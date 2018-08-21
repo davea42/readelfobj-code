@@ -1,0 +1,9 @@
+                COPYING
+            August 20, 2018
+
+The source code in the src directory is a BSD style copyright
+often called BSD3.
+
+Some source  is from llvm with its Mosaic copyright.
+
+The configure/Make scripts are declared to be Public Domain.

@@ -1,0 +1,15 @@
+                                 README 
+
+readobj is a program that reads elf object files
+and prints the header information.
+It also checks for certain errors including
+wasted space in the object files.
+
+It relies on a minimal elf.h but it does not
+depend on any library except standard libc.
+
+It also dumps relocation sections and Elf symtab
+sections.
+
+To dump DWARF section contents one should use 
+dwarfdump or GNU readelf, not readobj.
