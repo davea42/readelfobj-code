@@ -41,7 +41,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "readobj.h"
 #include "sanitized.h"
 
-char buffer1[BUFFERSIZE];
+static char buffer6[BUFFERSIZE];
 
 static int
 generic_dyn_from_dyn32(struct generic_dynentry **gbuffer_io,
@@ -81,7 +81,7 @@ generic_dyn_from_dyn32(struct generic_dynentry **gbuffer_io,
     if(res != RO_OK) {
         P("could not read whole dynamic section of %s "
         "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
-        filename,
+        sanitized(filename,buffer6,BUFFERSIZE),
         offset,size);
         free(gbuffer);
         free(ebuf);
@@ -262,19 +262,19 @@ elf_print_dynamic(void)
 
     if (!filedata.f_dynamic_sect_index) {
         P("No .dynamic section exists in %s\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
+            sanitized(filename,buffer6,BUFFERSIZE));
         return RO_OK;
     }
     if (filedata.f_dynamic_sect_index >= filedata.f_ehdr->ge_shnum) {
         P("Section Number of .dynamic section is bogus in %s\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
+            sanitized(filename,buffer6,BUFFERSIZE));
         return RO_ERR;
     }
     dynamicsect = filedata.f_shdr + filedata.f_dynamic_sect_index;
     bufcount = filedata.f_loc_dynamic.g_count;
     if(bufcount) {
         const char *name = sanitized(dynamicsect->gh_namestring,
-            buffer1,BUFFERSIZE);
+            buffer6,BUFFERSIZE);
 
         P("\n");
         P("Section %s (" LONGESTUFMT "):"
@@ -287,7 +287,7 @@ elf_print_dynamic(void)
         P("  name                             value\n");
     } else {
         P("No content exists in %s\n",
-            sanitized(dynamicsect->gh_namestring,buffer1,BUFFERSIZE));
+            sanitized(dynamicsect->gh_namestring,buffer6,BUFFERSIZE));
         return RO_ERR;
     }
     gbuffer = filedata.f_dynamic;
@@ -295,7 +295,7 @@ elf_print_dynamic(void)
         const char *name = 0;
 
         name = get_em_dynamic_table_name(gbuffer->gd_tag,
-            buffer1,BUFFERSIZE);
+            buffer6,BUFFERSIZE);
         P("  Tag: "
             LONGESTXFMT8 " %-15s "
             LONGESTXFMT8 " (" LONGESTUFMT ")\n",

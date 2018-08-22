@@ -39,6 +39,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <elf.h>
 #include "readobj.h"
+#include "sanitized.h"
+
+static char buffer1[BUFFERSIZE];
 
 int
 get_filedata(const char *name, int fd,struct filedata_s *fida)
@@ -50,7 +53,8 @@ get_filedata(const char *name, int fd,struct filedata_s *fida)
     if(res) {
         int myerr = errno;
         printf("FAIL reading %s with errno %d %s\n",
-            name,myerr,strerror(myerr));
+            sanitized(name,buffer1,BUFFERSIZE),
+            myerr,strerror(myerr));
         printf("Giving up");
         exit(1);
     }

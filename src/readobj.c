@@ -100,8 +100,8 @@ int only_wasted_summary = 0; /* suppress standard printing */
 /* All the data for one file. */
 struct filedata_s filedata;
 
-char buffer1[BUFFERSIZE];
-char buffer2[BUFFERSIZE];
+static char buffer1[BUFFERSIZE];
+static char buffer2[BUFFERSIZE];
 
 char *filename;
 int printfilenames;
@@ -311,12 +311,23 @@ do_one_file(const char *s)
 #endif /* LITTLE- BIG-ENDIAN */
     if (eclass == 32) {
         elf_load_elf_header32();
-    } else {
+    } else if (eclass == 64) {
+        if (sizeof(LONGESTUTYPE) < 8) {
+            P("Cannot read Elf64 from %s as the longest available "
+                " integer is just %u bytes\n",
+                sanitized(filename,buffer1,BUFFERSIZE),
+                (unsigned)sizeof(LONGESTUTYPE));
+            return;
+        }
         elf_load_elf_header64();
+    } else {
+        P("Cannot read Elf from %s as the elf class is"
+            " %u, which is not a valid class value.\n",
+            sanitized(filename,buffer1,BUFFERSIZE),
+            (unsigned)eclass);
+        return;
     }
-    if (!only_wasted_summary) {
-        elf_print_elf_header();
-    }
+    elf_print_elf_header();
     if (eclass == 32) {
         elf_load_sectheaders32(filedata.f_ehdr->ge_shoff,
             filedata.f_ehdr->ge_shentsize,
@@ -919,7 +930,8 @@ elf_print_sectheaders(void)
     P("Section count: " LONGESTUFMT "\n",generic_count);
     P("{\n");
     for(i = 0; i < generic_count; i++, ++gshdr) {
-        const char *namestr = gshdr->gh_namestring;
+        const char *namestr = sanitized(gshdr->gh_namestring,
+            buffer1,BUFFERSIZE);
 
         P("Section " LONGESTUFMT ", name " LONGESTUFMT " %s\n",
             i,gshdr->gh_name, namestr);
@@ -931,7 +943,7 @@ elf_print_sectheaders(void)
         } else {
             P(", flags "  LONGESTXFMT,gshdr->gh_flags);
             P(" %s",get_section_header_flag_names(gshdr->gh_flags,
-                buffer1,BUFFERSIZE));
+                buffer2,BUFFERSIZE));
         }
         P("\n");
 
@@ -959,7 +971,8 @@ elf_print_symbols(struct generic_symentry * gsym, LONGESTUTYPE ecount,
     LONGESTUTYPE i = 0;
 
     P("\n");
-    P("Symbols from %s: " LONGESTUFMT "\n",secname,ecount);
+    P("Symbols from %s: " LONGESTUFMT "\n",
+        sanitized(secname,buffer1,BUFFERSIZE),ecount);
     P("{\n");
     if(ecount > 0) {
         P("[Index] Value    Size    Type              "
@@ -987,25 +1000,26 @@ elf_print_symbols(struct generic_symentry * gsym, LONGESTUTYPE ecount,
         P("  type "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_type,gsym->gs_type,
-            get_symbol_stt_type(gsym->gs_type, buffer1, BUFFERSIZE));
+            get_symbol_stt_type(gsym->gs_type, buffer2, BUFFERSIZE));
         P(", bind "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_bind,gsym->gs_bind,
-            get_symbol_stb_string(gsym->gs_bind, buffer1,BUFFERSIZE));
+            get_symbol_stb_string(gsym->gs_bind, buffer2,BUFFERSIZE));
         P("\n");
 
         P("  st_other "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_other,
             gsym->gs_other,
-            get_symbol_sto_type(gsym->gs_other,buffer1, BUFFERSIZE));
+            get_symbol_sto_type(gsym->gs_other,buffer2, BUFFERSIZE));
         P(", st_shndx " LONGESTUFMT " %s",
             gsym->gs_shndx,
-            get_symbol_shn_type(gsym->gs_shndx, buffer1,BUFFERSIZE));
+            get_symbol_shn_type(gsym->gs_shndx, buffer2,BUFFERSIZE));
         P("\n");
 
         P("  st_name  (" LONGESTUFMT  ") %s",gsym->gs_name,
-            get_symstr_string(is_symtab,gsym->gs_name));
+            sanitized(get_symstr_string(is_symtab,gsym->gs_name),
+            buffer2,BUFFERSIZE));
         P("\n");
     }
     P("}\n");

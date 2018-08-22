@@ -25,7 +25,9 @@ only prints details of a few types of section.
 .B \--only-wasted-summary
 Suppresses header printing while printing
 a report of space wasted in the object file.
-A few bytes wasted is not serious but
+A few bytes wasted is not serious (it can
+be due to alignment requirements specified
+by the compiler) but
 thousands of bytes might suggest a
 compiler issue.
 Data at the end of the file not referenced by any header
@@ -50,11 +52,10 @@ to include details of all
 the section/segment data blocks
 sorted by file offset.
 
-.TP
-.B \--only-wasted-summary
-
 .SH FILES
 <install-prefix>/bin/readobj
+.PP
+<install-prefix>/share/man/man1/readobj.1
 .SH NOTES
 dwarfdump(1) can show the details of DWARF2,3,4 or 5
 section information.
@@ -67,5 +68,5 @@ printing shows the records of each but may not
 expand the machine-specific fields into the
 expected strings.
 .P
-Traditional archive-format (ar) files cannot be
+Traditional archive-format (ar) files are not
 understood by readobj.  This will not be fixed.

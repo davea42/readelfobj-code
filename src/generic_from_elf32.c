@@ -404,14 +404,14 @@ generic_elf_load_symbols32(int secnum,const char *secname,
     ecount = (long)(size/sizeof(Elf32_Sym));
     size2 = ecount * sizeof(Elf32_Sym);
     if(size != size2) {
-        P("Bogus size of symbols. "
+        P("ERROR: Bogus size of symbols. "
             LONGESTUFMT " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf32_Sym));
         return RO_ERR;
     }
     psym = calloc(ecount,sizeof(Elf32_Sym));
     if (!psym) {
-        P(" Unable to malloc Elf32_Sym strings for section %d (%s) "
+        P("ERROR:  Unable to malloc Elf32_Sym strings for section %d (%s) "
             "at offset " LONGESTXFMT "\n",
             secnum,sanitized(secname,buffer3,BUFFERSIZE),offset);
         return RO_ERR_MALLOC;
@@ -419,16 +419,18 @@ generic_elf_load_symbols32(int secnum,const char *secname,
     gsym = calloc(ecount,sizeof(struct generic_symentry));
     if (!gsym) {
         free(psym);
-        P(" Unable to malloc generic_symentry strings for section %d (%s) "
+        P("ERROR:  Unable to malloc generic_symentry "
+            "strings for section %d (%s) "
             "at offset " LONGESTXFMT "\n",
             secnum,sanitized(secname,buffer3,BUFFERSIZE),offset);
         return RO_ERR_MALLOC;
     }
     res = RR(psym,offset,size);
     if(res!= RO_OK) {
-        P("could not read whole symbol section of %s "
+        P("ERROR: could not read whole symbol section of %s "
             "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
-            filename, offset,size);
+            sanitized(filename,buffer3,BUFFERSIZE),
+            offset,size);
         return res;
     }
     orig_psym = psym;
@@ -472,14 +474,15 @@ generic_elf_load_symbols64(int secnum,const char *secname,
     ecount = (long)(size/sizeof(Elf64_Sym));
     size2 = ecount * sizeof(Elf64_Sym);
     if(size != size2) {
-        P("Bogus size of symbols. "
+        P("ERROR: Bogus size of symbols. "
             LONGESTUFMT " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf64_Sym));
         return RO_ERR;
     }
     psym = calloc(ecount,sizeof(Elf64_Sym));
     if (!psym) {
-        P(" Unable to malloc Elf64_Sym strings for section %d (%s) "
+        P("ERROR:  Unable to malloc Elf64_Sym strings "
+            "for section %d (%s) "
             "at offset " LONGESTXFMT "\n",
             secnum,sanitized(secname,buffer3,BUFFERSIZE),offset);
         return RO_ERR_MALLOC;
@@ -487,16 +490,19 @@ generic_elf_load_symbols64(int secnum,const char *secname,
     gsym = calloc(ecount,sizeof(struct generic_symentry));
     if (!gsym) {
         free(psym);
-        P(" Unable to malloc generic_symentry strings for section %d (%s) "
+        P("ERROR:  Unable to malloc generic_symentry "
+            "strings for section %d (%s) "
             "at offset " LONGESTXFMT "\n",
-            secnum,sanitized(secname,buffer3,BUFFERSIZE),offset);
+            secnum,
+            sanitized(secname,buffer3,BUFFERSIZE),offset);
         return RO_ERR_MALLOC;
     }
     res = RR(psym,offset,size);
     if(res!= RO_OK) {
-        P("could not read whole symbol section of %s "
+        P("ERROR: Could not read whole symbol section of %s "
             "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
-            filename, offset,size);
+            sanitized(filename,buffer3,BUFFERSIZE),
+            offset,size);
         return res;
     }
     orig_psym = psym;
@@ -536,7 +542,7 @@ generic_rel_from_rela32(struct generic_shdr * gsh,
     ecount = size/sizeof(Elf32_Rela);
     size2 = ecount * sizeof(Elf32_Rela);
     if(size != size2) {
-        P("Bogus size of relocations section "
+        P("ERROR: Bogus size of relocations section "
             LONGESTUFMT ". "
             " not divisible by %u\n",
             size,(unsigned)sizeof(Elf32_Rela));
@@ -565,7 +571,7 @@ generic_rel_from_rela64(struct generic_shdr * gsh,
     ecount = size/sizeof(Elf64_Rela);
     size2 = ecount * sizeof(Elf64_Rela);
     if(size != size2) {
-        P("Bogus size of relocations section "
+        P("ERROR: Bogus size of relocations section "
             LONGESTUFMT ". "
             " not divisible by %u\n",
             size,(unsigned)sizeof(Elf64_Rela));
@@ -594,7 +600,7 @@ generic_rel_from_rel32(struct generic_shdr * gsh,
     ecount = size/sizeof(Elf32_Rel);
     size2 = ecount * sizeof(Elf32_Rel);
     if(size != size2) {
-        P("Bogus size of relocations section "
+        P("ERROR: Bogus size of relocations section "
             LONGESTUFMT ". "
             " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf32_Rel));
@@ -624,7 +630,7 @@ generic_rel_from_rel64(struct generic_shdr * gsh,
     ecount = size/sizeof(Elf64_Rel);
     size2 = ecount * sizeof(Elf64_Rel);
     if(size != size2) {
-        P("Bogus size of relocations section "
+        P("ERROR: Bogus size of relocations section "
             LONGESTUFMT ". "
             " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf64_Rel));

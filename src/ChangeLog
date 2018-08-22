@@ -1,4 +1,12 @@
 2018-08-22  David Anderson
+     * dynamic_section.c,filedata.c,generic_from_elf32.c:
+       We use sanitized() for all strings and
+       add prefix ERROR: in case of an actual error.
+
+     * readobj.c: If the longest integer is < 8 bytes
+       refuse to call the Elf64 functions. Report the issue.
+       We use sanitized() for all strings and
+       add prefix ERROR: in case of an actual error.
      * readobj.1: Created the man page.
      * readobj.h: Now uses sizeof information from configure
        to decide its internal types.
