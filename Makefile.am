@@ -25,6 +25,13 @@ m4/ltversion.m4 \
 m4/lt~obsolete.m4 \
 missing 
 
+EXTRA_DIST = \
+COPYING \
+ChangeLog \
+NEWS \
+README
+
+
 # AUTHORS, ChangeLog and COPYING must be present
 
 

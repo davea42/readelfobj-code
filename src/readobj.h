@@ -37,18 +37,18 @@ extern "C" {
 #endif /* __cplusplus */
 
 /* readobj.h */
-#ifdef HAVE_LONG_LONG
-#define LONGESTXFMT "0x%llx"
+#if (SIZEOF_UNSIGNED_LONG < 8) && (SIZEOF_UNSIGNED_LONG_LONG == 8)
+#define LONGESTXFMT  "0x%llx"
 #define LONGESTXFMT8 "0x%08llx"
-#define LONGESTUFMT "%llu"
-#define LONGESTSFMT "%lld"
+#define LONGESTUFMT  "%llu"
+#define LONGESTSFMT  "%lld"
 #define LONGESTUTYPE unsigned long long
 #define LONGESTSTYPE long long
 #else
-#define LONGESTXFMT "0x%lx"
+#define LONGESTXFMT  "0x%lx"
 #define LONGESTXFMT8 "0x%08lx"
-#define LONGESTUFMT "%lu"
-#define LONGESTSFMT "%ld"
+#define LONGESTUFMT  "%lu"
+#define LONGESTSFMT  "%ld"
 #define LONGESTUTYPE unsigned long
 #define LONGESTSTYPE long
 #endif

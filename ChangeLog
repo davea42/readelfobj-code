@@ -1,2 +1,6 @@
+2018-08-22: David Anderson
+    * configure.ac: Added AC_CHECK_SIZEOF to try to
+      get the sizes we want in readobj.
+    * configure: Regenerated. Version 20180822.
 2018-08-20: David Anderson
     * All new.

@@ -21,6 +21,8 @@ readobj_CFLAGS = $(RO_CFLAGS_WARN)
 readobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
+man_MANS = readobj.1
+
 EXTRA_DIST = \
 COPYING \
 ChangeLog \

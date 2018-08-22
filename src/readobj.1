@@ -1,0 +1,71 @@
+.TH DWARFDUMP
+.SH NAME
+readobj \- dumps ELF object headers.
+.SH SYNOPSIS
+.B readobj [options] \f2objectfilename\fP ...
+.SH DESCRIPTION
+The 
+.B readobj
+command prints and checks ELF object file headers.
+With no options (but with the required \f2objectfilename\fP) 
+all headers print and a short report of space wasted
+in the object prints at the end.
+.PP
+Elf files are read from first-principles using
+standard C functions (libelf is not used).  
+Full checking of all fields for sanity
+ensures objects with bad headers are detected and
+reported.
+.PP
+The format is intended to be human readable.
+.B readobj
+only prints details of a few types of section.
+.SH PRINTING OPTIONS
+.TP
+.B \--only-wasted-summary
+Suppresses header printing while printing
+a report of space wasted in the object file.
+A few bytes wasted is not serious but
+thousands of bytes might suggest a
+compiler issue.
+Data at the end of the file not referenced by any header
+could mean something has hidden some data at the end.
+
+.TP
+.B \--print-dynamic
+Print the .dynamic section in detail.
+
+.TP
+.B \--print-relocs
+Print relocation sections in detail.
+
+.TP
+.B \--print-symtabs
+Print Elf symbol tables in detail.
+
+.TP
+.B \--print-wasted
+Expands the  wasted-space output
+to include details of all
+the section/segment data blocks
+sorted by file offset.
+
+.TP
+.B \--only-wasted-summary
+
+.SH FILES
+<install-prefix>/bin/readobj
+.SH NOTES
+dwarfdump(1) can show the details of DWARF2,3,4 or 5
+section information.
+.P
+GNU readelf(1) is essential to show  the content
+of the section contents that readobj does not print.
+.SH BUGS
+Relocation, dynamic section, and symtab section
+printing shows the records of each but may not
+expand the machine-specific fields into the
+expected strings.
+.P
+Traditional archive-format (ar) files cannot be
+understood by readobj.  This will not be fixed.

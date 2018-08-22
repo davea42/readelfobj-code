@@ -1,0 +1,4 @@
+2018-08-22  David Anderson
+     * readobj.1: Created the man page.
+     * readobj.h: Now uses sizeof information from configure
+       to decide its internal types.
