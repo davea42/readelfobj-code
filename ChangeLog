@@ -2,6 +2,7 @@
     * configure.ac: Added AC_CHECK_SIZEOF to try to
       get the sizes we want in readobj. Deleted some
       blank lines.
+      Renamed the executable as readelfobj
     * configure: Regenerated. Version 20180822.
 2018-08-20: David Anderson
     * All new.

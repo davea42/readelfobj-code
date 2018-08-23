@@ -5,9 +5,9 @@ MAINTAINERCLEANFILES = Makefile.in
 
 AUTOMAKE_OPTIONS = subdir-objects
 
-bin_PROGRAMS = readobj
+bin_PROGRAMS = readelfobj
 
-readobj_SOURCES =  dynamic_section.c  \
+readelfobj_SOURCES =  dynamic_section.c  \
 em.c \
 filedata.c \
 generic_from_elf32.c  \
@@ -16,12 +16,12 @@ readobj.h \
 sanitized.h \
 sanitized.c
 
-readobj_CFLAGS = $(RO_CFLAGS_WARN)
+readelfobj_CFLAGS = $(RO_CFLAGS_WARN)
 
-readobj_CPPFLAGS = \
+readelfobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
-man_MANS = readobj.1
+man_MANS = readelfobj.1
 
 EXTRA_DIST = \
 COPYING \

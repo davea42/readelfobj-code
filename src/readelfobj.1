@@ -1,11 +1,11 @@
 .TH DWARFDUMP
 .SH NAME
-readobj \- dumps ELF object headers.
+readelfobj \- dumps ELF object headers.
 .SH SYNOPSIS
-.B readobj [options] \f2objectfilename\fP ...
+.B readelfobj [options] \f2objectfilename\fP ...
 .SH DESCRIPTION
 The 
-.B readobj
+.B readelfobj
 command prints and checks ELF object file headers.
 With no options (but with the required \f2objectfilename\fP) 
 all headers print and a short report of space wasted
@@ -18,7 +18,7 @@ ensures objects with bad headers are detected and
 reported.
 .PP
 The format is intended to be human readable.
-.B readobj
+.B readelfobj
 only prints details of a few types of section.
 .SH PRINTING OPTIONS
 .TP
@@ -53,15 +53,15 @@ the section/segment data blocks
 sorted by file offset.
 
 .SH FILES
-<install-prefix>/bin/readobj
+<install-prefix>/bin/readelfobj
 .PP
-<install-prefix>/share/man/man1/readobj.1
+<install-prefix>/share/man/man1/readelfobj.1
 .SH NOTES
 dwarfdump(1) can show the details of DWARF2,3,4 or 5
 section information.
 .P
 GNU readelf(1) is essential to show  the content
-of the section contents that readobj does not print.
+of the section contents that readelfobj does not print.
 .SH BUGS
 Relocation, dynamic section, and symtab section
 printing shows the records of each but may not
@@ -69,4 +69,4 @@ expand the machine-specific fields into the
 expected strings.
 .P
 Traditional archive-format (ar) files are not
-understood by readobj.  This will not be fixed.
+understood by readelfobj.  This will not be fixed.

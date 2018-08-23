@@ -21,7 +21,7 @@ m4_define([v_date], [20180822])])
 
 AC_PREREQ([2.52])
 ### 2nd arg to AC_INIT is the version 'number'.
-AC_INIT([readobj], [v_date], [libdwarf-list -at- linuxmail -dot- org])
+AC_INIT([readelfobj], [v_date], [libdwarf-list -at- linuxmail -dot- org])
 AC_CONFIG_SRCDIR([configure.ac])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIRS([m4])
@@ -137,7 +137,7 @@ echo "  sizeof unsigned long.: ${ac_cv_sizeof_unsigned_long}"
 echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo
-echo "  readobj..............: always"
+echo "  readelfobj...........: always"
 echo
 echo "Compilation............: make (or gmake)"
 echo "  CPPFLAGS.............: $CPPFLAGS"

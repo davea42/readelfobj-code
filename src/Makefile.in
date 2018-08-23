@@ -91,7 +91,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = readobj$(EXEEXT)
+bin_PROGRAMS = readelfobj$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -108,18 +108,18 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_readobj_OBJECTS = readobj-dynamic_section.$(OBJEXT) \
-	readobj-em.$(OBJEXT) readobj-filedata.$(OBJEXT) \
-	readobj-generic_from_elf32.$(OBJEXT) readobj-readobj.$(OBJEXT) \
-	readobj-sanitized.$(OBJEXT)
-readobj_OBJECTS = $(am_readobj_OBJECTS)
-readobj_LDADD = $(LDADD)
+am_readelfobj_OBJECTS = readelfobj-dynamic_section.$(OBJEXT) \
+	readelfobj-em.$(OBJEXT) readelfobj-filedata.$(OBJEXT) \
+	readelfobj-generic_from_elf32.$(OBJEXT) \
+	readelfobj-readobj.$(OBJEXT) readelfobj-sanitized.$(OBJEXT)
+readelfobj_OBJECTS = $(am_readelfobj_OBJECTS)
+readelfobj_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-readobj_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readobj_CFLAGS) \
+readelfobj_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readelfobj_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -155,8 +155,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(readobj_SOURCES)
-DIST_SOURCES = $(readobj_SOURCES)
+SOURCES = $(readelfobj_SOURCES)
+DIST_SOURCES = $(readelfobj_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -336,7 +336,7 @@ top_srcdir = @top_srcdir@
 version_info = @version_info@
 MAINTAINERCLEANFILES = Makefile.in
 AUTOMAKE_OPTIONS = subdir-objects
-readobj_SOURCES = dynamic_section.c  \
+readelfobj_SOURCES = dynamic_section.c  \
 em.c \
 filedata.c \
 generic_from_elf32.c  \
@@ -345,11 +345,11 @@ readobj.h \
 sanitized.h \
 sanitized.c
 
-readobj_CFLAGS = $(RO_CFLAGS_WARN)
-readobj_CPPFLAGS = \
+readelfobj_CFLAGS = $(RO_CFLAGS_WARN)
+readelfobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
-man_MANS = readobj.1
+man_MANS = readelfobj.1
 EXTRA_DIST = \
 COPYING \
 ChangeLog \
@@ -439,9 +439,9 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-readobj$(EXEEXT): $(readobj_OBJECTS) $(readobj_DEPENDENCIES) $(EXTRA_readobj_DEPENDENCIES) 
-	@rm -f readobj$(EXEEXT)
-	$(AM_V_CCLD)$(readobj_LINK) $(readobj_OBJECTS) $(readobj_LDADD) $(LIBS)
+readelfobj$(EXEEXT): $(readelfobj_OBJECTS) $(readelfobj_DEPENDENCIES) $(EXTRA_readelfobj_DEPENDENCIES) 
+	@rm -f readelfobj$(EXEEXT)
+	$(AM_V_CCLD)$(readelfobj_LINK) $(readelfobj_OBJECTS) $(readelfobj_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -449,12 +449,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobj-dynamic_section.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobj-em.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobj-filedata.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobj-generic_from_elf32.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobj-readobj.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobj-sanitized.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dynamic_section.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-em.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-filedata.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf32.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readobj.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -480,89 +480,89 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-readobj-dynamic_section.o: dynamic_section.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-dynamic_section.o -MD -MP -MF $(DEPDIR)/readobj-dynamic_section.Tpo -c -o readobj-dynamic_section.o `test -f 'dynamic_section.c' || echo '$(srcdir)/'`dynamic_section.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-dynamic_section.Tpo $(DEPDIR)/readobj-dynamic_section.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dynamic_section.c' object='readobj-dynamic_section.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-dynamic_section.o: dynamic_section.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dynamic_section.o -MD -MP -MF $(DEPDIR)/readelfobj-dynamic_section.Tpo -c -o readelfobj-dynamic_section.o `test -f 'dynamic_section.c' || echo '$(srcdir)/'`dynamic_section.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dynamic_section.Tpo $(DEPDIR)/readelfobj-dynamic_section.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dynamic_section.c' object='readelfobj-dynamic_section.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-dynamic_section.o `test -f 'dynamic_section.c' || echo '$(srcdir)/'`dynamic_section.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dynamic_section.o `test -f 'dynamic_section.c' || echo '$(srcdir)/'`dynamic_section.c
 
-readobj-dynamic_section.obj: dynamic_section.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-dynamic_section.obj -MD -MP -MF $(DEPDIR)/readobj-dynamic_section.Tpo -c -o readobj-dynamic_section.obj `if test -f 'dynamic_section.c'; then $(CYGPATH_W) 'dynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/dynamic_section.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-dynamic_section.Tpo $(DEPDIR)/readobj-dynamic_section.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dynamic_section.c' object='readobj-dynamic_section.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-dynamic_section.obj: dynamic_section.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dynamic_section.obj -MD -MP -MF $(DEPDIR)/readelfobj-dynamic_section.Tpo -c -o readelfobj-dynamic_section.obj `if test -f 'dynamic_section.c'; then $(CYGPATH_W) 'dynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/dynamic_section.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dynamic_section.Tpo $(DEPDIR)/readelfobj-dynamic_section.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dynamic_section.c' object='readelfobj-dynamic_section.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-dynamic_section.obj `if test -f 'dynamic_section.c'; then $(CYGPATH_W) 'dynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/dynamic_section.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dynamic_section.obj `if test -f 'dynamic_section.c'; then $(CYGPATH_W) 'dynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/dynamic_section.c'; fi`
 
-readobj-em.o: em.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-em.o -MD -MP -MF $(DEPDIR)/readobj-em.Tpo -c -o readobj-em.o `test -f 'em.c' || echo '$(srcdir)/'`em.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-em.Tpo $(DEPDIR)/readobj-em.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='em.c' object='readobj-em.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-em.o: em.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-em.o -MD -MP -MF $(DEPDIR)/readelfobj-em.Tpo -c -o readelfobj-em.o `test -f 'em.c' || echo '$(srcdir)/'`em.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-em.Tpo $(DEPDIR)/readelfobj-em.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='em.c' object='readelfobj-em.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-em.o `test -f 'em.c' || echo '$(srcdir)/'`em.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-em.o `test -f 'em.c' || echo '$(srcdir)/'`em.c
 
-readobj-em.obj: em.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-em.obj -MD -MP -MF $(DEPDIR)/readobj-em.Tpo -c -o readobj-em.obj `if test -f 'em.c'; then $(CYGPATH_W) 'em.c'; else $(CYGPATH_W) '$(srcdir)/em.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-em.Tpo $(DEPDIR)/readobj-em.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='em.c' object='readobj-em.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-em.obj: em.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-em.obj -MD -MP -MF $(DEPDIR)/readelfobj-em.Tpo -c -o readelfobj-em.obj `if test -f 'em.c'; then $(CYGPATH_W) 'em.c'; else $(CYGPATH_W) '$(srcdir)/em.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-em.Tpo $(DEPDIR)/readelfobj-em.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='em.c' object='readelfobj-em.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-em.obj `if test -f 'em.c'; then $(CYGPATH_W) 'em.c'; else $(CYGPATH_W) '$(srcdir)/em.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-em.obj `if test -f 'em.c'; then $(CYGPATH_W) 'em.c'; else $(CYGPATH_W) '$(srcdir)/em.c'; fi`
 
-readobj-filedata.o: filedata.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-filedata.o -MD -MP -MF $(DEPDIR)/readobj-filedata.Tpo -c -o readobj-filedata.o `test -f 'filedata.c' || echo '$(srcdir)/'`filedata.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-filedata.Tpo $(DEPDIR)/readobj-filedata.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='filedata.c' object='readobj-filedata.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-filedata.o: filedata.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-filedata.o -MD -MP -MF $(DEPDIR)/readelfobj-filedata.Tpo -c -o readelfobj-filedata.o `test -f 'filedata.c' || echo '$(srcdir)/'`filedata.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-filedata.Tpo $(DEPDIR)/readelfobj-filedata.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='filedata.c' object='readelfobj-filedata.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-filedata.o `test -f 'filedata.c' || echo '$(srcdir)/'`filedata.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-filedata.o `test -f 'filedata.c' || echo '$(srcdir)/'`filedata.c
 
-readobj-filedata.obj: filedata.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-filedata.obj -MD -MP -MF $(DEPDIR)/readobj-filedata.Tpo -c -o readobj-filedata.obj `if test -f 'filedata.c'; then $(CYGPATH_W) 'filedata.c'; else $(CYGPATH_W) '$(srcdir)/filedata.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-filedata.Tpo $(DEPDIR)/readobj-filedata.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='filedata.c' object='readobj-filedata.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-filedata.obj: filedata.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-filedata.obj -MD -MP -MF $(DEPDIR)/readelfobj-filedata.Tpo -c -o readelfobj-filedata.obj `if test -f 'filedata.c'; then $(CYGPATH_W) 'filedata.c'; else $(CYGPATH_W) '$(srcdir)/filedata.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-filedata.Tpo $(DEPDIR)/readelfobj-filedata.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='filedata.c' object='readelfobj-filedata.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-filedata.obj `if test -f 'filedata.c'; then $(CYGPATH_W) 'filedata.c'; else $(CYGPATH_W) '$(srcdir)/filedata.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-filedata.obj `if test -f 'filedata.c'; then $(CYGPATH_W) 'filedata.c'; else $(CYGPATH_W) '$(srcdir)/filedata.c'; fi`
 
-readobj-generic_from_elf32.o: generic_from_elf32.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-generic_from_elf32.o -MD -MP -MF $(DEPDIR)/readobj-generic_from_elf32.Tpo -c -o readobj-generic_from_elf32.o `test -f 'generic_from_elf32.c' || echo '$(srcdir)/'`generic_from_elf32.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-generic_from_elf32.Tpo $(DEPDIR)/readobj-generic_from_elf32.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf32.c' object='readobj-generic_from_elf32.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-generic_from_elf32.o: generic_from_elf32.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf32.o -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf32.Tpo -c -o readelfobj-generic_from_elf32.o `test -f 'generic_from_elf32.c' || echo '$(srcdir)/'`generic_from_elf32.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf32.Tpo $(DEPDIR)/readelfobj-generic_from_elf32.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf32.c' object='readelfobj-generic_from_elf32.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-generic_from_elf32.o `test -f 'generic_from_elf32.c' || echo '$(srcdir)/'`generic_from_elf32.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf32.o `test -f 'generic_from_elf32.c' || echo '$(srcdir)/'`generic_from_elf32.c
 
-readobj-generic_from_elf32.obj: generic_from_elf32.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-generic_from_elf32.obj -MD -MP -MF $(DEPDIR)/readobj-generic_from_elf32.Tpo -c -o readobj-generic_from_elf32.obj `if test -f 'generic_from_elf32.c'; then $(CYGPATH_W) 'generic_from_elf32.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf32.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-generic_from_elf32.Tpo $(DEPDIR)/readobj-generic_from_elf32.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf32.c' object='readobj-generic_from_elf32.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-generic_from_elf32.obj: generic_from_elf32.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf32.obj -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf32.Tpo -c -o readelfobj-generic_from_elf32.obj `if test -f 'generic_from_elf32.c'; then $(CYGPATH_W) 'generic_from_elf32.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf32.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf32.Tpo $(DEPDIR)/readelfobj-generic_from_elf32.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf32.c' object='readelfobj-generic_from_elf32.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-generic_from_elf32.obj `if test -f 'generic_from_elf32.c'; then $(CYGPATH_W) 'generic_from_elf32.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf32.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf32.obj `if test -f 'generic_from_elf32.c'; then $(CYGPATH_W) 'generic_from_elf32.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf32.c'; fi`
 
-readobj-readobj.o: readobj.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-readobj.o -MD -MP -MF $(DEPDIR)/readobj-readobj.Tpo -c -o readobj-readobj.o `test -f 'readobj.c' || echo '$(srcdir)/'`readobj.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-readobj.Tpo $(DEPDIR)/readobj-readobj.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobj.c' object='readobj-readobj.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-readobj.o: readobj.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-readobj.o -MD -MP -MF $(DEPDIR)/readelfobj-readobj.Tpo -c -o readelfobj-readobj.o `test -f 'readobj.c' || echo '$(srcdir)/'`readobj.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-readobj.Tpo $(DEPDIR)/readelfobj-readobj.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobj.c' object='readelfobj-readobj.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-readobj.o `test -f 'readobj.c' || echo '$(srcdir)/'`readobj.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-readobj.o `test -f 'readobj.c' || echo '$(srcdir)/'`readobj.c
 
-readobj-readobj.obj: readobj.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-readobj.obj -MD -MP -MF $(DEPDIR)/readobj-readobj.Tpo -c -o readobj-readobj.obj `if test -f 'readobj.c'; then $(CYGPATH_W) 'readobj.c'; else $(CYGPATH_W) '$(srcdir)/readobj.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-readobj.Tpo $(DEPDIR)/readobj-readobj.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobj.c' object='readobj-readobj.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-readobj.obj: readobj.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-readobj.obj -MD -MP -MF $(DEPDIR)/readelfobj-readobj.Tpo -c -o readelfobj-readobj.obj `if test -f 'readobj.c'; then $(CYGPATH_W) 'readobj.c'; else $(CYGPATH_W) '$(srcdir)/readobj.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-readobj.Tpo $(DEPDIR)/readelfobj-readobj.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobj.c' object='readelfobj-readobj.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-readobj.obj `if test -f 'readobj.c'; then $(CYGPATH_W) 'readobj.c'; else $(CYGPATH_W) '$(srcdir)/readobj.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-readobj.obj `if test -f 'readobj.c'; then $(CYGPATH_W) 'readobj.c'; else $(CYGPATH_W) '$(srcdir)/readobj.c'; fi`
 
-readobj-sanitized.o: sanitized.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-sanitized.o -MD -MP -MF $(DEPDIR)/readobj-sanitized.Tpo -c -o readobj-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-sanitized.Tpo $(DEPDIR)/readobj-sanitized.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readobj-sanitized.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-sanitized.o: sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-sanitized.o -MD -MP -MF $(DEPDIR)/readelfobj-sanitized.Tpo -c -o readelfobj-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-sanitized.Tpo $(DEPDIR)/readelfobj-sanitized.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readelfobj-sanitized.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
 
-readobj-sanitized.obj: sanitized.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -MT readobj-sanitized.obj -MD -MP -MF $(DEPDIR)/readobj-sanitized.Tpo -c -o readobj-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobj-sanitized.Tpo $(DEPDIR)/readobj-sanitized.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readobj-sanitized.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-sanitized.obj: sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-sanitized.obj -MD -MP -MF $(DEPDIR)/readelfobj-sanitized.Tpo -c -o readelfobj-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-sanitized.Tpo $(DEPDIR)/readelfobj-sanitized.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readelfobj-sanitized.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobj_CPPFLAGS) $(CPPFLAGS) $(readobj_CFLAGS) $(CFLAGS) -c -o readobj-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

@@ -1,6 +1,6 @@
                                  README 
 
-readobj is a program that reads elf object files
+readelfobj is a program that reads elf object files
 and prints the header information.
 It also checks for certain errors including
 wasted space in the object files.
@@ -12,4 +12,4 @@ It also dumps relocation sections and Elf symtab
 sections.
 
 To dump DWARF section contents one should use 
-dwarfdump or GNU readelf, not readobj.
+dwarfdump or GNU readelf, not readelfobj.
