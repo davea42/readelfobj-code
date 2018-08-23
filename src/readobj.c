@@ -327,7 +327,9 @@ do_one_file(const char *s)
             (unsigned)eclass);
         return;
     }
-    elf_print_elf_header();
+    if (!only_wasted_summary) {
+        elf_print_elf_header();
+    }
     if (eclass == 32) {
         elf_load_sectheaders32(filedata.f_ehdr->ge_shoff,
             filedata.f_ehdr->ge_shentsize,

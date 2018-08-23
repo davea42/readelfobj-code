@@ -8,6 +8,7 @@
        refuse to call the Elf64 functions. Report the issue.
        We use sanitized() for all strings and
        add prefix ERROR: in case of an actual error.
+       If only printing wasted space, don't print the elf header.
      * readobj.1: Created the man page.
      * readobj.h: Now uses sizeof information from configure
        to decide its internal types.
