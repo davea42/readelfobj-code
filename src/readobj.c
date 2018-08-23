@@ -60,6 +60,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     e.e_ident[3]== 'F' )
 #endif
 
+#define ALIGN4 4
+#define ALIGN8 8
+
 static void do_one_file(const char *filename);
 static int elf_load_elf_header32(void);
 static int elf_load_elf_header64(void);
@@ -740,7 +743,7 @@ elf_load_progheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
         P("Something badly wrong reading program headers");
         return RO_ERR;
     }
-    insert_in_use_entry("Elf32_Phdr block",offset,entsize*count);
+    insert_in_use_entry("Elf32_Phdr block",offset,entsize*count,ALIGN4);
     return RO_OK;
 }
 
@@ -782,7 +785,7 @@ elf_load_progheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
         P("ERROR: Something badly wrong reading program headers");
         return RO_ERR;
     }
-    insert_in_use_entry("Elf64_Phdr block",offset,entsize*count);
+    insert_in_use_entry("Elf64_Phdr block",offset,entsize*count,ALIGN8);
     return RO_OK;
 }
 
@@ -878,7 +881,7 @@ elf_load_sectheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,
         P("Something wrong reading section headers\n");
         return RO_ERR;
     }
-    insert_in_use_entry("Elf32_Shdr",offset,entsize*count);
+    insert_in_use_entry("Elf32_Shdr block",offset,entsize*count,ALIGN4);
     return RO_OK;
 }
 
@@ -922,7 +925,7 @@ elf_load_sectheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,
         P("Something wrong reading section headers\n");
         return RO_ERR;
     }
-    insert_in_use_entry("Elf32_Shdr",offset,entsize*count);
+    insert_in_use_entry("Elf64_Shdr block",offset,entsize*count,ALIGN8);
     return RO_OK;
 }
 
@@ -1566,7 +1569,7 @@ elf_load_elf_header32(void)
     ehdr = (struct generic_ehdr *)calloc(1,sizeof(struct generic_ehdr));
     res  = generic_ehdr_from_32(ehdr,&ehdr32);
     if (res == RO_OK) {
-        insert_in_use_entry("Elf32_Ehdr",0,sizeof(Elf32_Ehdr));
+        insert_in_use_entry("Elf32_Ehdr",0,sizeof(Elf32_Ehdr),ALIGN4);
     }
     return res;
 }
@@ -1592,7 +1595,7 @@ elf_load_elf_header64(void)
     ehdr = (struct generic_ehdr *)calloc(1,sizeof(struct generic_ehdr));
     res  = generic_ehdr_from_64(ehdr,&ehdr64);
     if (res == RO_OK) {
-        insert_in_use_entry("Elf64_Ehdr",0,sizeof(Elf64_Ehdr));
+        insert_in_use_entry("Elf64_Ehdr",0,sizeof(Elf64_Ehdr),ALIGN8);
     }
     return res;
 }
@@ -1722,7 +1725,7 @@ cur_read_loc(FILE *fin_arg, long * fileoffset)
 
 void
 insert_in_use_entry(const char *description,LONGESTUTYPE offset,
-    LONGESTUTYPE length)
+    LONGESTUTYPE length,LONGESTUTYPE align)
 {
     struct in_use_s *e = 0;
 
@@ -1735,6 +1738,7 @@ insert_in_use_entry(const char *description,LONGESTUTYPE offset,
     e->u_next = 0;
     e->u_name = description;
     e->u_offset = offset;
+    e->u_align = align;
     e->u_length = length;
     e->u_lastbyte = offset+length;
     ++filedata.f_in_use_count;
@@ -1745,6 +1749,58 @@ insert_in_use_entry(const char *description,LONGESTUTYPE offset,
     }
     filedata.f_in_use = e;
     filedata.f_in_use_tail = e;
+}
+
+#define MAXWBLOCK 100000
+
+static int
+is_wasted_space_zero(LONGESTUTYPE offset,
+    LONGESTUTYPE length,
+    int *wasted_space_zero)
+{
+    LONGESTUTYPE remaining = length;
+    char *allocspace = 0;
+    LONGESTUTYPE alloclen = length;
+    LONGESTUTYPE origoffset = offset;
+    LONGESTUTYPE checklen = length;
+
+    if (length > MAXWBLOCK) {
+        alloclen = MAXWBLOCK;
+        checklen = MAXWBLOCK;
+    }
+    allocspace = (char *)malloc(alloclen);
+    if(!allocspace) {
+        P("Unable to malloc " LONGESTUFMT "bytes for zero checking.\n",
+            alloclen);
+        return RO_ERR;
+    }
+    while (remaining) {
+        LONGESTUTYPE i = 0;
+        int res = 0;
+
+        if (remaining < checklen) {
+            checklen = remaining;
+        }
+        res = RR(allocspace,offset,checklen);
+        if (res != RO_OK) {
+            free(allocspace);
+            P("ERROR: could not read wasted space at offset "
+                LONGESTXFMT " properly\n", 
+                offset);
+            return res;
+        }
+        for (i = 0; i < checklen; ++i) {
+            if (allocspace[i]) {
+                free(allocspace);
+                *wasted_space_zero = FALSE;
+                return RO_OK;;
+            }
+        }
+        remaining -= checklen;
+    }
+    *wasted_space_zero = TRUE;
+    free(allocspace);
+    return RO_OK;
 }
 
 static int
@@ -1773,6 +1829,7 @@ report_wasted_space(void)
     LONGESTUTYPE filesize = filedata.f_filesize;
     LONGESTUTYPE iucount = filedata.f_in_use_count;
     LONGESTUTYPE i = 0;
+    int res = 0;
 
     struct in_use_s *iuarray = 0;
     struct in_use_s *iupa = 0;
@@ -1810,12 +1867,20 @@ report_wasted_space(void)
     iupa = iuarray;
     if (print_wasted) {
         P("Listing Used Areas\n");
-        P("[]        offset       length     name\n");
+        P("[]        offset       length  finaloffset    name\n");
     }
     for (i = 0; i < iucount; ++i,++iupa) {
         if (print_wasted) {
-            P("[%3d] " LONGESTXFMT8 " " LONGESTXFMT8 " %s\n",
-                (int)i, iupa->u_offset, iupa->u_length, iupa->u_name);
+#if 0
+P("dadebug LASTUSED " LONGESTXFMT8 " " LONGESTXFMT8 " " LONGESTXFMT8 
+" %s\n",
+low_instance.u_offset, low_instance.u_length, 
+low_instance.u_lastbyte,low_instance.u_name);
+#endif
+            P("[%3d] " LONGESTXFMT8 " " LONGESTXFMT8 " " LONGESTXFMT8 
+                " %s\n",
+                (int)i, iupa->u_offset, iupa->u_length, 
+                iupa->u_lastbyte,iupa->u_name);
         }
         if (!iupa->u_length) {
             /* Not interesting. */
@@ -1834,16 +1899,87 @@ report_wasted_space(void)
         /* ASSERT: iupa->u_offset > low_instance.u_offset  */
         if (iupa->u_offset == low_instance.u_lastbyte) {
             /*  New follows the old with no wasted space. */
-            low_instance = *iupa;
+            if (iupa->u_length) {
+                low_instance = *iupa;
+            }
             continue;
         }
         if (iupa->u_offset > low_instance.u_lastbyte) {
+            if(iupa->u_align > 1) {
+                 LONGESTUTYPE misaligned = low_instance.u_lastbyte %
+                     iupa->u_align;
+                 LONGESTUTYPE newlast = low_instance.u_lastbyte;
+                 LONGESTUTYPE distance = 0;
+                 int wasted_space_zero = FALSE;
+
+                 if (misaligned) {
+                     distance =  iupa->u_align - misaligned;
+                     newlast += distance;
+                 }
+                 if (iupa->u_offset == newlast) {
+                     /* alignment space. No waste. */
+                     filedata.f_wasted_align_count++;
+                     filedata.f_wasted_align_space += distance; 
+                     if (print_wasted) {
+                         P("Warning: A gap of " LONGESTUFMT 
+                             " forced by alignment " 
+                             LONGESTUFMT 
+                             " from " LONGESTXFMT8 " to " LONGESTXFMT8
+                              "\n",
+                             distance,iupa->u_align,
+                             low_instance.u_lastbyte,iupa->u_offset);
+                         res = is_wasted_space_zero(low_instance.u_lastbyte,
+                             distance,&wasted_space_zero); 
+                         if (res == RO_OK) {
+                            if(!wasted_space_zero) {
+                                P("  Wasted space at "
+                                    LONGESTXFMT8 " of length "
+                                    LONGESTUFMT " bytes is not all zero\n",
+                                    low_instance.u_lastbyte,
+                                    distance);
+                            }
+                         }
+                     }
+                     if (iupa->u_length) {
+                         low_instance = *iupa;
+                     }
+                     continue;
+                 }
+                 if (iupa->u_offset > newlast) {
+                     /* A gap after alignment */
+                     /* FALL thru */
+                 } else {
+                     /*  ERROR in object: alignment. */
+                     P("Warning: A gap of " LONGESTUFMT 
+                         " forced by alignment " 
+                         LONGESTUFMT 
+                         " would get into next area, something wrong. "
+                         LONGESTXFMT " > "  LONGESTXFMT 
+                         "\n",
+                         distance,iupa->u_align,
+                         newlast , iupa->u_offset);
+                     /* FALL thru */
+                 }
+            }
             /* A gap  */
             LONGESTUTYPE diff = iupa->u_offset - low_instance.u_lastbyte;
             if (print_wasted) {
+                int wasted_space_zero = FALSE;
                 P("Warning: A gap of " LONGESTXFMT
-                    " bytes at offset " LONGESTXFMT "\n",
-                    diff,low_instance.u_lastbyte);
+                    " bytes at offset " LONGESTXFMT 
+                    " through " LONGESTXFMT "\n",
+                    diff,low_instance.u_lastbyte,iupa->u_offset);
+                res = is_wasted_space_zero(low_instance.u_lastbyte,
+                    diff,&wasted_space_zero);
+                if (res == RO_OK) {
+                    if(!wasted_space_zero) {
+                        P("Warning:  Wasted space at "
+                            LONGESTXFMT8 " of length "
+                            LONGESTUFMT " bytes is not all zero\n",
+                            low_instance.u_lastbyte,
+                            diff);
+                    }
+                }
             }
             filedata.f_wasted_content_count++;
             filedata.f_wasted_content_space += diff;
@@ -1875,6 +2011,18 @@ report_wasted_space(void)
             p,
             filedata.f_wasted_content_count,
             filedata.f_wasted_content_space);
+    }
+    if (filedata.f_wasted_align_count) {
+        const char *p = "";
+        if (printfilenames) {
+            p = sanitized(filename,buffer1,BUFFERSIZE);
+        }
+        P("Warning %s: " LONGESTUFMT
+            " instances of unused alignment space exist "
+            "and total " LONGESTUFMT " bytes of alignment.\n",
+            p,
+            filedata.f_wasted_align_count,
+            filedata.f_wasted_align_space);
     }
     if (highoffset < filesize) {
         const char *p = "";

@@ -1,4 +1,9 @@
 2018-08-23  David Anderson
+     * generic_from_elf32.c,readobj.c,readobj.h: Now recognizing
+       alignment requirements as causing some unused space
+       and reports on such.
+       Checks unused space to verify it is all-zero-bits.
+2018-08-23  David Anderson
      * Created readelfobj_version.h
      * Makefile.am: Added readelfobj_version.h to the sources list.
      * readobj.h: Now -v and --version print the version date string

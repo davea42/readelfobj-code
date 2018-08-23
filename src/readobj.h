@@ -190,6 +190,7 @@ struct in_use_s {
     struct in_use_s *u_next;
     const char *u_name;
     LONGESTUTYPE u_offset;
+    LONGESTUTYPE u_align;
     LONGESTUTYPE u_length;
     LONGESTUTYPE u_lastbyte;
 };
@@ -204,6 +205,10 @@ struct filedata_s {
 
     LONGESTUTYPE f_wasted_content_space;
     LONGESTUTYPE f_wasted_content_count;
+
+    LONGESTUTYPE f_wasted_align_space;
+    LONGESTUTYPE f_wasted_align_count;
+     
 
     void *(*f_copy_word) (void *, const void *, size_t);
 
@@ -277,7 +282,7 @@ int generic_elf_load_symbols64(int secnum,const char *secname,
     LONGESTUTYPE *count_out);
 
 void insert_in_use_entry(const char *description,LONGESTUTYPE offset,
-    LONGESTUTYPE length);
+    LONGESTUTYPE length,LONGESTUTYPE align);
 
 const char * get_symbol_sto_type(LONGESTUTYPE value, char *buffer,
     unsigned buflen);
