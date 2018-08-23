@@ -11,6 +11,7 @@ readelfobj_SOURCES =  dynamic_section.c  \
 em.c \
 filedata.c \
 generic_from_elf32.c  \
+readelfobj_version.h \
 readobj.c \
 readobj.h \
 sanitized.h \

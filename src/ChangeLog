@@ -1,3 +1,8 @@
+2018-08-23  David Anderson
+     * Created readelfobj_version.h
+     * Makefile.am: Added readelfobj_version.h to the sources list.
+     * readobj.h: Now -v and --version print the version date string
+       from readelfobj_version.h.
 2018-08-22  David Anderson
      * Makefile.am: Renamed the executable as readelfobj.
      * dynamic_section.c,filedata.c,generic_from_elf32.c:

@@ -13,3 +13,10 @@ sections.
 
 To dump DWARF section contents one should use 
 dwarfdump or GNU readelf, not readelfobj.
+
+
+To update configure, update configure.ac and/or
+one or more Makefile.am and do, in the top level
+directory:
+  autoreconf -vif
+   

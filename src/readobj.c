@@ -48,6 +48,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unistd.h>
 #include "readobj.h"
 #include "sanitized.h"
+#include "readelfobj_version.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -134,6 +135,7 @@ main(int argc,char **argv)
 {
     int i = 0;
     int filecount = 0;
+    int printed_version = FALSE;
 
     if( argc == 1) {
         printf("%s\n",Usage);
@@ -166,6 +168,12 @@ main(int argc,char **argv)
                 print_dynamic_sections= 1;
                 continue;
             }
+            if((strcmp(argv[0],"--version") == 0) || 
+               (strcmp(argv[0],"-v") == 0 )) {
+                P("Version-readelfobj: %s\n", READELFOBJ_VERSION_DATE_STR);
+                printed_version = TRUE;
+                continue;
+            }
             if ( (i+1) < argc) {
                 printfilenames = 1;
             }
@@ -183,7 +191,7 @@ main(int argc,char **argv)
             clean_filedata();
             fclose(fin);
         }
-        if (filecount == 0) {
+        if (!filecount && !printed_version) {
             printf("%s\n",Usage);
             exit(1);
         }

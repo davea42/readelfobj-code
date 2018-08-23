@@ -1,3 +1,7 @@
+2018-08-23: David Anderson
+    * scripts/UPD.awk,scripts/FIXDATESTRING: These
+      enable easy updating of the version string that readelfobj -v
+      prints.
 2018-08-22: David Anderson
     * configure.ac: Added AC_CHECK_SIZEOF to try to
       get the sizes we want in readobj. Deleted some
