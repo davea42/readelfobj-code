@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 bin_PROGRAMS = readelfobj
 
-readelfobj_SOURCES =  dynamic_section.c  \
+readelfobj_SOURCES =  elfdynamic_section.c  \
 elfem.c \
 filedata.c \
 generic_from_elf32.c  \

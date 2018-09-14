@@ -108,7 +108,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_readelfobj_OBJECTS = readelfobj-dynamic_section.$(OBJEXT) \
+am_readelfobj_OBJECTS = readelfobj-elfdynamic_section.$(OBJEXT) \
 	readelfobj-elfem.$(OBJEXT) readelfobj-filedata.$(OBJEXT) \
 	readelfobj-generic_from_elf32.$(OBJEXT) \
 	readelfobj-readelfobj.$(OBJEXT) readelfobj-sanitized.$(OBJEXT)
@@ -336,7 +336,7 @@ top_srcdir = @top_srcdir@
 version_info = @version_info@
 MAINTAINERCLEANFILES = Makefile.in
 AUTOMAKE_OPTIONS = subdir-objects
-readelfobj_SOURCES = dynamic_section.c  \
+readelfobj_SOURCES = elfdynamic_section.c  \
 elfem.c \
 filedata.c \
 generic_from_elf32.c  \
@@ -451,7 +451,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dynamic_section.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-elfdynamic_section.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-elfem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-filedata.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf32.Po@am__quote@
@@ -482,19 +482,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-readelfobj-dynamic_section.o: dynamic_section.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dynamic_section.o -MD -MP -MF $(DEPDIR)/readelfobj-dynamic_section.Tpo -c -o readelfobj-dynamic_section.o `test -f 'dynamic_section.c' || echo '$(srcdir)/'`dynamic_section.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dynamic_section.Tpo $(DEPDIR)/readelfobj-dynamic_section.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dynamic_section.c' object='readelfobj-dynamic_section.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-elfdynamic_section.o: elfdynamic_section.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-elfdynamic_section.o -MD -MP -MF $(DEPDIR)/readelfobj-elfdynamic_section.Tpo -c -o readelfobj-elfdynamic_section.o `test -f 'elfdynamic_section.c' || echo '$(srcdir)/'`elfdynamic_section.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-elfdynamic_section.Tpo $(DEPDIR)/readelfobj-elfdynamic_section.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='elfdynamic_section.c' object='readelfobj-elfdynamic_section.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dynamic_section.o `test -f 'dynamic_section.c' || echo '$(srcdir)/'`dynamic_section.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-elfdynamic_section.o `test -f 'elfdynamic_section.c' || echo '$(srcdir)/'`elfdynamic_section.c
 
-readelfobj-dynamic_section.obj: dynamic_section.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dynamic_section.obj -MD -MP -MF $(DEPDIR)/readelfobj-dynamic_section.Tpo -c -o readelfobj-dynamic_section.obj `if test -f 'dynamic_section.c'; then $(CYGPATH_W) 'dynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/dynamic_section.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dynamic_section.Tpo $(DEPDIR)/readelfobj-dynamic_section.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dynamic_section.c' object='readelfobj-dynamic_section.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-elfdynamic_section.obj: elfdynamic_section.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-elfdynamic_section.obj -MD -MP -MF $(DEPDIR)/readelfobj-elfdynamic_section.Tpo -c -o readelfobj-elfdynamic_section.obj `if test -f 'elfdynamic_section.c'; then $(CYGPATH_W) 'elfdynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/elfdynamic_section.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-elfdynamic_section.Tpo $(DEPDIR)/readelfobj-elfdynamic_section.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='elfdynamic_section.c' object='readelfobj-elfdynamic_section.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dynamic_section.obj `if test -f 'dynamic_section.c'; then $(CYGPATH_W) 'dynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/dynamic_section.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-elfdynamic_section.obj `if test -f 'elfdynamic_section.c'; then $(CYGPATH_W) 'elfdynamic_section.c'; else $(CYGPATH_W) '$(srcdir)/elfdynamic_section.c'; fi`
 
 readelfobj-elfem.o: elfem.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-elfem.o -MD -MP -MF $(DEPDIR)/readelfobj-elfem.Tpo -c -o readelfobj-elfem.o `test -f 'elfem.c' || echo '$(srcdir)/'`elfem.c
