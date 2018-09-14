@@ -46,7 +46,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <time.h>
 #include <elf.h>
 #include <unistd.h>
-#include "readobj.h"
+#include "reading.h"
+#include "readelfobj.h"
 #include "sanitized.h"
 #include "readelfobj_version.h"
 

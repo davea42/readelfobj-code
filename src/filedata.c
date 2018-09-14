@@ -38,7 +38,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include <stdlib.h>
 #include <elf.h>
-#include "readobj.h"
+#include "reading.h"
+#include "readelfobj.h"
 #include "sanitized.h"
 
 static char buffer1[BUFFERSIZE];

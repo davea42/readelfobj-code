@@ -8,12 +8,13 @@ AUTOMAKE_OPTIONS = subdir-objects
 bin_PROGRAMS = readelfobj
 
 readelfobj_SOURCES =  dynamic_section.c  \
-em.c \
+elfem.c \
 filedata.c \
 generic_from_elf32.c  \
 readelfobj_version.h \
-readobj.c \
-readobj.h \
+readelfobj.c \
+reading.h \
+readelfobj.h \
 sanitized.h \
 sanitized.c
 

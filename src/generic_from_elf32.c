@@ -34,7 +34,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <stdlib.h>
 #include <elf.h>
-#include "readobj.h"
+#include "reading.h"
+#include "readelfobj.h"
 #include "sanitized.h"
 
 

@@ -36,23 +36,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-/* readobj.h */
-#if (SIZEOF_UNSIGNED_LONG < 8) && (SIZEOF_UNSIGNED_LONG_LONG == 8)
-#define LONGESTXFMT  "0x%llx"
-#define LONGESTXFMT8 "0x%08llx"
-#define LONGESTUFMT  "%llu"
-#define LONGESTSFMT  "%lld"
-#define LONGESTUTYPE unsigned long long
-#define LONGESTSTYPE long long
-#else
-#define LONGESTXFMT  "0x%lx"
-#define LONGESTXFMT8 "0x%08lx"
-#define LONGESTUFMT  "%lu"
-#define LONGESTSFMT  "%ld"
-#define LONGESTUTYPE unsigned long
-#define LONGESTSTYPE long
-#endif
-
 extern char *filename;
 extern int printfilenames;
 extern FILE *fin;
@@ -295,49 +278,7 @@ const char * get_symbol_stt_type(LONGESTUTYPE value, char *buffer,
 const char * get_osabi_name(LONGESTUTYPE value, char *buffer,
     unsigned buflen);
 
-
-
-#define PREFIX "\t"
-#define LUFMT "%lu"
-#define UFMT "%u"
-#define DFMT "%d"
-#define XFMT "0x%x"
-
-#define RO_OK         0
-#define RO_ERR        1
-#define RO_ERR_SEEK   2
-#define RO_ERR_READ   3
-#define RO_ERR_MALLOC 4
-#define RO_ERR_OTHER  5
-
-#define P printf
-#define F fflush(stdout)
-#define RR(buf,loc,siz)  ((fseek(fin,(long)loc,0)<0) ? RO_ERR_SEEK : \
-    ((fread(buf,(long)siz,1,fin)!=1)?RO_ERR_READ:RO_OK))
-#define RN(buf,siz)  ((fread(buf,siz,1,fin) != 1) ? RO_ERR_READ  : RO_OK)
-/* #define CURLOC      ftell(fin)  */
-#define SEEKTO(i)  ((fseek(fin,(long)(i),SEEK_SET) == 0)? RO_OK: RO_ERR_SEEK)
-
 int cur_read_loc(FILE *fin, long* fileoffset);
-
-/*  This will be altered to deal with endianness */
-/* #define ASSIGN(t,s) (t = s) */
-#ifdef WORDS_BIGENDIAN
-#define ASSIGN(t,s)                             \
-    do {                                        \
-        unsigned tbyte = sizeof(t) - sizeof(s); \
-        t = 0;                                  \
-        filedata.f_copy_word(((char *)t)+tbyte ,&s,sizeof(s)); \
-    } while (0)
-#else /* LITTLE ENDIAN */
-#define ASSIGN(t,s)                             \
-    do {                                        \
-        t = 0;                                  \
-        filedata.f_copy_word(&t,&s,sizeof(s));    \
-    } while (0)
-#endif /* end LITTLE- BIG-ENDIAN */
-
-#define BUFFERSIZE 1000  /* For santized() calls */
 
 #ifndef EI_NIDENT
 #define EI_NIDENT 16
