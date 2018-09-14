@@ -50,7 +50,6 @@ get_filedata(const char *name, int fd,struct filedata_s *fida)
     int res = 0;
     LONGESTSTYPE ssize = 0;
     LONGESTUTYPE usize = 0;
-    
 
     res = fseek(fd,0L,SEEK_END);
     if(res) {

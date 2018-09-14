@@ -158,8 +158,9 @@ generic_phdr_from_phdr32(struct generic_phdr **phdr_out,
         ASSIGN(gphdr->gp_memsz,pph->p_memsz);
         ASSIGN(gphdr->gp_flags,pph->p_flags);
         ASSIGN(gphdr->gp_align,pph->p_align);
-        insert_in_use_entry("Phdr target",gphdr->gp_offset,gphdr->gp_filesz,
-           gphdr->gp_align);
+        insert_in_use_entry("Phdr target",gphdr->gp_offset,
+            gphdr->gp_filesz,
+            gphdr->gp_align);
     }
     free(orig_pph);
     *phdr_out = orig_gphdr;
@@ -228,8 +229,9 @@ generic_phdr_from_phdr64(struct generic_phdr **phdr_out,
         ASSIGN(gphdr->gp_memsz,pph->p_memsz);
         ASSIGN(gphdr->gp_flags,pph->p_flags);
         ASSIGN(gphdr->gp_align,pph->p_align);
-        insert_in_use_entry("Phdr target",gphdr->gp_offset,gphdr->gp_filesz,
-           gphdr->gp_align);
+        insert_in_use_entry("Phdr target",gphdr->gp_offset,
+            gphdr->gp_filesz,
+            gphdr->gp_align);
     }
     free(orig_pph);
     *phdr_out = orig_gphdr;
@@ -1331,7 +1333,7 @@ elf_load_rela_64(LONGESTUTYPE secnum,
     return RO_ERR;
 }
 
-void 
+void
 elf_load_sect_namestring(void)
 {
     struct generic_shdr *gshdr = 0;
@@ -1408,4 +1410,3 @@ elf_load_elf_header64(void)
     }
     return res;
 }
-

@@ -183,8 +183,6 @@ struct filedata_s {
 
     LONGESTUTYPE f_wasted_align_space;
     LONGESTUTYPE f_wasted_align_count;
-     
-
     void *(*f_copy_word) (void *, const void *, size_t);
 
     struct in_use_s * f_in_use;

@@ -82,9 +82,10 @@ main(int argc,char **argv)
                 P("%s",Usage);
                 exit(0);
             }
-            if((strcmp(argv[0],"--version") == 0) || 
-               (strcmp(argv[0],"-v") == 0 )) {
-                P("Version-readelfobj: %s\n", READELFOBJ_VERSION_DATE_STR);
+            if((strcmp(argv[0],"--version") == 0) ||
+                (strcmp(argv[0],"-v") == 0 )) {
+                P("Version-readelfobj: %s\n",
+                    READELFOBJ_VERSION_DATE_STR);
                 printed_version = TRUE;
                 continue;
             }

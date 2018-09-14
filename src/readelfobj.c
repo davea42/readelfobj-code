@@ -165,9 +165,10 @@ main(int argc,char **argv)
                 print_dynamic_sections= 1;
                 continue;
             }
-            if((strcmp(argv[0],"--version") == 0) || 
-               (strcmp(argv[0],"-v") == 0 )) {
-                P("Version-readelfobj: %s\n", READELFOBJ_VERSION_DATE_STR);
+            if((strcmp(argv[0],"--version") == 0) ||
+                (strcmp(argv[0],"-v") == 0 )) {
+                P("Version-readelfobj: %s\n",
+                    READELFOBJ_VERSION_DATE_STR);
                 printed_version = TRUE;
                 continue;
             }
@@ -1022,7 +1023,7 @@ is_wasted_space_zero(LONGESTUTYPE offset,
         if (res != RO_OK) {
             free(allocspace);
             P("ERROR: could not read wasted space at offset "
-                LONGESTXFMT " properly\n", 
+                LONGESTXFMT " properly\n",
                 offset);
             return res;
         }
@@ -1108,15 +1109,9 @@ report_wasted_space(void)
     }
     for (i = 0; i < iucount; ++i,++iupa) {
         if (print_wasted) {
-#if 0
-P("dadebug LASTUSED " LONGESTXFMT8 " " LONGESTXFMT8 " " LONGESTXFMT8 
-" %s\n",
-low_instance.u_offset, low_instance.u_length, 
-low_instance.u_lastbyte,low_instance.u_name);
-#endif
-            P("[%3d] " LONGESTXFMT8 " " LONGESTXFMT8 " " LONGESTXFMT8 
+            P("[%3d] " LONGESTXFMT8 " " LONGESTXFMT8 " " LONGESTXFMT8
                 " %s\n",
-                (int)i, iupa->u_offset, iupa->u_length, 
+                (int)i, iupa->u_offset, iupa->u_length,
                 iupa->u_lastbyte,iupa->u_name);
         }
         if (!iupa->u_length) {
@@ -1144,31 +1139,32 @@ low_instance.u_lastbyte,low_instance.u_name);
         if (iupa->u_offset > low_instance.u_lastbyte) {
             LONGESTUTYPE diff = 0;
             if(iupa->u_align > 1) {
-                 LONGESTUTYPE misaligned = low_instance.u_lastbyte %
-                     iupa->u_align;
-                 LONGESTUTYPE newlast = low_instance.u_lastbyte;
-                 LONGESTUTYPE distance = 0;
-                 int wasted_space_zero = FALSE;
+                LONGESTUTYPE misaligned = low_instance.u_lastbyte %
+                    iupa->u_align;
+                LONGESTUTYPE newlast = low_instance.u_lastbyte;
+                LONGESTUTYPE distance = 0;
+                int wasted_space_zero = FALSE;
 
-                 if (misaligned) {
-                     distance =  iupa->u_align - misaligned;
-                     newlast += distance;
-                 }
-                 if (iupa->u_offset == newlast) {
-                     /* alignment space. No waste. */
-                     filedata.f_wasted_align_count++;
-                     filedata.f_wasted_align_space += distance; 
-                     if (print_wasted) {
-                         P("Warning: A gap of " LONGESTUFMT 
-                             " forced by alignment " 
-                             LONGESTUFMT 
-                             " from " LONGESTXFMT8 " to " LONGESTXFMT8
-                              "\n",
-                             distance,iupa->u_align,
-                             low_instance.u_lastbyte,iupa->u_offset);
-                         res = is_wasted_space_zero(low_instance.u_lastbyte,
-                             distance,&wasted_space_zero); 
-                         if (res == RO_OK) {
+                if (misaligned) {
+                    distance =  iupa->u_align - misaligned;
+                    newlast += distance;
+                }
+                if (iupa->u_offset == newlast) {
+                    /* alignment space. No waste. */
+                    filedata.f_wasted_align_count++;
+                    filedata.f_wasted_align_space += distance;
+                    if (print_wasted) {
+                        P("Warning: A gap of " LONGESTUFMT
+                            " forced by alignment "
+                            LONGESTUFMT
+                            " from " LONGESTXFMT8 " to " LONGESTXFMT8
+                            "\n",
+                            distance,iupa->u_align,
+                            low_instance.u_lastbyte,iupa->u_offset);
+                        res = is_wasted_space_zero(
+                            low_instance.u_lastbyte,
+                            distance,&wasted_space_zero);
+                        if (res == RO_OK) {
                             if(!wasted_space_zero) {
                                 P("  Wasted space at "
                                     LONGESTXFMT8 " of length "
@@ -1176,35 +1172,35 @@ low_instance.u_lastbyte,low_instance.u_name);
                                     low_instance.u_lastbyte,
                                     distance);
                             }
-                         }
-                     }
-                     if (iupa->u_length) {
-                         low_instance = *iupa;
-                     }
-                     continue;
-                 }
-                 if (iupa->u_offset > newlast) {
-                     /* A gap after alignment */
-                     /* FALL thru */
-                 } else {
-                     /*  ERROR in object: alignment. */
-                     P("Warning: A gap of " LONGESTUFMT 
-                         " forced by alignment " 
-                         LONGESTUFMT 
-                         " would get into next area, something wrong. "
-                         LONGESTXFMT " > "  LONGESTXFMT 
-                         "\n",
-                         distance,iupa->u_align,
-                         newlast , iupa->u_offset);
-                     /* FALL thru */
-                 }
+                        }
+                    }
+                    if (iupa->u_length) {
+                        low_instance = *iupa;
+                    }
+                    continue;
+                }
+                if (iupa->u_offset > newlast) {
+                    /* A gap after alignment */
+                    /* FALL thru */
+                } else {
+                    /*  ERROR in object: alignment. */
+                    P("Warning: A gap of " LONGESTUFMT
+                        " forced by alignment "
+                        LONGESTUFMT
+                        " would get into next area, something wrong. "
+                        LONGESTXFMT " > "  LONGESTXFMT
+                        "\n",
+                        distance,iupa->u_align,
+                        newlast , iupa->u_offset);
+                    /* FALL thru */
+                }
             }
             /* A gap  */
             diff = iupa->u_offset - low_instance.u_lastbyte;
             if (print_wasted) {
                 int wasted_space_zero = FALSE;
                 P("Warning: A gap of " LONGESTXFMT
-                    " bytes at offset " LONGESTXFMT 
+                    " bytes at offset " LONGESTXFMT
                     " through " LONGESTXFMT "\n",
                     diff,low_instance.u_lastbyte,iupa->u_offset);
                 res = is_wasted_space_zero(low_instance.u_lastbyte,
