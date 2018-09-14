@@ -91,7 +91,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = readelfobj$(EXEEXT)
+bin_PROGRAMS = readelfobj$(EXEEXT) readobjmacho$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -120,6 +120,13 @@ am__v_lt_0 = --silent
 am__v_lt_1 = 
 readelfobj_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readelfobj_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+am_readobjmacho_OBJECTS = readobjmacho-readobjmacho.$(OBJEXT) \
+	readobjmacho-sanitized.$(OBJEXT)
+readobjmacho_OBJECTS = $(am_readobjmacho_OBJECTS)
+readobjmacho_LDADD = $(LDADD)
+readobjmacho_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readobjmacho_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -155,8 +162,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(readelfobj_SOURCES)
-DIST_SOURCES = $(readelfobj_SOURCES)
+SOURCES = $(readelfobj_SOURCES) $(readobjmacho_SOURCES)
+DIST_SOURCES = $(readelfobj_SOURCES) $(readobjmacho_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -351,6 +358,15 @@ readelfobj_CFLAGS = $(RO_CFLAGS_WARN)
 readelfobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
+readobjmacho_SOURCES = readobjmacho.c \
+reading.h  \
+sanitized.h \
+sanitized.c
+
+readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
+readobjmacho_CPPFLAGS = \
+-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
+
 man_MANS = readelfobj.1
 EXTRA_DIST = \
 COPYING \
@@ -445,6 +461,10 @@ readelfobj$(EXEEXT): $(readelfobj_OBJECTS) $(readelfobj_DEPENDENCIES) $(EXTRA_re
 	@rm -f readelfobj$(EXEEXT)
 	$(AM_V_CCLD)$(readelfobj_LINK) $(readelfobj_OBJECTS) $(readelfobj_LDADD) $(LIBS)
 
+readobjmacho$(EXEEXT): $(readobjmacho_OBJECTS) $(readobjmacho_DEPENDENCIES) $(EXTRA_readobjmacho_DEPENDENCIES) 
+	@rm -f readobjmacho$(EXEEXT)
+	$(AM_V_CCLD)$(readobjmacho_LINK) $(readobjmacho_OBJECTS) $(readobjmacho_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -457,6 +477,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf32.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-readobjmacho.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-sanitized.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -565,6 +587,34 @@ readelfobj-sanitized.obj: sanitized.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readelfobj-sanitized.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
+
+readobjmacho-readobjmacho.o: readobjmacho.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-readobjmacho.o -MD -MP -MF $(DEPDIR)/readobjmacho-readobjmacho.Tpo -c -o readobjmacho-readobjmacho.o `test -f 'readobjmacho.c' || echo '$(srcdir)/'`readobjmacho.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-readobjmacho.Tpo $(DEPDIR)/readobjmacho-readobjmacho.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobjmacho.c' object='readobjmacho-readobjmacho.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-readobjmacho.o `test -f 'readobjmacho.c' || echo '$(srcdir)/'`readobjmacho.c
+
+readobjmacho-readobjmacho.obj: readobjmacho.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-readobjmacho.obj -MD -MP -MF $(DEPDIR)/readobjmacho-readobjmacho.Tpo -c -o readobjmacho-readobjmacho.obj `if test -f 'readobjmacho.c'; then $(CYGPATH_W) 'readobjmacho.c'; else $(CYGPATH_W) '$(srcdir)/readobjmacho.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-readobjmacho.Tpo $(DEPDIR)/readobjmacho-readobjmacho.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobjmacho.c' object='readobjmacho-readobjmacho.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-readobjmacho.obj `if test -f 'readobjmacho.c'; then $(CYGPATH_W) 'readobjmacho.c'; else $(CYGPATH_W) '$(srcdir)/readobjmacho.c'; fi`
+
+readobjmacho-sanitized.o: sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-sanitized.o -MD -MP -MF $(DEPDIR)/readobjmacho-sanitized.Tpo -c -o readobjmacho-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-sanitized.Tpo $(DEPDIR)/readobjmacho-sanitized.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readobjmacho-sanitized.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
+
+readobjmacho-sanitized.obj: sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-sanitized.obj -MD -MP -MF $(DEPDIR)/readobjmacho-sanitized.Tpo -c -o readobjmacho-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-sanitized.Tpo $(DEPDIR)/readobjmacho-sanitized.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readobjmacho-sanitized.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

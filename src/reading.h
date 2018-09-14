@@ -52,6 +52,11 @@ extern "C" {
 #define LONGESTSTYPE long
 #endif
 
+#define TRUE 1
+#define FALSE 0
+
+#define ALIGN4 4
+#define ALIGN8 8
 
 #define PREFIX "\t"
 #define LUFMT "%lu"

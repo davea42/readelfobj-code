@@ -1,5 +1,6 @@
 
 ###Copyright (C) 2018 Vincent Torri <vincent dot torri at gmail dot com>
+###Derived from Torri's work, but this is by David Anderson
 ###This code is public domain and can be freely used or copied.
 
 dnl defines the version name of  the libdwarf.so

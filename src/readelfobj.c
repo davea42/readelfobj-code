@@ -119,7 +119,10 @@ char *Usage = "Usage: readobj <options> file ...\n"
     "--print-symtabs print out all elf symbols (.symtab & .dynsym)\n"
     "--print-wasted print out details about file space use\n"
     "               beyond just the total wasted.\n"
-    "--only-wasted-summary  Skip printing section/segment data.\n";
+    "--only-wasted-summary  Skip printing section/segment data.\n"
+    "--help         print this message\n"
+    "--version      print version string\n";
+
 
 static void
 clean_filedata(void)
