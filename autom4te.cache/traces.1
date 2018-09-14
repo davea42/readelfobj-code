@@ -567,25 +567,65 @@ m4trace:configure.ac:40: -1- AH_OUTPUT([HAVE_UNISTD_H], [/* Define to 1 if you h
 @%:@undef HAVE_UNISTD_H])
 m4trace:configure.ac:40: -1- AH_OUTPUT([HAVE_ELF_H], [/* Define to 1 if you have the <elf.h> header file. */
 @%:@undef HAVE_ELF_H])
-m4trace:configure.ac:67: -1- AC_SUBST([RO_CFLAGS_WARN])
-m4trace:configure.ac:67: -1- AC_SUBST_TRACE([RO_CFLAGS_WARN])
-m4trace:configure.ac:67: -1- m4_pattern_allow([^RO_CFLAGS_WARN$])
-m4trace:configure.ac:67: -1- AC_SUBST([RO_CFLAGS_WARN])
-m4trace:configure.ac:67: -1- AC_SUBST_TRACE([RO_CFLAGS_WARN])
-m4trace:configure.ac:67: -1- m4_pattern_allow([^RO_CFLAGS_WARN$])
-m4trace:configure.ac:69: -1- AC_DEFINE_TRACE_LITERAL([HAVE_ELF64_RELA])
-m4trace:configure.ac:69: -1- m4_pattern_allow([^HAVE_ELF64_RELA$])
-m4trace:configure.ac:69: -1- AH_OUTPUT([HAVE_ELF64_RELA], [/* Set to 1 if Elf64_Rela defined in elf.h. */
+m4trace:configure.ac:42: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_SHORT])
+m4trace:configure.ac:42: -1- m4_pattern_allow([^SIZEOF_SHORT$])
+m4trace:configure.ac:42: -1- AH_OUTPUT([SIZEOF_SHORT], [/* The size of `short\', as computed by sizeof. */
+@%:@undef SIZEOF_SHORT])
+m4trace:configure.ac:43: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_INT])
+m4trace:configure.ac:43: -1- m4_pattern_allow([^SIZEOF_INT$])
+m4trace:configure.ac:43: -1- AH_OUTPUT([SIZEOF_INT], [/* The size of `int\', as computed by sizeof. */
+@%:@undef SIZEOF_INT])
+m4trace:configure.ac:44: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_LONG])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^SIZEOF_LONG$])
+m4trace:configure.ac:44: -1- AH_OUTPUT([SIZEOF_LONG], [/* The size of `long\', as computed by sizeof. */
+@%:@undef SIZEOF_LONG])
+m4trace:configure.ac:45: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_LONG_LONG])
+m4trace:configure.ac:45: -1- m4_pattern_allow([^SIZEOF_LONG_LONG$])
+m4trace:configure.ac:45: -1- AH_OUTPUT([SIZEOF_LONG_LONG], [/* The size of `long long\', as computed by sizeof. */
+@%:@undef SIZEOF_LONG_LONG])
+m4trace:configure.ac:46: -1- AC_DEFINE_TRACE_LITERAL([DW_TYPEOF_32BIT])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^DW_TYPEOF_32BIT$])
+m4trace:configure.ac:46: -1- AH_OUTPUT([DW_TYPEOF_32BIT], [/* short is 32bit */
+@%:@undef DW_TYPEOF_32BIT])
+m4trace:configure.ac:46: -1- AC_DEFINE_TRACE_LITERAL([DW_TYPEOF_32BIT])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^DW_TYPEOF_32BIT$])
+m4trace:configure.ac:46: -1- AH_OUTPUT([DW_TYPEOF_32BIT], [/* int is 32bit */
+@%:@undef DW_TYPEOF_32BIT])
+m4trace:configure.ac:46: -1- AC_DEFINE_TRACE_LITERAL([DW_TYPEOF_32BIT])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^DW_TYPEOF_32BIT$])
+m4trace:configure.ac:46: -1- AH_OUTPUT([DW_TYPEOF_32BIT], [/* long is 32bit */
+@%:@undef DW_TYPEOF_32BIT])
+m4trace:configure.ac:64: -1- AC_DEFINE_TRACE_LITERAL([DW_TYPEOF_64BIT])
+m4trace:configure.ac:64: -1- m4_pattern_allow([^DW_TYPEOF_64BIT$])
+m4trace:configure.ac:64: -1- AH_OUTPUT([DW_TYPEOF_64BIT], [/* int is 64bit */
+@%:@undef DW_TYPEOF_64BIT])
+m4trace:configure.ac:64: -1- AC_DEFINE_TRACE_LITERAL([DW_TYPEOF_64BIT])
+m4trace:configure.ac:64: -1- m4_pattern_allow([^DW_TYPEOF_64BIT$])
+m4trace:configure.ac:64: -1- AH_OUTPUT([DW_TYPEOF_64BIT], [/* long long is 64bit */
+@%:@undef DW_TYPEOF_64BIT])
+m4trace:configure.ac:64: -1- AC_DEFINE_TRACE_LITERAL([DW_TYPEOF_64BIT])
+m4trace:configure.ac:64: -1- m4_pattern_allow([^DW_TYPEOF_64BIT$])
+m4trace:configure.ac:64: -1- AH_OUTPUT([DW_TYPEOF_64BIT], [/* long is 64bit */
+@%:@undef DW_TYPEOF_64BIT])
+m4trace:configure.ac:108: -1- AC_SUBST([RO_CFLAGS_WARN])
+m4trace:configure.ac:108: -1- AC_SUBST_TRACE([RO_CFLAGS_WARN])
+m4trace:configure.ac:108: -1- m4_pattern_allow([^RO_CFLAGS_WARN$])
+m4trace:configure.ac:108: -1- AC_SUBST([RO_CFLAGS_WARN])
+m4trace:configure.ac:108: -1- AC_SUBST_TRACE([RO_CFLAGS_WARN])
+m4trace:configure.ac:108: -1- m4_pattern_allow([^RO_CFLAGS_WARN$])
+m4trace:configure.ac:110: -1- AC_DEFINE_TRACE_LITERAL([HAVE_ELF64_RELA])
+m4trace:configure.ac:110: -1- m4_pattern_allow([^HAVE_ELF64_RELA$])
+m4trace:configure.ac:110: -1- AH_OUTPUT([HAVE_ELF64_RELA], [/* Set to 1 if Elf64_Rela defined in elf.h. */
 @%:@undef HAVE_ELF64_RELA])
-m4trace:configure.ac:90: -1- AC_DEFINE_TRACE_LITERAL([HAVE_ELF64_REL])
-m4trace:configure.ac:90: -1- m4_pattern_allow([^HAVE_ELF64_REL$])
-m4trace:configure.ac:90: -1- AH_OUTPUT([HAVE_ELF64_REL], [/* Set to 1 if Elf64_Rel defined. */
+m4trace:configure.ac:131: -1- AC_DEFINE_TRACE_LITERAL([HAVE_ELF64_REL])
+m4trace:configure.ac:131: -1- m4_pattern_allow([^HAVE_ELF64_REL$])
+m4trace:configure.ac:131: -1- AH_OUTPUT([HAVE_ELF64_REL], [/* Set to 1 if Elf64_Rel defined. */
 @%:@undef HAVE_ELF64_REL])
-m4trace:configure.ac:90: -1- AC_DEFINE_TRACE_LITERAL([HAVE_ELF64_SYM])
-m4trace:configure.ac:90: -1- m4_pattern_allow([^HAVE_ELF64_SYM$])
-m4trace:configure.ac:90: -1- AH_OUTPUT([HAVE_ELF64_SYM], [/* Set to 1 if Elf64_Sym defined. */
+m4trace:configure.ac:131: -1- AC_DEFINE_TRACE_LITERAL([HAVE_ELF64_SYM])
+m4trace:configure.ac:131: -1- m4_pattern_allow([^HAVE_ELF64_SYM$])
+m4trace:configure.ac:131: -1- AH_OUTPUT([HAVE_ELF64_SYM], [/* Set to 1 if Elf64_Sym defined. */
 @%:@undef HAVE_ELF64_SYM])
-m4trace:configure.ac:115: -1- AH_OUTPUT([WORDS_BIGENDIAN], [/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+m4trace:configure.ac:156: -1- AH_OUTPUT([WORDS_BIGENDIAN], [/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined AC_APPLE_UNIVERSAL_BUILD
 # if defined __BIG_ENDIAN__
@@ -596,48 +636,48 @@ m4trace:configure.ac:115: -1- AH_OUTPUT([WORDS_BIGENDIAN], [/* Define WORDS_BIGE
 #  undef WORDS_BIGENDIAN
 # endif
 #endif])
-m4trace:configure.ac:115: -1- AC_DEFINE_TRACE_LITERAL([WORDS_BIGENDIAN])
-m4trace:configure.ac:115: -1- m4_pattern_allow([^WORDS_BIGENDIAN$])
-m4trace:configure.ac:115: -1- AC_DEFINE_TRACE_LITERAL([AC_APPLE_UNIVERSAL_BUILD])
-m4trace:configure.ac:115: -1- m4_pattern_allow([^AC_APPLE_UNIVERSAL_BUILD$])
-m4trace:configure.ac:115: -1- AH_OUTPUT([AC_APPLE_UNIVERSAL_BUILD], [/* Define if building universal (internal helper macro) */
+m4trace:configure.ac:156: -1- AC_DEFINE_TRACE_LITERAL([WORDS_BIGENDIAN])
+m4trace:configure.ac:156: -1- m4_pattern_allow([^WORDS_BIGENDIAN$])
+m4trace:configure.ac:156: -1- AC_DEFINE_TRACE_LITERAL([AC_APPLE_UNIVERSAL_BUILD])
+m4trace:configure.ac:156: -1- m4_pattern_allow([^AC_APPLE_UNIVERSAL_BUILD$])
+m4trace:configure.ac:156: -1- AH_OUTPUT([AC_APPLE_UNIVERSAL_BUILD], [/* Define if building universal (internal helper macro) */
 @%:@undef AC_APPLE_UNIVERSAL_BUILD])
-m4trace:configure.ac:116: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_UNSIGNED_LONG_LONG])
-m4trace:configure.ac:116: -1- m4_pattern_allow([^SIZEOF_UNSIGNED_LONG_LONG$])
-m4trace:configure.ac:116: -1- AH_OUTPUT([SIZEOF_UNSIGNED_LONG_LONG], [/* The size of `unsigned long long\', as computed by sizeof. */
+m4trace:configure.ac:157: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_UNSIGNED_LONG_LONG])
+m4trace:configure.ac:157: -1- m4_pattern_allow([^SIZEOF_UNSIGNED_LONG_LONG$])
+m4trace:configure.ac:157: -1- AH_OUTPUT([SIZEOF_UNSIGNED_LONG_LONG], [/* The size of `unsigned long long\', as computed by sizeof. */
 @%:@undef SIZEOF_UNSIGNED_LONG_LONG])
-m4trace:configure.ac:117: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_UNSIGNED_LONG])
-m4trace:configure.ac:117: -1- m4_pattern_allow([^SIZEOF_UNSIGNED_LONG$])
-m4trace:configure.ac:117: -1- AH_OUTPUT([SIZEOF_UNSIGNED_LONG], [/* The size of `unsigned long\', as computed by sizeof. */
+m4trace:configure.ac:158: -1- AC_DEFINE_TRACE_LITERAL([SIZEOF_UNSIGNED_LONG])
+m4trace:configure.ac:158: -1- m4_pattern_allow([^SIZEOF_UNSIGNED_LONG$])
+m4trace:configure.ac:158: -1- AH_OUTPUT([SIZEOF_UNSIGNED_LONG], [/* The size of `unsigned long\', as computed by sizeof. */
 @%:@undef SIZEOF_UNSIGNED_LONG])
-m4trace:configure.ac:119: -1- AC_CONFIG_FILES([
+m4trace:configure.ac:161: -1- AC_CONFIG_FILES([
 Makefile
 src/Makefile
 ])
-m4trace:configure.ac:124: -1- AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([LIB@&t@OBJS])
-m4trace:configure.ac:124: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:124: -1- AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([LTLIBOBJS])
-m4trace:configure.ac:124: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:124: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
-m4trace:configure.ac:124: -1- AC_SUBST([am__EXEEXT_TRUE])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([am__EXEEXT_TRUE])
-m4trace:configure.ac:124: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
-m4trace:configure.ac:124: -1- AC_SUBST([am__EXEEXT_FALSE])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([am__EXEEXT_FALSE])
-m4trace:configure.ac:124: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
-m4trace:configure.ac:124: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
-m4trace:configure.ac:124: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([top_builddir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([top_build_prefix])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([srcdir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([abs_srcdir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([top_srcdir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([abs_top_srcdir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([builddir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([abs_builddir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([abs_top_builddir])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([INSTALL])
-m4trace:configure.ac:124: -1- AC_SUBST_TRACE([MKDIR_P])
-m4trace:configure.ac:124: -1- AC_REQUIRE_AUX_FILE([ltmain.sh])
+m4trace:configure.ac:166: -1- AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([LIB@&t@OBJS])
+m4trace:configure.ac:166: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:166: -1- AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([LTLIBOBJS])
+m4trace:configure.ac:166: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:166: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:166: -1- AC_SUBST([am__EXEEXT_TRUE])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([am__EXEEXT_TRUE])
+m4trace:configure.ac:166: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:166: -1- AC_SUBST([am__EXEEXT_FALSE])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([am__EXEEXT_FALSE])
+m4trace:configure.ac:166: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:166: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:166: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([top_builddir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([top_build_prefix])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([srcdir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([abs_srcdir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([top_srcdir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([abs_top_srcdir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([builddir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([abs_builddir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([abs_top_builddir])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([INSTALL])
+m4trace:configure.ac:166: -1- AC_SUBST_TRACE([MKDIR_P])
+m4trace:configure.ac:166: -1- AC_REQUIRE_AUX_FILE([ltmain.sh])

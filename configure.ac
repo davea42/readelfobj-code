@@ -39,6 +39,47 @@ AC_SUBST([release_info])
 AC_PROG_CC
 AC_CHECK_HEADERS([unistd.h elf.h])
 
+AC_CHECK_SIZEOF([short])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([long])
+AC_CHECK_SIZEOF([long long])
+AS_IF( 
+    [ test "${ac_cv_sizeof_short}" = "4" ],
+    [ AC_DEFINE([DW_TYPEOF_32BIT],[short],[short is 32bit]) 
+      type32bit="short" 
+    ],
+    [ AS_IF( [ test "${ac_cv_sizeof_int}" = "4" ],
+         [AC_DEFINE([DW_TYPEOF_32BIT],[int],[int is 32bit])
+             type32bit="int" 
+         ],
+         [ AS_IF( [ test "${ac_cv_sizeof_long}" = "4" ],
+
+            [AC_DEFINE([DW_TYPEOF_32BIT],[long],[long is 32bit])
+             type32bit="long" 
+            ],
+            [AC_MSG_ERROR([We do not have a 32bit type])])
+         ]
+    )])
+
+AS_IF(
+    [ test "${ac_cv_sizeof_int}" = "8" ],
+    [ AC_DEFINE([DW_TYPEOF_64BIT],[int],[int is 64bit]) 
+      type64bit="int"
+    ],
+    [ AS_IF( [ test "${ac_cv_sizeof_long_long}" = "8" ],
+         [AC_DEFINE([DW_TYPEOF_64BIT],[long long],
+             [long long is 64bit])
+             type64bit="long long" 
+         ],
+         [ AS_IF( [ test "${ac_cv_sizeof_long}" = "8" ],
+
+            [AC_DEFINE([DW_TYPEOF_64BIT],[long],[long is 64bit])
+             type64bit="long" 
+            ],
+            [AC_MSG_ERROR([We do not have a 64bit type])])
+         ]
+    )])
+
 AC_ARG_ENABLE([wall],
    [AS_HELP_STRING([--enable-wall],
                    [enable -Wall and other options @<:@default=no@:>@])],
@@ -116,6 +157,7 @@ AC_C_BIGENDIAN
 AC_CHECK_SIZEOF([unsigned long long])
 AC_CHECK_SIZEOF([unsigned long])
 
+
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
@@ -137,6 +179,8 @@ echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  sizeof unsigned long.: ${ac_cv_sizeof_unsigned_long}"
 echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
+echo "  Preferred 32bit......: ${type32bit}"
+echo "  Preferred 64bit......: ${type64bit}"
 echo
 echo "  readelfobj...........: always"
 echo
