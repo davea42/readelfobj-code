@@ -10,7 +10,7 @@ bin_PROGRAMS = readelfobj readobjmacho
 readelfobj_SOURCES =  elfdynamic_section.c  \
 elfem.c \
 filedata.c \
-generic_from_elf32.c  \
+generic_from_elf.c  \
 readelfobj_version.h \
 readelfobj.c \
 reading.h \

@@ -151,14 +151,6 @@ int generic_rel_from_rel32(struct generic_shdr * gsh,
 int generic_rel_from_rel64(struct generic_shdr * gsh,
     Elf64_Rel *relp,
     struct generic_rela *grel);
-int generic_rel_from_rela32(struct generic_shdr * gsh,
-    Elf32_Rela *relp,
-    struct generic_rela *grel_out);
-int generic_rel_from_rela64(struct generic_shdr * gsh,
-    Elf64_Rela *relp,
-    struct generic_rela *grel);
-
-
 
 
 struct location {
@@ -263,6 +255,32 @@ int generic_elf_load_symbols32(int secnum,const char *secname,
 int generic_elf_load_symbols64(int secnum,const char *secname,
     struct generic_symentry **gsym_out,LONGESTUTYPE offset,LONGESTUTYPE size,
     LONGESTUTYPE *count_out);
+int elf_load_dynstr(int isdynsym,
+    LONGESTUTYPE strsect,LONGESTUTYPE strlen);
+
+int elf_load_elf_header32(void);
+int elf_load_elf_header64(void);
+int elf_load_sectheaders32(LONGESTUTYPE, LONGESTUTYPE, LONGESTUTYPE);
+int elf_load_sectheaders64(LONGESTUTYPE, LONGESTUTYPE, LONGESTUTYPE);
+void elf_load_sect_namestring(void);
+int elf_load_sectstrings(LONGESTUTYPE);
+int elf_load_progheaders32(LONGESTUTYPE ,LONGESTUTYPE, LONGESTUTYPE);
+int elf_load_progheaders64(LONGESTUTYPE ,LONGESTUTYPE, LONGESTUTYPE);
+int elf_load_rela_32(LONGESTUTYPE secnum,
+    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    LONGESTUTYPE *count_out);
+int elf_load_rela_64(LONGESTUTYPE secnum,
+    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    LONGESTUTYPE *count_out);
+int elf_load_rel_32(LONGESTUTYPE secnum,
+    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    LONGESTUTYPE *count_out);
+int elf_load_rel_64(LONGESTUTYPE secnum,
+    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    LONGESTUTYPE *count_out);
+
+
+
 
 void insert_in_use_entry(const char *description,LONGESTUTYPE offset,
     LONGESTUTYPE length,LONGESTUTYPE align);

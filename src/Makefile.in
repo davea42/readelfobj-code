@@ -110,7 +110,7 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_readelfobj_OBJECTS = readelfobj-elfdynamic_section.$(OBJEXT) \
 	readelfobj-elfem.$(OBJEXT) readelfobj-filedata.$(OBJEXT) \
-	readelfobj-generic_from_elf32.$(OBJEXT) \
+	readelfobj-generic_from_elf.$(OBJEXT) \
 	readelfobj-readelfobj.$(OBJEXT) readelfobj-sanitized.$(OBJEXT)
 readelfobj_OBJECTS = $(am_readelfobj_OBJECTS)
 readelfobj_LDADD = $(LDADD)
@@ -346,7 +346,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 readelfobj_SOURCES = elfdynamic_section.c  \
 elfem.c \
 filedata.c \
-generic_from_elf32.c  \
+generic_from_elf.c  \
 readelfobj_version.h \
 readelfobj.c \
 reading.h \
@@ -474,7 +474,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-elfdynamic_section.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-elfem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-filedata.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf32.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-readobjmacho.Po@am__quote@
@@ -546,19 +546,19 @@ readelfobj-filedata.obj: filedata.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-filedata.obj `if test -f 'filedata.c'; then $(CYGPATH_W) 'filedata.c'; else $(CYGPATH_W) '$(srcdir)/filedata.c'; fi`
 
-readelfobj-generic_from_elf32.o: generic_from_elf32.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf32.o -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf32.Tpo -c -o readelfobj-generic_from_elf32.o `test -f 'generic_from_elf32.c' || echo '$(srcdir)/'`generic_from_elf32.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf32.Tpo $(DEPDIR)/readelfobj-generic_from_elf32.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf32.c' object='readelfobj-generic_from_elf32.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-generic_from_elf.o: generic_from_elf.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf.o -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf.Tpo -c -o readelfobj-generic_from_elf.o `test -f 'generic_from_elf.c' || echo '$(srcdir)/'`generic_from_elf.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf.Tpo $(DEPDIR)/readelfobj-generic_from_elf.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf.c' object='readelfobj-generic_from_elf.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf32.o `test -f 'generic_from_elf32.c' || echo '$(srcdir)/'`generic_from_elf32.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf.o `test -f 'generic_from_elf.c' || echo '$(srcdir)/'`generic_from_elf.c
 
-readelfobj-generic_from_elf32.obj: generic_from_elf32.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf32.obj -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf32.Tpo -c -o readelfobj-generic_from_elf32.obj `if test -f 'generic_from_elf32.c'; then $(CYGPATH_W) 'generic_from_elf32.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf32.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf32.Tpo $(DEPDIR)/readelfobj-generic_from_elf32.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf32.c' object='readelfobj-generic_from_elf32.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-generic_from_elf.obj: generic_from_elf.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf.obj -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf.Tpo -c -o readelfobj-generic_from_elf.obj `if test -f 'generic_from_elf.c'; then $(CYGPATH_W) 'generic_from_elf.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf.Tpo $(DEPDIR)/readelfobj-generic_from_elf.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf.c' object='readelfobj-generic_from_elf.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf32.obj `if test -f 'generic_from_elf32.c'; then $(CYGPATH_W) 'generic_from_elf32.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf32.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf.obj `if test -f 'generic_from_elf.c'; then $(CYGPATH_W) 'generic_from_elf.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf.c'; fi`
 
 readelfobj-readelfobj.o: readelfobj.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-readelfobj.o -MD -MP -MF $(DEPDIR)/readelfobj-readelfobj.Tpo -c -o readelfobj-readelfobj.o `test -f 'readelfobj.c' || echo '$(srcdir)/'`readelfobj.c
