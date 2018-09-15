@@ -1,0 +1,4 @@
+Warning : Wasted .dynamic section entries: 0xa (10)
+Warning : Wasted .dynamic section space  : 0xa0 (160)
+Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
+Warning : 1 instances of wasted section space exist and total 1 bytes wasted.
