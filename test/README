@@ -1,4 +1,9 @@
 
+
+All tests assume readelfobj (version to test)
+is copied to this directlry by PICKUP
+or something else
+
 Testobject
 libkrb5support.so.0.1.debug is from libdwarf regressiontests
-     directory hughes.
+      in the directory hughes.

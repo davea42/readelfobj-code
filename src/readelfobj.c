@@ -102,7 +102,7 @@ char *filename;
 int printfilenames;
 FILE *fin;
 
-char *Usage = "Usage: readobj <options> file ...\n"
+char *Usage = "Usage: readelfobj <options> file ...\n"
     "Options:\n"
     "--print-dynamic print the .dynamic section (DT_ stuff)\n"
     "--print-relocs print relocation entries (.rela & .rel)\n"

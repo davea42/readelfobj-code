@@ -1,2 +1,3 @@
 #!/bin/sh
 rm junk*
+rm readelfobj
