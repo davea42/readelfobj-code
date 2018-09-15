@@ -1,0 +1,10 @@
+Usage: readelfobj <options> file ...
+Options:
+--print-dynamic print the .dynamic section (DT_ stuff)
+--print-relocs print relocation entries (.rela & .rel)
+--print-symtabs print out all elf symbols (.symtab & .dynsym)
+--print-wasted print out details about file space use
+               beyond just the total wasted.
+--only-wasted-summary  Skip printing section/segment data.
+--help         print this message
+--version      print version string
