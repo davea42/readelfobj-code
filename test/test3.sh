@@ -4,7 +4,7 @@ base=$n.base
 o=libkrb5support.so.0.1.debug
 #echo "START test $n "
 ./readelfobj --print-dynamic $o  >junk.$n
-diff junk.$n $n.base > junk.$n.out
+diff $n.base junk.$n  > junk.$n.out
 if [ $? -ne 0 ]
 then
   cat junk.$n.out
