@@ -1,4 +1,7 @@
 2018-09-16  David Anderson
+     * readelfobj.c: Now detects PT_DYNAMIC vs .dynamic
+       section mismatches.
+2018-09-16  David Anderson
      * elfdynamic_section.c: Replaces dynamic_section.c.
        Now properly sign extends the d_tag of the dynamic section.
      * elfem.c: Replaces em.c. Now uses LONGESTUTYPE at a

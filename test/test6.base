@@ -206,6 +206,7 @@ Section 38, name 9 .strtab
 }
 Warning : Wasted .dynamic section entries: 0xa (10)
 Warning : Wasted .dynamic section space  : 0xa0 (160)
+Warning: dynamic section error: ProgHeader  2 PT_DYNAMIC offset 0xcd10 (52496)  but section 21 .dynamic offset 0x200 (512)
 Listing Used Areas
 []        offset       length  finaloffset    name
 [  0] 0x00000000 0x00000000 0x00000000 Shdr target

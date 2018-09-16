@@ -20,7 +20,8 @@ done
 
 if [ $ct -gt 0 ]
 then
-  echo "FAIL COUNT: $ct"
+  echo "FAIL. COUNT: $ct"
   exit 1
 fi
+echo "PASS." 
 exit 0

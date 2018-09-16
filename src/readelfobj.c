@@ -286,6 +286,93 @@ ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len)
     return orig_s1;
 }
 
+static void
+check_dynamic_section(void)
+{
+    LONGESTUTYPE pcount = filedata.f_loc_phdr.g_count;
+    struct generic_phdr *gphdr = filedata.f_phdr;
+    struct generic_shdr *gshdr = 0;
+    LONGESTUTYPE scount = filedata.f_loc_shdr.g_count;
+    LONGESTUTYPE i = 0;
+    LONGESTUTYPE dynamic_p_offset = 0;
+    LONGESTUTYPE dynamic_p_length = 0;
+    LONGESTUTYPE dynamic_p_pnum = 0;
+    LONGESTUTYPE dynamic_s_offset = 0;
+    LONGESTUTYPE dynamic_s_length = 0;
+    LONGESTUTYPE dynamic_s_snum = 0;
+    int foundp = FALSE;
+    int founds = FALSE;
+
+    if (!pcount) {
+        /* nothing to do. */
+        return;
+    }
+    if (!scount) {
+        /* nothing to do. */
+        return;
+    }
+
+    /*  In case of error reading headers count might now be zero */
+    for( i = 0; i < pcount; ++i,  gphdr++) {
+        const char *typename = get_program_header_type_name(
+            gphdr->gp_type, buffer1,BUFFERSIZE);
+
+        /* The type name returned is in ( ) */
+        if (!strcmp(typename, "(PT_DYNAMIC )")) {
+            dynamic_p_offset = gphdr->gp_offset;
+            dynamic_p_length = gphdr->gp_filesz;
+            dynamic_p_pnum = i;
+            foundp = TRUE;
+            break;
+        }
+    }
+
+    gshdr = filedata.f_shdr;
+    for(i = 0; i < scount; i++, ++gshdr) {
+        const char *namestr = sanitized(gshdr->gh_namestring,
+            buffer1,BUFFERSIZE);
+        if (!strcmp(namestr,".dynamic")) {
+            dynamic_s_offset = gshdr->gh_offset;
+            dynamic_s_length = gshdr->gh_size;
+            dynamic_s_snum = i;
+            founds = TRUE;
+            break;
+        }
+    }
+    if (!foundp || !founds) {
+        /* Nothing to do */
+        return;
+    }
+    if (dynamic_p_offset !=  dynamic_s_offset) {
+        P("Warning: dynamic section error: ProgHeader  "
+            LONGESTUFMT " PT_DYNAMIC"
+            " offset " LONGESTXFMT " (" LONGESTUFMT ") "
+            " but section " LONGESTUFMT " .dynamic"
+            " offset " LONGESTXFMT " (" LONGESTUFMT ")\n",
+            dynamic_p_pnum,
+            dynamic_p_offset,
+            dynamic_p_offset,
+            dynamic_s_snum,
+            dynamic_s_offset,
+            dynamic_s_offset);
+        return;
+    }
+    if (dynamic_p_length !=  dynamic_s_length) {
+        P("Warning: dynamic section error:  ProgHeader "
+            LONGESTUFMT " PT_DYNAMIC"
+            " length " LONGESTXFMT " (" LONGESTUFMT ") "
+            " but section " LONGESTUFMT " .dynamic"
+            " length " LONGESTXFMT " (" LONGESTUFMT ")\n",
+            dynamic_p_pnum,
+            dynamic_p_length,
+            dynamic_p_length,
+            dynamic_s_snum,
+            dynamic_s_length,
+            dynamic_s_length);
+        return;
+    }
+    return;
+}
 
 
 static void
@@ -489,6 +576,7 @@ do_one_file(const char *s)
             filedata.f_wasted_dynamic_space,
             filedata.f_wasted_dynamic_space);
     }
+    check_dynamic_section();
     report_wasted_space();
 }
 static void
@@ -1060,6 +1148,7 @@ comproffset(const void *l_in, const void *r_in)
     }
     return 0;
 }
+
 
 static void
 report_wasted_space(void)

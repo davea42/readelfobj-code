@@ -1,4 +1,7 @@
 2018-09-16   David Anderson
+    * test3.base,test4.base,test5.base,test6.base,test7.base:
+      Updated per new error-dection in readelfobj.
+2018-09-16   David Anderson
     * CLEANUP: cleanup temp files.
     * libkrb5support.so.0.1.debug: A test objectfile.
     * PICKUP:  Copy readelfobj from build to here.
