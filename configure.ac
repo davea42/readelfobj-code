@@ -18,7 +18,7 @@ m4_define([lt_age], [v_min])
 
 ### Sets the release name.
 ###m4_define([v_date], [m4_esyscmd_s([date "+%Y%m%d"])])
-m4_define([v_date], [20180912])])
+m4_define([v_date], [20180915])])
 
 AC_PREREQ([2.52])
 ### 2nd arg to AC_INIT is the version 'number'.
@@ -161,6 +161,7 @@ AC_CHECK_SIZEOF([unsigned long])
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
+test/Makefile
 ])
 
 AC_OUTPUT

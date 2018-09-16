@@ -2,7 +2,7 @@
 ### This code is public domain and can be freely used or copied.
 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = src
+SUBDIRS = src test
 
 MAINTAINERCLEANFILES = \
 Makefile.in \
@@ -30,7 +30,6 @@ COPYING \
 ChangeLog \
 NEWS \
 README
-
 
 # AUTHORS, ChangeLog and COPYING must be present
 

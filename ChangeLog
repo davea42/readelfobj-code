@@ -1,4 +1,9 @@
 2018-09-16: David Anderson
+    * Makefile.am, configure.ac: Working toward a working 
+      'make check'
+2018-09-16: David Anderson
+    * Makefile.am: created to implement 'make check'
+2018-09-16: David Anderson
     * tests/: Created the test directory
       and some test cases and expected results.
 2018-08-23: David Anderson
