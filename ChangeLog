@@ -1,3 +1,6 @@
+2018-09-16: David Anderson
+    * tests/: Created the test directory
+      and some test cases and expected results.
 2018-08-23: David Anderson
     * scripts/UPD.awk,scripts/FIXDATESTRING: These
       enable easy updating of the version string that readelfobj -v

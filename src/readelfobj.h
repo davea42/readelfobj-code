@@ -91,7 +91,8 @@ struct generic_shdr {
 struct generic_dynentry {
     LONGESTSTYPE  gd_tag;
     /*  gd_val stands in for d_ptr and d_val union,
-        the union adds nothing in practice. */
+        the union adds nothing in practice since
+        we expect ptrsize <= ulongest. */
     LONGESTUTYPE  gd_val;
     LONGESTUTYPE  gd_dyn_file_offset;
 };

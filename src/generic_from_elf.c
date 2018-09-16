@@ -32,6 +32,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "config.h"
 #include <stdio.h>
+#include <string.h> /* For memcpy etc */
 #include <stdlib.h>
 #include <elf.h>
 #include "reading.h"
@@ -557,7 +558,9 @@ generic_rel_from_rela32(struct generic_shdr * gsh,
     for ( i = 0; i < ecount; ++i,++relp,++grel) {
         ASSIGN(grel->gr_offset,relp->r_offset);
         ASSIGN(grel->gr_info,relp->r_info);
+        /* addend signed */
         ASSIGN(grel->gr_addend,relp->r_addend);
+        SIGN_EXTEND(grel->gr_addend,sizeof(relp->r_addend));
         grel->gr_sym  = relp->r_info >>8; /* ELF32_R_SYM */
         grel->gr_type = relp->r_info  & 0xff; /* ELF32_R_TYPE */
     }
@@ -587,6 +590,7 @@ generic_rel_from_rela64(struct generic_shdr * gsh,
         ASSIGN(grel->gr_offset,relp->r_offset);
         ASSIGN(grel->gr_info,relp->r_info);
         ASSIGN(grel->gr_addend,relp->r_addend);
+        SIGN_EXTEND(grel->gr_addend,sizeof(relp->r_addend));
         grel->gr_sym  = relp->r_info >>8; /* ELF64_R_SYM */
         grel->gr_type = relp->r_info  & 0xff; /* ELF64_R_TYPE */
     }

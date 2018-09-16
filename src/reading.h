@@ -87,11 +87,28 @@ extern "C" {
         t = 0;                                  \
         filedata.f_copy_word(((char *)t)+tbyte ,&s,sizeof(s)); \
     } while (0)
+#define SIGN_EXTEND(dest, length)           \
+    do {                                    \
+        if (*(signed char *)((char *)&dest +\
+            sizeof(dest) - length) < 0) {   \
+            memcpy((char *)&dest, "\xff\xff\xff\xff\xff\xff\xff\xff", \
+                sizeof(dest) - length);     \
+        }                                   \
+    } while (0)
+
 #else /* LITTLE ENDIAN */
 #define ASSIGN(t,s)                             \
     do {                                        \
         t = 0;                                  \
         filedata.f_copy_word(&t,&s,sizeof(s));    \
+    } while (0)
+#define SIGN_EXTEND(dest, length)                               \
+    do {                                                        \
+        if (*(signed char *)((char *)&dest + (length-1)) < 0) { \
+            memcpy((char *)&dest+length,                        \
+                "\xff\xff\xff\xff\xff\xff\xff\xff",             \
+                sizeof(dest) - length);                         \
+        }                                                       \
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
 

@@ -58,12 +58,12 @@ THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
 /*  Used for all sorts of tables, not just e_machine */
 struct em_values {
    const char *em_name;
-   unsigned em_number;
+   LONGESTUTYPE em_number;
 };
 
 static const char *
 standard_table_name(struct em_values *em,
-    unsigned value,char *buffer,
+    LONGESTUTYPE value,char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = em;
@@ -92,8 +92,13 @@ standard_table_name(struct em_values *em,
             break;
         }
     }
-    buffer[next++] = ')';
-    buffer[next] = 0;
+    if (buffer[1] == 0) {
+        /*  Found no matches. Bogus number or incomplete table. */
+        strcpy(buffer,"(Unknown)");
+    } else {
+        buffer[next++] = ')';
+        buffer[next] = 0;
+    }
     return buffer;
 }
 

@@ -88,19 +88,19 @@ Section 9, name 125 .rela.plt
   addr 0x2510 (9488) offset 0x1f0 (496), size 2592
   link 3, info 11, align 8, entsize 24
 Section 10, name 135 .init
-  type 0x8 (SHT_NOBITS ), flags 0x6 ()
+  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
   addr 0x2f30 (12080) offset 0x1f0 (496), size 26
   link 0, info 0, align 4, entsize 0
 Section 11, name 130 .plt
-  type 0x8 (SHT_NOBITS ), flags 0x6 ()
+  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
   addr 0x2f50 (12112) offset 0x1f0 (496), size 1744
   link 0, info 0, align 16, entsize 16
 Section 12, name 141 .text
-  type 0x8 (SHT_NOBITS ), flags 0x6 ()
+  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
   addr 0x3620 (13856) offset 0x1f0 (496), size 26988
   link 0, info 0, align 16, entsize 0
 Section 13, name 147 .fini
-  type 0x8 (SHT_NOBITS ), flags 0x6 ()
+  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
   addr 0x9f8c (40844) offset 0x1f0 (496), size 9
   link 0, info 0, align 4, entsize 0
 Section 14, name 153 .rodata
@@ -116,43 +116,43 @@ Section 16, name 175 .eh_frame
   addr 0xaaa8 (43688) offset 0x200 (512), size 6804
   link 0, info 0, align 8, entsize 0
 Section 17, name 185 .init_array
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20ccc8 (2149576) offset 0x200 (512), size 8
   link 0, info 0, align 8, entsize 0
 Section 18, name 197 .fini_array
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20ccd0 (2149584) offset 0x200 (512), size 24
   link 0, info 0, align 8, entsize 0
 Section 19, name 209 .jcr
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20cce8 (2149608) offset 0x200 (512), size 8
   link 0, info 0, align 8, entsize 0
 Section 20, name 214 .data.rel.ro
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20ccf0 (2149616) offset 0x200 (512), size 32
   link 0, info 0, align 16, entsize 0
 Section 21, name 227 .dynamic
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20cd10 (2149648) offset 0x200 (512), size 560
   link 4, info 0, align 8, entsize 16
 Section 22, name 236 .got
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20cf40 (2150208) offset 0x200 (512), size 184
   link 0, info 0, align 8, entsize 8
 Section 23, name 241 .got.plt
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20d000 (2150400) offset 0x200 (512), size 888
   link 0, info 0, align 8, entsize 8
 Section 24, name 250 .data
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20d380 (2151296) offset 0x200 (512), size 232
   link 0, info 0, align 16, entsize 0
 Section 25, name 256 .bss
-  type 0x8 (SHT_NOBITS ), flags 0x3 ()
+  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
   addr 0x20d480 (2151552) offset 0x200 (512), size 456
   link 0, info 0, align 32, entsize 0
 Section 26, name 261 .comment
-  type 0x1 (SHT_PROGBITS ), flags 0x30 ()
+  type 0x1 (SHT_PROGBITS ), flags 0x30 (Unknown)
   addr 0x0 (0) offset 0x200 (512), size 44
   link 0, info 0, align 1, entsize 1
 Section 27, name 270 .debug_aranges
@@ -172,7 +172,7 @@ Section 30, name 311 .debug_line
   addr 0x0 (0) offset 0xc112 (49426), size 10162
   link 0, info 0, align 1, entsize 0
 Section 31, name 323 .debug_str
-  type 0x1 (SHT_PROGBITS ), flags 0x30 ()
+  type 0x1 (SHT_PROGBITS ), flags 0x30 (Unknown)
   addr 0x0 (0) offset 0xe8c4 (59588), size 3305
   link 0, info 0, align 1, entsize 1
 Section 32, name 334 .debug_loc

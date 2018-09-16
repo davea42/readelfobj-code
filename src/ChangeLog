@@ -1,3 +1,13 @@
+2018-09-16  David Anderson
+     * elfdynamic_section.c: Replaces dynamic_section.c.
+       Now properly sign extends the d_tag of the dynamic section.
+     * elfem.c: Replaces em.c. Now uses LONGESTUTYPE at a
+       critical point and ensures that the tag field has enough
+       bits (64 bits).
+     * generic_from_elf.c: Replaces generic_from_elf32.c.
+       Now properly sign extends the r_addend rela field.
+     * readelfobj.c: Replaces readobj.c.
+       Added SIGN_EXTEND macro.
 2018-08-23  David Anderson
      * generic_from_elf32.c,readobj.c,readobj.h: Now recognizing
        alignment requirements as causing some unused space

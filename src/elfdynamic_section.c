@@ -90,7 +90,9 @@ generic_dyn_from_dyn32(struct generic_dynentry **gbuffer_io,
     }
     for(i = 0; i < ecount;
         ++i,++gbuffer,++ebuf,trueoff += sizeof(Elf32_Dyn)) {
+        /* SIGNED VALUE */
         ASSIGN(gbuffer->gd_tag,ebuf->d_tag);
+        SIGN_EXTEND(gbuffer->gd_tag,sizeof(ebuf->d_tag));
         ASSIGN(gbuffer->gd_val,ebuf->d_un.d_val);
         /* Assigning the file offset, not sec offset */
         ASSIGN(gbuffer->gd_dyn_file_offset, trueoff);
@@ -152,7 +154,9 @@ generic_dyn_from_dyn64(struct generic_dynentry **gbuffer_io,
     }
     for(i = 0; i < ecount;
         ++i,++gbuffer,++ebuf,trueoff += sizeof(Elf64_Dyn)) {
+        /* SIGNED VALUE */
         ASSIGN(gbuffer->gd_tag,ebuf->d_tag);
+        SIGN_EXTEND(gbuffer->gd_tag,sizeof(ebuf->d_tag));
         ASSIGN(gbuffer->gd_val,ebuf->d_un.d_val);
         /* Assigning the file offset, not sec offset */
         ASSIGN(gbuffer->gd_dyn_file_offset, trueoff);

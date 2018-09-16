@@ -1,0 +1,13 @@
+2018-09-16   David Anderson
+    * CLEANUP: cleanup temp files.
+    * libkrb5support.so.0.1.debug: A test objectfile.
+    * PICKUP:  Copy readelfobj from build to here.
+    * README:  Comments.
+    * runtests.sh: Run all tests.
+    * test1.sh, test2.sh, test3.sh, test4.sh, test5.sh,
+      test6.sh, test7.sh: Testing individual readelfobj
+      options.
+    * test1.base,test3.base,test4.base,test5.base,test6.base,
+      test7.base: Baseline (as correct as currently
+      supported...).
+

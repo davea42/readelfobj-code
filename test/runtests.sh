@@ -1,5 +1,6 @@
 #!/bin/sh
 
+ct=0
 if [ ! -x readelfobj ]
 then
    echo "Build readelfobj and install it here to test"

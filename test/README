@@ -4,6 +4,13 @@ All tests assume readelfobj (version to test)
 is copied to this directlry by PICKUP
 or something else
 
+=======
 Testobject
 libkrb5support.so.0.1.debug is from libdwarf regressiontests
       in the directory hughes.
+
+The .dynamic section of this object starts out with
+a string, something not mentioned by the Elf standard,
+so unless something new has been added to the standard
+(how is that possible?) the object file shows a bug. ?
+=======
