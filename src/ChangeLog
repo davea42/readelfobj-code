@@ -1,4 +1,6 @@
 2018-09-18  David Anderson
+     * object_detector.h: declarations object_detector.c needs
+       and that caller using object_detector.c needs.
      * object_detector.c: New and very simple, it detects
        key facts about Elf and Mach-o object files.
      * Makefile.am: Now builds object_detector.
