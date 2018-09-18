@@ -35,6 +35,69 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h> /* memcpy, strcpy */
 #include "object_detector.h"
 
+
+#ifndef TRUE
+#define TRUE 1
+#define FALSE 0
+#endif /* TRUE */
+
+
+#ifndef DW_DLV_OK
+#define DW_DLV_NO_ENTRY -1
+#define DW_DLV_OK        0
+#define DW_DLV_ERROR     1
+#endif /* DW_DLV_OK */
+
+#define DW_FTYPE_UNKNOWN 0
+#define DW_FTYPE_ELF     1
+#define DW_FTYPE_MACH_O  2
+#define DW_FTYPE_PE      3
+
+
+#define DW_ENDIAN_UNKNOWN 0
+#define DW_ENDIAN_BIG     1
+#define DW_ENDIAN_LITTLE  2
+#define DW_ENDIAN_SAME    3
+#define DW_ENDIAN_OPPOSITE 4
+
+#ifndef EI_NIDENT
+#define EI_NIDENT 16 
+#define EI_CLASS  4
+#define EI_DATA   5
+#define EI_VERSION 6 
+#define ELFCLASS32 1
+#define ELFCLASS64 2
+#define ELFDATA2LSB 1
+#define ELFDATA2MSB 2
+#endif /* EI_NIDENT */
+
+#define DSYM_SUFFIX "/.dSYM/Contents/Resources/DWARF/"
+#define PATHSIZE 2000
+
+/*  Assuming short 16 bits, unsigned 32 bits */
+typedef unsigned short t16;
+typedef unsigned t32;
+
+#ifndef  MH_MAGIC
+/* mach-o 32bit */
+#define MH_MAGIC        0xfeedface
+#define MH_CIGAM        0xcefaedfe
+#endif /*  MH_MAGIC */
+#ifndef  MH_MAGIC_64
+/* mach-o 64bit */
+#define MH_MAGIC_64 0xfeedfacf
+#define MH_CIGAM_64 0xcffaedfe
+#endif /*  MH_MAGIC_64 */
+
+#define EI_NIDENT 16
+/* An incomplete elf header, good for 32 and 64bit elf */
+struct elf_header {
+    unsigned char  e_ident[EI_NIDENT];
+    t16 e_type;
+    t16 e_machine;
+    t32 e_version; 
+};
+
 /*  For following MacOS file naming convention */
 static const char * 
 getseparator (const char *f)
