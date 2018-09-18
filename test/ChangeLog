@@ -1,3 +1,6 @@
+2018-09-18   David Anderson
+    * Makefile.am,test8m.sh,test8m.base,PICKUP: 
+      Now tests object_detector
 2018-09-16   David Anderson
     * test3.base,test4.base,test5.base,test6.base,test7.base:
       Updated per new error-dection in readelfobj.

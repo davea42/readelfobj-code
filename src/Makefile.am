@@ -5,7 +5,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 AUTOMAKE_OPTIONS = subdir-objects
 
-bin_PROGRAMS = readelfobj readobjmacho
+bin_PROGRAMS = readelfobj readobjmacho object_detector
 
 readelfobj_SOURCES =  elfdynamic_section.c  \
 elfem.c \
@@ -33,6 +33,9 @@ readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
 
 readobjmacho_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
+
+object_detector_SOURCES = object-detector.c
+object_detector_CFLAGS = $(RO_CFLAGS_WARN)
 
 man_MANS = readelfobj.1
 

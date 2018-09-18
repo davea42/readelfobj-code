@@ -1,3 +1,6 @@
+2018-09-18: David Anderson
+    * Makefile.am, configure.ac: New version
+      date and now builds and tests object_detector.
 2018-09-16: David Anderson
     * Makefile.am, configure.ac: Working toward a working 
       'make check'

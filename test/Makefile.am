@@ -18,6 +18,8 @@ CLEANFILES = config.h.in~ \
   junk.test6.out \
   junk.test7 \
   junk.test7.out \
+  junk.test8m \
+  junk.test8m.out \
   readelfobj
 
 

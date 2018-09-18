@@ -1,3 +1,4 @@
 #!/bin/bash
 
 cp ../src/readelfobj .
+cp ../src/object_detector .

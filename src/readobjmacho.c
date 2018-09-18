@@ -44,7 +44,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <elf.h>
 #include <unistd.h>
 #include "reading.h"
 #include "readobjmacho.h"
