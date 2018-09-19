@@ -39,6 +39,24 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     for the object file (useful for dSYM) and return the
     constructed path in oupath.  
     returns DW_DLV_OK, DW_DLV_ERROR, or DW_DLV_NO_ENTRY */
+
+#ifndef DW_FTYPE_UNKNOWN
+#define DW_FTYPE_UNKNOWN 0
+#define DW_FTYPE_ELF     1
+#define DW_FTYPE_MACH_O  2
+#define DW_FTYPE_PE      3
+#endif /* DW_FTYPE_UNKNOWN */
+
+
+#ifndef DW_ENDIAN_UNKNOWN
+#define DW_ENDIAN_UNKNOWN 0
+#define DW_ENDIAN_BIG     1
+#define DW_ENDIAN_LITTLE  2
+#define DW_ENDIAN_SAME    3
+#define DW_ENDIAN_OPPOSITE 4
+#endif /* DW_ENDIAN_UNKNOWN */
+
+
 int dwarf_object_detector_path(const char  *path,
     char *outpath,size_t outpath_len,
     unsigned *ftype,

@@ -3,6 +3,9 @@
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
 
+/* int is 16bit */
+#undef DW_TYPEOF_16BIT
+
 /* long is 32bit */
 #undef DW_TYPEOF_32BIT
 

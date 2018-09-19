@@ -36,6 +36,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
+/* uint*_t are for macho-loader.h */
+#define uint16_t  unsigned DW_TYPEOF_16BIT
+#define uint32_t  unsigned DW_TYPEOF_32BIT
+#define uint8_t  unsigned char
+
 #if (SIZEOF_UNSIGNED_LONG < 8) && (SIZEOF_UNSIGNED_LONG_LONG == 8)
 #define LONGESTXFMT  "0x%llx"
 #define LONGESTXFMT8 "0x%08llx"
@@ -43,6 +48,7 @@ extern "C" {
 #define LONGESTSFMT  "%lld"
 #define LONGESTUTYPE unsigned long long
 #define LONGESTSTYPE long long
+#define uint64_t  unsigned long long
 #else
 #define LONGESTXFMT  "0x%lx"
 #define LONGESTXFMT8 "0x%08lx"
@@ -50,6 +56,7 @@ extern "C" {
 #define LONGESTSFMT  "%ld"
 #define LONGESTUTYPE unsigned long
 #define LONGESTSTYPE long
+#define uint64_t  unsigned long
 #endif
 
 #define TRUE 1

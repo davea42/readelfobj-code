@@ -1,3 +1,10 @@
+2018-09-19  David Anderson
+     * Makefile.am: I adds mach-o headers.
+     * macho-loader.h: New header.
+     * object_detector.c: Moved some #defines to object_detector.h
+     * object_detector.h: Received the defines.
+     * reading.h: Have a full set of defines for 8,16,32,64 types now.
+     * readobjmacho.c: Does additional includes.
 2018-09-18  David Anderson
      * object_detector.h: declarations object_detector.c needs
        and that caller using object_detector.c needs.

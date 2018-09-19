@@ -44,6 +44,18 @@ AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([long long])
 AS_IF( 
+    [ test "${ac_cv_sizeof_short}" = "2" ],
+    [ AC_DEFINE([DW_TYPEOF_16BIT],[short],[short is 16bit]) 
+      type16bit="short" 
+    ],
+    [ AS_IF( [ test "${ac_cv_sizeof_int}" = "2" ],
+         [AC_DEFINE([DW_TYPEOF_16BIT],[int],[int is 16bit])
+             type16bit="int" 
+         ],
+         [AC_MSG_ERROR([We do not find a 16bit type])])
+    ]
+    )
+AS_IF( 
     [ test "${ac_cv_sizeof_short}" = "4" ],
     [ AC_DEFINE([DW_TYPEOF_32BIT],[short],[short is 32bit]) 
       type32bit="short" 
@@ -180,6 +192,7 @@ echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  sizeof unsigned long.: ${ac_cv_sizeof_unsigned_long}"
 echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
+echo "  Preferred 16bit......: ${type16bit}"
 echo "  Preferred 32bit......: ${type32bit}"
 echo "  Preferred 64bit......: ${type64bit}"
 echo

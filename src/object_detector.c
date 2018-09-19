@@ -48,18 +48,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_DLV_ERROR     1
 #endif /* DW_DLV_OK */
 
-#define DW_FTYPE_UNKNOWN 0
-#define DW_FTYPE_ELF     1
-#define DW_FTYPE_MACH_O  2
-#define DW_FTYPE_PE      3
-
-
-#define DW_ENDIAN_UNKNOWN 0
-#define DW_ENDIAN_BIG     1
-#define DW_ENDIAN_LITTLE  2
-#define DW_ENDIAN_SAME    3
-#define DW_ENDIAN_OPPOSITE 4
-
 #ifndef EI_NIDENT
 #define EI_NIDENT 16 
 #define EI_CLASS  4

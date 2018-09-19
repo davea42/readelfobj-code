@@ -13354,6 +13354,25 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+if  test "${ac_cv_sizeof_short}" = "2" ; then :
+   
+$as_echo "@%:@define DW_TYPEOF_16BIT short" >>confdefs.h
+ 
+      type16bit="short" 
+    
+else
+   if  test "${ac_cv_sizeof_int}" = "2" ; then :
+  
+$as_echo "@%:@define DW_TYPEOF_16BIT int" >>confdefs.h
+
+             type16bit="int" 
+         
+else
+  as_fn_error $? "We do not find a 16bit type" "$LINENO" 5
+fi
+    
+    
+fi
 if  test "${ac_cv_sizeof_short}" = "4" ; then :
    
 $as_echo "@%:@define DW_TYPEOF_32BIT short" >>confdefs.h
@@ -16215,6 +16234,7 @@ echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  sizeof unsigned long.: ${ac_cv_sizeof_unsigned_long}"
 echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
+echo "  Preferred 16bit......: ${type16bit}"
 echo "  Preferred 32bit......: ${type32bit}"
 echo "  Preferred 64bit......: ${type64bit}"
 echo

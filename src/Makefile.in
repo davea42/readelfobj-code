@@ -131,6 +131,7 @@ readelfobj_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readelfobj_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_readobjmacho_OBJECTS = readobjmacho-readobjmacho.$(OBJEXT) \
+	readobjmacho-object_detector.$(OBJEXT) \
 	readobjmacho-sanitized.$(OBJEXT)
 readobjmacho_OBJECTS = $(am_readobjmacho_OBJECTS)
 readobjmacho_LDADD = $(LDADD)
@@ -372,6 +373,9 @@ readelfobj_CPPFLAGS = \
 readobjmacho_SOURCES = readobjmacho.c \
 reading.h  \
 sanitized.h \
+macho-loader.h \
+object_detector.c \
+object_detector.h \
 sanitized.c
 
 readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
@@ -495,6 +499,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-readobjmacho.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-sanitized.Po@am__quote@
 
@@ -633,6 +638,20 @@ readobjmacho-readobjmacho.obj: readobjmacho.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobjmacho.c' object='readobjmacho-readobjmacho.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-readobjmacho.obj `if test -f 'readobjmacho.c'; then $(CYGPATH_W) 'readobjmacho.c'; else $(CYGPATH_W) '$(srcdir)/readobjmacho.c'; fi`
+
+readobjmacho-object_detector.o: object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-object_detector.o -MD -MP -MF $(DEPDIR)/readobjmacho-object_detector.Tpo -c -o readobjmacho-object_detector.o `test -f 'object_detector.c' || echo '$(srcdir)/'`object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-object_detector.Tpo $(DEPDIR)/readobjmacho-object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='object_detector.c' object='readobjmacho-object_detector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-object_detector.o `test -f 'object_detector.c' || echo '$(srcdir)/'`object_detector.c
+
+readobjmacho-object_detector.obj: object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-object_detector.obj -MD -MP -MF $(DEPDIR)/readobjmacho-object_detector.Tpo -c -o readobjmacho-object_detector.obj `if test -f 'object_detector.c'; then $(CYGPATH_W) 'object_detector.c'; else $(CYGPATH_W) '$(srcdir)/object_detector.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-object_detector.Tpo $(DEPDIR)/readobjmacho-object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='object_detector.c' object='readobjmacho-object_detector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-object_detector.obj `if test -f 'object_detector.c'; then $(CYGPATH_W) 'object_detector.c'; else $(CYGPATH_W) '$(srcdir)/object_detector.c'; fi`
 
 readobjmacho-sanitized.o: sanitized.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-sanitized.o -MD -MP -MF $(DEPDIR)/readobjmacho-sanitized.Tpo -c -o readobjmacho-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c

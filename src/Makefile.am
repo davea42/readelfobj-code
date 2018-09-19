@@ -27,6 +27,9 @@ readelfobj_CPPFLAGS = \
 readobjmacho_SOURCES =  readobjmacho.c \
 reading.h  \
 sanitized.h \
+macho-loader.h \
+object_detector.c \
+object_detector.h \
 sanitized.c
 
 readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)

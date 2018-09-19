@@ -46,7 +46,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <time.h>
 #include <unistd.h>
 #include "reading.h"
+#include "object_detector.h"
 #include "readobjmacho.h"
+#include "macho-loader.h"
 #include "sanitized.h"
 #include "readelfobj_version.h"
 
@@ -60,6 +62,7 @@ char *Usage = "Usage: readobjmacho <options> file ...\n"
     "--version  print version string\n";
 
 
+static char file_buffer1[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
 static void do_one_file(const char *s);
 
@@ -158,6 +161,15 @@ ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len)
 static void
 do_one_file(const char *s)
 {
+    unsigned ftype = 0;
+    unsigned endian = 0;
+    unsigned offsetsize = 0;
+    size_t filesize = 0;
+    int res = 0;
+
+    res = dwarf_object_detector_path(s,file_buffer1,BUFFERSIZE,
+       &ftype,&endian,&offsetsize,&filesize);
+       
 #if 0
 #ifdef WORDS_BIGENDIAN
     if (obj_is_little_endian) {

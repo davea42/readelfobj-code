@@ -1,3 +1,5 @@
+2018-09-19: David Anderson
+    * configure.ac: Now locates 16bit type or errors/quits.
 2018-09-18: David Anderson
     * Makefile.am, configure.ac: New version
       date and now builds and tests object_detector.
