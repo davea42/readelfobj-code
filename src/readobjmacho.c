@@ -118,10 +118,8 @@ const char *get_command_name(LONGESTUTYPE v)
 {
     unsigned i = 0;
 
-printf(" dadebug find " LONGESTUFMT "\n",v);
     for( ; commandname[i].name; i++) {
         if (v==commandname[i].val) { 
-printf(" dadebug FOUND  %s" LONGESTUFMT "\n",commandname[i].name,v);
             return commandname[i].name;
         }
     }
@@ -382,7 +380,6 @@ load_macho_header32(struct macho_filedata_s *mfp)
      mfp->mo_header.reserved = 0;
      mfp->mo_command_count = mfp->mo_header.ncmds;
      mfp->mo_command_start_offset = sizeof(mh32);
-printf("dadebug header size 0x%x\n",(unsigned)sizeof(mh32));
      return RO_OK;  
 }
 
@@ -405,7 +402,6 @@ load_macho_header64(struct macho_filedata_s *mfp)
      ASSIGNMO(mfp,mfp->mo_header.sizeofcmds,mh64.sizeofcmds);
      ASSIGNMO(mfp,mfp->mo_header.flags,mh64.flags);
      ASSIGNMO(mfp,mfp->mo_header.reserved,mh64.reserved);
-printf("dadebug header size 0x%x\n",(unsigned)sizeof(mh64));
      mfp->mo_command_count = mfp->mo_header.ncmds;
      mfp->mo_command_start_offset = sizeof(mh64);
      return RO_OK;  
