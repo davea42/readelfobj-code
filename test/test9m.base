@@ -1,19 +1,35 @@
 File: mach-o-object32
 Reading: mach-o-object32
-Mach-o Magic:  0xfeedfacf
-  cputype           :  0x1000007 cpusubtype: 0x3
-  filetype          :  0xa DSYM (debug sections present)
-  number of commands:  0x7
-  size of commands  :  0x918
-  flags             :  0x0
-File: mach-o-object64
-Reading: mach-o-object64
 Mach-o Magic:  0xfeedface
   cputype           :  0x7 cpusubtype: 0x3
   filetype          :  0xa DSYM (debug sections present)
   number of commands:  0x7
   size of commands  :  0x7a8
   flags             :  0x0
+ Commands: at offset 0x1c
+  [0 cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
+  [1 cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
+  [2 cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
+  [3 cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
+  [4 cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
+  [5 cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
+  [6 cmd: 0x1 LC_SEGMENT cmdsize: 872 (0x368)
+File: mach-o-object64
+Reading: mach-o-object64
+Mach-o Magic:  0xfeedfacf
+  cputype           :  0x1000007 cpusubtype: 0x3
+  filetype          :  0xa DSYM (debug sections present)
+  number of commands:  0x7
+  size of commands  :  0x918
+  flags             :  0x0
+ Commands: at offset 0x20
+  [0 cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
+  [1 cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
+  [2 cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
+  [3 cmd: 0x19 LC_SEGMENT_64 cmdsize: 552 (0x228)
+  [4 cmd: 0x19 LC_SEGMENT_64 cmdsize: 632 (0x278)
+  [5 cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
+  [6 cmd: 0x19 LC_SEGMENT_64 cmdsize: 952 (0x3b8)
 File: libkrb5support.so.0.1.debug
 Reading: libkrb5support.so.0.1.debug
 File libkrb5support.so.0.1.debug is not mach-o. Ignored.
