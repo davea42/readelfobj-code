@@ -65,6 +65,70 @@ static char tru_path_buffer[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
 static void do_one_file(const char *s);
 
+static void destructmacho(struct macho_filedata_s *mp);
+static struct commands_text_s {
+   const char *name;
+   unsigned long val;
+} commandname [] = {
+{"LC_SEGMENT",    0x1},
+{"LC_SYMTAB",     0x2},
+{"LC_SYMSEG",     0x3}, 
+{"LC_THREAD",     0x4 }, 
+{"LC_UNIXTHREAD", 0x5}, 
+{"LC_LOADFVMLIB", 0x6},
+{"LC_IDFVMLIB",   0x7  },
+{"LC_IDENT",      0x8  },
+{"LC_FVMFILE",    0x9  },
+{"LC_PREPAGE",    0xa  },
+{"LC_DYSYMTAB",   0xb  },
+{"LC_LOAD_DYLIB", 0xc  },
+{"LC_ID_DYLIB",   0xd  },
+{"LC_LOAD_DYLINKER", 0xe },
+{"LC_ID_DYLINKER",0xf },
+{"LC_PREBOUND_DYLIB", 0x10 },
+{"LC_ROUTINES",   0x11 },
+{"LC_SUB_FRAMEWORK", 0x12 },
+{"LC_SUB_UMBRELLA", 0x13  },
+{"LC_SUB_CLIENT", 0x14  },
+{"LC_SUB_LIBRARY",0x15  },
+{"LC_TWOLEVEL_HINTS", 0x16 },
+{"LC_PREBIND_CKSUM",  0x17 },
+{"LC_LOAD_WEAK_DYLIB", (0x18 | LC_REQ_DYLD)},
+{"LC_SEGMENT_64",   0x19 },
+{"LC_ROUTINES_64",  0x1a    },
+{"LC_UUID",         0x1b    },
+{"LC_RPATH",       (0x1c | LC_REQ_DYLD) },
+{"LC_CODE_SIGNATURE", 0x1d }, 
+{"LC_SEGMENT_SPLIT_INFO", 0x1e}, 
+{"LC_REEXPORT_DYLIB", (0x1f | LC_REQ_DYLD)}, 
+{"LC_LAZY_LOAD_DYLIB", 0x20}, 
+{"LC_ENCRYPTION_INFO", 0x21}, 
+{"LC_DYLD_INFO",    0x22   }, 
+{"LC_DYLD_INFO_ONLY", (0x22|LC_REQ_DYLD)}, 
+{"LC_LOAD_UPWARD_DYLIB", (0x23 | LC_REQ_DYLD) },
+{"LC_VERSION_MIN_MACOSX", 0x24   },
+{"LC_VERSION_MIN_IPHONEOS", 0x25}, 
+{"LC_FUNCTION_STARTS", 0x26 },
+{"LC_DYLD_ENVIRONMENT", 0x27 },
+{"LC_MAIN", (0x28|LC_REQ_DYLD)},
+{0,0}
+};
+
+const char *get_command_name(LONGESTUTYPE v)
+{
+    unsigned i = 0;
+
+printf(" dadebug find " LONGESTUFMT "\n",v);
+    for( ; commandname[i].name; i++) {
+        if (v==commandname[i].val) { 
+printf(" dadebug FOUND  %s" LONGESTUFMT "\n",commandname[i].name,v);
+            return commandname[i].name;
+        }
+    }
+    return ("Unknown");
+}
+
+
 int
 main(int argc,char **argv)
 {
@@ -108,6 +172,7 @@ main(int argc,char **argv)
             fclose(fin);
             ++filecount;
             do_one_file(filename);
+            destructmacho(&macho_filedata);
         }
         if (!filecount && !printed_version) {
             printf("%s\n",Usage);
@@ -165,7 +230,30 @@ destructmacho(struct macho_filedata_s *mp)
         fclose(mp->mo_file);
         mp->mo_file = 0;
     }
+    if (mp->mo_commands){
+        free(mp->mo_commands);
+        mp->mo_commands = 0;
+    }
     memset(mp,0,sizeof(*mp));
+}
+
+static void
+print_macho_commands(struct macho_filedata_s *mfp)
+{
+    LONGESTUTYPE i = 0;
+    struct generic_macho_command *cmdp = 0;
+
+    cmdp = mfp->mo_commands;
+    P(" Commands: at offset " LONGESTXFMT "\n",mfp->mo_command_start_offset);
+    for ( ; i < mfp->mo_command_count; ++i, ++cmdp) {
+       P("  [" LONGESTUFMT " cmd: " LONGESTXFMT " %s"
+           " cmdsize: " LONGESTUFMT " (" LONGESTXFMT ")\n",
+           i,
+           cmdp->cmd, get_command_name(cmdp->cmd),
+           cmdp->cmdsize,
+           cmdp->cmdsize);
+    }
+
 }
 
 static void
@@ -252,6 +340,10 @@ do_one_file(const char *s)
     }
     print_macho_header(&macho_filedata);
 
+    res = load_macho_commands(&macho_filedata);
+
+    print_macho_commands(&macho_filedata);
+
 
 }
 
@@ -288,6 +380,9 @@ load_macho_header32(struct macho_filedata_s *mfp)
      ASSIGNMO(mfp,mfp->mo_header.sizeofcmds,mh32.sizeofcmds);
      ASSIGNMO(mfp,mfp->mo_header.flags,mh32.flags);
      mfp->mo_header.reserved = 0;
+     mfp->mo_command_count = mfp->mo_header.ncmds;
+     mfp->mo_command_start_offset = sizeof(mh32);
+printf("dadebug header size 0x%x\n",(unsigned)sizeof(mh32));
      return RO_OK;  
 }
 
@@ -310,6 +405,9 @@ load_macho_header64(struct macho_filedata_s *mfp)
      ASSIGNMO(mfp,mfp->mo_header.sizeofcmds,mh64.sizeofcmds);
      ASSIGNMO(mfp,mfp->mo_header.flags,mh64.flags);
      ASSIGNMO(mfp,mfp->mo_header.reserved,mh64.reserved);
+printf("dadebug header size 0x%x\n",(unsigned)sizeof(mh64));
+     mfp->mo_command_count = mfp->mo_header.ncmds;
+     mfp->mo_command_start_offset = sizeof(mh64);
      return RO_OK;  
 }
 
@@ -333,4 +431,46 @@ load_macho_header(struct macho_filedata_s *mfp)
      return res;
 }
 
+/* Works the same, 32 or 64 bit */
+int 
+load_macho_commands(struct macho_filedata_s *mfp)
+{
+    LONGESTUTYPE cmdi = 0;
+    LONGESTUTYPE curoff = mfp->mo_command_start_offset;
+    LONGESTUTYPE cmdspace = 0;
+    struct load_command mc;
+    struct generic_macho_command *mcp = 0;
 
+    if ((curoff + mfp->mo_command_count * sizeof(mc)) >= 
+        mfp->mo_filesize) {
+        /* corrupt object. */
+        return RO_ERR;
+    }
+
+    mfp->mo_commands = (struct generic_macho_command *) calloc(
+        mfp->mo_command_count,sizeof(struct generic_macho_command));
+    if( !mfp->mo_commands) {
+        /* out of memory */
+        return RO_ERR;
+    }
+     
+    mcp = mfp->mo_commands;
+    for ( ; cmdi < mfp->mo_header.ncmds; ++cmdi,++mcp ) {
+        int res = 0;
+
+        res = RRMO(mfp->mo_file,&mc,curoff,sizeof(mc));
+        if (res != RO_OK) {
+            return res;
+        }
+        ASSIGNMO(mfp,mcp->cmd,mc.cmd);
+        ASSIGNMO(mfp,mcp->cmdsize,mc.cmdsize);
+        mcp->offset_this_command = curoff;
+        curoff += mcp->cmdsize;
+        cmdspace += mcp->cmdsize;
+        if (mcp->cmdsize > mfp->mo_filesize ||
+            curoff > mfp->mo_filesize) {
+            /* corrupt object */
+            return RO_ERR;
+        }
+    }
+}

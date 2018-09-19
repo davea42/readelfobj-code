@@ -67,7 +67,11 @@ struct generic_macho_header {
     LONGESTUTYPE   flags;   
     LONGESTUTYPE   reserved;  
 };
-
+struct generic_macho_command {
+    LONGESTUTYPE   cmd;
+    LONGESTUTYPE   cmdsize;
+    LONGESTUTYPE   offset_this_command;
+};
 
 struct macho_filedata_s {
     FILE *  mo_file;
@@ -80,11 +84,18 @@ struct macho_filedata_s {
 
     /* Used to hold 32 and 64 header data */
     struct generic_macho_header mo_header;
+
+    unsigned mo_command_count;
+    LONGESTUTYPE  mo_command_start_offset;
+    struct generic_macho_command *mo_commands;
+    LONGESTUTYPE  mo_offset_after_commands; /* properly aligned value */
+ 
 };
 
 struct macho_filedata_s macho_filedata;
 
 int load_macho_header(struct macho_filedata_s *mfp);
+int load_macho_commands(struct macho_filedata_s *mfp);
 
 
 #ifdef __cplusplus
