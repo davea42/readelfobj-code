@@ -1,0 +1,19 @@
+File: mach-o-object32
+Reading: mach-o-object32
+Mach-o Magic:  0xfeedfacf
+  cputype           :  0x1000007 cpusubtype: 0x3
+  filetype          :  0xa DSYM (debug sections present)
+  number of commands:  0x7
+  size of commands  :  0x918
+  flags             :  0x0
+File: mach-o-object64
+Reading: mach-o-object64
+Mach-o Magic:  0xfeedface
+  cputype           :  0x7 cpusubtype: 0x3
+  filetype          :  0xa DSYM (debug sections present)
+  number of commands:  0x7
+  size of commands  :  0x7a8
+  flags             :  0x0
+File: libkrb5support.so.0.1.debug
+Reading: libkrb5support.so.0.1.debug
+File libkrb5support.so.0.1.debug is not mach-o. Ignored.
