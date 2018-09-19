@@ -20,7 +20,10 @@ CLEANFILES = config.h.in~ \
   junk.test7.out \
   junk.test8m \
   junk.test8m.out \
+  junk.test9m \
+  junk.test9m.out \
   object_detector \
+  readobjmacho \
   readelfobj
 
 
