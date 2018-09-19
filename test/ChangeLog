@@ -1,3 +1,6 @@
+2018-09-19   David Anderson
+    * mach-o-object32,mach-o-object64:	* The mach-o test objects 
+      were misnamed. *32 was really 64bit and vice-versa. Fixed.
 2018-09-18   David Anderson
     * test9m.sh, test9m.base: New mach-o test.
     * Makefile.am,test8m.sh,test8m.base,PICKUP: 
