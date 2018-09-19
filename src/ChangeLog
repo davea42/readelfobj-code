@@ -1,4 +1,7 @@
 2018-09-19  David Anderson
+     * reading.h,readobjmacho.c,readobjmacho.h: Now loads and 
+       prints mach-o header.
+2018-09-19  David Anderson
      * Makefile.am: I adds mach-o headers.
      * macho-loader.h: New header.
      * object_detector.c: Moved some #defines to object_detector.h

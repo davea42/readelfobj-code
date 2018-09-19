@@ -41,6 +41,14 @@ extern "C" {
 #define uint32_t  unsigned DW_TYPEOF_32BIT
 #define uint8_t  unsigned char
 
+#ifndef DW_DLV_OK
+/* DW_DLV_OK  must match RO_OK */
+/* DW_DLV_NO_ENTRY  must match FIXME */
+#define DW_DLV_OK 0
+#define DW_DLV_NO_ENTRY -1 
+#define DW_DLV_ERROR 1
+#endif /* DW_DLV_OK */
+
 #if (SIZEOF_UNSIGNED_LONG < 8) && (SIZEOF_UNSIGNED_LONG_LONG == 8)
 #define LONGESTXFMT  "0x%llx"
 #define LONGESTXFMT8 "0x%08llx"
@@ -80,8 +88,11 @@ extern "C" {
 
 #define P printf
 #define F fflush(stdout)
+#define RRMO(f,buf,loc,siz)  ((fseek(f,(long)loc,0)<0) ? RO_ERR_SEEK : \
+    ((fread(buf,(long)siz,1,f)!=1)?RO_ERR_READ:RO_OK))
 #define RR(buf,loc,siz)  ((fseek(fin,(long)loc,0)<0) ? RO_ERR_SEEK : \
     ((fread(buf,(long)siz,1,fin)!=1)?RO_ERR_READ:RO_OK))
+#define RNMO(f,buf,siz)  ((fread(buf,siz,1,f) != 1) ? RO_ERR_READ  : RO_OK)
 #define RN(buf,siz)  ((fread(buf,siz,1,fin) != 1) ? RO_ERR_READ  : RO_OK)
 /* #define CURLOC      ftell(fin)  */
 #define SEEKTO(i)  ((fseek(fin,(long)(i),SEEK_SET) == 0)? RO_OK: RO_ERR_SEEK)

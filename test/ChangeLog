@@ -1,4 +1,5 @@
 2018-09-18   David Anderson
+    * test9m.sh, test9m.base: New mach-o test.
     * Makefile.am,test8m.sh,test8m.base,PICKUP: 
       Now tests object_detector
 2018-09-16   David Anderson

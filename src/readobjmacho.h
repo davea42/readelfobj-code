@@ -40,8 +40,51 @@ extern char *filename;
 extern int printfilenames;
 extern FILE *fin;
 
-
 int cur_read_loc(FILE *fin, long* fileoffset);
+#ifdef WORDS_BIGENDIAN
+#define ASSIGNMO(gp,t,s)                             \
+    do {                                        \
+        unsigned tbyte = sizeof(t) - sizeof(s); \
+        t = 0;                                  \
+        gp->mo_copy_word(((char *)t)+tbyte ,&s,sizeof(s)); \
+    } while (0)
+
+#else /* LITTLE ENDIAN */
+#define ASSIGNMO(gp,t,s)                             \
+    do {                                        \
+        t = 0;                                  \
+        gp->mo_copy_word(&t,&s,sizeof(s));    \
+    } while (0)
+#endif /* end LITTLE- BIG-ENDIAN */
+
+struct generic_macho_header {
+    LONGESTUTYPE   magic;     
+    LONGESTUTYPE   cputype;     
+    LONGESTUTYPE   cpusubtype;     
+    LONGESTUTYPE   filetype;  
+    LONGESTUTYPE   ncmds;      /* number of load commands */
+    LONGESTUTYPE   sizeofcmds; /* the size of all the load commands */
+    LONGESTUTYPE   flags;   
+    LONGESTUTYPE   reserved;  
+};
+
+
+struct macho_filedata_s {
+    FILE *  mo_file;
+    const char *mo_path;
+    unsigned mo_endian;
+    size_t mo_filesize;
+    size_t mo_offsetsize; /* 32 or 64 */
+    size_t mo_pointersize;
+    void *(*mo_copy_word) (void *, const void *, size_t);
+
+    /* Used to hold 32 and 64 header data */
+    struct generic_macho_header mo_header;
+};
+
+struct macho_filedata_s macho_filedata;
+
+int load_macho_header(struct macho_filedata_s *mfp);
 
 
 #ifdef __cplusplus

@@ -52,9 +52,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "sanitized.h"
 #include "readelfobj_version.h"
 
-char *filename;
-int printfilenames;
-FILE *fin;
+int printfilenames = FALSE;
+struct macho_filedata_s macho_filedata;
 
 char *Usage = "Usage: readobjmacho <options> file ...\n"
     "Options:\n"
@@ -62,7 +61,7 @@ char *Usage = "Usage: readobjmacho <options> file ...\n"
     "--version  print version string\n";
 
 
-static char file_buffer1[BUFFERSIZE];
+static char tru_path_buffer[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
 static void do_one_file(const char *s);
 
@@ -79,6 +78,9 @@ main(int argc,char **argv)
     } else {
         argv++;
         for(i =1; i<argc; i++,argv++) {
+            const char * filename = 0;
+            FILE *fin = 0;
+
             if((strcmp(argv[0],"--help") == 0) ||
                 (strcmp(argv[0],"-h") == 0)) {
                 P("%s",Usage);
@@ -92,7 +94,7 @@ main(int argc,char **argv)
                 continue;
             }
             if ( (i+1) < argc) {
-                printfilenames = 1;
+                printfilenames = TRUE;
             }
             filename = argv[0];
             if (printfilenames) {
@@ -103,9 +105,9 @@ main(int argc,char **argv)
                 P("No such file as %s\n",argv[0]);
                 continue;
             }
+            fclose(fin);
             ++filecount;
             do_one_file(filename);
-            fclose(fin);
         }
         if (!filecount && !printed_version) {
             printf("%s\n",Usage);
@@ -156,7 +158,36 @@ ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len)
     return orig_s1;
 }
 
+static void
+destructmacho(struct macho_filedata_s *mp)
+{
+    if (mp->mo_file) {
+        fclose(mp->mo_file);
+        mp->mo_file = 0;
+    }
+    memset(mp,0,sizeof(*mp));
+}
 
+static void
+print_macho_header(struct macho_filedata_s *mfp)
+{
+    P("Mach-o Magic:  " LONGESTXFMT "\n",mfp->mo_header.magic);
+    P("  cputype           :  " LONGESTXFMT   
+        " cpusubtype: " LONGESTXFMT "\n",
+        mfp->mo_header.cputype,mfp->mo_header.cpusubtype);
+    P("  filetype          :  " LONGESTXFMT  
+        " %s"    "\n",
+        mfp->mo_header.filetype,
+        mfp->mo_header.filetype == MH_DSYM? 
+            "DSYM (debug sections present)":
+            "");
+    P("  number of commands:  " LONGESTXFMT  "\n",
+        mfp->mo_header.ncmds);
+    P("  size of commands  :  " LONGESTXFMT  "\n",
+        mfp->mo_header.sizeofcmds);
+    P("  flags             :  " LONGESTXFMT  "\n",
+        mfp->mo_header.flags);
+}
 
 static void
 do_one_file(const char *s)
@@ -167,24 +198,61 @@ do_one_file(const char *s)
     size_t filesize = 0;
     int res = 0;
 
-    res = dwarf_object_detector_path(s,file_buffer1,BUFFERSIZE,
+    if (printfilenames) {
+        P("Reading: %s\n",s);
+    }
+    res = dwarf_object_detector_path(s,tru_path_buffer,BUFFERSIZE,
        &ftype,&endian,&offsetsize,&filesize);
+    if (res != DW_DLV_OK) {
+        P("ERROR: Unable to read \"%s\", ignoring file\n",
+            s); 
+        return;
+    }
+    if (ftype !=  DW_FTYPE_MACH_O) {
+        P("File %s is not mach-o. Ignored.\n",tru_path_buffer);
+        return;
+    }
+
+    macho_filedata.mo_file = fopen(tru_path_buffer,"r");
+    if (!macho_filedata.mo_file) {
+        P("Warning: Unable to open %s for detailed reading.\n",
+            s);
+        return;
+    }
+
        
-#if 0
 #ifdef WORDS_BIGENDIAN
-    if (obj_is_little_endian) {
-        filedata.f_copy_word = ro_memcpy_swap_bytes;
+    if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_OPPOSITE ) {
+        macho_filedata.mo_copy_word = ro_memcpy_swap_bytes;
+        macho_filedata.mo_endian = DW_ENDIAN_LITTLE;
     } else {
-        filedata.f_copy_word = memcpy;
+        macho_filedata.mo_copy_word = memcpy;
+        macho_filedata.mo_endian = DW_ENDIAN_BIG;
     }
 #else  /* LITTLE ENDIAN */
-    if (obj_is_little_endian) {
-        filedata.f_copy_word = memcpy;
+    if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_SAME ) {
+        macho_filedata.mo_copy_word = memcpy;
+        macho_filedata.mo_endian = DW_ENDIAN_LITTLE;
     } else {
-        filedata.f_copy_word = ro_memcpy_swap_bytes;
+        macho_filedata.mo_copy_word = ro_memcpy_swap_bytes;
+        macho_filedata.mo_endian = DW_ENDIAN_BIG;
     }
 #endif /* LITTLE- BIG-ENDIAN */
-#endif
+
+    macho_filedata.mo_filesize = filesize;
+    macho_filedata.mo_offsetsize = offsetsize;
+    macho_filedata.mo_pointersize = 0; /* Not known yet */
+    macho_filedata.mo_path = tru_path_buffer;
+    res = load_macho_header(&macho_filedata);
+    if (res != DW_DLV_OK) {
+        P("Warning: %s macho-header not loaded giving up",
+            macho_filedata.mo_path);
+        destructmacho(&macho_filedata);
+        return;
+    }
+    print_macho_header(&macho_filedata);
+
+
 }
 
 int
@@ -200,3 +268,69 @@ cur_read_loc(FILE *fin_arg, long * fileoffset)
     *fileoffset = loc;
     return RO_OK;
 }
+
+static int
+load_macho_header32(struct macho_filedata_s *mfp)
+{
+     struct mach_header mh32;
+     int res = 0;
+
+     res = RRMO(mfp->mo_file,&mh32,0,sizeof(mh32));
+     if (res != RO_OK) {
+         return res;
+     }
+     /* Do not adjust endianness of magic, leave as-is. */
+     mfp->mo_header.magic = mh32.magic;
+     ASSIGNMO(mfp,mfp->mo_header.cputype,mh32.cputype);
+     ASSIGNMO(mfp,mfp->mo_header.cpusubtype,mh32.cpusubtype);
+     ASSIGNMO(mfp,mfp->mo_header.filetype,mh32.filetype);
+     ASSIGNMO(mfp,mfp->mo_header.ncmds,mh32.ncmds);
+     ASSIGNMO(mfp,mfp->mo_header.sizeofcmds,mh32.sizeofcmds);
+     ASSIGNMO(mfp,mfp->mo_header.flags,mh32.flags);
+     mfp->mo_header.reserved = 0;
+     return RO_OK;  
+}
+
+static int
+load_macho_header64(struct macho_filedata_s *mfp)
+{
+     struct mach_header_64 mh64;
+     int res = 0;
+
+     res = RRMO(mfp->mo_file,&mh64,0,sizeof(mh64));
+     if (res != RO_OK) {
+         return res;
+     }
+     /* Do not adjust endianness of magic, leave as-is. */
+     mfp->mo_header.magic = mh64.magic;
+     ASSIGNMO(mfp,mfp->mo_header.cputype,mh64.cputype);
+     ASSIGNMO(mfp,mfp->mo_header.cpusubtype,mh64.cpusubtype);
+     ASSIGNMO(mfp,mfp->mo_header.filetype,mh64.filetype);
+     ASSIGNMO(mfp,mfp->mo_header.ncmds,mh64.ncmds);
+     ASSIGNMO(mfp,mfp->mo_header.sizeofcmds,mh64.sizeofcmds);
+     ASSIGNMO(mfp,mfp->mo_header.flags,mh64.flags);
+     ASSIGNMO(mfp,mfp->mo_header.reserved,mh64.reserved);
+     return RO_OK;  
+}
+
+int
+load_macho_header(struct macho_filedata_s *mfp)
+{
+     int res = 0;
+
+     if (mfp->mo_offsetsize == 32) {
+         res = load_macho_header32(mfp);
+     } else if (mfp->mo_offsetsize == 64) {
+         res = load_macho_header64(mfp);
+     } else {
+         P("Warning: Unknown offset size %u\n",(unsigned)mfp->mo_offsetsize);
+         return RO_ERR;
+     }
+     if (res != RO_OK) {
+         P("Warning: unable to read object header\n");
+         return res;
+     }
+     return res;
+}
+
+
