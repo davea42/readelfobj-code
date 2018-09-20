@@ -271,8 +271,8 @@ print_macho_commands(struct macho_filedata_s *mfp)
     cmdp = mfp->mo_commands;
     P(" Commands: at offset " LONGESTXFMT "\n",mfp->mo_command_start_offset);
     for ( ; i < mfp->mo_command_count; ++i, ++cmdp) {
-       P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT " %s"
-           " cmdsize: " LONGESTUFMT " (" LONGESTXFMT ")\n",
+       P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT8 " %-14s"
+           " cmdsize: " LONGESTUFMT " (" LONGESTXFMT8 ")\n",
            i,
            cmdp->cmd, get_command_name(cmdp->cmd),
            cmdp->cmdsize,

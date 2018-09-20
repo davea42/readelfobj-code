@@ -7,13 +7,13 @@ Mach-o Magic:  0xfeedface
   size of commands  :  0x7a8
   flags             :  0x0
  Commands: at offset 0x1c
-  [0] cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
-  [1] cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
-  [2] cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
-  [3] cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
-  [4] cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
-  [5] cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
-  [6] cmd: 0x1 LC_SEGMENT cmdsize: 872 (0x368)
+  [0] cmd: 0x0000001b LC_UUID        cmdsize: 24 (0x00000018)
+  [1] cmd: 0x00000002 LC_SYMTAB      cmdsize: 24 (0x00000018)
+  [2] cmd: 0x00000001 LC_SEGMENT     cmdsize: 56 (0x00000038)
+  [3] cmd: 0x00000001 LC_SEGMENT     cmdsize: 464 (0x000001d0)
+  [4] cmd: 0x00000001 LC_SEGMENT     cmdsize: 464 (0x000001d0)
+  [5] cmd: 0x00000001 LC_SEGMENT     cmdsize: 56 (0x00000038)
+  [6] cmd: 0x00000001 LC_SEGMENT     cmdsize: 872 (0x00000368)
   Segments 0-6:
     command                 segname      fileoff   filesize
   [0] 0x0                                   0x00000000 0x00000000
@@ -31,13 +31,13 @@ Mach-o Magic:  0xfeedfacf
   size of commands  :  0x918
   flags             :  0x0
  Commands: at offset 0x20
-  [0] cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
-  [1] cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
-  [2] cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
-  [3] cmd: 0x19 LC_SEGMENT_64 cmdsize: 552 (0x228)
-  [4] cmd: 0x19 LC_SEGMENT_64 cmdsize: 632 (0x278)
-  [5] cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
-  [6] cmd: 0x19 LC_SEGMENT_64 cmdsize: 952 (0x3b8)
+  [0] cmd: 0x0000001b LC_UUID        cmdsize: 24 (0x00000018)
+  [1] cmd: 0x00000002 LC_SYMTAB      cmdsize: 24 (0x00000018)
+  [2] cmd: 0x00000019 LC_SEGMENT_64  cmdsize: 72 (0x00000048)
+  [3] cmd: 0x00000019 LC_SEGMENT_64  cmdsize: 552 (0x00000228)
+  [4] cmd: 0x00000019 LC_SEGMENT_64  cmdsize: 632 (0x00000278)
+  [5] cmd: 0x00000019 LC_SEGMENT_64  cmdsize: 72 (0x00000048)
+  [6] cmd: 0x00000019 LC_SEGMENT_64  cmdsize: 952 (0x000003b8)
   Segments 0-6:
     command                 segname      fileoff   filesize
   [0] 0x0                                   0x00000000 0x00000000
