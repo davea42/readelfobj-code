@@ -240,6 +240,29 @@ destructmacho(struct macho_filedata_s *mp)
 }
 
 static void
+print_macho_segments(struct macho_filedata_s *mfp)
+{
+    LONGESTUTYPE segmentcount = mfp->mo_segment_count;
+    LONGESTUTYPE i = 0;
+    struct generic_segment_command *cmdp = mfp->mo_segment_commands;
+
+    P("  Segments 0-" LONGESTUFMT ":\n",segmentcount); 
+    P("    command                 segname      fileoff   filesize\n");
+    for ( ; i < segmentcount; ++i, ++cmdp) {
+       P("  [" LONGESTUFMT "] " 
+           LONGESTXFMT " %-15s"
+           " %-17s"
+           " " LONGESTXFMT8
+           " " LONGESTXFMT8 "\n",
+           i,
+           cmdp->cmd, cmdp->cmd?get_command_name(cmdp->cmd):"",
+           cmdp->segname,
+           cmdp->fileoff,
+           cmdp->filesize);
+    }
+}
+
+static void
 print_macho_commands(struct macho_filedata_s *mfp)
 {
     LONGESTUTYPE i = 0;
@@ -248,7 +271,7 @@ print_macho_commands(struct macho_filedata_s *mfp)
     cmdp = mfp->mo_commands;
     P(" Commands: at offset " LONGESTXFMT "\n",mfp->mo_command_start_offset);
     for ( ; i < mfp->mo_command_count; ++i, ++cmdp) {
-       P("  [" LONGESTUFMT " cmd: " LONGESTXFMT " %s"
+       P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT " %s"
            " cmdsize: " LONGESTUFMT " (" LONGESTXFMT ")\n",
            i,
            cmdp->cmd, get_command_name(cmdp->cmd),
@@ -345,8 +368,7 @@ do_one_file(const char *s)
     res = load_macho_commands(&macho_filedata);
 
     print_macho_commands(&macho_filedata);
-
-
+    print_macho_segments(&macho_filedata);
 }
 
 int
@@ -533,6 +555,9 @@ load_segment_commands(struct macho_filedata_s *mfp)
     if(mfp->mo_segment_count < 1) {
         return RO_OK;
     }
+    /* Add room for zero segment */
+    ++mfp->mo_segment_count;
+
     mfp->mo_segment_commands = (struct generic_segment_command *)
         calloc(sizeof(struct generic_segment_command),mfp->mo_segment_count);
     if(!mfp->mo_segment_commands) {
@@ -541,13 +566,23 @@ load_segment_commands(struct macho_filedata_s *mfp)
 
     mmp = mfp->mo_commands;
     msp = mfp->mo_segment_commands;
-    for ( ; i < mfp->mo_segment_count; ++i,++mmp) {
+    /* leave zero segment all zeros */
+    msp++;
+    for (i = 0 ; i < mfp->mo_command_count; ++i,++mmp) {
         unsigned cmd = mmp->cmd;
+        int res = 0;
+
         if (cmd == LC_SEGMENT) {
-            load_segment_command_content32(mfp,mmp,msp,i);
+            res = load_segment_command_content32(mfp,mmp,msp,i);
+            ++msp;
         } else if (cmd == LC_SEGMENT_64) {
-            load_segment_command_content64(mfp,mmp,msp,i);
+            res = load_segment_command_content64(mfp,mmp,msp,i);
+            ++msp;
         }
+        if (res != RO_OK) {
+            return res;
+        }
+        
     }
 }
 
@@ -604,5 +639,4 @@ load_macho_commands(struct macho_filedata_s *mfp)
         return res;
     }
     return RO_OK;
- 
 }
