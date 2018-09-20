@@ -1,4 +1,8 @@
 2018-09-20  David Anderson
+     * reading.h: Added RO_NO_ENTRY
+     * readobjmacho.c,readobjmacho.h: Now read and print
+       macho section headers too.
+2018-09-20  David Anderson
      * readobjmacho.c: Now we read and print the LC_SEGMENT overall data.
 2018-09-19  David Anderson
      * readobjmacho.c, readobjmacho.h: now we correctly

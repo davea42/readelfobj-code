@@ -1,6 +1,4 @@
-/* Copyright (c) 2013-2018, David Anderson
-All rights reserved.
-
+/*
 Redistribution and use in source and binary forms, with
 or without modification, are permitted provided that the
 following conditions are met:
@@ -86,16 +84,35 @@ struct generic_segment_command {
     LONGESTUTYPE   nsects;
     LONGESTUTYPE   flags;
     LONGESTUTYPE   macho_command_index; /* our index into mo_commands */
-   
+    LONGESTUTYPE   sectionsoffset;
 };
+
+struct generic_section {
+    /* Larger than in file, room for NUL guaranteed */
+    char          sectname[24];
+    char          segname[24];
+    LONGESTUTYPE  addr;
+    LONGESTUTYPE  size; 
+    LONGESTUTYPE  offset;
+    LONGESTUTYPE  align;
+    LONGESTUTYPE  reloff;
+    LONGESTUTYPE  nreloc; 
+    LONGESTUTYPE  flags;   
+    LONGESTUTYPE  reserved1;
+    LONGESTUTYPE  reserved2;
+    LONGESTUTYPE  reserved3;
+    LONGESTUTYPE  generic_segment_num;
+    LONGESTUTYPE  offset_of_sec_rec;
+};
+
 
 struct macho_filedata_s {
     FILE *  mo_file;
     const char *mo_path;
     unsigned mo_endian;
-    size_t mo_filesize;
-    size_t mo_offsetsize; /* 32 or 64 */
-    size_t mo_pointersize;
+    LONGESTUTYPE mo_filesize;
+    LONGESTUTYPE mo_offsetsize; /* 32 or 64 */
+    LONGESTUTYPE mo_pointersize;
     void *(*mo_copy_word) (void *, const void *, size_t);
 
     /* Used to hold 32 and 64 header data */
@@ -108,6 +125,9 @@ struct macho_filedata_s {
 
     LONGESTUTYPE mo_segment_count;
     struct generic_segment_command *mo_segment_commands;
+
+    LONGESTUTYPE mo_dwarf_sectioncount;
+    struct generic_section *mo_dwarf_sections;
 
  
 };

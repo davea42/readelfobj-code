@@ -79,6 +79,7 @@ extern "C" {
 #define DFMT "%d"
 #define XFMT "0x%x"
 
+#define RO_NO_ENTRY   -1 /* matches DW_DLV_NO_ENTRY */
 #define RO_OK         0
 #define RO_ERR        1
 #define RO_ERR_SEEK   2
