@@ -49,10 +49,10 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* DW_DLV_OK */
 
 #ifndef EI_NIDENT
-#define EI_NIDENT 16 
+#define EI_NIDENT 16
 #define EI_CLASS  4
 #define EI_DATA   5
-#define EI_VERSION 6 
+#define EI_VERSION 6
 #define ELFCLASS32 1
 #define ELFCLASS64 2
 #define ELFDATA2LSB 1
@@ -83,11 +83,11 @@ struct elf_header {
     unsigned char  e_ident[EI_NIDENT];
     t16 e_type;
     t16 e_machine;
-    t32 e_version; 
+    t32 e_version;
 };
 
 /*  For following MacOS file naming convention */
-static const char * 
+static const char *
 getseparator (const char *f)
 {
     const char *p, *q;
@@ -102,7 +102,7 @@ getseparator (const char *f)
     } while (c);
     return p;
 }
-static const char * 
+static const char *
 getbasename (const char *f)
 {
     const char *pseparator = getseparator (f);
@@ -113,23 +113,23 @@ getbasename (const char *f)
 }
 
 /*  Not a standard function, though part of GNU libc
-    since 2008. */ 
+    since 2008. */
 static char *
 dw_stpcpy(char *dest,const char *src)
 {
-     const char *cp = src;
-     char *dp = dest;
-     
-     for ( ; *cp; ++cp,++dp) {
-         *dp = *cp;
-     }
-     *dp = 0;
-     return dp;
+    const char *cp = src;
+    char *dp = dest;
+
+    for ( ; *cp; ++cp,++dp) {
+        *dp = *cp;
+    }
+    *dp = 0;
+    return dp;
 }
 
 
 
-static int 
+static int
 fill_in_elf_fields(struct elf_header *h,
     unsigned *endian,
     unsigned *offsetsize)
@@ -165,7 +165,7 @@ fill_in_elf_fields(struct elf_header *h,
     return DW_DLV_OK;
 }
 
-static int 
+static int
 is_mach_o_magic(struct elf_header *h,
     unsigned *endian,
     unsigned *offsetsize)
@@ -192,10 +192,10 @@ is_mach_o_magic(struct elf_header *h,
     }
     *endian = locendian;
     *offsetsize = locoffsetsize;
-    return TRUE; 
+    return TRUE;
 }
 
-int 
+int
 dwarf_object_detector_f(FILE *f,
     unsigned *ftype,
     unsigned *endian,
@@ -219,7 +219,7 @@ dwarf_object_detector_f(FILE *f,
     if (fsize < 0) {
         return DW_DLV_ERROR;
     }
-    if (fsize <= readlen) { 
+    if (fsize <= readlen) {
         /* Not a real object file */
         return DW_DLV_ERROR;
     }
@@ -232,10 +232,10 @@ dwarf_object_detector_f(FILE *f,
         return DW_DLV_ERROR;
     }
     if (h.e_ident[0] == 0x7f &&
-        h.e_ident[1] == 'E' && 
-        h.e_ident[2] == 'L' && 
+        h.e_ident[1] == 'E' &&
+        h.e_ident[2] == 'L' &&
         h.e_ident[3] == 'F') {
-        /* is ELF */ 
+        /* is ELF */
         res = fill_in_elf_fields(&h,endian,offsetsize);
         if (res != DW_DLV_OK) {
             return res;
@@ -248,13 +248,12 @@ dwarf_object_detector_f(FILE *f,
         *ftype = DW_FTYPE_MACH_O;
         *filesize = (size_t)fsize;
         return DW_DLV_OK;
- 
     }
     /* CHECK FOR  PE object. */
     return DW_DLV_NO_ENTRY;
 }
 
-int 
+int
 dwarf_object_detector_path(const char  *path,
     char *outpath,size_t outpath_len,
     unsigned *ftype,
@@ -288,13 +287,12 @@ dwarf_object_detector_path(const char  *path,
             /* path + suffix + basenameofpath */
             char * p = 0;
 
-            p = dw_stpcpy(dwarf_finalpath,path); 
+            p = dw_stpcpy(dwarf_finalpath,path);
             p = dw_stpcpy(p,DSYM_SUFFIX);
             dw_stpcpy(p,getbasename(path));
         } else {
             return DW_DLV_ERROR;
         }
-        
         f = fopen(dwarf_finalpath,"r");
         if (!f) {
             return DW_DLV_NO_ENTRY;
@@ -310,7 +308,7 @@ dwarf_object_detector_path(const char  *path,
         }
         fclose(f);
         return res;
-    } 
+    }
     f = fopen(path,"r");
     if (!f) {
         return DW_DLV_NO_ENTRY;
@@ -319,8 +317,8 @@ dwarf_object_detector_path(const char  *path,
         ftype,endian,offsetsize,filesize);
     if (res == DW_DLV_OK) {
         if (plen >= outpath_len) {
-                fclose(f);
-                return DW_DLV_ERROR;
+            fclose(f);
+            return DW_DLV_ERROR;
         }
         strcpy(outpath,path);
     }
@@ -361,7 +359,7 @@ int main(int argc, char **argv)
         unsigned endian = 0;
         unsigned offsetsize = 0;
         size_t filesize = 0;
-         
+
         res = dwarf_object_detector_path(path,
             finalpath,PATHSIZE,
             &ftype, &endian, &offsetsize,&filesize);
@@ -374,9 +372,9 @@ int main(int argc, char **argv)
                 offsetsize,
                 (unsigned long)filesize);
         } else if (res == DW_DLV_ERROR) {
-            printf("%s type is unknown\n",path); 
+            printf("%s type is unknown\n",path);
         } else if (res == DW_DLV_NO_ENTRY) {
-            printf("%s cannot be opened\n",path); 
+            printf("%s cannot be opened\n",path);
         } else {
             printf("%s FAIL. LOGIC ERROR\n",path);
         }

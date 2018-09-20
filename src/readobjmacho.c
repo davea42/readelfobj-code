@@ -363,8 +363,6 @@ do_one_file(const char *s)
             s);
         return;
     }
-
-       
 #ifdef WORDS_BIGENDIAN
     if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_OPPOSITE ) {
         macho_filedata.mo_copy_word = ro_memcpy_swap_bytes;
@@ -438,7 +436,7 @@ load_macho_header32(struct macho_filedata_s *mfp)
     mfp->mo_header.reserved = 0;
     mfp->mo_command_count = mfp->mo_header.ncmds;
     mfp->mo_command_start_offset = sizeof(mh32);
-    return RO_OK;  
+    return RO_OK;
 }
 
 static int
@@ -462,7 +460,7 @@ load_macho_header64(struct macho_filedata_s *mfp)
     ASSIGNMO(mfp,mfp->mo_header.reserved,mh64.reserved);
     mfp->mo_command_count = mfp->mo_header.ncmds;
     mfp->mo_command_start_offset = sizeof(mh64);
-    return RO_OK;  
+    return RO_OK;
 }
 
 int
@@ -503,7 +501,7 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
         (mmp->cmdsize + mmp->offset_this_command) > filesize ) {
 
         return RO_ERR;
-    }   
+    }
     res = RRMO(mfp->mo_file,&sc,mmp->offset_this_command,sizeof(sc));
     if (res != RO_OK) {
         return res;
@@ -549,7 +547,7 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
         mmp->cmdsize > filesize ||
         (mmp->cmdsize + mmp->offset_this_command) > filesize ) {
         return RO_ERR;
-    }   
+    }
     res = RRMO(mfp->mo_file,&sc,mmp->offset_this_command,sizeof(sc));
     if (res != RO_OK) {
         return res;
@@ -578,15 +576,12 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     msp->macho_command_index = mmpindex;
     msp->sectionsoffset = afterseghdr;
     return RO_OK;
-}       
+}
 
-
-
-
-int 
+int
 load_segment_commands(struct macho_filedata_s *mfp)
 {
-    LONGESTUTYPE i = 0;  
+    LONGESTUTYPE i = 0;
     struct generic_macho_command *mmp = 0;
     struct generic_segment_command *msp = 0;
 
@@ -615,7 +610,6 @@ load_segment_commands(struct macho_filedata_s *mfp)
         if (res != RO_OK) {
             return res;
         }
-        
     }
     return RO_OK;
 }
@@ -642,9 +636,9 @@ load_dwarf_section_details32(struct macho_filedata_s *mfp,
     mfp->mo_dwarf_sections = secs;
     mfp->mo_dwarf_sectioncount = secalloc;
     secs->offset_of_sec_rec = curoff;
-    /*  Leave 0 section all zeros except our offset, 
+    /*  Leave 0 section all zeros except our offset,
         elf-like in a sense */
-    ++secs; 
+    ++secs;
     for (; seci < seccount; ++seci,++secs,curoff += shdrlen ) {
         struct section mosec;
         int res = 0;
@@ -744,7 +738,7 @@ load_dwarf_section_details(struct macho_filedata_s *mfp,
     struct generic_section * secp = 0;
     LONGESTUTYPE secalloc = seccount+1;
     int res = 0;
-    
+
     if (mfp->mo_offsetsize == 32) {
         res = load_dwarf_section_details32(mfp,segp,segi);
     } else if (mfp->mo_offsetsize == 64) {
@@ -776,7 +770,7 @@ load_dwarf_sections(struct macho_filedata_s *mfp)
 }
 
 /* Works the same, 32 or 64 bit */
-int 
+int
 load_macho_commands(struct macho_filedata_s *mfp)
 {
     LONGESTUTYPE cmdi = 0;
@@ -787,7 +781,7 @@ load_macho_commands(struct macho_filedata_s *mfp)
     unsigned segment_command_count = 0;
     int res = 0;
 
-    if ((curoff + mfp->mo_command_count * sizeof(mc)) >= 
+    if ((curoff + mfp->mo_command_count * sizeof(mc)) >=
         mfp->mo_filesize) {
         /* corrupt object. */
         return RO_ERR;
@@ -799,7 +793,6 @@ load_macho_commands(struct macho_filedata_s *mfp)
         /* out of memory */
         return RO_ERR;
     }
-     
     mcp = mfp->mo_commands;
     for ( ; cmdi < mfp->mo_header.ncmds; ++cmdi,++mcp ) {
         int res = 0;
