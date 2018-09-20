@@ -246,7 +246,8 @@ print_macho_segments(struct macho_filedata_s *mfp)
     LONGESTUTYPE i = 0;
     struct generic_segment_command *cmdp = mfp->mo_segment_commands;
 
-    P("  Segments count:" LONGESTUFMT ":\n",segmentcount);
+    P("  Segments count:" LONGESTUFMT " starting at "
+        LONGESTXFMT8 ":\n",segmentcount,mfp->mo_command_start_offset);
     P("    command                 segname      fileoff   filesize\n");
     for ( ; i < segmentcount; ++i, ++cmdp) {
         P("  [" LONGESTUFMT "] "
