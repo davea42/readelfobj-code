@@ -7,13 +7,21 @@ Mach-o Magic:  0xfeedface
   size of commands  :  0x7a8
   flags             :  0x0
  Commands: at offset 0x1c
-  [0 cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
-  [1 cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
-  [2 cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
-  [3 cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
-  [4 cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
-  [5 cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
-  [6 cmd: 0x1 LC_SEGMENT cmdsize: 872 (0x368)
+  [0] cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
+  [1] cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
+  [2] cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
+  [3] cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
+  [4] cmd: 0x1 LC_SEGMENT cmdsize: 464 (0x1d0)
+  [5] cmd: 0x1 LC_SEGMENT cmdsize: 56 (0x38)
+  [6] cmd: 0x1 LC_SEGMENT cmdsize: 872 (0x368)
+  Segments 0-6:
+    command                 segname      fileoff   filesize
+  [0] 0x0                                   0x00000000 0x00000000
+  [1] 0x1 LC_SEGMENT      __PAGEZERO        0x00000000 0x00000000
+  [2] 0x1 LC_SEGMENT      __TEXT            0x00000000 0x00000000
+  [3] 0x1 LC_SEGMENT      __DATA            0x00000000 0x00000000
+  [4] 0x1 LC_SEGMENT      __LINKEDIT        0x00001000 0x00004acb
+  [5] 0x1 LC_SEGMENT      __DWARF           0x00006000 0x00008859
 File: mach-o-object64
 Reading: mach-o-object64
 Mach-o Magic:  0xfeedfacf
@@ -23,13 +31,21 @@ Mach-o Magic:  0xfeedfacf
   size of commands  :  0x918
   flags             :  0x0
  Commands: at offset 0x20
-  [0 cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
-  [1 cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
-  [2 cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
-  [3 cmd: 0x19 LC_SEGMENT_64 cmdsize: 552 (0x228)
-  [4 cmd: 0x19 LC_SEGMENT_64 cmdsize: 632 (0x278)
-  [5 cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
-  [6 cmd: 0x19 LC_SEGMENT_64 cmdsize: 952 (0x3b8)
+  [0] cmd: 0x1b LC_UUID cmdsize: 24 (0x18)
+  [1] cmd: 0x2 LC_SYMTAB cmdsize: 24 (0x18)
+  [2] cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
+  [3] cmd: 0x19 LC_SEGMENT_64 cmdsize: 552 (0x228)
+  [4] cmd: 0x19 LC_SEGMENT_64 cmdsize: 632 (0x278)
+  [5] cmd: 0x19 LC_SEGMENT_64 cmdsize: 72 (0x48)
+  [6] cmd: 0x19 LC_SEGMENT_64 cmdsize: 952 (0x3b8)
+  Segments 0-6:
+    command                 segname      fileoff   filesize
+  [0] 0x0                                   0x00000000 0x00000000
+  [1] 0x19 LC_SEGMENT_64   __PAGEZERO        0x00000000 0x00000000
+  [2] 0x19 LC_SEGMENT_64   __TEXT            0x00000000 0x00000000
+  [3] 0x19 LC_SEGMENT_64   __DATA            0x00000000 0x00000000
+  [4] 0x19 LC_SEGMENT_64   __LINKEDIT        0x00001000 0x0000531b
+  [5] 0x19 LC_SEGMENT_64   __DWARF           0x00007000 0x000087ee
 File: libkrb5support.so.0.1.debug
 Reading: libkrb5support.so.0.1.debug
 File libkrb5support.so.0.1.debug is not mach-o. Ignored.
