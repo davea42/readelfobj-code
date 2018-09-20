@@ -232,6 +232,10 @@ destructmacho(struct macho_filedata_s *mp)
         free(mp->mo_commands);
         mp->mo_commands = 0;
     }
+    if (mp->mo_segment_commands){
+        free(mp->mo_segment_commands);
+        mp->mo_segment_commands = 0;
+    }
     memset(mp,0,sizeof(*mp));
 }
 
@@ -427,6 +431,126 @@ load_macho_header(struct macho_filedata_s *mfp)
      return res;
 }
 
+
+static int
+load_segment_command_content32(struct macho_filedata_s *mfp,
+    struct generic_macho_command *mmp,
+    struct generic_segment_command *msp,
+    LONGESTUTYPE mmpindex)
+{
+    struct segment_command sc;
+    int res = 0;
+    LONGESTUTYPE filesize = mfp->mo_filesize;
+
+    if (mmp->offset_this_command > filesize ||
+        mmp->cmdsize > filesize ||
+        (mmp->cmdsize + mmp->offset_this_command) > filesize ) {
+
+        return RO_ERR;
+    }   
+    res = RRMO(mfp->mo_file,&sc,mmp->offset_this_command,sizeof(sc));
+    if (res != RO_OK) {
+        return res;
+    }
+    ASSIGNMO(mfp,msp->cmd,sc.cmd);
+    ASSIGNMO(mfp,msp->cmdsize,sc.cmdsize);
+    strncpy(msp->segname,sc.segname,16);
+    msp->segname[16] =0;
+    ASSIGNMO(mfp,msp->vmaddr,sc.vmaddr);
+    ASSIGNMO(mfp,msp->vmsize,sc.vmsize);
+    ASSIGNMO(mfp,msp->fileoff,sc.fileoff);
+    ASSIGNMO(mfp,msp->filesize,sc.filesize);
+    if (msp->fileoff > mfp->mo_filesize ||
+        msp->filesize > mfp->mo_filesize) {
+        /* corrupt */
+        return RO_ERR;
+    }
+    if ((msp->fileoff+msp->filesize ) > filesize) {
+        /* corrupt */
+        return RO_ERR;
+    }
+    ASSIGNMO(mfp,msp->maxprot,sc.maxprot);
+    ASSIGNMO(mfp,msp->initprot,sc.initprot);
+    ASSIGNMO(mfp,msp->nsects,sc.nsects);
+    ASSIGNMO(mfp,msp->flags,sc.flags);
+    msp->macho_command_index = mmpindex;
+    return RO_OK;
+}
+static int
+load_segment_command_content64(struct macho_filedata_s *mfp,
+    struct generic_macho_command *mmp,
+    struct generic_segment_command *msp,
+    LONGESTUTYPE mmpindex)
+{
+    struct segment_command_64 sc;
+    int res = 0;
+    LONGESTUTYPE filesize = mfp->mo_filesize;
+
+    if (mmp->offset_this_command > filesize ||
+        mmp->cmdsize > filesize ||
+        (mmp->cmdsize + mmp->offset_this_command) > filesize ) {
+        return RO_ERR;
+    }   
+    res = RRMO(mfp->mo_file,&sc,mmp->offset_this_command,sizeof(sc));
+    if (res != RO_OK) {
+        return res;
+    }
+    ASSIGNMO(mfp,msp->cmd,sc.cmd);
+    ASSIGNMO(mfp,msp->cmdsize,sc.cmdsize);
+    strncpy(msp->segname,sc.segname,16);
+    msp->segname[16] =0;
+    ASSIGNMO(mfp,msp->vmaddr,sc.vmaddr);
+    ASSIGNMO(mfp,msp->vmsize,sc.vmsize);
+    ASSIGNMO(mfp,msp->fileoff,sc.fileoff);
+    ASSIGNMO(mfp,msp->filesize,sc.filesize);
+    if (msp->fileoff > filesize ||
+        msp->filesize > filesize) {
+        /* corrupt */
+        return RO_ERR;
+    }
+    if ((msp->fileoff+msp->filesize ) > filesize) {
+        /* corrupt */
+        return RO_ERR;
+    }
+    ASSIGNMO(mfp,msp->maxprot,sc.maxprot);
+    ASSIGNMO(mfp,msp->initprot,sc.initprot);
+    ASSIGNMO(mfp,msp->nsects,sc.nsects);
+    ASSIGNMO(mfp,msp->flags,sc.flags);
+    msp->macho_command_index = mmpindex;
+    return RO_OK;
+}       
+
+
+
+
+int 
+load_segment_commands(struct macho_filedata_s *mfp)
+{
+    LONGESTUTYPE i = 0;  
+    struct generic_macho_command *mmp = 0;
+    struct generic_segment_command *msp = 0;
+
+    if(mfp->mo_segment_count < 1) {
+        return RO_OK;
+    }
+    mfp->mo_segment_commands = (struct generic_segment_command *)
+        calloc(sizeof(struct generic_segment_command),mfp->mo_segment_count);
+    if(!mfp->mo_segment_commands) {
+        return RO_ERR;
+    }
+
+    mmp = mfp->mo_commands;
+    msp = mfp->mo_segment_commands;
+    for ( ; i < mfp->mo_segment_count; ++i,++mmp) {
+        unsigned cmd = mmp->cmd;
+        if (cmd == LC_SEGMENT) {
+            load_segment_command_content32(mfp,mmp,msp,i);
+        } else if (cmd == LC_SEGMENT_64) {
+            load_segment_command_content64(mfp,mmp,msp,i);
+        }
+    }
+}
+
 /* Works the same, 32 or 64 bit */
 int 
 load_macho_commands(struct macho_filedata_s *mfp)
@@ -436,6 +560,8 @@ load_macho_commands(struct macho_filedata_s *mfp)
     LONGESTUTYPE cmdspace = 0;
     struct load_command mc;
     struct generic_macho_command *mcp = 0;
+    unsigned segment_command_count = 0;
+    int res = 0;
 
     if ((curoff + mfp->mo_command_count * sizeof(mc)) >= 
         mfp->mo_filesize) {
@@ -468,5 +594,15 @@ load_macho_commands(struct macho_filedata_s *mfp)
             /* corrupt object */
             return RO_ERR;
         }
+        if (mcp->cmd == LC_SEGMENT || mcp->cmd == LC_SEGMENT_64) {
+            segment_command_count++;
+        }
     }
+    mfp->mo_segment_count = segment_command_count;
+    res = load_segment_commands(mfp);
+    if (res != RO_OK) {
+        return res;
+    }
+    return RO_OK;
+ 
 }

@@ -1,6 +1,7 @@
 2018-09-19  David Anderson
      * readobjmacho.c, readobjmacho.h: now we correctly
-       iterate through commands.
+       iterate through commands. And collect segment
+       headers.
 2018-09-19  David Anderson
      * reading.h,readobjmacho.c,readobjmacho.h: Now loads and 
        prints mach-o header.

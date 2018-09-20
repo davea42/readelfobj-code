@@ -73,6 +73,22 @@ struct generic_macho_command {
     LONGESTUTYPE   offset_this_command;
 };
 
+struct generic_segment_command {
+    LONGESTUTYPE   cmd;
+    LONGESTUTYPE   cmdsize;
+    char segname[16];
+    LONGESTUTYPE   vmaddr;
+    LONGESTUTYPE   vmsize;
+    LONGESTUTYPE   fileoff;
+    LONGESTUTYPE   filesize;
+    LONGESTUTYPE   maxprot;
+    LONGESTUTYPE   initprot;
+    LONGESTUTYPE   nsects;
+    LONGESTUTYPE   flags;
+    LONGESTUTYPE   macho_command_index; /* our index into mo_commands */
+   
+};
+
 struct macho_filedata_s {
     FILE *  mo_file;
     const char *mo_path;
@@ -89,6 +105,10 @@ struct macho_filedata_s {
     LONGESTUTYPE  mo_command_start_offset;
     struct generic_macho_command *mo_commands;
     LONGESTUTYPE  mo_offset_after_commands; /* properly aligned value */
+
+    LONGESTUTYPE mo_segment_count;
+    struct generic_segment_command *mo_segment_commands;
+
  
 };
 
