@@ -110,7 +110,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_object_detector_OBJECTS =  \
-	object_detector-object_detector.$(OBJEXT)
+	object_detector-object_detector.$(OBJEXT) \
+	object_detector-dwarf_object_detector.$(OBJEXT)
 object_detector_OBJECTS = $(am_object_detector_OBJECTS)
 object_detector_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -121,7 +122,9 @@ object_detector_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
 	$(object_detector_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-am_readelfobj_OBJECTS = readelfobj-elfdynamic_section.$(OBJEXT) \
+am_readelfobj_OBJECTS = readelfobj-dwarf_object_detector.$(OBJEXT) \
+	readelfobj-dwarf_object_read_common.$(OBJEXT) \
+	readelfobj-elfdynamic_section.$(OBJEXT) \
 	readelfobj-elfem.$(OBJEXT) readelfobj-filedata.$(OBJEXT) \
 	readelfobj-generic_from_elf.$(OBJEXT) \
 	readelfobj-readelfobj.$(OBJEXT) readelfobj-sanitized.$(OBJEXT)
@@ -131,7 +134,9 @@ readelfobj_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readelfobj_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_readobjmacho_OBJECTS = readobjmacho-readobjmacho.$(OBJEXT) \
-	readobjmacho-object_detector.$(OBJEXT) \
+	readobjmacho-dwarf_object_read_common.$(OBJEXT) \
+	readobjmacho-dwarf_object_detector.$(OBJEXT) \
+	readobjmacho-dwarf_machoread.$(OBJEXT) \
 	readobjmacho-sanitized.$(OBJEXT)
 readobjmacho_OBJECTS = $(am_readobjmacho_OBJECTS)
 readobjmacho_LDADD = $(LDADD)
@@ -355,7 +360,12 @@ top_srcdir = @top_srcdir@
 version_info = @version_info@
 MAINTAINERCLEANFILES = Makefile.in
 AUTOMAKE_OPTIONS = subdir-objects
-readelfobj_SOURCES = elfdynamic_section.c  \
+readelfobj_SOURCES = \
+dwarf_object_detector.h \
+dwarf_object_detector.c \
+dwarf_object_read_common.c \
+dwarf_object_read_common.h \
+elfdynamic_section.c  \
 elfem.c \
 filedata.c \
 generic_from_elf.c  \
@@ -373,17 +383,24 @@ readelfobj_CPPFLAGS = \
 readobjmacho_SOURCES = readobjmacho.c \
 reading.h  \
 sanitized.h \
+dwarf_object_read_common.c \
+dwarf_object_read_common.h \
+dwarf_reading.h \
+dwarf_object_detector.c \
+dwarf_object_detector.h \
+dwarf_machoread.h \
+dwarf_machoread.c \
 macho-loader.h \
-object_detector.c \
-object_detector.h \
 sanitized.c
 
 readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
 readobjmacho_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
-object_detector_SOURCES = object_detector.c object_detector.h
-object_detector_CFLAGS = $(RO_CFLAGS_WARN) -DTESTING
+object_detector_SOURCES = object_detector.c dwarf_object_detector.c \
+   dwarf_object_detector.h
+
+object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
 man_MANS = readelfobj.1
 EXTRA_DIST = \
 COPYING \
@@ -492,14 +509,19 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-object_detector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_detector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_read_common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-elfdynamic_section.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-elfem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-filedata.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-object_detector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_machoread.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_object_detector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_object_read_common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-readobjmacho.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-sanitized.Po@am__quote@
 
@@ -540,6 +562,48 @@ object_detector-object_detector.obj: object_detector.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='object_detector.c' object='object_detector-object_detector.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -c -o object_detector-object_detector.obj `if test -f 'object_detector.c'; then $(CYGPATH_W) 'object_detector.c'; else $(CYGPATH_W) '$(srcdir)/object_detector.c'; fi`
+
+object_detector-dwarf_object_detector.o: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -MT object_detector-dwarf_object_detector.o -MD -MP -MF $(DEPDIR)/object_detector-dwarf_object_detector.Tpo -c -o object_detector-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/object_detector-dwarf_object_detector.Tpo $(DEPDIR)/object_detector-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='object_detector-dwarf_object_detector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -c -o object_detector-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+
+object_detector-dwarf_object_detector.obj: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -MT object_detector-dwarf_object_detector.obj -MD -MP -MF $(DEPDIR)/object_detector-dwarf_object_detector.Tpo -c -o object_detector-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/object_detector-dwarf_object_detector.Tpo $(DEPDIR)/object_detector-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='object_detector-dwarf_object_detector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -c -o object_detector-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+
+readelfobj-dwarf_object_detector.o: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_object_detector.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_object_detector.Tpo -c -o readelfobj-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_object_detector.Tpo $(DEPDIR)/readelfobj-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='readelfobj-dwarf_object_detector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+
+readelfobj-dwarf_object_detector.obj: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_object_detector.obj -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_object_detector.Tpo -c -o readelfobj-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_object_detector.Tpo $(DEPDIR)/readelfobj-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='readelfobj-dwarf_object_detector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+
+readelfobj-dwarf_object_read_common.o: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_object_read_common.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_object_read_common.Tpo -c -o readelfobj-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_object_read_common.Tpo $(DEPDIR)/readelfobj-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='readelfobj-dwarf_object_read_common.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
+
+readelfobj-dwarf_object_read_common.obj: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_object_read_common.obj -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_object_read_common.Tpo -c -o readelfobj-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_object_read_common.Tpo $(DEPDIR)/readelfobj-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='readelfobj-dwarf_object_read_common.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
 
 readelfobj-elfdynamic_section.o: elfdynamic_section.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-elfdynamic_section.o -MD -MP -MF $(DEPDIR)/readelfobj-elfdynamic_section.Tpo -c -o readelfobj-elfdynamic_section.o `test -f 'elfdynamic_section.c' || echo '$(srcdir)/'`elfdynamic_section.c
@@ -639,19 +703,47 @@ readobjmacho-readobjmacho.obj: readobjmacho.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-readobjmacho.obj `if test -f 'readobjmacho.c'; then $(CYGPATH_W) 'readobjmacho.c'; else $(CYGPATH_W) '$(srcdir)/readobjmacho.c'; fi`
 
-readobjmacho-object_detector.o: object_detector.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-object_detector.o -MD -MP -MF $(DEPDIR)/readobjmacho-object_detector.Tpo -c -o readobjmacho-object_detector.o `test -f 'object_detector.c' || echo '$(srcdir)/'`object_detector.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-object_detector.Tpo $(DEPDIR)/readobjmacho-object_detector.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='object_detector.c' object='readobjmacho-object_detector.o' libtool=no @AMDEPBACKSLASH@
+readobjmacho-dwarf_object_read_common.o: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-dwarf_object_read_common.o -MD -MP -MF $(DEPDIR)/readobjmacho-dwarf_object_read_common.Tpo -c -o readobjmacho-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-dwarf_object_read_common.Tpo $(DEPDIR)/readobjmacho-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='readobjmacho-dwarf_object_read_common.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-object_detector.o `test -f 'object_detector.c' || echo '$(srcdir)/'`object_detector.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
 
-readobjmacho-object_detector.obj: object_detector.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-object_detector.obj -MD -MP -MF $(DEPDIR)/readobjmacho-object_detector.Tpo -c -o readobjmacho-object_detector.obj `if test -f 'object_detector.c'; then $(CYGPATH_W) 'object_detector.c'; else $(CYGPATH_W) '$(srcdir)/object_detector.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-object_detector.Tpo $(DEPDIR)/readobjmacho-object_detector.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='object_detector.c' object='readobjmacho-object_detector.obj' libtool=no @AMDEPBACKSLASH@
+readobjmacho-dwarf_object_read_common.obj: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-dwarf_object_read_common.obj -MD -MP -MF $(DEPDIR)/readobjmacho-dwarf_object_read_common.Tpo -c -o readobjmacho-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-dwarf_object_read_common.Tpo $(DEPDIR)/readobjmacho-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='readobjmacho-dwarf_object_read_common.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-object_detector.obj `if test -f 'object_detector.c'; then $(CYGPATH_W) 'object_detector.c'; else $(CYGPATH_W) '$(srcdir)/object_detector.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
+
+readobjmacho-dwarf_object_detector.o: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-dwarf_object_detector.o -MD -MP -MF $(DEPDIR)/readobjmacho-dwarf_object_detector.Tpo -c -o readobjmacho-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-dwarf_object_detector.Tpo $(DEPDIR)/readobjmacho-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='readobjmacho-dwarf_object_detector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+
+readobjmacho-dwarf_object_detector.obj: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-dwarf_object_detector.obj -MD -MP -MF $(DEPDIR)/readobjmacho-dwarf_object_detector.Tpo -c -o readobjmacho-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-dwarf_object_detector.Tpo $(DEPDIR)/readobjmacho-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='readobjmacho-dwarf_object_detector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+
+readobjmacho-dwarf_machoread.o: dwarf_machoread.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-dwarf_machoread.o -MD -MP -MF $(DEPDIR)/readobjmacho-dwarf_machoread.Tpo -c -o readobjmacho-dwarf_machoread.o `test -f 'dwarf_machoread.c' || echo '$(srcdir)/'`dwarf_machoread.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-dwarf_machoread.Tpo $(DEPDIR)/readobjmacho-dwarf_machoread.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_machoread.c' object='readobjmacho-dwarf_machoread.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-dwarf_machoread.o `test -f 'dwarf_machoread.c' || echo '$(srcdir)/'`dwarf_machoread.c
+
+readobjmacho-dwarf_machoread.obj: dwarf_machoread.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-dwarf_machoread.obj -MD -MP -MF $(DEPDIR)/readobjmacho-dwarf_machoread.Tpo -c -o readobjmacho-dwarf_machoread.obj `if test -f 'dwarf_machoread.c'; then $(CYGPATH_W) 'dwarf_machoread.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_machoread.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-dwarf_machoread.Tpo $(DEPDIR)/readobjmacho-dwarf_machoread.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_machoread.c' object='readobjmacho-dwarf_machoread.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-dwarf_machoread.obj `if test -f 'dwarf_machoread.c'; then $(CYGPATH_W) 'dwarf_machoread.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_machoread.c'; fi`
 
 readobjmacho-sanitized.o: sanitized.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-sanitized.o -MD -MP -MF $(DEPDIR)/readobjmacho-sanitized.Tpo -c -o readobjmacho-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c

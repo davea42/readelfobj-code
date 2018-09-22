@@ -42,6 +42,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "readelfobj.h"
 #include "sanitized.h"
 
+#define BUFFERSIZE 1000
 static char buffer6[BUFFERSIZE];
 
 static int
@@ -187,7 +188,7 @@ elf_load_dynamic32(LONGESTUTYPE offset,LONGESTUTYPE size)
             " filesize " LONGESTUFMT
             " section content size " LONGESTUFMT
             "\n", filedata.f_filesize,size);
-        return RO_ERR;
+        return RO_ERROR;
     }
 
     ecount = size/(LONGESTUTYPE)sizeof(Elf32_Dyn);
@@ -196,14 +197,14 @@ elf_load_dynamic32(LONGESTUTYPE offset,LONGESTUTYPE size)
         P("Bogus size of dynamic. "
             LONGESTUFMT " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf32_Dyn));
-        return RO_ERR;
+        return RO_ERROR;
     }
     res = generic_dyn_from_dyn32(&gbuffer,&bufcount,offset,size,ecount);
     if (res != RO_OK) {
         return res;
     }
     if(!bufcount) {
-        return RO_ERR;
+        return RO_ERROR;
     }
     filedata.f_dynamic = gbuffer;
     filedata.f_loc_dynamic.g_name = ".dynamic";
@@ -229,7 +230,7 @@ elf_load_dynamic64(LONGESTUTYPE offset,LONGESTUTYPE size)
             " filesize " LONGESTUFMT
             " section content size " LONGESTUFMT
             "\n", filedata.f_filesize,size);
-        return RO_ERR;
+        return RO_ERROR;
     }
 
     ecount = size/(LONGESTUTYPE)sizeof(Elf64_Dyn);
@@ -238,14 +239,14 @@ elf_load_dynamic64(LONGESTUTYPE offset,LONGESTUTYPE size)
         P("Bogus size of dynamic. "
             LONGESTUFMT " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf64_Dyn));
-        return RO_ERR;
+        return RO_ERROR;
     }
     res = generic_dyn_from_dyn64(&gbuffer,&bufcount,offset,size,ecount);
     if (res != RO_OK) {
         return res;
     }
     if(!bufcount) {
-        return RO_ERR;
+        return RO_ERROR;
     }
     filedata.f_dynamic = gbuffer;
     filedata.f_loc_dynamic.g_name = ".dynamic";
@@ -273,7 +274,7 @@ elf_print_dynamic(void)
     if (filedata.f_dynamic_sect_index >= filedata.f_ehdr->ge_shnum) {
         P("Section Number of .dynamic section is bogus in %s\n",
             sanitized(filename,buffer6,BUFFERSIZE));
-        return RO_ERR;
+        return RO_ERROR;
     }
     dynamicsect = filedata.f_shdr + filedata.f_dynamic_sect_index;
     bufcount = filedata.f_loc_dynamic.g_count;
@@ -293,7 +294,7 @@ elf_print_dynamic(void)
     } else {
         P("No content exists in %s\n",
             sanitized(dynamicsect->gh_namestring,buffer6,BUFFERSIZE));
-        return RO_ERR;
+        return RO_ERROR;
     }
     gbuffer = filedata.f_dynamic;
     for(i = 0; i < bufcount; ++i,++gbuffer) {

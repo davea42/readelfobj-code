@@ -1,4 +1,5 @@
-/* Copyright (c) 2013-2018, David Anderson
+/* 
+Copyright (c) 2018, David Anderson
 All rights reserved.
 
 Redistribution and use in source and binary forms, with
@@ -35,8 +36,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#define BUFFERSIZE 2000
 
 /* uint*_t are for macho-loader.h */
 #define uint16_t  unsigned DW_TYPEOF_16BIT
@@ -94,19 +93,27 @@ extern "C" {
 
 /*  Error codes returned via pointer,specific to object-reading */
 #define RO_ERR_SEEK   2
-#define RO_ERR_READ   3
-#define RO_ERR_MALLOC 4
-#define RO_ERR_OTHER  5
+
+#define RO_ERR_READ             3
+#define RO_ERR_MALLOC           4
+#define RO_ERR_OTHER            5
 #define RO_ERR_BADOFFSETSIZE    6
 #define RO_ERR_LOADSEGOFFSETBAD 7
 #define RO_ERR_FILEOFFSETBAD    8
+#define RO_ERR_BADTYPESIZE      9
+#define RO_ERR_TOOSMALL        10
+#define RO_ERR_ELF_VERSION     11
+#define RO_ERR_ELF_CLASS       12
+#define RO_ERR_ELF_ENDIAN      13
+#define RO_ERR_OPEN_FAIL       14
+#define RO_ERR_PATH_SIZE       15
 
 #define P printf
 #define F fflush(stdout)
 
 
-#define RRMOA(f,buf,loc,siz,errc) dwarf_object_read_random(f,buf,loc,siz,errc);
-
+#define RRMOA(f,buf,loc,siz,errc) dwarf_object_read_random(f, \
+    (char *)buf,loc,siz,errc);
 
 #define RRMO(f,buf,loc,siz)  ((fseek(f,(long)loc,0)<0) ? RO_ERR_SEEK : \
     ((fread(buf,(long)siz,1,f)!=1)?RO_ERR_READ:RO_OK))
@@ -116,7 +123,8 @@ extern "C" {
 #define RN(buf,siz)  ((fread(buf,siz,1,fin) != 1) ? RO_ERR_READ  : RO_OK)
 /* #define CURLOC      ftell(fin)  */
 #define SEEKTO(i)  ((fseek(fin,(long)(i),SEEK_SET) == 0)? RO_OK: RO_ERR_SEEK)
-
+/*  This will be altered to deal with endianness */
+/* #define ASSIGN(t,s) (t = s) */
 #ifdef WORDS_BIGENDIAN
 #define ASSIGN(t,s)                             \
     do {                                        \
@@ -149,8 +157,7 @@ extern "C" {
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
 
-int dwarf_object_read_random(FILE *f,char *buf,long loc,
-    long size,int *errc);
+#define BUFFERSIZE 1000  /* For sanitized() calls */
 
 
 #ifdef __cplusplus

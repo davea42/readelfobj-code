@@ -47,6 +47,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <elf.h>
 #include <unistd.h>
 #include "reading.h"
+#include "dwarf_object_detector.h"
 #include "readelfobj.h"
 #include "sanitized.h"
 #include "readelfobj_version.h"
@@ -282,7 +283,6 @@ ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len)
     } else {
         memcpy(s1, s2, len);
     }
-
     return orig_s1;
 }
 
@@ -375,28 +375,36 @@ check_dynamic_section(void)
 }
 
 
+char namebuffer[BUFFERSIZE*4];
 static void
 do_one_file(const char *s)
 {
     int res = 0;
     int eclass = 0;
     int obj_is_little_endian = FALSE;
+    unsigned ftype = 0;
+    unsigned endian = 0;
+    unsigned offsetsize = 0;
+    size_t filesize = 0;
+    int errcode = 0;
 
-    res = get_filedata(s,fileno(fin),&filedata);
-    if (res != RO_OK) {
+    res = dwarf_object_detector_path(s,
+        namebuffer,BUFFERSIZE*4, &ftype,
+        &endian, &offsetsize, &filesize,
+        &errcode);
+    if (res != DW_DLV_OK) {
+        printf("Not valid Elf: %s\n",s);
         return;
     }
-    if (!this_is_maybe_elf( &eclass, &obj_is_little_endian)) {
-        return;
-    }
+
 #ifdef WORDS_BIGENDIAN
-    if (obj_is_little_endian) {
+    if (endian == DW_ENDIAN_LITTLE) {
         filedata.f_copy_word = ro_memcpy_swap_bytes;
     } else {
         filedata.f_copy_word = memcpy;
     }
 #else  /* LITTLE ENDIAN */
-    if (obj_is_little_endian) {
+    if (endian == DW_ENDIAN_LITTLE) {
         filedata.f_copy_word = memcpy;
     } else {
         filedata.f_copy_word = ro_memcpy_swap_bytes;
@@ -1044,7 +1052,7 @@ cur_read_loc(FILE *fin_arg, long * fileoffset)
     loc = ftell(fin_arg);
     if (loc < 0) {
         /* ERROR */
-        return RO_ERR;
+        return RO_ERROR;
     }
     *fileoffset = loc;
     return RO_OK;
@@ -1098,7 +1106,7 @@ is_wasted_space_zero(LONGESTUTYPE offset,
     if(!allocspace) {
         P("Unable to malloc " LONGESTUFMT "bytes for zero checking.\n",
             alloclen);
-        return RO_ERR;
+        return RO_ERROR;
     }
     while (remaining) {
         LONGESTUTYPE i = 0;

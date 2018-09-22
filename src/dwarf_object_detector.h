@@ -34,6 +34,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     outpath is a place you provide, of a length outpath_len
     you consider reasonable,
     where the final path used is recorded.
+    outpath_len must be larger than strlen(path);
+    
     This matters as for mach-o if the path is a directory
     name the function will look in the standard macho-place
     for the object file (useful for dSYM) and return the
@@ -46,7 +48,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_FTYPE_MACH_O  2
 #define DW_FTYPE_PE      3
 #endif /* DW_FTYPE_UNKNOWN */
-
 
 #ifndef DW_ENDIAN_UNKNOWN
 #define DW_ENDIAN_UNKNOWN 0
@@ -61,4 +62,19 @@ int dwarf_object_detector_path(const char  *path,
     unsigned *ftype,
     unsigned *endian,
     unsigned *offsetsize,
-    size_t   *filesize);
+    size_t   *filesize,
+    int * errcode;);
+
+int dwarf_object_detector_f(FILE *f,
+    unsigned *ftype,
+    unsigned *endian,
+    unsigned *offsetsize,
+    size_t   *filesize,
+    int *errcode);
+
+int dwarf_object_detector_fd(int fd,
+    unsigned *ftype,
+    unsigned *endian,
+    unsigned *offsetsize,
+    size_t   *filesize,
+    int * errcode);

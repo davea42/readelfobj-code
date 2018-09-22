@@ -7,7 +7,12 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 bin_PROGRAMS = readelfobj readobjmacho object_detector
 
-readelfobj_SOURCES =  elfdynamic_section.c  \
+readelfobj_SOURCES =  \
+dwarf_object_detector.h \
+dwarf_object_detector.c \
+dwarf_object_read_common.c \
+dwarf_object_read_common.h \
+elfdynamic_section.c  \
 elfem.c \
 filedata.c \
 generic_from_elf.c  \
@@ -27,9 +32,14 @@ readelfobj_CPPFLAGS = \
 readobjmacho_SOURCES =  readobjmacho.c \
 reading.h  \
 sanitized.h \
+dwarf_object_read_common.c \
+dwarf_object_read_common.h \
+dwarf_reading.h \
+dwarf_object_detector.c \
+dwarf_object_detector.h \
+dwarf_machoread.h \
+dwarf_machoread.c \
 macho-loader.h \
-object_detector.c \
-object_detector.h \
 sanitized.c
 
 readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
@@ -37,8 +47,9 @@ readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
 readobjmacho_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
-object_detector_SOURCES = object_detector.c object_detector.h
-object_detector_CFLAGS = $(RO_CFLAGS_WARN) -DTESTING
+object_detector_SOURCES = object_detector.c dwarf_object_detector.c \
+   dwarf_object_detector.h
+object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
 
 man_MANS = readelfobj.1
 

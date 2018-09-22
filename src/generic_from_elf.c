@@ -414,7 +414,7 @@ generic_elf_load_symbols32(int secnum,const char *secname,
         P("ERROR: Bogus size of symbols. "
             LONGESTUFMT " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf32_Sym));
-        return RO_ERR;
+        return RO_ERROR;
     }
     psym = calloc(ecount,sizeof(Elf32_Sym));
     if (!psym) {
@@ -484,7 +484,7 @@ generic_elf_load_symbols64(int secnum,const char *secname,
         P("ERROR: Bogus size of symbols. "
             LONGESTUFMT " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf64_Sym));
-        return RO_ERR;
+        return RO_ERROR;
     }
     psym = calloc(ecount,sizeof(Elf64_Sym));
     if (!psym) {
@@ -553,7 +553,7 @@ generic_rel_from_rela32(struct generic_shdr * gsh,
             LONGESTUFMT ". "
             " not divisible by %u\n",
             size,(unsigned)sizeof(Elf32_Rela));
-        return  RO_ERR;
+        return  RO_ERROR;
     }
     for ( i = 0; i < ecount; ++i,++relp,++grel) {
         ASSIGN(grel->gr_offset,relp->r_offset);
@@ -584,7 +584,7 @@ generic_rel_from_rela64(struct generic_shdr * gsh,
             LONGESTUFMT ". "
             " not divisible by %u\n",
             size,(unsigned)sizeof(Elf64_Rela));
-        return  RO_ERR;
+        return  RO_ERROR;
     }
     for ( i = 0; i < ecount; ++i,++relp,++grel) {
         ASSIGN(grel->gr_offset,relp->r_offset);
@@ -614,7 +614,7 @@ generic_rel_from_rel32(struct generic_shdr * gsh,
             LONGESTUFMT ". "
             " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf32_Rel));
-        return RO_ERR;
+        return RO_ERROR;
     }
     for ( i = 0; i < ecount; ++i,++relp,++grel) {
         grel->gr_isrela = 0;
@@ -644,7 +644,7 @@ generic_rel_from_rel64(struct generic_shdr * gsh,
             LONGESTUFMT ". "
             " not divisible by %lu\n",
             size,(unsigned long)sizeof(Elf64_Rel));
-        return RO_ERR;
+        return RO_ERROR;
     }
     for ( i = 0; i < ecount; ++i,++relp,++grel) {
         grel->gr_isrela = 0;
@@ -675,7 +675,7 @@ elf_load_dynstr(int isdynsym,
             filedata.f_dynsym_sect_strings = 0;
             filedata.f_dynsym_sect_strings_max = 0;
             filedata.f_dynsym_sect_strings_sect_index = 0;
-            return RO_ERR;
+            return RO_ERROR;
         }
         res = RR(filedata.f_dynsym_sect_strings,
             strpsh->gh_offset,
@@ -759,14 +759,14 @@ elf_load_sectstrings(LONGESTUTYPE stringsection)
     if (stringsection >= filedata.f_ehdr->ge_shnum) {
         printf("String section " LONGESTUFMT " invalid. Ignored.",
             stringsection);
-        return RO_ERR;
+        return RO_ERROR;
     }
     psh = filedata.f_shdr + stringsection;
     secoffset = psh->gh_offset;
     if(psh->gh_type == SHT_NULL) {
         P("String section type SHT_NULL!!. "
             "No section string section!\n");
-        return RO_ERR;
+        return RO_ERROR;
     }
     if(psh->gh_size > filedata.f_elf_shstrings_max) {
         free(filedata.f_elf_shstrings_data);
@@ -815,7 +815,7 @@ elf_load_progheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
             LONGESTUFMT  " vs "
             LONGESTUFMT "\n",
             entsize,(LONGESTUTYPE)sizeof(Elf32_Phdr));
-        return RO_ERR;
+        return RO_ERROR;
     }
     if ((offset > filedata.f_filesize)||
         (entsize > 200)||
@@ -826,7 +826,7 @@ elf_load_progheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
                 "\n", filedata.f_filesize,entsize,count);
-            return RO_ERR;
+            return RO_ERROR;
     }
     res = generic_phdr_from_phdr32(&gphdr,&generic_count,
         offset,entsize,count);
@@ -835,7 +835,7 @@ elf_load_progheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
     }
     if (count != generic_count) {
         P("Something badly wrong reading program headers");
-        return RO_ERR;
+        return RO_ERROR;
     }
     insert_in_use_entry("Elf32_Phdr block",offset,entsize*count,ALIGN4);
     return RO_OK;
@@ -857,7 +857,7 @@ elf_load_progheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
             LONGESTUFMT  " vs "
             LONGESTUFMT "\n",
             entsize,(LONGESTUTYPE)sizeof(Elf64_Phdr));
-        return RO_ERR;
+        return RO_ERROR;
     }
     if ((offset > filedata.f_filesize)||
         (entsize > 200)||
@@ -868,7 +868,7 @@ elf_load_progheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
                 "\n", filedata.f_filesize,entsize,count);
-            return RO_ERR;
+            return RO_ERROR;
     }
     res = generic_phdr_from_phdr64(&gphdr,&generic_count,
         offset,entsize,count);
@@ -877,7 +877,7 @@ elf_load_progheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE cou
     }
     if (count != generic_count) {
         P("ERROR: Something badly wrong reading program headers");
-        return RO_ERR;
+        return RO_ERROR;
     }
     insert_in_use_entry("Elf64_Phdr block",offset,entsize*count,ALIGN8);
     return RO_OK;
@@ -898,7 +898,7 @@ elf_load_sectheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,
         P("Elf Section header too small? "
             LONGESTUFMT " vs %u\n",
             entsize,(unsigned )sizeof(Elf32_Shdr));
-        return RO_ERR;
+        return RO_ERROR;
     }
     if(count == 0) {
         P("No section headers\n");
@@ -913,7 +913,7 @@ elf_load_sectheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
                 "\n", filedata.f_filesize,entsize,count);
-            return RO_ERR;
+            return RO_ERROR;
     }
     res = generic_shdr_from_shdr32(&gshdr,&generic_count,
         offset,entsize,count);
@@ -922,7 +922,7 @@ elf_load_sectheaders32(LONGESTUTYPE offset,LONGESTUTYPE entsize,
     }
     if (generic_count != count) {
         P("Something wrong reading section headers\n");
-        return RO_ERR;
+        return RO_ERROR;
     }
     insert_in_use_entry("Elf32_Shdr block",offset,entsize*count,ALIGN4);
     return RO_OK;
@@ -942,7 +942,7 @@ elf_load_sectheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,
         P("Elf Section header too small? "
             LONGESTUFMT " vs %u\n",
             entsize,(unsigned )sizeof(Elf64_Shdr));
-        return RO_ERR;
+        return RO_ERROR;
     }
     if(count == 0) {
         P("No section headers\n");
@@ -957,7 +957,7 @@ elf_load_sectheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
                 "\n", filedata.f_filesize,entsize,count);
-            return RO_ERR;
+            return RO_ERROR;
     }
     res = generic_shdr_from_shdr64(&gshdr,&generic_count,
         offset,entsize,count);
@@ -966,7 +966,7 @@ elf_load_sectheaders64(LONGESTUTYPE offset,LONGESTUTYPE entsize,
     }
     if (generic_count != count) {
         P("Something wrong reading section headers\n");
-        return RO_ERR;
+        return RO_ERROR;
     }
     insert_in_use_entry("Elf64_Shdr block",offset,entsize*count,ALIGN8);
     return RO_OK;
@@ -1007,7 +1007,7 @@ elf_load_rela_32(LONGESTUTYPE secnum,
                 "\n",
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 filedata.f_filesize,offset,size);
-            return RO_ERR;
+            return RO_ERROR;
     }
 
     count = (long)(size/reclen);
@@ -1018,7 +1018,7 @@ elf_load_rela_32(LONGESTUTYPE secnum,
             " not divisible by "
             LONGESTUFMT "\n",
             secnum, size,reclen);
-        return RO_ERR;
+        return RO_ERROR;
     }
     relp = (Elf32_Rela *)malloc(size);
     if(!relp) {
@@ -1061,7 +1061,7 @@ elf_load_rela_32(LONGESTUTYPE secnum,
     /* Some sort of error */
     count_out = 0;
     free (grel);
-    return RO_ERR;
+    return RO_ERROR;
 }
 
 int
@@ -1085,7 +1085,7 @@ elf_load_rel_32(LONGESTUTYPE secnum,
             ", offset "
             LONGESTXFMT ", size " LONGESTXFMT "\n",
             secnum, offset, size);
-        return RO_ERR;
+        return RO_ERROR;
     }
     if ((offset > filedata.f_filesize)||
         (size > filedata.f_filesize) ||
@@ -1097,7 +1097,7 @@ elf_load_rel_32(LONGESTUTYPE secnum,
                 "\n",
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 filedata.f_filesize,offset,size);
-            return RO_ERR;
+            return RO_ERROR;
     }
 
     count = size/reclen;
@@ -1108,7 +1108,7 @@ elf_load_rel_32(LONGESTUTYPE secnum,
             " not divisible by "
             LONGESTUFMT "\n",
             secnum, size,reclen);
-        return RO_ERR;
+        return RO_ERROR;
     }
     relp = (Elf32_Rel *)malloc(size);
     if(!relp) {
@@ -1151,7 +1151,7 @@ elf_load_rel_32(LONGESTUTYPE secnum,
     /* Some sort of error */
     count_out = 0;
     free (grel);
-    return RO_ERR;
+    return RO_ERROR;
 }
 
 
@@ -1176,7 +1176,7 @@ elf_load_rel_64(LONGESTUTYPE secnum,
             ", offset "
             LONGESTXFMT ", size " LONGESTXFMT "\n",
             secnum, offset, size);
-        return RO_ERR;
+        return RO_ERROR;
     }
     if ((offset > filedata.f_filesize)||
         (size > filedata.f_filesize) ||
@@ -1188,7 +1188,7 @@ elf_load_rel_64(LONGESTUTYPE secnum,
                 "\n",
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 filedata.f_filesize,offset,size);
-            return RO_ERR;
+            return RO_ERROR;
     }
 
     count = size/reclen;
@@ -1199,7 +1199,7 @@ elf_load_rel_64(LONGESTUTYPE secnum,
             " not divisible by "
             LONGESTUFMT "\n",
             secnum, size,reclen);
-        return RO_ERR;
+        return RO_ERROR;
     }
     relp = (Elf64_Rel *)malloc(size);
     if(!relp) {
@@ -1242,7 +1242,7 @@ elf_load_rel_64(LONGESTUTYPE secnum,
     /* Some sort of error */
     count_out = 0;
     free (grel);
-    return RO_ERR;
+    return RO_ERROR;
 }
 
 
@@ -1280,7 +1280,7 @@ elf_load_rela_64(LONGESTUTYPE secnum,
                 "\n",
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 filedata.f_filesize,offset,size);
-            return RO_ERR;
+            return RO_ERROR;
     }
 
     count = (long)(size/reclen);
@@ -1291,7 +1291,7 @@ elf_load_rela_64(LONGESTUTYPE secnum,
             " not divisible by "
             LONGESTUFMT "\n",
             secnum, size,reclen);
-        return RO_ERR;
+        return RO_ERROR;
     }
     relp = (Elf64_Rela *)malloc(size);
     if(!relp) {
@@ -1334,7 +1334,7 @@ elf_load_rela_64(LONGESTUTYPE secnum,
     /* Some sort of error */
     count_out = 0;
     free (grel);
-    return RO_ERR;
+    return RO_ERROR;
 }
 
 void
