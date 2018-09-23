@@ -174,10 +174,12 @@ dwarf_construct_macho_access_path(const char *path,
     }
     res = dwarf_construct_macho_access(fd,
         path,&mymp,errcode);
-    if (res == DW_DLV_OK) {
-        mymp->mo_destruct_close_fd = TRUE;
-        *mp = mymp;
+    if (res != DW_DLV_OK) {
+        close(fd);
+        return res;
     }
+    mymp->mo_destruct_close_fd = TRUE;
+    *mp = mymp;
     return res;
 }
   
@@ -206,6 +208,7 @@ dwarf_construct_macho_access(int fd,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
+    mfp->mo_fd = fd;
     mfp->mo_ident[0] = 'M';
     mfp->mo_ident[1] = 1;
     mfp->mo_offsetsize = offsetsize;

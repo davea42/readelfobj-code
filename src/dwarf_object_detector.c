@@ -37,6 +37,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h> /* memcpy, strcpy */
 #include "dwarf_object_detector.h"
 
+/* This is the main() program for the object_detector executable. */
 
 #ifndef TRUE
 #define TRUE 1
@@ -156,7 +157,9 @@ dw_stpcpy(char *dest,const char *src)
 static int
 fill_in_elf_fields(struct elf_header *h,
     unsigned *endian,
-    unsigned *offsetsize,
+    /*  Size of the object file offsets, not DWARF offset
+        size. */
+    unsigned *objoffsetsize,
     int *errcode)
 {
     unsigned locendian = 0;
@@ -189,7 +192,7 @@ fill_in_elf_fields(struct elf_header *h,
         return DW_DLV_ERROR;
     }
     *endian = locendian;
-    *offsetsize = locoffsetsize;
+    *objoffsetsize = locoffsetsize;
     return DW_DLV_OK;
 }
 
@@ -346,11 +349,6 @@ dwarf_object_detector_path(const char  *path,
             *errcode = RO_ERR_PATH_SIZE;
             return DW_DLV_ERROR;
         }
-    }
-    if (finallen < outpath_len) {
-        close(fd);
-        *errcode = RO_ERR_PATH_SIZE;
-        return DW_DLV_ERROR;
     }
     fd = open(outpath,O_RDONLY);
     if (fd < 0) {

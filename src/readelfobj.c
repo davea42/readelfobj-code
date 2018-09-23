@@ -46,7 +46,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <time.h>
 #include <elf.h>
 #include <unistd.h>
-#include "reading.h"
+#include "dwarf_reading.h"
 #include "dwarf_object_detector.h"
 #include "readelfobj.h"
 #include "sanitized.h"
@@ -380,7 +380,6 @@ static void
 do_one_file(const char *s)
 {
     int res = 0;
-    int eclass = 0;
     int obj_is_little_endian = FALSE;
     unsigned ftype = 0;
     unsigned endian = 0;
@@ -394,6 +393,10 @@ do_one_file(const char *s)
         &errcode);
     if (res != DW_DLV_OK) {
         printf("Not valid Elf: %s\n",s);
+        return;
+    }
+    if (ftype != DW_FTYPE_ELF) {
+        printf("Not Elf: %s\n",s);
         return;
     }
 
@@ -410,9 +413,10 @@ do_one_file(const char *s)
         filedata.f_copy_word = ro_memcpy_swap_bytes;
     }
 #endif /* LITTLE- BIG-ENDIAN */
-    if (eclass == 32) {
+    filedata.f_filesize = filesize;
+    if (offsetsize == 32) {
         elf_load_elf_header32();
-    } else if (eclass == 64) {
+    } else if (offsetsize == 64) {
         if (sizeof(LONGESTUTYPE) < 8) {
             P("Cannot read Elf64 from %s as the longest available "
                 " integer is just %u bytes\n",
@@ -425,13 +429,13 @@ do_one_file(const char *s)
         P("Cannot read Elf from %s as the elf class is"
             " %u, which is not a valid class value.\n",
             sanitized(filename,buffer1,BUFFERSIZE),
-            (unsigned)eclass);
+            (unsigned)offsetsize);
         return;
     }
     if (!only_wasted_summary) {
         elf_print_elf_header();
     }
-    if (eclass == 32) {
+    if (offsetsize == 32) {
         elf_load_sectheaders32(filedata.f_ehdr->ge_shoff,
             filedata.f_ehdr->ge_shentsize,
             filedata.f_ehdr->ge_shnum);
@@ -443,7 +447,7 @@ do_one_file(const char *s)
     elf_load_sectstrings(filedata.f_ehdr->ge_shstrndx);
     elf_load_sect_namestring();
     elf_find_sym_sections();
-    if (eclass == 32) {
+    if (offsetsize == 32) {
         if (filedata.f_ehdr->ge_phnum) {
             elf_load_progheaders32( filedata.f_ehdr->ge_phoff,
                 filedata.f_ehdr->ge_phentsize,
@@ -476,7 +480,7 @@ do_one_file(const char *s)
     if(filedata.f_dynamic_sect_index) {
         struct generic_shdr *sp = filedata.f_shdr +
             filedata.f_dynamic_sect_index;
-        if (eclass == 32) {
+        if (offsetsize == 32) {
             elf_load_dynamic32(sp->gh_offset,
                 sp->gh_size);
         } else {
@@ -505,7 +509,7 @@ do_one_file(const char *s)
                     filedata.f_symtab_sect_strings_sect_index);
                 return;
             }
-            if (eclass == 32) {
+            if (offsetsize == 32) {
                 elf_print_symbols32(TRUE,filedata.f_symtab_sect_index,
                     namestr,psh->gh_offset,psh->gh_size);
             } else {
@@ -525,7 +529,7 @@ do_one_file(const char *s)
                     filedata.f_dynsym_sect_strings_sect_index);
                 return;
             }
-            if (eclass == 32) {
+            if (offsetsize == 32) {
                 elf_print_symbols32(FALSE,filedata.f_symtab_sect_index,
                     namestr,psh->gh_offset,psh->gh_size);
             } else {
@@ -547,14 +551,14 @@ do_one_file(const char *s)
             const char *namestr = filedata.f_shdr->gh_namestring;
             if(!strncmp(namestr,".rel.",5)) {
                 ++reloc_count;
-                if (eclass == 32) {
+                if (offsetsize == 32) {
                     elf_print_relocation32(FALSE,i,psh);
                 } else {
                     elf_print_relocation64(FALSE,i,psh);
                 }
             } else if (!strncmp(namestr,".rela.",6)) {
                 ++reloc_count;
-                if (eclass == 32) {
+                if (offsetsize == 32) {
                     elf_print_relocation32(TRUE,i,psh);
                 } else {
                     elf_print_relocation64(TRUE,i,psh);

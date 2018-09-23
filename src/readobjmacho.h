@@ -111,10 +111,12 @@ struct macho_filedata_s {
     const char *mo_path;
     unsigned mo_endian;
     LONGESTUTYPE mo_filesize;
-    LONGESTUTYPE mo_offsetsize; /* 32 or 64 */
-    LONGESTUTYPE mo_pointersize;
-    void *(*mo_copy_word) (void *, const void *, size_t);
 
+    /*  32 or 64, this is the object offset size, not 
+        DWARF offset size */
+    LONGESTUTYPE mo_offsetsize; 
+
+    void *(*mo_copy_word) (void *, const void *, size_t);
     /* Used to hold 32 and 64 header data */
     struct generic_macho_header mo_header;
 

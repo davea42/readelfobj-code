@@ -57,6 +57,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_ENDIAN_OPPOSITE 4
 #endif /* DW_ENDIAN_UNKNOWN */
 
+/* offsetsize refers to the object-file-format.
+    Elf 32 or macho- 32. Not to dwarf. */
 int dwarf_object_detector_path(const char  *path,
     char *outpath,size_t outpath_len,
     unsigned *ftype,

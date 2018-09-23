@@ -4,4 +4,4 @@
     and is modified from time to time.
 */
 
-#define READELFOBJ_VERSION_DATE_STR " 2018-08-23 12:35:37-07:00  "
+#define READELFOBJ_VERSION_DATE_STR " 2018-09-23 08:38:29-07:00  "

@@ -30,11 +30,11 @@ then
 fi
 if [ ! -d src ]
 then
-   echo "Not in the right directory, scripts directory missing"
+   echo "Not in the right directory, src directory missing"
    echo "In " `pwd`
    exit 1
 fi
-if [ ! -f src/readobj.c ]
+if [ ! -f src/readelfobj_version.h ]
 then
    echo "Not in the right directory, readelfobject source file missing"
    echo "In " `pwd`

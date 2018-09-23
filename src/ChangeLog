@@ -1,3 +1,15 @@
+2018-09-23  David Anderson
+    * object_detector.h,reading.h:  Deleted. Replaced by dwarf_
+      versions.
+    * Makefile.am,dwarf_machoread.c,
+      dwarf_object_detector.c,dwarf_object_detector.h,
+      elfdynamic_section.c, elfem.c,fd-filedata.c,filedata.c,
+      generic_from_elf.c,object_detector.c,readelfobj.c,
+      readelfobj_version.h,readobjmacho.c,readobjmacho.h:
+      Refactored to put object code into library-like files
+      with an interface that reports errors much more sensibly
+      than before.  Looking toward using the dwarf* files
+      in libdwarf.
 2018-09-20  David Anderson
      * reading.h: Added RO_NO_ENTRY
      * readobjmacho.c,readobjmacho.h: Now read and print

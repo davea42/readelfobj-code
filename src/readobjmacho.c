@@ -329,11 +329,10 @@ do_one_file(const char *s)
 
     mfp->mo_filesize = filesize;
     mfp->mo_offsetsize = offsetsize;
-    mfp->mo_pointersize = 0; /* Not known yet */
     res = dwarf_load_macho_header(mfp,&errcode);
     if (res != DW_DLV_OK) {
-        P("Warning: %s macho-header not loaded giving up",
-            tru_path_buffer);
+        P("Warning: %s macho-header not loaded giving up. Error %d",
+            tru_path_buffer,errcode);
         dwarf_destruct_macho_access(mfp,&errcode);
         return;
     }

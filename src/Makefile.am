@@ -18,7 +18,7 @@ filedata.c \
 generic_from_elf.c  \
 readelfobj_version.h \
 readelfobj.c \
-reading.h \
+dwarf_reading.h \
 readelfobj.h \
 sanitized.h \
 sanitized.c
@@ -30,7 +30,6 @@ readelfobj_CPPFLAGS = \
 
 
 readobjmacho_SOURCES =  readobjmacho.c \
-reading.h  \
 sanitized.h \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \

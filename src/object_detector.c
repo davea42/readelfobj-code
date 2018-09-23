@@ -35,6 +35,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h> /* memcpy, strcpy */
 #include "dwarf_object_detector.h"
 
+/* This is library code to actually detect the type of object. */
+
 #ifndef TRUE
 #define TRUE 1
 #define FALSE 0
