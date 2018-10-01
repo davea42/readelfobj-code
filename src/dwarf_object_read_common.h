@@ -30,9 +30,23 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef  DWARF_OBJECT_READ_COMMON_H
+#define  DWARF_OBJECT_READ_COMMON_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 int dwarf_object_read_random(int fd,char *buf,long loc,
     size_t size,int *errc);
 
 void * dwarf_ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len);
 
+void  dwarf_safe_strcpy(char *out, long outlen, 
+    const char *in, long inlen);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /*  DWARF_OBJECT_READ_COMMON_H */

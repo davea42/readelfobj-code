@@ -36,7 +36,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "config.h"
 #include <stdio.h>
+#ifdef HAVE_MALLOC_H
 #include <malloc.h>
+#endif /* HAVE_MALLOC_H */
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
@@ -44,7 +46,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sys/stat.h> /* open() */
 #include <fcntl.h> /* open() */
 #include <time.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h> /* lseek read close */
+#endif /* HAVE_UNISTD_H */
 #include "dwarf_reading.h"
 #include "dwarf_object_read_common.h"
 #include "dwarf_machoread.h"

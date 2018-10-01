@@ -29,11 +29,14 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "config.h"
 #include <stdio.h>
 #include <sys/types.h> /* fstat */
 #include <sys/stat.h> /* fstat */
 #include <fcntl.h> /* O_RDONLY */
-#include <unistd.h> /* lseek etc */
+#ifdef HAVE_UNISTD_H
+#include <unistd.h> /* lseek read close */
+#endif /* HAVE_UNISTD_H */
 #include <string.h> /* memcpy, strcpy */
 #include "dwarf_object_detector.h"
 

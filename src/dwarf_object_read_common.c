@@ -34,7 +34,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <string.h> /* memcpy */
 #include <sys/types.h> /* lseek and read */
-#include <unistd.h> /* lseek and read */
+#ifdef HAVE_UNISTD_H
+#include <unistd.h> /* /* lseek read close */
+#endif /* HAVE_UNISTD_H */
 #include "dwarf_reading.h" /* for error codes */
 #include "dwarf_object_read_common.h"
 
@@ -95,5 +97,16 @@ dwarf_ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len)
         memcpy(s1, s2, len);
     }
     return orig_s1;
+}
+
+void
+dwarf_safe_strcpy(char *out, long outlen, const char *in, long inlen)
+{
+    if (inlen >= (outlen - 1)) {
+        strncpy(out, in, outlen - 1);
+        out[outlen - 1] = 0;
+    } else {
+        strcpy(out, in);
+    }
 }
 

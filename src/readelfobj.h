@@ -29,8 +29,8 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef READOBJ_H
-#define READOBJ_H
+#ifndef READELFOBJ_H
+#define READELFOBJ_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,10 +38,16 @@ extern "C" {
 
 extern char *filename;
 extern int printfilenames;
-extern FILE *fin;
-extern char *getshstring(LONGESTUTYPE sectype);
 
-
+/*  Use this for rel too. */
+struct generic_rela {
+    int          gr_isrela; /* 0 means rel, non-zero means rela */
+    LONGESTUTYPE gr_offset;
+    LONGESTUTYPE gr_info;
+    LONGESTUTYPE gr_sym; /* From info */
+    LONGESTUTYPE gr_type; /* From info */
+    LONGESTSTYPE gr_addend;
+};
 
 /*  The following are generic to simplify handling
     Elf32 and Elf64.  Some fields added where
@@ -86,6 +92,17 @@ struct generic_shdr {
     LONGESTUTYPE gh_info;
     LONGESTUTYPE gh_addralign;
     LONGESTUTYPE gh_entsize;
+
+    /*  Zero unless content read in. Malloc space
+        of size gh_size,  in bytes. For dwarf
+        and strings mainly. free() this if not null*/
+    char *       gh_content;
+    /*  If a .rel or .rela section this will point
+        to generic relocation records if such
+        have been loaded.
+        free() this if not null. */
+    LONGESTUTYPE          gh_relcount;
+    struct generic_rela * gh_rels;
 };
 
 struct generic_dynentry {
@@ -109,51 +126,6 @@ struct generic_symentry {
     LONGESTUTYPE gs_type;
 };
 
-
-/*  Use this for rel too. */
-struct generic_rela {
-    int          gr_isrela; /* 0 means rel, non-zero means rela */
-    LONGESTUTYPE gr_offset;
-    LONGESTUTYPE gr_info;
-    LONGESTUTYPE gr_sym; /* From info */
-    LONGESTUTYPE gr_type; /* From info */
-    LONGESTSTYPE gr_addend;
-};
-
-int generic_ehdr_from_32(struct generic_ehdr *ehdr, Elf32_Ehdr *e);
-int generic_ehdr_from_64(struct generic_ehdr *ehdr, Elf64_Ehdr *e);
-
-int generic_phdr_from_phdr32(struct generic_phdr **phdr_out,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count);
-int
-generic_phdr_from_phdr64(struct generic_phdr **phdr_out,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count);
-
-int generic_shdr_from_shdr32(struct generic_shdr **hdr_out,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count);
-int generic_shdr_from_shdr64(struct generic_shdr **hdr_out,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count);
-
-int generic_rel_from_rel32(struct generic_shdr * gsh,
-    Elf32_Rel *relp,
-    struct generic_rela *grel_out);
-int generic_rel_from_rel64(struct generic_shdr * gsh,
-    Elf64_Rel *relp,
-    struct generic_rela *grel);
-
-
 struct location {
     const char *g_name;
     LONGESTUTYPE g_offset;
@@ -171,7 +143,21 @@ struct in_use_s {
     LONGESTUTYPE u_lastbyte;
 };
 
-struct filedata_s {
+struct elf_filedata_s {
+    /*  f_ident[0] == 'E' means it is elf and
+        elf_filedata_s is the struct involved.  
+        Other means error/corruption of some kind. 
+        f_ident[1] is a version number. 
+        Only version 1 is defined. */
+    char         f_ident[8];
+    int          f_fd;
+    int          f_printf_on_error;
+
+    /* If TRUE close f_fd on destruct. */
+    int          f_destruct_close_fd; 
+
+    unsigned	 f_endian;
+    unsigned     f_offsetsize; /* Elf offset size, not DWARF. 32 or 64 */
     LONGESTUTYPE f_filesize;
     LONGESTUTYPE f_max_secdata_offset;
     LONGESTUTYPE f_max_progdata_offset;
@@ -228,72 +214,71 @@ struct filedata_s {
 
 
 };
-extern struct filedata_s filedata;
+typedef struct elf_filedata_s * elf_filedata;
 
-int get_filedata(const char *name, int fd,struct filedata_s *fida);
-int elf_load_dynamic32(LONGESTUTYPE offset,
-    LONGESTUTYPE size);
-int elf_load_dynamic64(LONGESTUTYPE offset,
-    LONGESTUTYPE size);
-int elf_print_dynamic(void);
-char * get_dynstr_string(LONGESTUTYPE offset, LONGESTUTYPE index);
-char * get_symstr_string(int is_symtab, LONGESTUTYPE offset);
-char *get_shtypestring(LONGESTUTYPE x);
-const char * get_em_machine_name(unsigned value);
-const char * get_em_dynamic_table_name(LONGESTUTYPE value, char *buffer,
-    unsigned buflen);
-const char * get_program_header_type_name(unsigned value,
+int dwarf_construct_elf_access(int fd,
+    const char *path,
+    elf_filedata *ep,int *errcode);
+int dwarf_construct_elf_access_path(const char *path,
+    elf_filedata *ep,int *errcode);
+int dwarf_destruct_elf_access(elf_filedata ep,int *errcode);
+int dwarf_load_elf_header(elf_filedata ep,int *errcode);
+int dwarf_load_elf_sectheaders(elf_filedata ep,int *errcode);
+int dwarf_load_elf_progheaders(elf_filedata ep,int *errcode);
+
+int dwarf_load_elf_dynamic(elf_filedata ep, int *errcode);
+int dwarf_load_elf_symstr(elf_filedata ep, int *errcode);
+int dwarf_load_elf_dynstr(elf_filedata ep, int *errcode);
+int dwarf_load_elf_symtab_symbols(elf_filedata ep,int *errcode);
+int dwarf_load_elf_dynsym_symbols(elf_filedata ep,int *errcode); 
+
+int dwarf_load_elf_rela(elf_filedata ep,
+    LONGESTUTYPE secnum, int *errcode);
+int dwarf_load_elf_rel(elf_filedata ep,
+    LONGESTUTYPE secnum, int *errcode);
+
+int dwarf_get_elf_symstr_string(elf_filedata ep,
+    int is_symtab,LONGESTUTYPE index,
+    char *buffer, LONGESTUTYPE bufferlen,
+    int *errcode);
+
+/*  The following for an elf checker/dumper. */
+const char * dwarf_get_elf_machine_name(unsigned value);
+const char * dwarf_get_elf_dynamic_table_name(
+    LONGESTUTYPE value, 
     char *buffer, unsigned buflen);
-const char * get_section_header_flag_names(LONGESTUTYPE value,
+const char * dwarf_get_elf_program_header_type_name(
+    LONGESTUTYPE value,
     char *buffer, unsigned buflen);
-const char * get_section_header_st_type(LONGESTUTYPE value, char *buffer,
-    unsigned buflen);
-int generic_elf_load_symbols32(int secnum,const char *secname,
-    struct generic_symentry **gsym_out,LONGESTUTYPE offset,
-    LONGESTUTYPE size, LONGESTUTYPE *count_out);
-int generic_elf_load_symbols64(int secnum,const char *secname,
-    struct generic_symentry **gsym_out,LONGESTUTYPE offset,LONGESTUTYPE size,
-    LONGESTUTYPE *count_out);
-int elf_load_dynstr(int isdynsym,
-    LONGESTUTYPE strsect,LONGESTUTYPE strlen);
-
-int elf_load_elf_header32(void);
-int elf_load_elf_header64(void);
-int elf_load_sectheaders32(LONGESTUTYPE, LONGESTUTYPE, LONGESTUTYPE);
-int elf_load_sectheaders64(LONGESTUTYPE, LONGESTUTYPE, LONGESTUTYPE);
-void elf_load_sect_namestring(void);
-int elf_load_sectstrings(LONGESTUTYPE);
-int elf_load_progheaders32(LONGESTUTYPE ,LONGESTUTYPE, LONGESTUTYPE);
-int elf_load_progheaders64(LONGESTUTYPE ,LONGESTUTYPE, LONGESTUTYPE);
-int elf_load_rela_32(LONGESTUTYPE secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out);
-int elf_load_rela_64(LONGESTUTYPE secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out);
-int elf_load_rel_32(LONGESTUTYPE secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out);
-int elf_load_rel_64(LONGESTUTYPE secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out);
-
-
-
-
-void insert_in_use_entry(const char *description,LONGESTUTYPE offset,
+const char * dwarf_get_elf_section_header_flag_names(
+    LONGESTUTYPE value,
+    char *buffer, unsigned buflen);
+const char * dwarf_get_elf_section_header_st_type(
+    LONGESTUTYPE value, 
+    char *buffer, unsigned buflen);
+void dwarf_insert_in_use_entry(elf_filedata ep,
+    const char *description,LONGESTUTYPE offset,
     LONGESTUTYPE length,LONGESTUTYPE align);
+const char * dwarf_get_elf_symbol_sto_type(
+    LONGESTUTYPE value, char *buffer,
+    unsigned buflen);
+const char * dwarf_get_elf_symbol_shn_type(
+    LONGESTUTYPE value, char *buffer, unsigned buflen);
+const char * dwarf_get_elf_symbol_stb_string(
+    LONGESTUTYPE val, char *buff, unsigned buflen);
+const char * dwarf_get_elf_symbol_stt_type( LONGESTUTYPE value, 
+    char *buffer, unsigned buflen);
+const char * dwarf_get_elf_osabi_name( LONGESTUTYPE value, 
+    char *buffer, unsigned buflen);
+const char * dwarf_get_elf_machine_name(unsigned value);
+const char * dwarf_get_elf_dynamic_table_name(
+    LONGESTUTYPE value, char *buffer, unsigned buflen);
+const char * dwarf_get_elf_section_header_flag_names(
+    LONGESTUTYPE value, char *buffer, unsigned buflen);
+const char * dwarf_get_elf_section_header_st_type_name(
+    LONGESTUTYPE value, char *buffer, unsigned buflen);
 
-const char * get_symbol_sto_type(LONGESTUTYPE value, char *buffer,
-    unsigned buflen);
-const char * get_symbol_shn_type(LONGESTUTYPE value, char *buffer,
-    unsigned buflen);
-const char * get_symbol_stb_string(LONGESTUTYPE val, char *buff,
-    unsigned buflen);
-const char * get_symbol_stt_type(LONGESTUTYPE value, char *buffer,
-    unsigned buflen);
-const char * get_osabi_name(LONGESTUTYPE value, char *buffer,
-    unsigned buflen);
+
 
 int cur_read_loc(FILE *fin, long* fileoffset);
 
@@ -305,4 +290,4 @@ int cur_read_loc(FILE *fin, long* fileoffset);
 }
 #endif /* __cplusplus */
 
-#endif /* READOBJ_H */
+#endif /* READELFOBJ_H */

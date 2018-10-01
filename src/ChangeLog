@@ -1,3 +1,9 @@
+2018-10-01  David Anderson
+    * all files: Everything changes dramatically to
+      extract object loading functions from the source printing
+      things.   Major refactoring and renaming.
+2018-10-01  David Anderson
+    * elfdynamic_section.c: Deleted as part of refactoring.
 2018-09-23  David Anderson
     * object_detector.h,reading.h:  Deleted. Replaced by dwarf_
       versions.

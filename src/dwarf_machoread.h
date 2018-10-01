@@ -30,8 +30,8 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef READOBJ_H
-#define READOBJ_H
+#ifndef DWARF_MACHOREAD_H
+#define DWARF_MACHOREAD_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -152,4 +152,4 @@ int dwarf_destruct_macho_access(macho_filedata mp,int *errcode);
 }
 #endif /* __cplusplus */
 
-#endif /* READOBJ_H */
+#endif /* DWARF_MACHOREAD_H */

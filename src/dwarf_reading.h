@@ -30,8 +30,8 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef READING_H
-#define READING_H
+#ifndef DWARF_READING_H
+#define DWARF_READING_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -107,6 +107,16 @@ extern "C" {
 #define RO_ERR_ELF_ENDIAN      13
 #define RO_ERR_OPEN_FAIL       14
 #define RO_ERR_PATH_SIZE       15
+#define RO_ERR_INTEGERTOOSMALL 16
+#define RO_ERR_SYMBOLSECTIONSIZE  17
+#define RO_ERR_RELSECTIONSIZE     18
+#define RO_ERR_STRINGOFFSETBIG    19
+#define RO_ERR_DYNAMICSECTIONSIZE 20
+#define RO_ERR_UNEXPECTEDZERO     21
+#define RO_ERR_PHDRCOUNTMISMATCH  22
+#define RO_ERR_SHDRCOUNTMISMATCH  23
+#define RO_ERR_RELCOUNTMISMATCH   24
+#define RO_ERR_NULL_ELF_POINTER   25
 
 #define P printf
 #define F fflush(stdout)
@@ -115,22 +125,15 @@ extern "C" {
 #define RRMOA(f,buf,loc,siz,errc) dwarf_object_read_random(f, \
     (char *)buf,loc,siz,errc);
 
-#define RRMO(f,buf,loc,siz)  ((fseek(f,(long)loc,0)<0) ? RO_ERR_SEEK : \
-    ((fread(buf,(long)siz,1,f)!=1)?RO_ERR_READ:RO_OK))
 #define RR(buf,loc,siz)  ((fseek(fin,(long)loc,0)<0) ? RO_ERR_SEEK : \
     ((fread(buf,(long)siz,1,fin)!=1)?RO_ERR_READ:RO_OK))
 #define RNMO(f,buf,siz)  ((fread(buf,siz,1,f) != 1) ? RO_ERR_READ  : RO_OK)
-#define RN(buf,siz)  ((fread(buf,siz,1,fin) != 1) ? RO_ERR_READ  : RO_OK)
-/* #define CURLOC      ftell(fin)  */
-#define SEEKTO(i)  ((fseek(fin,(long)(i),SEEK_SET) == 0)? RO_OK: RO_ERR_SEEK)
-/*  This will be altered to deal with endianness */
-/* #define ASSIGN(t,s) (t = s) */
 #ifdef WORDS_BIGENDIAN
-#define ASSIGN(t,s)                             \
+#define ASSIGN(func,t,s)                             \
     do {                                        \
         unsigned tbyte = sizeof(t) - sizeof(s); \
         t = 0;                                  \
-        filedata.f_copy_word(((char *)t)+tbyte ,&s,sizeof(s)); \
+        func(((char *)t)+tbyte ,&s,sizeof(s)); \
     } while (0)
 #define SIGN_EXTEND(dest, length)           \
     do {                                    \
@@ -142,10 +145,10 @@ extern "C" {
     } while (0)
 
 #else /* LITTLE ENDIAN */
-#define ASSIGN(t,s)                             \
+#define ASSIGN(func,t,s)                             \
     do {                                        \
         t = 0;                                  \
-        filedata.f_copy_word(&t,&s,sizeof(s));    \
+        func(&t,&s,sizeof(s));    \
     } while (0)
 #define SIGN_EXTEND(dest, length)                               \
     do {                                                        \
@@ -164,4 +167,4 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif /* READING_H */
+#endif /* DWARF_READING_H */

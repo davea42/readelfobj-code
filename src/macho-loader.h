@@ -1,4 +1,4 @@
-/*  This is a severly cut-down version of loader.h from cctools-895,
+/*  This is a cut-down version of loader.h from cctools-895,
     shrunk to eliminate aspects unwanted in libdwarf and to avoid
     #include entirely.  cctools-895  in its original form
     is available from https://opensource.apple.com/
@@ -25,8 +25,13 @@
  * 
  * @APPLE_LICENSE_HEADER_END@
  */
-#ifndef _MACHO_LOADER_H_
-#define _MACHO_LOADER_H_
+#ifndef MACHO_LOADER_H
+#define MACHO_LOADER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 
 #if 0 /* Not used here. DavidA. September 2018 */
 /*
@@ -1501,5 +1506,7 @@ struct tlv_descriptor
 	unsigned long	key;
 	unsigned long	offset;
 };
-
-#endif /* _MACHO_LOADER_H_ */
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* MACHO_LOADER_H */

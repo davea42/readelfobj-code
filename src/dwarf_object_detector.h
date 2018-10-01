@@ -29,6 +29,13 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef DWARF_OBJECT_DETECTOR_H
+#define DWARF_OBJECT_DETECTOR_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 
 /*  Declares the interface function.
     outpath is a place you provide, of a length outpath_len
@@ -80,3 +87,8 @@ int dwarf_object_detector_fd(int fd,
     unsigned *offsetsize,
     size_t   *filesize,
     int * errcode);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* DWARF_OBJECT_DETECTOR_H */

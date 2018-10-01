@@ -12,9 +12,7 @@ dwarf_object_detector.h \
 dwarf_object_detector.c \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
-elfdynamic_section.c  \
 elfem.c \
-filedata.c \
 generic_from_elf.c  \
 readelfobj_version.h \
 readelfobj.c \

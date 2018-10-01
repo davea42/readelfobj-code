@@ -39,15 +39,21 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "config.h"
 #include <stdio.h>
+#ifdef HAVE_MALLOC_H
 #include <malloc.h>
+#endif /* HAVE_MALLOC_H */
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <elf.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h> /* lseek read close */
+#endif /* HAVE_UNISTD_H */
 #include <unistd.h>
 #include "dwarf_reading.h"
 #include "dwarf_object_detector.h"
+#include "dwarf_object_read_common.h"
 #include "readelfobj.h"
 #include "sanitized.h"
 #include "readelfobj_version.h"
@@ -66,35 +72,26 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define ALIGN8 8
 
 static void do_one_file(const char *filename);
-static void elf_find_sym_sections(void);
-static void elf_print_elf_header(void);
-static void elf_print_progheaders(void);
-static void elf_print_sectstrings(LONGESTUTYPE);
-static void elf_print_sectheaders(void);
-static void elf_print_relocations( struct generic_shdr * gsh,
-    struct generic_rela *grela, LONGESTUTYPE count);
-static void elf_print_relocation32(int isrela,LONGESTUTYPE secnum,
-    struct generic_shdr *sec);
-static void elf_print_relocation64(int isrela,LONGESTUTYPE secnum,
-    struct generic_shdr *sec);
-static void elf_print_symbols32(int is_symtab,int secnum,
-    const char *secname,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE size);
-static void elf_print_symbols64(int is_symtab,int secnum,
-    const char *secname,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE size);
-static void report_wasted_space(void);
+static void elf_print_elf_header(elf_filedata ep);
+static void elf_print_progheaders(elf_filedata ep);
+static void elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE);
+static void elf_print_sectheaders(elf_filedata ep);
+static void elf_print_relocation_details(elf_filedata ep,
+    int isrela,LONGESTUTYPE secnum,
+    struct generic_shdr * gsh);
+static void elf_print_symbols(elf_filedata ep,int is_symtab,
+    struct generic_symentry * gsym, 
+    LONGESTUTYPE ecount,
+    const char *secname);
+
+static void report_wasted_space(elf_filedata ep);
+static int elf_print_dynamic(elf_filedata ep);
 
 int print_symtab_sections = 0; /* symtab dynsym */
 int print_reloc_sections  = 0; /* .rel .rela */
 int print_dynamic_sections  = 0; /* .dynamic */
 int print_wasted  = 0; /* prints space use details */
 int only_wasted_summary = 0; /* suppress standard printing */
-
-/* All the data for one file. */
-struct filedata_s filedata;
 
 static char buffer1[BUFFERSIZE];
 static char buffer2[BUFFERSIZE];
@@ -114,19 +111,6 @@ char *Usage = "Usage: readelfobj <options> file ...\n"
     "--help         print this message\n"
     "--version      print version string\n";
 
-
-static void
-clean_filedata(void)
-{
-    free(filedata.f_ehdr);
-    free(filedata.f_shdr);
-    free(filedata.f_phdr);
-    free(filedata.f_elf_shstrings_data);
-    free(filedata.f_dynamic);
-    free(filedata.f_symtab_sect_strings);
-    free(filedata.f_dynsym_sect_strings);
-    memset(&filedata, 0, sizeof(filedata));
-}
 
 int
 main(int argc,char **argv)
@@ -187,7 +171,6 @@ main(int argc,char **argv)
             }
             ++filecount;
             do_one_file(filename);
-            clean_filedata();
             fclose(fin);
         }
         if (!filecount && !printed_version) {
@@ -199,100 +182,12 @@ main(int argc,char **argv)
 }
 
 static int
-this_is_maybe_elf(int *class, int *is_little_endian)
+check_dynamic_section(elf_filedata ep)
 {
-    Elf32_Ehdr ehdr32;
-    int res = 0;
-    int lclass = 0;
-    int isle = 0;
-
-    res = RR(&ehdr32,0,sizeof(ehdr32));
-    if(res != RO_OK) {
-        P("Warning: Could not read whole file header of %s\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
-        return FALSE;
-    }
-    if (filedata.f_filesize < sizeof(ehdr32)) {
-        P("Warning: The file %s is shorter than any ELF file header\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
-        return FALSE;
-    }
-    if (! IS_ELF(ehdr32)) {
-        P("Warning: The file %s is not Elf.\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
-        return FALSE;
-    }
-    lclass = ehdr32.e_ident[EI_CLASS];
-    if (lclass == ELFCLASS32) {
-        *class = 32;
-    } else if (lclass == ELFCLASS64) {
-        *class = 64;
-    } else {
-        P("Warning: The file %s has an unknown elf class."
-            " Ignoring the file.\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
-        return FALSE;
-    }
-    isle = ehdr32.e_ident[EI_DATA];
-    if (isle == ELFDATA2LSB) {
-        *is_little_endian = TRUE;
-    } else if (isle == ELFDATA2MSB) {
-        *is_little_endian = FALSE;
-    } else {
-        P("Warning: The file %s has an unknown endianness code."
-            " Ignoring the file.\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
-        return FALSE;
-    }
-    return TRUE;
-}
-
-/*
-  A byte-swapping version of memcpy
-  for cross-endian use.
-  Only 2,4,8 should be lengths passed in.
-*/
-static void *
-ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len)
-{
-    void *orig_s1 = s1;
-    unsigned char *targ = (unsigned char *) s1;
-    const unsigned char *src = (const unsigned char *) s2;
-
-    if (len == 4) {
-        targ[3] = src[0];
-        targ[2] = src[1];
-        targ[1] = src[2];
-        targ[0] = src[3];
-    } else if (len == 8) {
-        targ[7] = src[0];
-        targ[6] = src[1];
-        targ[5] = src[2];
-        targ[4] = src[3];
-        targ[3] = src[4];
-        targ[2] = src[5];
-        targ[1] = src[6];
-        targ[0] = src[7];
-    } else if (len == 2) {
-        targ[1] = src[0];
-        targ[0] = src[1];
-    }
-/* should NOT get below here: is not the intended use */
-    else if (len == 1) {
-        targ[0] = src[0];
-    } else {
-        memcpy(s1, s2, len);
-    }
-    return orig_s1;
-}
-
-static void
-check_dynamic_section(void)
-{
-    LONGESTUTYPE pcount = filedata.f_loc_phdr.g_count;
-    struct generic_phdr *gphdr = filedata.f_phdr;
+    LONGESTUTYPE pcount = ep->f_loc_phdr.g_count;
+    struct generic_phdr *gphdr = ep->f_phdr;
     struct generic_shdr *gshdr = 0;
-    LONGESTUTYPE scount = filedata.f_loc_shdr.g_count;
+    LONGESTUTYPE scount = ep->f_loc_shdr.g_count;
     LONGESTUTYPE i = 0;
     LONGESTUTYPE dynamic_p_offset = 0;
     LONGESTUTYPE dynamic_p_length = 0;
@@ -305,16 +200,17 @@ check_dynamic_section(void)
 
     if (!pcount) {
         /* nothing to do. */
-        return;
+        return DW_DLV_NO_ENTRY;
     }
     if (!scount) {
         /* nothing to do. */
-        return;
+        return DW_DLV_NO_ENTRY;
     }
 
     /*  In case of error reading headers count might now be zero */
     for( i = 0; i < pcount; ++i,  gphdr++) {
-        const char *typename = get_program_header_type_name(
+        const char *typename = 
+            dwarf_get_elf_program_header_type_name(
             gphdr->gp_type, buffer1,BUFFERSIZE);
 
         /* The type name returned is in ( ) */
@@ -327,7 +223,7 @@ check_dynamic_section(void)
         }
     }
 
-    gshdr = filedata.f_shdr;
+    gshdr = ep->f_shdr;
     for(i = 0; i < scount; i++, ++gshdr) {
         const char *namestr = sanitized(gshdr->gh_namestring,
             buffer1,BUFFERSIZE);
@@ -341,7 +237,7 @@ check_dynamic_section(void)
     }
     if (!foundp || !founds) {
         /* Nothing to do */
-        return;
+        return DW_DLV_NO_ENTRY;
     }
     if (dynamic_p_offset !=  dynamic_s_offset) {
         P("Warning: dynamic section error: ProgHeader  "
@@ -355,7 +251,7 @@ check_dynamic_section(void)
             dynamic_s_snum,
             dynamic_s_offset,
             dynamic_s_offset);
-        return;
+        return DW_DLV_ERROR;
     }
     if (dynamic_p_length !=  dynamic_s_length) {
         P("Warning: dynamic section error:  ProgHeader "
@@ -369,9 +265,9 @@ check_dynamic_section(void)
             dynamic_s_snum,
             dynamic_s_length,
             dynamic_s_length);
-        return;
+        return DW_DLV_ERROR;
     }
-    return;
+    return DW_DLV_OK;
 }
 
 
@@ -386,6 +282,7 @@ do_one_file(const char *s)
     unsigned offsetsize = 0;
     size_t filesize = 0;
     int errcode = 0;
+    elf_filedata ep = 0;
 
     res = dwarf_object_detector_path(s,
         namebuffer,BUFFERSIZE*4, &ftype,
@@ -400,95 +297,72 @@ do_one_file(const char *s)
         return;
     }
 
+    res = dwarf_construct_elf_access_path(namebuffer, &ep,&errcode);
+    if (res == DW_DLV_NO_ENTRY) {
+        P("Unable to find %s. Something odd here. \n",namebuffer);
+        return;
+    } else if (res == DW_DLV_ERROR) {
+        P("Unable to open %s. Err code %d\n",namebuffer,errcode);
+        return;
+    }
+
 #ifdef WORDS_BIGENDIAN
     if (endian == DW_ENDIAN_LITTLE) {
-        filedata.f_copy_word = ro_memcpy_swap_bytes;
+        ep->f_copy_word = dwarf_ro_memcpy_swap_bytes;
     } else {
-        filedata.f_copy_word = memcpy;
+        ep->f_copy_word = memcpy;
     }
 #else  /* LITTLE ENDIAN */
     if (endian == DW_ENDIAN_LITTLE) {
-        filedata.f_copy_word = memcpy;
+        ep->f_copy_word = memcpy;
     } else {
-        filedata.f_copy_word = ro_memcpy_swap_bytes;
+        ep->f_copy_word = dwarf_ro_memcpy_swap_bytes;
     }
 #endif /* LITTLE- BIG-ENDIAN */
-    filedata.f_filesize = filesize;
-    if (offsetsize == 32) {
-        elf_load_elf_header32();
-    } else if (offsetsize == 64) {
-        if (sizeof(LONGESTUTYPE) < 8) {
-            P("Cannot read Elf64 from %s as the longest available "
-                " integer is just %u bytes\n",
-                sanitized(filename,buffer1,BUFFERSIZE),
-                (unsigned)sizeof(LONGESTUTYPE));
-            return;
-        }
-        elf_load_elf_header64();
-    } else {
-        P("Cannot read Elf from %s as the elf class is"
-            " %u, which is not a valid class value.\n",
-            sanitized(filename,buffer1,BUFFERSIZE),
-            (unsigned)offsetsize);
+    
+    ep->f_filesize = filesize;
+    ep->f_offsetsize = offsetsize;
+
+    res = dwarf_load_elf_header(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        P("Error: unable to load elf header. errcode %d\n",errcode);
         return;
-    }
+    } 
+    if (res == DW_DLV_NO_ENTRY) {
+        P("Error: unable to find elf header.\n");
+        return;
+    } 
+
     if (!only_wasted_summary) {
-        elf_print_elf_header();
+        elf_print_elf_header(ep);
     }
-    if (offsetsize == 32) {
-        elf_load_sectheaders32(filedata.f_ehdr->ge_shoff,
-            filedata.f_ehdr->ge_shentsize,
-            filedata.f_ehdr->ge_shnum);
-    } else {
-        elf_load_sectheaders64(filedata.f_ehdr->ge_shoff,
-            filedata.f_ehdr->ge_shentsize,
-            filedata.f_ehdr->ge_shnum);
-    }
-    elf_load_sectstrings(filedata.f_ehdr->ge_shstrndx);
-    elf_load_sect_namestring();
-    elf_find_sym_sections();
-    if (offsetsize == 32) {
-        if (filedata.f_ehdr->ge_phnum) {
-            elf_load_progheaders32( filedata.f_ehdr->ge_phoff,
-                filedata.f_ehdr->ge_phentsize,
-                filedata.f_ehdr->ge_phnum);
-        }
-    } else {
-        if (filedata.f_ehdr->ge_phnum) {
-            elf_load_progheaders64( filedata.f_ehdr->ge_phoff,
-                filedata.f_ehdr->ge_phentsize,
-                filedata.f_ehdr->ge_phnum);
-        }
-    }
-    if (filedata.f_dynsym_sect_index) {
-        /* There is such a section. */
-        res = elf_load_dynstr(TRUE,
-            filedata.f_dynsym_sect_strings_sect_index,
-            filedata.f_dynsym_sect_strings_max);
-    }
-    if (filedata.f_symtab_sect_index) {
-        /* There is such a section. */
-        elf_load_dynstr(FALSE,
-            filedata.f_symtab_sect_strings_sect_index,
-            filedata.f_symtab_sect_strings_max);
-    }
+
+    res = dwarf_load_elf_sectheaders(ep,&errcode);
+
+    res = dwarf_load_elf_progheaders(ep,&errcode);
+
+    res = dwarf_load_elf_symstr(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        P("Error: unable to load symstr. errcode %d\n",errcode);
+        return;
+    } 
+    res =   dwarf_load_elf_dynstr(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        P("Error: unable to load dynstr. errcode %d\n",errcode);
+        return;
+    } 
+
     if (!only_wasted_summary) {
-        elf_print_progheaders();
-        elf_print_sectstrings(filedata.f_ehdr->ge_shstrndx);
-        elf_print_sectheaders();
+        elf_print_progheaders(ep);
+        elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
+        elf_print_sectheaders(ep);
     }
-    if(filedata.f_dynamic_sect_index) {
-        struct generic_shdr *sp = filedata.f_shdr +
-            filedata.f_dynamic_sect_index;
-        if (offsetsize == 32) {
-            elf_load_dynamic32(sp->gh_offset,
-                sp->gh_size);
-        } else {
-            elf_load_dynamic64(sp->gh_offset,
-                sp->gh_size);
-        }
+    res = dwarf_load_elf_dynamic(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        P("Error: Unable to load dynamic section");
+    } else if (res == DW_DLV_OK) {
         if (print_dynamic_sections) {
-            elf_print_dynamic();
+            elf_print_dynamic(ep);
         }
     } else {
         if (print_dynamic_sections) {
@@ -496,49 +370,57 @@ do_one_file(const char *s)
                 sanitized(filename,buffer1,BUFFERSIZE));
         }
     }
+        
     if(print_symtab_sections ) {
-        if (filedata.f_symtab_sect_index) {
-            struct generic_shdr * psh = filedata.f_shdr +
-                filedata.f_symtab_sect_index;
+        int symtab_ok = TRUE;
+        int dynsym_ok = TRUE;
+        /* Load symtab/dynsym if present. */
+        res  =dwarf_load_elf_symtab_symbols(ep,&errcode); 
+        if( res == DW_DLV_ERROR) {
+            P("Error: Unable to load .symtab section. Errcode %d\n",
+                errcode);
+            symtab_ok = FALSE;
+        }
+        res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
+        if( res == DW_DLV_ERROR) {
+            P("Error: Unable to load .dynsym section. Errcode %d\n",
+                errcode);
+            dynsym_ok = FALSE;
+        }
+        if (symtab_ok && ep->f_symtab_sect_index) {
+            struct generic_shdr * psh = ep->f_shdr +
+                ep->f_symtab_sect_index;
             const char *namestr = psh->gh_namestring;
             LONGESTUTYPE link = psh->gh_link;
-            if ( link != filedata.f_symtab_sect_strings_sect_index){
-                P("ERROR: symtab link section " LONGESTUFMT " mismatch with "
+            if ( link != ep->f_symtab_sect_strings_sect_index){
+                P("ERROR: symtab link section " LONGESTUFMT 
+                    " mismatch with "
                     LONGESTUFMT " section\n",
                     link,
-                    filedata.f_symtab_sect_strings_sect_index);
+                    ep->f_symtab_sect_strings_sect_index);
                 return;
             }
-            if (offsetsize == 32) {
-                elf_print_symbols32(TRUE,filedata.f_symtab_sect_index,
-                    namestr,psh->gh_offset,psh->gh_size);
-            } else {
-                elf_print_symbols64(TRUE,filedata.f_symtab_sect_index,
-                    namestr,psh->gh_offset,psh->gh_size);
-            }
+            elf_print_symbols(ep,TRUE,ep->f_symtab,
+                 ep->f_loc_symtab.g_count,namestr); 
         }
-        if(filedata.f_dynsym_sect_index) {
-            struct generic_shdr * psh = filedata.f_shdr +
-                filedata.f_dynsym_sect_index;
+        if(dynsym_ok && ep->f_dynsym_sect_index) {
+            struct generic_shdr * psh = ep->f_shdr +
+                ep->f_dynsym_sect_index;
             const char *namestr = psh->gh_namestring;
             LONGESTUTYPE link = psh->gh_link;
-            if ( link != filedata.f_dynsym_sect_strings_sect_index){
-                P("ERROR: dynsym link section " LONGESTUFMT " mismatch with "
+            if ( link != ep->f_dynsym_sect_strings_sect_index){
+                P("ERROR: dynsym link section " LONGESTUFMT 
+                    " mismatch with "
                     LONGESTUFMT " section\n",
                     link,
-                    filedata.f_dynsym_sect_strings_sect_index);
+                    ep->f_dynsym_sect_strings_sect_index);
                 return;
             }
-            if (offsetsize == 32) {
-                elf_print_symbols32(FALSE,filedata.f_symtab_sect_index,
-                    namestr,psh->gh_offset,psh->gh_size);
-            } else {
-                elf_print_symbols64(FALSE,filedata.f_symtab_sect_index,
-                    namestr,psh->gh_offset,psh->gh_size);
-            }
+            elf_print_symbols(ep,FALSE,ep->f_dynsym,
+                 ep->f_loc_dynsym.g_count,namestr); 
         }
-        if (!filedata.f_dynsym_sect_index  &&
-            !filedata.f_symtab_sect_index) {
+        if (!ep->f_dynsym_sect_index  &&
+            !ep->f_symtab_sect_index) {
             P("No .symtab or .dynsym section in %s.\n",
                 sanitized(filename,buffer1,BUFFERSIZE));
         }
@@ -546,32 +428,44 @@ do_one_file(const char *s)
     if(print_reloc_sections) {
         unsigned reloc_count = 0;
         LONGESTUTYPE i = 0;
-        struct generic_shdr * psh = filedata.f_shdr;
-        for (i = 0;i < filedata.f_loc_shdr.g_count; ++i,++psh) {
-            const char *namestr = filedata.f_shdr->gh_namestring;
+        struct generic_shdr * psh = 0;
+
+        psh = ep->f_shdr;
+        for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+            const char *namestr = ep->f_shdr->gh_namestring;
             if(!strncmp(namestr,".rel.",5)) {
-                ++reloc_count;
-                if (offsetsize == 32) {
-                    elf_print_relocation32(FALSE,i,psh);
-                } else {
-                    elf_print_relocation64(FALSE,i,psh);
+                res = dwarf_load_elf_rel(ep,i,&errcode);
+                if(res == DW_DLV_ERROR) {
+                    P("ERROR reading .rel section "
+                        LONGESTUFMT " Error code %d file:%s \n",
+                        i,errcode,
+                        sanitized(filename,buffer1,BUFFERSIZE));
+                    return;
+                } else if (res == DW_DLV_OK) {
+                    ++reloc_count;
+                    elf_print_relocation_details(ep,FALSE,i,psh);
                 }
             } else if (!strncmp(namestr,".rela.",6)) {
-                ++reloc_count;
-                if (offsetsize == 32) {
-                    elf_print_relocation32(TRUE,i,psh);
-                } else {
-                    elf_print_relocation64(TRUE,i,psh);
+                res = dwarf_load_elf_rela(ep,i,&errcode);
+                if(res == DW_DLV_ERROR) {
+                    P("ERROR reading .rela section "
+                        LONGESTUFMT " Error code %d file:%s \n",
+                        i,errcode,
+                        sanitized(filename,buffer1,BUFFERSIZE));
+                    return;
+                } else if (res == DW_DLV_OK) {
+                    ++reloc_count;
+                    elf_print_relocation_details(ep,TRUE,i,psh);
                 }
             }
         }
         if (reloc_count == 0) {
-            P("No .rel* sections were found in %s\n",
+            P("No .rel or .rela sections were found in %s\n",
                 sanitized(filename,buffer1,BUFFERSIZE));
         }
     }
-    if (filedata.f_dynamic_sect_index &&
-        filedata.f_wasted_dynamic_space) {
+    if (ep->f_dynamic_sect_index &&
+        ep->f_wasted_dynamic_space) {
         const char *p = "";
         if (printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
@@ -579,91 +473,83 @@ do_one_file(const char *s)
         P("Warning %s: Wasted .dynamic section entries: "
             LONGESTXFMT " (" LONGESTUFMT ")\n",
             p,
-            filedata.f_wasted_dynamic_count,
-            filedata.f_wasted_dynamic_count);
+            ep->f_wasted_dynamic_count,
+            ep->f_wasted_dynamic_count);
 
         P("Warning %s: Wasted .dynamic section space  : "
             LONGESTXFMT " (" LONGESTUFMT ")\n",
             p,
-            filedata.f_wasted_dynamic_space,
-            filedata.f_wasted_dynamic_space);
+            ep->f_wasted_dynamic_space,
+            ep->f_wasted_dynamic_space);
     }
-    check_dynamic_section();
-    report_wasted_space();
+    check_dynamic_section(ep);
+    report_wasted_space(ep);
 }
 static void
-elf_print_sectstrings(LONGESTUTYPE stringsection)
+elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection)
 {
     struct generic_shdr *psh = 0;
     if (!stringsection) {
         P("Section strings never found.\n");
         return;
     }
-    if (stringsection >= filedata.f_ehdr->ge_shnum) {
+    if (stringsection >= ep->f_ehdr->ge_shnum) {
         printf("String section " LONGESTUFMT " invalid. Ignored.",
             stringsection);
         return;
     }
 
-    psh = filedata.f_shdr + stringsection;;
+    psh = ep->f_shdr + stringsection;;
     P("String section data at " LONGESTXFMT " (" LONGESTUFMT ")"
         " length " LONGESTXFMT " (" LONGESTUFMT ")" "\n",
         psh->gh_offset, psh->gh_offset,
         psh->gh_size,psh->gh_size);
 }
+
+/*  We're not creating a generic function for this,
+    such is not needed for normal reading DWARF.  */
 static void
-elf_print_interp(LONGESTUTYPE offset, LONGESTUTYPE size)
+elf_load_print_interp(elf_filedata ep,
+    LONGESTUTYPE offset, 
+    LONGESTUTYPE size)
 {
     long cloc = 0;
     long j = 0;
     long res = 0;
     char *buf = 0;
+    int errcode = 0;
 
-    res = cur_read_loc(fin,&cloc);
-    if(res != RO_OK) {
-        P("\tcurrent loc unknown?. No interpreter string.\n");
-        return;
-    }
-    if ((offset > filedata.f_filesize)||
-        (size > filedata.f_filesize) ||
-        ((size +offset) > filedata.f_filesize)) {
+    if ((offset > ep->f_filesize)||
+        (size > ep->f_filesize) ||
+        ((size +offset) > ep->f_filesize)) {
             P("ERROR: Something badly wrong with interpreter name "
                 " filesize " LONGESTUFMT
                 " offset " LONGESTUFMT
                 " size " LONGESTUFMT
-                "\n", filedata.f_filesize,offset,size);
+                "\n", ep->f_filesize,offset,size);
             return;
-    }
-    j = (long)SEEKTO(offset);
-    if(j != RO_OK){
-        P("ERROR: seekto %lx failed reading interpreter data\n",(long)offset);
     }
     buf = malloc(size);
     if(buf == 0) {
-        SEEKTO(cloc);
         P("ERROR: malloc failed reading interpreter data\n");
         return;
     }
-    res = RN(buf,size);
+    res = RRMOA(ep->f_fd,buf,offset,size,&errcode);
     if(res != RO_OK) {
         P("ERROR: Read interp string failed\n");
-        SEEKTO(cloc);
         return;
     }
     P("    Interpreter:  %s\n",sanitized(buf,buffer1,BUFFERSIZE));
-    if(SEEKTO(cloc) != RO_OK) {
-        P("ERROR: Seek back to %lx after reading interpreter data failed\n",(long)cloc);
-    }
     free(buf);
     return;
 }
 
 
 static void
-elf_print_progheaders(void)
+elf_print_progheaders(elf_filedata ep)
 {
-    LONGESTUTYPE count = filedata.f_loc_phdr.g_count;
-    struct generic_phdr *gphdr = filedata.f_phdr;
+    LONGESTUTYPE count = ep->f_loc_phdr.g_count;
+    struct generic_phdr *gphdr = ep->f_phdr;
     LONGESTUTYPE i = 0;
 
     /*  In case of error reading headers count might now be zero */
@@ -673,7 +559,7 @@ elf_print_progheaders(void)
     for( i = 0; i < count; ++i,  gphdr++) {
         P("Program header " LONGESTUFMT ,i);
         P("  type %s " LONGESTXFMT,
-            get_program_header_type_name(gphdr->gp_type,
+            dwarf_get_elf_program_header_type_name(gphdr->gp_type,
                 buffer1,BUFFERSIZE),
             gphdr->gp_type);
         P("\n");
@@ -704,7 +590,7 @@ elf_print_progheaders(void)
             gphdr->gp_align,gphdr->gp_align);
         P("\n");
         if(gphdr->gp_type == PT_INTERP) {
-            elf_print_interp(gphdr->gp_offset,
+            elf_load_print_interp(ep,gphdr->gp_offset,
                 gphdr->gp_filesz);
         }
     }
@@ -712,14 +598,14 @@ elf_print_progheaders(void)
 }
 
 static void
-elf_print_sectheaders(void)
+elf_print_sectheaders(elf_filedata ep)
 {
     struct generic_shdr *gshdr = 0;
     LONGESTUTYPE generic_count = 0;
     LONGESTUTYPE i = 0;
 
-    gshdr = filedata.f_shdr;
-    generic_count = filedata.f_loc_shdr.g_count;
+    gshdr = ep->f_shdr;
+    generic_count = ep->f_loc_shdr.g_count;
     P("\n");
     P("Section count: " LONGESTUFMT "\n",generic_count);
     P("{\n");
@@ -730,14 +616,16 @@ elf_print_sectheaders(void)
         P("Section " LONGESTUFMT ", name " LONGESTUFMT " %s\n",
             i,gshdr->gh_name, namestr);
         P("  type " LONGESTXFMT " %s",gshdr->gh_type,
-            get_section_header_st_type(gshdr->gh_type,buffer2,
+            dwarf_get_elf_section_header_st_type(gshdr->gh_type,buffer2,
                 BUFFERSIZE));
         if(gshdr->gh_flags == 0) {
             P(", flags " LONGESTXFMT ,gshdr->gh_flags);
         } else {
             P(", flags "  LONGESTXFMT,gshdr->gh_flags);
-            P(" %s",get_section_header_flag_names(gshdr->gh_flags,
-                buffer2,BUFFERSIZE));
+            P(" %s",
+                dwarf_get_elf_section_header_flag_names(
+                    gshdr->gh_flags,
+                    buffer2,BUFFERSIZE));
         }
         P("\n");
 
@@ -757,10 +645,12 @@ elf_print_sectheaders(void)
     P("}\n");
 }
 
-
 static void
-elf_print_symbols(struct generic_symentry * gsym, LONGESTUTYPE ecount,
-   const char *secname, int is_symtab)
+elf_print_symbols(elf_filedata ep,
+    int is_symtab,
+    struct generic_symentry * gsym, 
+    LONGESTUTYPE ecount,
+    const char *secname)
 {
     LONGESTUTYPE i = 0;
 
@@ -774,6 +664,11 @@ elf_print_symbols(struct generic_symentry * gsym, LONGESTUTYPE ecount,
     }
 
     for(i = 0; i < ecount; ++i,++gsym) {
+        char *symstr = 0;
+        int errcode = 0;
+        int res;
+
+
         P("[%3d]",(int)i);
         P("  st_value "
             LONGESTXFMT " (" LONGESTUFMT ")",
@@ -794,120 +689,54 @@ elf_print_symbols(struct generic_symentry * gsym, LONGESTUTYPE ecount,
         P("  type "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_type,gsym->gs_type,
-            get_symbol_stt_type(gsym->gs_type, buffer2, BUFFERSIZE));
+            dwarf_get_elf_symbol_stt_type(gsym->gs_type, 
+                buffer2, BUFFERSIZE));
         P(", bind "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_bind,gsym->gs_bind,
-            get_symbol_stb_string(gsym->gs_bind, buffer2,BUFFERSIZE));
+            dwarf_get_elf_symbol_stb_string(gsym->gs_bind, 
+                buffer2,BUFFERSIZE));
         P("\n");
 
         P("  st_other "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_other,
             gsym->gs_other,
-            get_symbol_sto_type(gsym->gs_other,buffer2, BUFFERSIZE));
+            dwarf_get_elf_symbol_sto_type(gsym->gs_other,
+                buffer2, BUFFERSIZE));
         P(", st_shndx " LONGESTUFMT " %s",
             gsym->gs_shndx,
-            get_symbol_shn_type(gsym->gs_shndx, buffer2,BUFFERSIZE));
+            dwarf_get_elf_symbol_shn_type(gsym->gs_shndx, 
+                buffer2,BUFFERSIZE));
         P("\n");
 
-        P("  st_name  (" LONGESTUFMT  ") %s",gsym->gs_name,
-            sanitized(get_symstr_string(is_symtab,gsym->gs_name),
-            buffer2,BUFFERSIZE));
-        P("\n");
+       
+        res = dwarf_get_elf_symstr_string(ep, 
+            is_symtab,gsym->gs_name,
+            buffer2,BUFFERSIZE,&errcode);
+        if (res != DW_DLV_OK ) {
+            P("  ERROR: st_name access %s "
+                 " entry " LONGESTUFMT 
+                 " with index " LONGESTUFMT 
+                  " (" LONGESTXFMT ")" 
+                 " fails with err code %d\n",
+                 is_symtab?".symtab":".dynsym",
+                 i, gsym->gs_name, gsym->gs_name, 
+                 errcode);
+        } else {
+            P("  st_name  (" LONGESTUFMT  ") %s",gsym->gs_name,
+                 buffer2);
+            P("\n");
+        }
     }
     P("}\n");
     return;
 }
 
 static void
-elf_print_symbols32(int is_symtab,int secnum,const char *secname,
-    LONGESTUTYPE offset,LONGESTUTYPE size)
-{
-    struct generic_symentry *gsym = 0;
-    LONGESTUTYPE ecount = 0;
-    int res = 0;
-
-
-    res = generic_elf_load_symbols32(secnum,secname,&gsym,
-        offset,size,&ecount);
-    if(res != RO_OK) {
-        P("ERROR: not printing symbols, sec %d\n",secnum);
-        return;
-    }
-    elf_print_symbols(gsym,ecount,secname,is_symtab);
-    free(gsym);
-    return;
-}
-
-static void
-elf_print_symbols64(int is_symtab,int secnum,const char *secname,
-    LONGESTUTYPE offset,LONGESTUTYPE size)
-{
-    struct generic_symentry *gsym = 0;
-    LONGESTUTYPE ecount = 0;
-    int res = 0;
-
-
-    res = generic_elf_load_symbols64(secnum,secname,&gsym,
-        offset,size,&ecount);
-    if(res != RO_OK) {
-        P("ERROR: not printing symbols, sec %d\n",secnum);
-        return;
-    }
-    elf_print_symbols(gsym,ecount,secname,is_symtab);
-    free(gsym);
-    return;
-}
-
-
-static void
-elf_print_relocation32(int isrela,LONGESTUTYPE secnum,
-    struct generic_shdr * gsh)
-{
-    struct generic_rela *grela = 0;
-
-    LONGESTUTYPE count  = 0;
-    int res = 0;
-
-    /*  print true file offset. Need to store it so available here. */
-    if (isrela) {
-        res = elf_load_rela_32(secnum,gsh,&grela,&count);
-    } else {
-        res = elf_load_rel_32(secnum,gsh,&grela,&count);
-    } /* or load 64 */
-    if (!res) {
-        P("ERROR: probable loading relocation section\n");
-        return;
-    }
-    elf_print_relocations(gsh,grela,count);
-    free(grela);
-}
-static void
-elf_print_relocation64(int isrela,LONGESTUTYPE secnum,
-    struct generic_shdr * gsh)
-{
-    struct generic_rela *grela = 0;
-    LONGESTUTYPE count  = 0;
-    int res = 0;
-
-    /*  print true file offset. Need to store it so available here. */
-    if (isrela) {
-        res = elf_load_rela_64(secnum,gsh,&grela,&count);
-    } else {
-        res = elf_load_rel_64(secnum,gsh,&grela,&count);
-    } /* or load 64 */
-    if (!res) {
-        P("ERROR: probable loading relocation section\n");
-        return;
-    }
-    elf_print_relocations(gsh,grela,count);
-    free(grela);
-}
-
-
-static void
-elf_print_relocations( struct generic_shdr * gsh,
+elf_print_relocation_content(elf_filedata ep, 
+    int isrela,
+    struct generic_shdr * gsh,
     struct generic_rela *grela, LONGESTUTYPE count)
 {
     LONGESTUTYPE i = 0;
@@ -924,23 +753,46 @@ elf_print_relocations( struct generic_shdr * gsh,
             grela->gr_offset,
             grela->gr_offset);
         P(", info "
-            LONGESTXFMT " (" LONGESTUFMT ")",
+            LONGESTXFMT " (" LONGESTUFMT ")\n",
             grela->gr_info,
             grela->gr_info);
-        P(", sym "
+        P(" sym "
             LONGESTXFMT " (" LONGESTUFMT ")",
             grela->gr_sym,
             grela->gr_sym);
         P(", type "
-            LONGESTXFMT " (" LONGESTUFMT ")",
+            LONGESTXFMT " (" LONGESTUFMT ")\n",
             grela->gr_type,
             grela->gr_type);
+        if (isrela) {
+            P(" addend "
+                LONGESTSFMT "\n" ,
+                grela->gr_sym);
+            }
         P("\n");
     }
     return;
 }
+
 static void
-elf_print_elf_header(void)
+elf_print_relocation_details(elf_filedata ep,
+    int isrela,LONGESTUTYPE secnum,
+    struct generic_shdr * gsh)
+{
+    struct generic_rela *grela = 0;
+    int errcode;
+    LONGESTUTYPE count  = 0;
+    LONGESTUTYPE i  = 0;
+    int res = 0;
+
+    count = gsh->gh_relcount;
+    grela = gsh->gh_rels;
+
+    elf_print_relocation_content(ep,isrela,gsh,grela,count);
+}
+
+static void
+elf_print_elf_header(elf_filedata ep)
 {
     LONGESTUTYPE i = 0;
     int c = 0;
@@ -948,33 +800,33 @@ elf_print_elf_header(void)
     P("Elf object file %s\n",sanitized(filename,buffer1,BUFFERSIZE));
     P("  ident bytes: ");
     for(i = 0; i < EI_NIDENT; i++) {
-        c =  filedata.f_ehdr->ge_ident[i];
+        c = ep->f_ehdr->ge_ident[i];
         P(" %02x",c);
     }
     P("\n");
-    i = filedata.f_ehdr->ge_ident[EI_CLASS];
+    i = ep->f_ehdr->ge_ident[EI_CLASS];
     P("  ident[class] " LONGESTXFMT "   %s\n",i,
         (i == ELFCLASSNONE)? "ELFCLASSNONE":
         (i == ELFCLASS32) ? "ELFCLASS32" :
         (i == ELFCLASS64) ? "ELFCLASS64" :
         "unknown ");
-    c = filedata.f_ehdr->ge_ident[EI_DATA];
+    c = ep->f_ehdr->ge_ident[EI_DATA];
     P("  ident[data] %#x   %s\n",c,(c == ELFDATANONE)? "ELFDATANONE":
         (c == ELFDATA2MSB)? "ELFDATA2MSB":
         (c == ELFDATA2LSB) ? "ELFDATA2LSB":
         "Invalid object encoding");
-    i = filedata.f_ehdr->ge_ident[EI_VERSION];
+    i = ep->f_ehdr->ge_ident[EI_VERSION];
     P("  file version " LONGESTXFMT "\n", i);
-    i = filedata.f_ehdr->ge_ident[EI_OSABI];
+    i = ep->f_ehdr->ge_ident[EI_OSABI];
     P("  osabi        " LONGESTXFMT " %s\n",
         i,
-        get_osabi_name(i,buffer1,BUFFERSIZE));
+        dwarf_get_elf_osabi_name(i,buffer1,BUFFERSIZE));
 
-    i = filedata.f_ehdr->ge_ident[EI_ABIVERSION];
+    i = ep->f_ehdr->ge_ident[EI_ABIVERSION];
     P("  ident[version] " LONGESTXFMT "   %s\n",i,
         (i == EV_CURRENT)? "EV_CURRENT":
         "unknown");
-    i = filedata.f_ehdr->ge_type;
+    i = ep->f_ehdr->ge_type;
     P("  type " LONGESTXFMT " %s\n",i,(i == ET_NONE)? "ET_NONE No file type":
         (i == ET_REL)? "ET_REL Relocatable file":
         (i == ET_EXEC)? "ET_EXEC Executable file":
@@ -983,68 +835,41 @@ elf_print_elf_header(void)
         (i >= 0xff00 && i < 0xffff)? "Processor-specific type":
         "unknown");
     /* See http://www.uxsglobal.com/developers/gabi/latest/ch4.eheader.html  */
-    P("  machine " LONGESTXFMT" %s\n",filedata.f_ehdr->ge_machine,
-        get_em_machine_name(filedata.f_ehdr->ge_machine));
+    P("  machine " LONGESTXFMT" %s\n",ep->f_ehdr->ge_machine,
+        dwarf_get_elf_machine_name(ep->f_ehdr->ge_machine));
     P("  Entry " LONGESTXFMT "  prog hdr off: "
         LONGESTXFMT "   sec hdr off "
         LONGESTXFMT "\n",
-        filedata.f_ehdr->ge_entry,
-        filedata.f_ehdr->ge_phoff,
-        filedata.f_ehdr->ge_shoff);
-    P("  Flags " LONGESTXFMT,filedata.f_ehdr->ge_flags);
+        ep->f_ehdr->ge_entry,
+        ep->f_ehdr->ge_phoff,
+        ep->f_ehdr->ge_shoff);
+    P("  Flags " LONGESTXFMT,ep->f_ehdr->ge_flags);
     /* FIXME print flags */
     P("\tEhdrsize " LONGESTUFMT "  Proghdrsize "
         LONGESTUFMT "  Sechdrsize "
         LONGESTUFMT "\n",
-        filedata.f_ehdr->ge_ehsize,
-        filedata.f_ehdr->ge_phentsize,
-        filedata.f_ehdr->ge_shentsize);
+        ep->f_ehdr->ge_ehsize,
+        ep->f_ehdr->ge_phentsize,
+        ep->f_ehdr->ge_shentsize);
     P("              P-hdrcount  "
         LONGESTUFMT "  S-hdrcount "
         LONGESTUFMT "\n",
-        filedata.f_ehdr->ge_phnum,
-        filedata.f_ehdr->ge_shnum);
-    if(filedata.f_ehdr->ge_shstrndx == SHN_UNDEF) {
+        ep->f_ehdr->ge_phnum,
+        ep->f_ehdr->ge_shnum);
+    if(ep->f_ehdr->ge_shstrndx == SHN_UNDEF) {
         P("  Section strings are not present e_shstrndx ==SHN_UNDEF\n");
     } else {
         P("  Section strings are in section "
-            LONGESTUFMT "\n",filedata.f_ehdr->ge_shstrndx);
+            LONGESTUFMT "\n",ep->f_ehdr->ge_shstrndx);
     }
-    if(filedata.f_ehdr->ge_shstrndx > filedata.f_ehdr->ge_shnum) {
+    if(ep->f_ehdr->ge_shstrndx > ep->f_ehdr->ge_shnum) {
         P("String section index is wrong: "
             LONGESTUFMT " vs only "
             LONGESTUFMT " sections."
             " Consider it 0\n",
-            filedata.f_ehdr->ge_shstrndx,
-            filedata.f_ehdr->ge_shnum);
-        filedata.f_ehdr->ge_shstrndx = 0;
-    }
-}
-
-static void
-elf_find_sym_sections(void)
-{
-    struct generic_shdr* psh = 0;
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE count = 0;
-
-    count = filedata.f_loc_shdr.g_count;
-    psh = filedata.f_shdr;
-    for (i = 0; i < count; ++psh,++i) {
-        const char *name = psh->gh_namestring;
-        if (!strcmp(name,".dynsym")) {
-            filedata.f_dynsym_sect_index = i;
-        } else if (!strcmp(name,".dynstr")) {
-            filedata.f_dynsym_sect_strings_sect_index = i;
-            filedata.f_dynsym_sect_strings_max = psh->gh_size;
-        } else if (!strcmp(name,".symtab")) {
-            filedata.f_symtab_sect_index = i;
-        } else if (!strcmp(name,".strtab")) {
-            filedata.f_symtab_sect_strings_sect_index = i;
-            filedata.f_symtab_sect_strings_max = psh->gh_size;
-        } else if (!strcmp(name,".dynamic")) {
-            filedata.f_dynamic_sect_index = i;
-        }
+            ep->f_ehdr->ge_shstrndx,
+            ep->f_ehdr->ge_shnum);
+        ep->f_ehdr->ge_shstrndx = 0;
     }
 }
 
@@ -1062,38 +887,11 @@ cur_read_loc(FILE *fin_arg, long * fileoffset)
     return RO_OK;
 }
 
-void
-insert_in_use_entry(const char *description,LONGESTUTYPE offset,
-    LONGESTUTYPE length,LONGESTUTYPE align)
-{
-    struct in_use_s *e = 0;
-
-    e = (struct in_use_s *)calloc(1,sizeof(struct in_use_s));
-    if(!e) {
-        P("ERROR: Out of memory creating in-use entry " LONGESTUFMT
-            " Giving up.\n",filedata.f_in_use_count);
-        exit(1);
-    }
-    e->u_next = 0;
-    e->u_name = description;
-    e->u_offset = offset;
-    e->u_align = align;
-    e->u_length = length;
-    e->u_lastbyte = offset+length;
-    ++filedata.f_in_use_count;
-    if (filedata.f_in_use) {
-        filedata.f_in_use_tail->u_next = e;
-        filedata.f_in_use_tail = e;
-        return;
-    }
-    filedata.f_in_use = e;
-    filedata.f_in_use_tail = e;
-}
-
 #define MAXWBLOCK 100000
 
 static int
-is_wasted_space_zero(LONGESTUTYPE offset,
+is_wasted_space_zero(elf_filedata ep,
+    LONGESTUTYPE offset,
     LONGESTUTYPE length,
     int *wasted_space_zero)
 {
@@ -1101,6 +899,7 @@ is_wasted_space_zero(LONGESTUTYPE offset,
     char *allocspace = 0;
     LONGESTUTYPE alloclen = length;
     LONGESTUTYPE checklen = length;
+    int errcode = 0;
 
     if (length > MAXWBLOCK) {
         alloclen = MAXWBLOCK;
@@ -1119,7 +918,7 @@ is_wasted_space_zero(LONGESTUTYPE offset,
         if (remaining < checklen) {
             checklen = remaining;
         }
-        res = RR(allocspace,offset,checklen);
+        res = RRMOA(ep->f_fd,allocspace,offset,checklen,&errcode);
         if (res != RO_OK) {
             free(allocspace);
             P("ERROR: could not read wasted space at offset "
@@ -1163,10 +962,10 @@ comproffset(const void *l_in, const void *r_in)
 
 
 static void
-report_wasted_space(void)
+report_wasted_space(elf_filedata  ep)
 {
-    LONGESTUTYPE filesize = filedata.f_filesize;
-    LONGESTUTYPE iucount = filedata.f_in_use_count;
+    LONGESTUTYPE filesize = ep->f_filesize;
+    LONGESTUTYPE iucount = ep->f_in_use_count;
     LONGESTUTYPE i = 0;
     int res = 0;
 
@@ -1190,7 +989,7 @@ report_wasted_space(void)
         return;
     }
     iupa = iuarray;
-    iupl = filedata.f_in_use;
+    iupl = ep->f_in_use;
     for (i = 0  ; i < iucount; iupa++, iupl = nxt,++i) {
         nxt = iupl->u_next;
         *iupa = *iupl;
@@ -1199,8 +998,8 @@ report_wasted_space(void)
         }
         free(iupl);
     }
-    filedata.f_in_use = 0;
-    filedata.f_in_use_tail = 0;
+    ep->f_in_use = 0;
+    ep->f_in_use_tail = 0;
     qsort(iuarray,iucount,sizeof(struct in_use_s),
         comproffset);
     iupa = iuarray;
@@ -1252,8 +1051,8 @@ report_wasted_space(void)
                 }
                 if (iupa->u_offset == newlast) {
                     /* alignment space. No waste. */
-                    filedata.f_wasted_align_count++;
-                    filedata.f_wasted_align_space += distance;
+                    ep->f_wasted_align_count++;
+                    ep->f_wasted_align_space += distance;
                     if (print_wasted) {
                         P("Warning: A gap of " LONGESTUFMT
                             " forced by alignment "
@@ -1262,7 +1061,7 @@ report_wasted_space(void)
                             "\n",
                             distance,iupa->u_align,
                             low_instance.u_lastbyte,iupa->u_offset);
-                        res = is_wasted_space_zero(
+                        res = is_wasted_space_zero(ep,
                             low_instance.u_lastbyte,
                             distance,&wasted_space_zero);
                         if (res == RO_OK) {
@@ -1304,7 +1103,7 @@ report_wasted_space(void)
                     " bytes at offset " LONGESTXFMT
                     " through " LONGESTXFMT "\n",
                     diff,low_instance.u_lastbyte,iupa->u_offset);
-                res = is_wasted_space_zero(low_instance.u_lastbyte,
+                res = is_wasted_space_zero(ep,low_instance.u_lastbyte,
                     diff,&wasted_space_zero);
                 if (res == RO_OK) {
                     if(!wasted_space_zero) {
@@ -1316,8 +1115,8 @@ report_wasted_space(void)
                     }
                 }
             }
-            filedata.f_wasted_content_count++;
-            filedata.f_wasted_content_space += diff;
+            ep->f_wasted_content_count++;
+            ep->f_wasted_content_space += diff;
             low_instance = *iupa;
             continue;
         }
@@ -1335,7 +1134,7 @@ report_wasted_space(void)
             iupa->u_offset,iupa->u_lastbyte,iupa->u_name);
         low_instance = *iupa;
     }
-    if (filedata.f_wasted_content_count) {
+    if (ep->f_wasted_content_count) {
         const char *p = "";
         if (printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
@@ -1344,10 +1143,10 @@ report_wasted_space(void)
             " instances of wasted section space exist "
             "and total " LONGESTUFMT " bytes wasted.\n",
             p,
-            filedata.f_wasted_content_count,
-            filedata.f_wasted_content_space);
+            ep->f_wasted_content_count,
+            ep->f_wasted_content_space);
     }
-    if (filedata.f_wasted_align_count) {
+    if (ep->f_wasted_align_count) {
         const char *p = "";
         if (printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
@@ -1356,8 +1155,8 @@ report_wasted_space(void)
             " instances of unused alignment space exist "
             "and total " LONGESTUFMT " bytes of alignment.\n",
             p,
-            filedata.f_wasted_align_count,
-            filedata.f_wasted_align_space);
+            ep->f_wasted_align_count,
+            ep->f_wasted_align_space);
     }
     if (highoffset < filesize) {
         const char *p = "";
@@ -1384,4 +1183,61 @@ report_wasted_space(void)
             highoffset,highoffset);
     }
     free(iuarray);
+}
+
+
+static char buffer6[BUFFERSIZE];
+static int
+elf_print_dynamic(elf_filedata ep)
+{
+    LONGESTUTYPE bufcount = 0;
+    LONGESTUTYPE i = 0;
+    struct generic_dynentry *gbuffer = 0;
+    struct generic_shdr *dynamicsect = 0;
+
+    if (!ep->f_dynamic_sect_index) {
+        P("No .dynamic section exists in %s\n",
+            sanitized(filename,buffer6,BUFFERSIZE));
+        return RO_OK;
+    }
+    if (ep->f_dynamic_sect_index >= ep->f_ehdr->ge_shnum) {
+        P("Section Number of .dynamic section is bogus in %s\n",
+            sanitized(filename,buffer6,BUFFERSIZE));
+        return RO_ERROR;
+    }
+    dynamicsect = ep->f_shdr + ep->f_dynamic_sect_index;
+    bufcount = ep->f_loc_dynamic.g_count;
+    if(bufcount) {
+        const char *name = sanitized(dynamicsect->gh_namestring,
+            buffer6,BUFFERSIZE);
+
+        P("\n");
+        P("Section %s (" LONGESTUFMT "):"
+            " Entries:" LONGESTUFMT " Offset:"
+            LONGESTXFMT8  "\n",
+            name,
+            ep->f_dynamic_sect_index,
+            bufcount,
+            ep->f_loc_dynamic.g_offset);
+        P("  name                             value\n");
+    } else {
+        P("No content exists in %s\n",
+            sanitized(dynamicsect->gh_namestring,buffer6,BUFFERSIZE));
+        return RO_ERROR;
+    }
+    gbuffer = ep->f_dynamic;
+    for(i = 0; i < bufcount; ++i,++gbuffer) {
+        const char *name = 0;
+
+        name = dwarf_get_elf_dynamic_table_name(gbuffer->gd_tag,
+            buffer6,BUFFERSIZE);
+        P("  Tag: "
+            LONGESTXFMT8 " %-15s "
+            LONGESTXFMT8 " (" LONGESTUFMT ")\n",
+            gbuffer->gd_tag,
+            name,
+            gbuffer->gd_val,
+            gbuffer->gd_val);
+    }
+    return RO_OK;
 }

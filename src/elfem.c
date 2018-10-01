@@ -63,7 +63,8 @@ struct em_values {
 
 static const char *
 standard_table_name(struct em_values *em,
-    LONGESTUTYPE value,char *buffer,
+    LONGESTUTYPE value,
+    char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = em;
@@ -288,7 +289,7 @@ static struct em_values emvals[] = {
 
 /* ASSERT: table values sorted by em_number */
 const char *
-get_em_machine_name(unsigned value)
+dwarf_get_elf_machine_name(unsigned value)
 {
     struct em_values *ev = &emvals[0];
 
@@ -451,7 +452,7 @@ static struct em_values dtvals[] = {
 /*  Table values not sorted by em_number,
     will have dups */
 const char *
-get_em_dynamic_table_name(LONGESTUTYPE value,char *buffer,
+dwarf_get_elf_dynamic_table_name(LONGESTUTYPE value,char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = &dtvals[0];
@@ -508,8 +509,8 @@ static struct em_values pt_vals[] = {
 
 /*  There are duplicates here and not all in order.  */
 const char *
-get_program_header_type_name(unsigned value, char *buffer,
-    unsigned buflen)
+dwarf_get_elf_program_header_type_name(LONGESTUTYPE value, 
+    char *buffer, unsigned buflen)
 {
     struct em_values *ev = &pt_vals[0];
     const char *out = 0;
@@ -622,7 +623,7 @@ static struct em_values shf_vals[] = {
 };
 /*  There are duplicates here and not all in order.  */
 const char *
-get_section_header_flag_names(LONGESTUTYPE value, char *buffer,
+dwarf_get_elf_section_header_flag_names(LONGESTUTYPE value, char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = &shf_vals[0];
@@ -692,7 +693,7 @@ static struct em_values sht_vals[] = {
 /* Not fully in order. Few duplicates. */
 
 const char *
-get_section_header_st_type(LONGESTUTYPE value, char *buffer,
+dwarf_get_elf_section_header_st_type(LONGESTUTYPE value, char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = &sht_vals[0];
@@ -714,7 +715,7 @@ static struct em_values sto_vals[] = {
 
 };
 const char *
-get_symbol_sto_type(LONGESTUTYPE value, char *buffer,
+dwarf_get_elf_symbol_sto_type(LONGESTUTYPE value, char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = &sto_vals[0];
@@ -742,7 +743,7 @@ static struct em_values shn_vals[] = {
 };
 
 const char *
-get_symbol_shn_type(LONGESTUTYPE value, char *buffer,
+dwarf_get_elf_symbol_shn_type(LONGESTUTYPE value, char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = &shn_vals[0];
@@ -765,7 +766,7 @@ static struct em_values stb_vals[] = {
 };
 
 const char *
-get_symbol_stb_string(LONGESTUTYPE value,char * buffer,unsigned buflen)
+dwarf_get_elf_symbol_stb_string(LONGESTUTYPE value,char * buffer,unsigned buflen)
 {
     struct em_values *ev = &stb_vals[0];
     const char *out = 0;
@@ -796,7 +797,7 @@ static struct em_values stt_vals[] = {
 
 
 const char *
-get_symbol_stt_type(LONGESTUTYPE value, char *buffer,
+dwarf_get_elf_symbol_stt_type(LONGESTUTYPE value, char *buffer,
     unsigned buflen)
 {
     struct em_values *ev = &stt_vals[0];
@@ -838,7 +839,7 @@ static struct em_values osabi_vals[] = {
 };
 
 const char *
-get_osabi_name(LONGESTUTYPE value,char * buffer,unsigned buflen)
+dwarf_get_elf_osabi_name(LONGESTUTYPE value,char * buffer,unsigned buflen)
 {
     struct em_values *ev = &osabi_vals[0];
     const char *out = 0;

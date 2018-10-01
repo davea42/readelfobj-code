@@ -33,7 +33,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h> /* lseek read close */
+#endif /* HAVE_UNISTD_H */
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
@@ -43,6 +45,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "sanitized.h"
 
 static char buffer1[BUFFERSIZE];
+
+BOGUS DO NOT USE
 
 int
 get_filedata(const char *name, int fd,struct filedata_s *fida)
