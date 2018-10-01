@@ -1,3 +1,7 @@
+2018-10-01   David Anderson
+    * test4.base, test5.base updated as the new readobj
+      has much more detailed information in case of 
+      .dynsym being...damaged/corrupt.
 2018-09-19   David Anderson
     * mach-o-object32,mach-o-object64:	* The mach-o test objects 
       were misnamed. *32 was really 64bit and vice-versa. Fixed.

@@ -204,7 +204,7 @@ Section 38, name 9 .strtab
   addr 0x0 (0) offset 0x230b0 (143536), size 5936
   link 0, info 0, align 1, entsize 0
 }
-No .rel* sections were found in libkrb5support.so.0.1.debug
+No .rel or .rela sections were found in libkrb5support.so.0.1.debug
 Warning : Wasted .dynamic section entries: 0xa (10)
 Warning : Wasted .dynamic section space  : 0xa0 (160)
 Warning: dynamic section error: ProgHeader  2 PT_DYNAMIC offset 0xcd10 (52496)  but section 21 .dynamic offset 0x200 (512)

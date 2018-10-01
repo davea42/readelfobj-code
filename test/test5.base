@@ -1932,12 +1932,12 @@ Symbols from .dynsym: 167
   st_size  0x4820646552282032 (5197264356318388274), st_info 0x2e (46)
   type 0xe (14) (Unknown), bind 0x2 (2) (STB_WEAK )
   st_other 0x38 (56) (Unknown), st_shndx 12846 (Unknown)
-  st_name  (874522965) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 1 with index 874522965 (0x34202955) fails with err code 19
 [  2]  st_value 0x3c0029372d (257700738861)
   st_size  0x8000008bf0002 (2251799960420354), st_info 0x2e (46)
   type 0xe (14) (Unknown), bind 0x2 (2) (STB_WEAK )
   st_other 0x38 (56) (Unknown), st_shndx 12846 (Unknown)
-  st_name  (874542177) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 2 with index 874542177 (0x34207461) fails with err code 19
 [  3]  st_value 0xba200000000 (12790412607488)
   st_size  0x362000000000 (59511066853376), st_info 0xf0 (240)
   type 0x0 (0) (STT_NOTYPE ), bind 0xf (15) (STB_HIPROC )
@@ -1967,7 +1967,7 @@ Symbols from .dynsym: 167
   st_size  0x8d00000000 (605590388736), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (801964034) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 8 with index 801964034 (0x2fcd0002) fails with err code 19
 [  9]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -1977,7 +1977,7 @@ Symbols from .dynsym: 167
   st_size  0xc4f00000000 (13533441949696), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (826671106) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 10 with index 826671106 (0x31460002) fails with err code 19
 [ 11]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -1987,7 +1987,7 @@ Symbols from .dynsym: 167
   st_size  0x73500000000 (7924214661120), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1102708738) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 12 with index 1102708738 (0x41ba0002) fails with err code 19
 [ 13]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -1997,7 +1997,7 @@ Symbols from .dynsym: 167
   st_size  0x6b500000000 (7374458847232), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1270546434) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 14 with index 1270546434 (0x4bbb0002) fails with err code 19
 [ 15]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2007,7 +2007,7 @@ Symbols from .dynsym: 167
   st_size  0x3200000000 (214748364800), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1391722498) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 16 with index 1391722498 (0x52f40002) fails with err code 19
 [ 17]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2017,7 +2017,7 @@ Symbols from .dynsym: 167
   st_size  0xfb00000000 (1078036791296), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1401618434) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 18 with index 1401618434 (0x538b0002) fails with err code 19
 [ 19]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2027,7 +2027,7 @@ Symbols from .dynsym: 167
   st_size  0xcf500000000 (14246406520832), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1479540738) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 20 with index 1479540738 (0x58300002) fails with err code 19
 [ 21]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2037,7 +2037,7 @@ Symbols from .dynsym: 167
   st_size  0x94100000000 (10174777524224), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1656487938) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 22 with index 1656487938 (0x62bc0002) fails with err code 19
 [ 23]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2047,7 +2047,7 @@ Symbols from .dynsym: 167
   st_size  0x3700000000 (236223201280), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1815216130) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 24 with index 1815216130 (0x6c320002) fails with err code 19
 [ 25]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2057,7 +2057,7 @@ Symbols from .dynsym: 167
   st_size  0x24b00000000 (2521145802752), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1829896194) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 26 with index 1829896194 (0x6d120002) fails with err code 19
 [ 27]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2067,7 +2067,7 @@ Symbols from .dynsym: 167
   st_size  0x2b500000000 (2976412336128), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1883635714) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 28 with index 1883635714 (0x70460002) fails with err code 19
 [ 29]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2077,7 +2077,7 @@ Symbols from .dynsym: 167
   st_size  0x15fe00000000 (24180665876480), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (1927938050) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 30 with index 1927938050 (0x72ea0002) fails with err code 19
 [ 31]  st_value 0x0 (0)
   st_size  0x2c00000000 (188978561024), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2087,7 +2087,7 @@ Symbols from .dynsym: 167
   st_size  0x14b00000000 (1421634174976), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
-  st_name  (2443313154) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 32 with index 2443313154 (0x91a20002) fails with err code 19
 [ 33]  st_value 0x0 (0)
   st_size  0x3b00000000 (253403070464), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2102,77 +2102,77 @@ Symbols from .dynsym: 167
   st_size  0x260000001bd40300 (2738188573908140800), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 2048 (Unknown)
-  st_name  (2064121856) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 35 with index 2064121856 (0x7b080000) fails with err code 19
 [ 36]  st_value 0x4000001d4000000 (288230384003448832)
   st_size  0x7a080000193900 (34348743253375232), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x27 (39) (Unknown), st_shndx 30321 (Unknown)
-  st_name  (14088) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 36 with index 14088 (0x3708) fails with err code 19
 [ 37]  st_value 0xc0839000000be (3386740626686142)
   st_size  0xbe340393f506d800 (13705583500001204224), st_info 0xca (202)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0xc (12) (STB_HIOS )
   st_other 0x0 (0) (Unknown), st_shndx 10752 (Unknown)
-  st_name  (1308622848) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 37 with index 1308622848 (0x4e000000) fails with err code 19
 [ 38]  st_value 0x600009f2d6f0000 (432346247889616896)
   st_size  0x976f0800000033fb (10911949218235036667), st_info 0xf6 (246)
   type 0x6 (6) (STT_TLS ), bind 0xf (15) (STB_HIPROC )
   st_other 0x22 (34) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (100663465) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 38 with index 100663465 (0x60000a9) fails with err code 19
 [ 39]  st_value 0x6000056de6f1000 (432345937326575616)
   st_size  0xec6f1800000033fd (17036862303644955645), st_info 0xfc (252)
   type 0xc (12) (STT_HIOS ), bind 0xf (15) (STB_HIPROC )
   st_other 0x33 (51) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (100663356) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 39 with index 100663356 (0x600003c) fails with err code 19
 [ 40]  st_value 0x600009f3a6f2000 (432346248107728896)
   st_size  0xa4462800000033ff (11837192651055051775), st_info 0xfe (254)
   type 0xe (14) (Unknown), bind 0xf (15) (STB_HIPROC )
   st_other 0x33 (51) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (100663382) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 40 with index 100663382 (0x6000056) fails with err code 19
 [ 41]  st_value 0x570946300000 (95697343873024)
   st_size  0x3800000033010106 (4035225266979668230), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x1 (1) (Unknown), st_shndx 51 (Unknown)
-  st_name  (100663356) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 41 with index 100663356 (0x600003c) fails with err code 19
 [ 42]  st_value 0x56fb464000000033 (6267680547108028467)
   st_size  0x330104060000 (56079455485952), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x6 (6) (Unknown), st_shndx 258 (Unknown)
-  st_name  (3981126) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 42 with index 3981126 (0x3cbf46) fails with err code 19
 [ 43]  st_value 0x4650000000330105 (5066549580795150597)
   st_size  0x3301060600003cb2 (3675225393750621362), st_info 0x57 (87)
   type 0x7 (7) (Unknown), bind 0x5 (5) (Unknown)
   st_other 0x0 (0) (Unknown), st_shndx 1536 (Unknown)
-  st_name  (373704704) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 43 with index 373704704 (0x16464800) fails with err code 19
 [ 44]  st_value 0x4b6003be01080600 (5431345265204790784)
   st_size  0xc2010a06000084ac (13979465739220845740), st_info 0x4b (75)
   type 0xb (11) (Unknown), bind 0x4 (4) (Unknown)
   st_other 0xea (234) (Unknown), st_shndx 176 (Unknown)
-  st_name  (1476395008) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 44 with index 1476395008 (0x58000000) fails with err code 19
 [ 45]  st_value 0x447000000022010c (4931441591972921612)
   st_size  0x22011006000002fa (2450257290222109434), st_info 0x8a (138)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0x8 (8) (Unknown)
   st_other 0x0 (0) (Unknown), st_shndx 1536 (Unknown)
-  st_name  (3661916163) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 45 with index 3661916163 (0xda446803) fails with err code 19
 [ 46]  st_value 0xc701120600 (854716450304)
   st_size  0x1606000085644478 (1586955920932619384), st_info 0x44 (68)
   type 0x4 (4) (STT_FILE ), bind 0x4 (4) (Unknown)
   st_other 0x9f (159) (Unknown), st_shndx 193 (Unknown)
-  st_name  (1946157056) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 46 with index 1946157056 (0x74000000) fails with err code 19
 [ 47]  st_value 0x610117060000c1 (27304271137472705)
   st_size  0x61e144820000 (107620144906240), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x80 (128) (STO_MIPS_MICROMIPS ), st_shndx 43844 (Unknown)
-  st_name  (23041) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 47 with index 23041 (0x5a01) fails with err code 19
 [ 48]  st_value 0x11c0600006de644 (79945490462795332)
   st_size  0xc1da448800000292 (13968552545149256338), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 33536 (Unknown)
-  st_name  (2214664198) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 48 with index 2214664198 (0x84011806) fails with err code 19
 [ 49]  st_value 0x600000100449000 (432345568527028224)
   st_size  0x44980000c874012e (4942700594402165038), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT ), bind 0x0 (0) (STB_LOCAL )
   st_other 0xd2 (210) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (621150208) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 49 with index 621150208 (0x25060000) fails with err code 19
 [ 50]  st_value 0x3bf44a00000c8 (1054726393168072)
   st_size  0xc87401300600 (220400561686016), st_info 0x6 (6)
   type 0x6 (6) (STT_TLS ), bind 0x0 (0) (STB_LOCAL )
@@ -2182,12 +2182,12 @@ Symbols from .dynsym: 167
   st_size  0x28013206000005 (11260313429082117), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 12550 (Unknown)
-  st_name  (91964584) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 51 with index 91964584 (0x57b44a8) fails with err code 19
 [ 52]  st_value 0xc000000022013406 (13835058055852667910)
   st_size  0x13606000002a044 (87263839850242116), st_info 0x4f (79)
   type 0xf (15) (STT_HIPROC ), bind 0x4 (4) (Unknown)
   st_other 0x40 (64) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (1152909312) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 52 with index 1152909312 (0x44b80000) fails with err code 19
 [ 53]  st_value 0x3bea00618000097 (269828975721709719)
   st_size  0xbea1060000d2b970 (13736266935540300144), st_info 0xc4 (196)
   type 0x4 (4) (STT_FILE ), bind 0xc (12) (STB_HIOS )
@@ -2197,52 +2197,52 @@ Symbols from .dynsym: 167
   st_size  0x1000000022a60600 (1152921505188152832), st_info 0x61 (97)
   type 0x1 (1) (STT_OBJECT ), bind 0x6 (6) (Unknown)
   st_other 0x0 (0) (Unknown), st_shndx 1536 (Unknown)
-  st_name  (3195011075) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 54 with index 3195011075 (0xbe700003) fails with err code 19
 [ 55]  st_value 0xc2a808000084c87f (14026469835547134079)
   st_size  0xa9080000d1dc7f03 (12179985195744395011), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x7 (7) (Unknown), st_shndx 6408 (Unknown)
-  st_name  (2466776832) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 55 with index 2466776832 (0x93080700) fails with err code 19
 [ 56]  st_value 0x5080000000000 (1416170976575488)
   st_size  0x80000ca4e000000 (576461621195440128), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 1024 (Unknown)
-  st_name  (2013266882) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 56 with index 2013266882 (0x780003c2) fails with err code 19
 [ 57]  st_value 0xc913455a05281100 (14489000679116902656)
   st_size  0x15197c05000023 (5938994961448995), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0xe9 (233) (Unknown), st_shndx 20 (Unknown)
-  st_name  (5320) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 57 with index 5320 (0x14c8) fails with err code 19
 [ 58]  st_value 0x832613000014d1 (36915084995335377)
   st_size  0x297e0500 (696124672), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 32005 (Unknown)
-  st_name  (1592726272) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 58 with index 1592726272 (0x5eef1300) fails with err code 19
 [ 59]  st_value 0x125020000d82714 (82474367213643540)
   st_size  0x70020000bc4b1445 (8071013485360387141), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x5 (5) (STO_PPC64_LOCAL_BIT ), st_shndx 7807 (Unknown)
-  st_name  (12342800) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 59 with index 12342800 (0xbc5610) fails with err code 19
 [ 60]  st_value 0x7503000000220176 (8431582927369929078)
   st_size  0x75017602006d15 (32934178626497813), st_info 0xc2 (194)
   type 0x2 (2) (STT_FUNC ), bind 0xc (12) (STB_HIOS )
   st_other 0x0 (0) (Unknown), st_shndx 512 (Unknown)
-  st_name  (3876736257) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 60 with index 3876736257 (0xe7124d01) fails with err code 19
 [ 61]  st_value 0x4000000 (67108864)
   st_size  0x4e00000000050800 (5620492334958708736), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x45 (69) (Unknown), st_shndx 21504 (Unknown)
-  st_name  (106301446) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 61 with index 106301446 (0x6560806) fails with err code 19
 [ 62]  st_value 0x1810200006db212 (108370065064047122)
   st_size  0x6d1d320300000022 (7862495512925044770), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC ), bind 0x2 (2) (STB_WEAK )
   st_other 0x2 (2) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (67109066) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 62 with index 67109066 (0x40000ca) fails with err code 19
 [ 63]  st_value 0x50900006dc01f00 (362821246821342976)
   st_size  0x8f1e450000002203 (10312756063027339779), st_info 0x8c (140)
   type 0xc (12) (STT_HIOS ), bind 0x8 (8) (Unknown)
   st_other 0x2 (2) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (25231872) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 63 with index 25231872 (0x1810200) fails with err code 19
 [ 64]  st_value 0x2203100900 (146080270592)
   st_size  0x2300000000028f1e (2522015791327645470), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE ), bind 0x2 (2) (STB_WEAK )
@@ -2252,17 +2252,17 @@ Symbols from .dynsym: 167
   st_size  0x32f4200000ca (56024090280138), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (67108864) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 65 with index 67108864 (0x4000000) fails with err code 19
 [ 66]  st_value 0x1b000000000028 (7599824371187752)
   st_size  0x40000 (262144), st_info 0xc8 (200)
   type 0x8 (8) (Unknown), bind 0xc (12) (STB_HIOS )
   st_other 0x0 (0) (Unknown), st_shndx 7680 (Unknown)
-  st_name  (1946276364) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 66 with index 1946276364 (0x7401d20c) fails with err code 19
 [ 67]  st_value 0x800000aa5080000 (576460798021861376)
   st_size  0x530000001210 (91259465110032), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 51790 (Unknown)
-  st_name  (1288) p%b9%d2
+  st_name  (1288) p¹Ò
 [ 68]  st_value 0xca4e0000000005 (56943707202519045)
   st_size  0x9e0400001fc20800 (11386225758432266240), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2272,17 +2272,17 @@ Symbols from .dynsym: 167
   st_size  0x53b9020000 (359586201600), st_info 0x1d (29)
   type 0xd (13) (STT_LOPROC ), bind 0x1 (1) (STB_GLOBAL )
   st_other 0x3 (3) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (67108866) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 69 with index 67108866 (0x4000002) fails with err code 19
 [ 70]  st_value 0x1fcb01080200 (34956756124160)
   st_size  0x28010902006e1c00 (2882595140695628800), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x4d (77) (Unknown), st_shndx 28441 (Unknown)
-  st_name  (117573658) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 70 with index 117573658 (0x702081a) fails with err code 19
 [ 71]  st_value 0x230033010a (150327197962)
   st_size  0x508000000000004 (362539770003324932), st_info 0xb8 (184)
   type 0x8 (8) (Unknown), bind 0xb (11) (Unknown)
   st_other 0x0 (0) (Unknown), st_shndx 512 (Unknown)
-  st_name  (3105095684) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 71 with index 3105095684 (0xb9140004) fails with err code 19
 [ 72]  st_value 0x18b130000800c02 (111203506530028546)
   st_size  0x2cb0300000028 (786163698761768), st_info 0x4e (78)
   type 0xe (14) (Unknown), bind 0x4 (4) (Unknown)
@@ -2292,112 +2292,112 @@ Symbols from .dynsym: 167
   st_size  0x2a0000ca4e000004 (3026419818484989956), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 1024 (Unknown)
-  st_name  (1207959552) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 73 with index 1207959552 (0x48000000) fails with err code 19
 [ 74]  st_value 0x92a000015e92a00 (660340295730801152)
   st_size  0x16292a000016 (24366054113302), st_info 0x2a (42)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0x2 (2) (STB_WEAK )
   st_other 0x3f (63) (Unknown), st_shndx 16 (Unknown)
-  st_name  (1328) %7f%c8%84
+  st_name  (1328) È„
 [ 75]  st_value 0x3900000fff2a0000 (4107282928867344384)
   st_size  0xfb2e0c900000bdd9 (18099417765063474649), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x2a (42) (Unknown), st_shndx 2045 (Unknown)
-  st_name  (1460522) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 75 with index 1460522 (0x16492a) fails with err code 19
 [ 76]  st_value 0x8af1340000001652 (10011840621225973330)
   st_size  0x1048350c0000 (17902313668608), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 12300 (Unknown)
-  st_name  (3591386113) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 76 with index 3591386113 (0xd6103401) fails with err code 19
 [ 77]  st_value 0x404d34100000165d (4633416834958235229)
   st_size  0x16323e0c0000 (24405045149696), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 15628 (Unknown)
-  st_name  (1891054600) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 77 with index 1891054600 (0x70b73408) fails with err code 19
 [ 78]  st_value 0x3ab1341c000015f2 (4229218819941340658)
   st_size  0x1612410c0000 (24267656527872), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 16396 (Unknown)
-  st_name  (1010381848) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 78 with index 1010381848 (0x3c393418) fails with err code 19
 [ 79]  st_value 0xd617342400000022 (15426856377804390434)
   st_size  0x1652450c0000 (24542601543680), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 17164 (Unknown)
-  st_name  (1520672) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 79 with index 1520672 (0x173420) fails with err code 19
 [ 80]  st_value 0x5fcf3430000000c7 (6903794134545334471)
   st_size  0x16684e0c0000 (24637241819136), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 18956 (Unknown)
-  st_name  (1601451048) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 80 with index 1601451048 (0x5f743428) fails with err code 19
 [ 81]  st_value 0x791e344000001673 (8727470577373156979)
   st_size  0x16895b0c0000 (24779193843712), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 20492 (Unknown)
-  st_name  (2875864120) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 81 with index 2875864120 (0xab6a3438) fails with err code 19
 [ 82]  st_value 0x7926345800001689 (8729722480266057353)
   st_size  0x16895d0c0000 (24779227398144), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 23564 (Unknown)
-  st_name  (2033529928) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 82 with index 2033529928 (0x79353448) fails with err code 19
 [ 83]  st_value 0xd97b00780000174d (15671119843761854285)
   st_size  0x2201c5040000bd (9572094895456445), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 27148 (Unknown)
-  st_name  (958739560) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 83 with index 958739560 (0x39253468) fails with err code 19
 [ 84]  st_value 0x2cb01c5040000 (786158414200832)
   st_size  0xc504000061c94200 (14196471927019225600), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x3e (62) (Unknown), st_shndx 26886 (Unknown)
-  st_name  (2701328384) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 84 with index 2701328384 (0xa1030000) fails with err code 19
 [ 85]  st_value 0x220191040000bdc4 (2450399118632205764)
   st_size  0x223802c0000000 (9631733670477824), st_info 0x7 (7)
   type 0x7 (7) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x8 (8) (STO_MIPS_PLT ), st_shndx 18492 (Unknown)
-  st_name  (172289) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 85 with index 172289 (0x2a101) fails with err code 19
 [ 86]  st_value 0x8600690002a1 (147336319730337)
   st_size  0x2f00000005393219 (3386706919870247449), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 18688 (Unknown)
-  st_name  (3409444864) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 86 with index 3409444864 (0xcb380000) fails with err code 19
 [ 87]  st_value 0x4e00000450050800 (5620492353480755200)
   st_size  0x2058080000ca (35562463428810), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (67108864) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 87 with index 67108864 (0x4000000) fails with err code 19
 [ 88]  st_value 0x20612126280f0000 (2333182529719173120)
   st_size  0x300c0000 (806092800), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x10 (16) (Unknown), st_shndx 52618 (Unknown)
-  st_name  (558340) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 88 with index 558340 (0x88504) fails with err code 19
 [ 89]  st_value 0x450050800000000 (310753906206441472)
   st_size  0x9c040000ca4e0000 (11242110573217710080), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 4 (Unknown)
-  st_name  (2621440) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 89 with index 2621440 (0x280000) fails with err code 19
 [ 90]  st_value 0x30000003304fe16 (216172782969749014)
   st_size  0x770000000002cb (33495522228568779), st_info 0x6f (111)
   type 0xf (15) (STT_HIPROC ), bind 0x6 (6) (Unknown)
   st_other 0x90 (144) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (33554440) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 90 with index 33554440 (0x2000008) fails with err code 19
 [ 91]  st_value 0xca4e00000a3c0508 (14577589044016579848)
   st_size  0x80000112a080000 (576460826023034880), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (262144) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 91 with index 262144 (0x40000) fails with err code 19
 [ 92]  st_value 0xf41641c607101100 (17588317713519874304)
   st_size  0x3d1641c807000006 (4401778013167943686), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0xcc (204) (Unknown), st_shndx 48 (Unknown)
-  st_name  (8810) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 92 with index 8810 (0x226a) fails with err code 19
 [ 93]  st_value 0xd005bcb07000001 (936849650046992385)
   st_size  0x300c4e000030d5 (13524328029106389), st_info 0xca (202)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0xc (12) (STB_HIOS )
   st_other 0x4e (78) (Unknown), st_shndx 43542 (Unknown)
-  st_name  (117440518) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 93 with index 117440518 (0x7000006) fails with err code 19
 [ 94]  st_value 0x7000000300c5b00 (504403159071611648)
   st_size  0xc68000011330d00 (893964526321601792), st_info 0xd (13)
   type 0xd (13) (STT_LOPROC ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x73 (115) (Unknown), st_shndx 34 (Unknown)
-  st_name  (983040) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 94 with index 983040 (0xf0000) fails with err code 19
 [ 95]  st_value 0xd517c40710000094 (15354956989155246228)
   st_size  0x23cd070000d5 (39363492708565), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION ), bind 0x0 (0) (STB_LOCAL )
@@ -2407,17 +2407,17 @@ Symbols from .dynsym: 167
   st_size  0x60f3200000ca4e00 (6985962631367118336), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x4 (4) (STO_MIPS_OPTIONAL ), st_shndx 0 (SHN_UNDEF )
-  st_name  (10496) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 96 with index 10496 (0x2900) fails with err code 19
 [ 97]  st_value 0xcb03000008731e00 (14628536014771265024)
   st_size  0x7b000025000002 (34621422756167682), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x22 (34) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (4111532032) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 97 with index 4111532032 (0xf5110000) fails with err code 19
 [ 98]  st_value 0xca4e00000b960508 (14577589044039255304)
   st_size  0x4000002fc080000 (288230388970029056), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (262144) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 98 with index 262144 (0x40000) fails with err code 19
 [ 99]  st_value 0x3e0a4d2d03041000 (4470470435838103552)
   st_size  0x292e03000040 (45277595566144), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT ), bind 0x0 (0) (STB_LOCAL )
@@ -2427,12 +2427,12 @@ Symbols from .dynsym: 167
   st_size  0x3053003000061 (850128697032801), st_info 0x73 (115)
   type 0x3 (3) (STT_SECTION ), bind 0x7 (7) (Unknown)
   st_other 0x67 (103) (Unknown), st_shndx 768 (Unknown)
-  st_name  (1829306368) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 100 with index 1829306368 (0x6d090000) fails with err code 19
 [101]  st_value 0x33330e0000d5 (56294371229909)
   st_size  0x3000002cb036c00 (216172794109717504), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x1e (30) (Unknown), st_shndx 50695 (Unknown)
-  st_name  (100667392) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 101 with index 100667392 (0x6001000) fails with err code 19
 [102]  st_value 0xf00009da8020000 (1080864587697487872)
   st_size  0x2203000000330199 (2450802622223024537), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION ), bind 0x0 (0) (STB_LOCAL )
@@ -2447,82 +2447,82 @@ Symbols from .dynsym: 167
   st_size  0x281e0000 (673054720), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 57356 (Unknown)
-  st_name  (854335488) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 104 with index 854335488 (0x32ec2000) fails with err code 19
 [105]  st_value 0xfe97a08000019 (4478834980159513)
   st_size  0xcb9b2a0000ca4e00 (14671366390591147520), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x4 (4) (STO_MIPS_OPTIONAL ), st_shndx 14592 (Unknown)
-  st_name  (45056) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 105 with index 45056 (0xb000) fails with err code 19
 [106]  st_value 0xcd917d00000506 (57862336282625286)
   st_size  0x7600000519620600 (8502796118376187392), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 5632 (Unknown)
-  st_name  (1779826688) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 106 with index 1779826688 (0x6a160000) fails with err code 19
 [107]  st_value 0x735f5f7c68030000 (8313468425074835456)
   st_size  0x7c000000334a0400 (8935141661563552768), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x4a (74) (Unknown), st_shndx 34 (Unknown)
-  st_name  (24799) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 107 with index 24799 (0x60df) fails with err code 19
 [108]  st_value 0x40000c542540000 (288231223373070336)
   st_size  0x8ccb54000002cb4a (10145294944559090506), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x4a (74) (Unknown), st_shndx 40 (Unknown)
-  st_name  (7233375) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 108 with index 7233375 (0x6e5f5f) fails with err code 19
 [109]  st_value 0x5000070057e00 (1407376762961408)
   st_size  0x220000700f (146028916751), st_info 0xa4 (164)
   type 0x4 (4) (STT_FILE ), bind 0xa (10) (STB_GNU_UNIQUE STB_LOOS )
   st_other 0xcb (203) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (1241776128) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 109 with index 1241776128 (0x4a040000) fails with err code 19
 [110]  st_value 0x2238000000 (146968412160)
   st_size  0x2cb380000001b38 (201316180999281464), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 6968 (Unknown)
-  st_name  (3360663) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 110 with index 3360663 (0x334797) fails with err code 19
 [111]  st_value 0x3f011000060e94e (283745468228364622)
   st_size  0x8734700000022 (2378548593557538), st_info 0xcb (203)
   type 0xb (11) (Unknown), bind 0xc (12) (STB_HIOS )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (2755133440) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 111 with index 2755133440 (0xa4380000) fails with err code 19
 [112]  st_value 0x4900000000cb (80264348827851)
   st_size  0x800000000000400 (576460752303424512), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 42040 (Unknown)
-  st_name  (46872576) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 112 with index 46872576 (0x2cb3800) fails with err code 19
 [113]  st_value 0x2008000004db0800 (2308094809108842496)
   st_size  0xdff8240000c9 (246256848863433), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x4e (78) (Unknown), st_shndx 202 (Unknown)
-  st_name  (1230341) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 113 with index 1230341 (0x12c605) fails with err code 19
 [114]  st_value 0xc87430020000ccea (14444222690032143594)
   st_size  0x2000035cf230000 (144115419184300032), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 8963 (Unknown)
-  st_name  (3363057666) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 114 with index 3363057666 (0xc8743002) fails with err code 19
 [115]  st_value 0x2830020000 (172604129280)
   st_size  0x40000005d0000 (1125899912937472), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x22 (34) (Unknown), st_shndx 32151 (Unknown)
-  st_name  (13183280) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 115 with index 13183280 (0xc92930) fails with err code 19
 [116]  st_value 0x8c160000ca4e0000 (10094255618191654912)
   st_size  0x76c16000006 (8160806961158), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x7a (122) (Unknown), st_shndx 4806 (Unknown)
-  st_name  (6457) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 116 with index 6457 (0x1939) fails with err code 19
 [117]  st_value 0xc7345d3e0a200000 (14354200433375838208)
   st_size  0x223f0a000054 (37654146056276), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x39 (57) (Unknown), st_shndx 24836 (Unknown)
-  st_name  (570134) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 117 with index 570134 (0x8b316) fails with err code 19
 [118]  st_value 0xc36f080000003340 (14082483355903865664)
   st_size  0x28410a00003e (44259805757502), st_info 0x27 (39)
   type 0x7 (7) (Unknown), bind 0x2 (2) (STB_WEAK )
   st_other 0x0 (0) (Unknown), st_shndx 2560 (Unknown)
-  st_name  (611254272) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 118 with index 611254272 (0x246f0000) fails with err code 19
 [119]  st_value 0x700180000002842 (504429546544572482)
   st_size  0x40000004c002308 (288230377426789128), st_info 0x7e (126)
   type 0xe (14) (Unknown), bind 0x7 (7) (Unknown)
   st_other 0x0 (0) (Unknown), st_shndx 2560 (Unknown)
-  st_name  (4168028160) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 119 with index 4168028160 (0xf86f1000) fails with err code 19
 [120]  st_value 0x80000ca4e000017 (576461621195440151)
   st_size  0xaf808000009a8 (3087463010535848), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2532,22 +2532,22 @@ Symbols from .dynsym: 167
   st_size  0x530d0000005a5805 (5984439479851177989), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 27140 (Unknown)
-  st_name  (134023168) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 121 with index 134023168 (0x7fd0800) fails with err code 19
 [122]  st_value 0x280806330b000600 (2884562377628452352)
   st_size  0x9b10e00000b010e (698354810382647566), st_info 0xc (12)
   type 0xc (12) (STT_HIOS ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x30 (48) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (1073741824) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 122 with index 1073741824 (0x40000000) fails with err code 19
 [123]  st_value 0x967a080000193900 (10842987848942565632)
   st_size  0x5f0000ca4e00000b (6845472302495170571), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 1024 (Unknown)
-  st_name  (385875968) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 123 with index 385875968 (0x17000000) fails with err code 19
 [124]  st_value 0x40000 (262144)
   st_size  0x40000000b042808 (288230376336533512), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 19 (Unknown)
-  st_name  (13064) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 124 with index 13064 (0x3308) fails with err code 19
 [125]  st_value 0x800000000000400 (576460752303424512)
   st_size  0xb208000002c20828 (12828503538611128360), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2562,92 +2562,92 @@ Symbols from .dynsym: 167
   st_size  0x13401000004 (1322866704388), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE ), bind 0x1 (1) (STB_GLOBAL )
   st_other 0x0 (0) (Unknown), st_shndx 1024 (Unknown)
-  st_name  (754974720) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 127 with index 754974720 (0x2d000000) fails with err code 19
 [128]  st_value 0x0 (0)
   st_size  0x12851300000000 (5212866231664640), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE ), bind 0x2 (2) (STB_WEAK )
   st_other 0x3 (3) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (51790) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 128 with index 51790 (0xca4e) fails with err code 19
 [129]  st_value 0x2f63000001e (3256390516766)
   st_size  0x33c300000c92013 (233114057287737363), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 2323 (Unknown)
-  st_name  (493032192) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 129 with index 493032192 (0x1d631300) fails with err code 19
 [130]  st_value 0x810504530000089c (9296841760305055900)
   st_size  0x830500005eef456d (9440952195444852077), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 12288 (Unknown)
-  st_name  (2234515456) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 130 with index 2234515456 (0x85300000) fails with err code 19
 [131]  st_value 0x22840500 (579077376)
   st_size  0x5185050000bac009 (5874106786545057801), st_info 0x45 (69)
   type 0x5 (5) (STT_COMMON ), bind 0x4 (4) (Unknown)
   st_other 0x26 (38) (Unknown), st_shndx 131 (Unknown)
-  st_name  (7532) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 131 with index 7532 (0x1d6c) fails with err code 19
 [132]  st_value 0x2233000000 (146884526080)
   st_size  0x101b10194020456 (72533689350882390), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x5 (5) (STO_PPC64_LOCAL_BIT ), st_shndx 5283 (Unknown)
-  st_name  (660279) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 132 with index 660279 (0xa1337) fails with err code 19
 [133]  st_value 0xc4301010000 (13481919184896)
   st_size  0x10300000b600102 (72902019158900994), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x1 (1) (Unknown), st_shndx 3103 (Unknown)
-  st_name  (6221) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 133 with index 6221 (0x184d) fails with err code 19
 [134]  st_value 0xbc751900050000 (53046045856563200)
   st_size  0x18440185019e0200 (1748524226096005632), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x1 (1) (Unknown), st_shndx 8758 (Unknown)
-  st_name  (6989) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 134 with index 6989 (0x1b4d) fails with err code 19
 [135]  st_value 0x37edc0700 (15013250816)
   st_size  0x22dc0700009dbb08 (2511890388757625608), st_info 0x2a (42)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0x2 (2) (STB_WEAK )
   st_other 0x7f (127) (Unknown), st_shndx 63 (Unknown)
-  st_name  (32627719) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 135 with index 32627719 (0x1f1dc07) fails with err code 19
 [136]  st_value 0xc00000022dc0700 (864691129039980288)
   st_size  0xc8a7dc07006e663b (14458767051326383675), st_info 0x8 (8)
   type 0x8 (8) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x29 (41) (Unknown), st_shndx 136 (Unknown)
-  st_name  (134217728) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 136 with index 134217728 (0x8000000) fails with err code 19
 [137]  st_value 0x57c0201bbdc0700 (395193073771742976)
   st_size  0x5702996c01300000 (6269742320408592384), st_info 0x9 (9)
   type 0x9 (9) (Unknown), bind 0x0 (0) (STB_LOCAL )
   st_other 0x3f (63) (Unknown), st_shndx 187 (Unknown)
-  st_name  (1048576) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 137 with index 1048576 (0x100000) fails with err code 19
 [138]  st_value 0x6e010000a8635700 (7926616821973866240)
   st_size  0x1fa08590008029d (142435516561228445), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x6d (109) (Unknown), st_shndx 665 (Unknown)
-  st_name  (53951) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 138 with index 53951 (0xd2bf) fails with err code 19
 [139]  st_value 0xb11000400000030 (797418626201157680)
   st_size  0x228201000037 (37941757870135), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0xab (171) (Unknown), st_shndx 7170 (Unknown)
-  st_name  (13136972) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 139 with index 13136972 (0xc8744c) fails with err code 19
 [140]  st_value 0x2032000000002284 (2319916758049235588)
   st_size  0x39701b501000007 (258677380514578439), st_info 0x15 (21)
   type 0x5 (5) (STT_COMMON ), bind 0x1 (1) (STB_GLOBAL )
   st_other 0x78 (120) (Unknown), st_shndx 256 (Unknown)
-  st_name  (46334208) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 140 with index 46334208 (0x2c30100) fails with err code 19
 [141]  st_value 0x727265150000c8 (32213925814599880)
   st_size  0x155200000022b701 (1536290422889035521), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x1 (1) (Unknown), st_shndx 29877 (Unknown)
-  st_name  (10457153) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 141 with index 10457153 (0x9f9041) fails with err code 19
 [142]  st_value 0x22b9010000b2305e (2502032167504326750)
   st_size  0x2c031000000 (3024479059968), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC ), bind 0x2 (2) (STB_WEAK )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (3103850601) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 142 with index 3103850601 (0xb9010069) fails with err code 19
 [143]  st_value 0x7615520299ba0100 (8508797242108936448)
   st_size  0xc874ca0100 (860952854784), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 29733 (Unknown)
-  st_name  (2275585) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 143 with index 2275585 (0x22b901) fails with err code 19
 [144]  st_value 0x37f079 (3666041)
   st_size  0x411d03b99c015100 (4691910482511089920), st_info 0xc (12)
   type 0xc (12) (STT_HIOS ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 256 (Unknown)
-  st_name  (2336620544) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 144 with index 2336620544 (0x8b460000) fails with err code 19
 [145]  st_value 0x5002ab5100000000 (5765358837368356864)
   st_size  0xa400000000000038 (11817445422220181560), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2657,7 +2657,7 @@ Symbols from .dynsym: 167
   st_size  0x384a02b92d04ae00 (4056057408748039680), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x2f (47) (Unknown), st_shndx 697 (Unknown)
-  st_name  (3164340482) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 146 with index 3164340482 (0xbc9c0102) fails with err code 19
 [147]  st_value 0x550118048500001f (6125203375890890783)
   st_size  0x20d4f00309 (141011452681), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2667,12 +2667,12 @@ Symbols from .dynsym: 167
   st_size  0x395350 (3756880), st_info 0x54 (84)
   type 0x4 (4) (STT_FILE ), bind 0x5 (5) (Unknown)
   st_other 0x9 (9) (Unknown), st_shndx 61443 (Unknown)
-  st_name  (18350080) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 148 with index 18350080 (0x1180000) fails with err code 19
 [149]  st_value 0x20d4f00309 (141011452681)
   st_size  0xf003095401180000 (17294677250433089536), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x18 (24) (Unknown), st_shndx 21761 (Unknown)
-  st_name  (2086400) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 149 with index 2086400 (0x1fd600) fails with err code 19
 [150]  st_value 0x38a51d00 (950344960)
   st_size  0x4e00000000390000 (5620492334962114560), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2682,32 +2682,32 @@ Symbols from .dynsym: 167
   st_size  0x22019e01007272 (9571927341429362), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x9c (156) (Unknown), st_shndx 8705 (Unknown)
-  st_name  (2842) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 151 with index 2842 (0xb1a) fails with err code 19
 [152]  st_value 0x39802301 (964698881)
   st_size  0x3405e49c01770000 (3748653623546413056), st_info 0x6a (106)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0x6 (6) (Unknown)
   st_other 0xc (12) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (1174405120) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 152 with index 1174405120 (0x46000000) fails with err code 19
 [153]  st_value 0x2301000000300000 (2522297266307334144)
   st_size  0x2f000000302c05d6 (3386706920590804438), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (966657212) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 153 with index 966657212 (0x399e04bc) fails with err code 19
 [154]  st_value 0xab00000000000039 (12321848580485677113)
   st_size  0x39ba4d02 (968510722), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 41821 (Unknown)
-  st_name  (4785355) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 154 with index 4785355 (0x4904cb) fails with err code 19
 [155]  st_value 0x20d4a0030955 (36097589709141)
   st_size  0x309540118000000 (218798420578533376), st_info 0xbe (190)
   type 0xe (14) (Unknown), bind 0xb (11) (Unknown)
   st_other 0x5 (5) (STO_PPC64_LOCAL_BIT ), st_shndx 280 (Unknown)
-  st_name  (529530880) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 155 with index 529530880 (0x1f900000) fails with err code 19
 [156]  st_value 0x39c35d00 (969104640)
   st_size  0x39ed5d1faa0000 (16305057891483648), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (14848) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 156 with index 14848 (0x3a00) fails with err code 19
 [157]  st_value 0x39f71d00 (972496128)
   st_size  0x400000000390000 (288230376155447296), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2717,12 +2717,12 @@ Symbols from .dynsym: 167
   st_size  0x2d000000a602cd07 (3242591734491958535), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (973079235) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 158 with index 973079235 (0x3a0002c3) fails with err code 19
 [159]  st_value 0x600000000000003a (6917529027641081914)
   st_size  0x2606cbb701000000 (2740101410157756416), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 7424 (Unknown)
-  st_name  (2891711192) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 159 with index 2891711192 (0xac5c02d8) fails with err code 19
 [160]  st_value 0x5d9f000000000020 (6746110766824292384)
   st_size  0x3a22 (14882), st_info 0xa (10)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0x0 (0) (STB_LOCAL )
@@ -2732,7 +2732,7 @@ Symbols from .dynsym: 167
   st_size  0x20d54003095501 (9241670160307457), st_info 0x3a (58)
   type 0xa (10) (STT_GNU_IFUNC STT_LOOS STT_AMDGPU_HSA_KERNEL ), bind 0x3 (3) (Unknown)
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (3693019819) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 161 with index 3693019819 (0xdc1f02ab) fails with err code 19
 [162]  st_value 0x2cd4207be000000 (201890159321415680)
   st_size  0x2d82d000000902c (204963261068644396), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
@@ -2742,12 +2742,12 @@ Symbols from .dynsym: 167
   st_size  0x832d0000017a02f8 (9452211192945312504), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x2f (47) (Unknown), st_shndx 740 (Unknown)
-  st_name  (36908) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 163 with index 36908 (0x902c) fails with err code 19
 [164]  st_value 0x38b2f078a110000 (255349513304211456)
   st_size  0x3a834a00000001ec (4216295040009372140), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
   st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF )
-  st_name  (979383555) offset beyond end of .dynstr strings
+  ERROR: st_name access .dynsym  entry 164 with index 979383555 (0x3a603503) fails with err code 19
 [165]  st_value 0x255011807a00000 (168041763815030784)
   st_size  0x3ac90f00007d (64635214495869), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE ), bind 0x0 (0) (STB_LOCAL )
