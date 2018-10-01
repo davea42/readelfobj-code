@@ -37,7 +37,8 @@ AC_SUBST([version_info])
 AC_SUBST([release_info])
 
 AC_PROG_CC
-AC_CHECK_HEADERS([unistd.h elf.h])
+### MacOS does not have/use malloc.h
+AC_CHECK_HEADERS([unistd.h elf.h malloc.h])
 
 AC_CHECK_SIZEOF([short])
 AC_CHECK_SIZEOF([int])
