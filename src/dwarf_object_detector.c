@@ -85,7 +85,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define ELFDATA2MSB 2
 #endif /* EI_NIDENT */
 
-#define DSYM_SUFFIX "/.dSYM/Contents/Resources/DWARF/"
+#define DSYM_SUFFIX ".dSYM/Contents/Resources/DWARF/"
 #define PATHSIZE 2000
 
 /*  Assuming short 16 bits, unsigned 32 bits */
@@ -312,13 +312,14 @@ dwarf_object_detector_path(const char  *path,
     size_t   *filesize,
     int *errcode)
 {
-    FILE *f = 0;
+    char *cp = 0;
     size_t plen = strlen(path);
     size_t dsprefixlen = sizeof(DSYM_SUFFIX);
     struct stat statbuf;
     size_t finallen = outpath_len;
     int fd = -1;
     int res = 0;
+    char *basename = 0;
 
 #if !defined(S_ISREG)
 #define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
@@ -331,36 +332,28 @@ dwarf_object_detector_path(const char  *path,
     if(res) {
         return DW_DLV_NO_ENTRY;
     }
-    if(S_ISDIR(statbuf.st_mode)) {
-        finallen = 2*plen + dsprefixlen + 2;
-        if (finallen < outpath_len) {
-            /* path + suffix + basenameofpath */
-            char * p = 0;
-
-            p = dw_stpcpy(outpath,path);
-            p = dw_stpcpy(p,DSYM_SUFFIX);
-            dw_stpcpy(p,getbasename(path));
-        } else {
-            *errcode = RO_ERR_PATH_SIZE;
-            return DW_DLV_ERROR;
-        }
-    } else {
-        finallen = strlen(path);
-        if (finallen <  outpath_len) {
-            strcpy(outpath,path);
-        } else {
-            *errcode = RO_ERR_PATH_SIZE;
-            return DW_DLV_ERROR;
-        }
+    if ((2*plen + dsprefixlen +2) >= outpath_len) {
+        *errcode = RO_ERR_PATH_SIZE;
+        return DW_DLV_ERROR;
     }
+    cp = dw_stpcpy(outpath,path);
+    cp = dw_stpcpy(cp,DSYM_SUFFIX);
+    dw_stpcpy(cp,getbasename(path));
+
     fd = open(outpath,O_RDONLY);
     if (fd < 0) {
+        *outpath = 0;
+        fd = open(path,O_RDONLY);
+        dw_stpcpy(outpath,path);
+    }
+    if (fd < 0) {
+        *outpath = 0;
         return DW_DLV_NO_ENTRY;
     }
     res = dwarf_object_detector_fd(fd,
         ftype,endian,offsetsize,filesize,errcode);
-    if (res == DW_DLV_OK) {
-        strcpy(outpath,path);
+    if (res != DW_DLV_OK) {
+        *outpath = 0;
     }
     close(fd);
     return res;

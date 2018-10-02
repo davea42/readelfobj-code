@@ -44,7 +44,8 @@ readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
 readobjmacho_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
-object_detector_SOURCES = object_detector.c dwarf_object_detector.c \
+object_detector_SOURCES = object_detector_main.c \
+   dwarf_object_detector.c \
    dwarf_object_detector.h
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
 

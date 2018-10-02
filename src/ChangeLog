@@ -1,3 +1,6 @@
+2018-10-02  David Anderson
+    * dwarf_object_detector.c->dwarf_object_detector_main.c:
+      to make it clearer what is main program 
 2018-10-01  David Anderson
     * all files: Everything changes dramatically to
       extract object loading functions from the source printing
