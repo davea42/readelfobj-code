@@ -1,5 +1,5 @@
 File: mach-o-object32
-Reading: mach-o-object32
+Reading: mach-o-object32 (mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32)
 Mach-o Magic:  0xfeedface
   cputype           : 0x7 cpusubtype: 0x3
   offset size       : 4
@@ -40,7 +40,7 @@ Mach-o Magic:  0xfeedface
   [11] __apple_types    0x0000dcc7 0x00000b6e
   [12] __apple_objc     0x0000e835 0x00000024
 File: mach-o-object64
-Reading: mach-o-object64
+Reading: mach-o-object64 (mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64)
 Mach-o Magic:  0xfeedfacf
   cputype           : 0x1000007 cpusubtype: 0x3
   offset size       : 8
@@ -80,5 +80,5 @@ Mach-o Magic:  0xfeedfacf
   [10] __apple_types    0x0000ec5c 0x00000b6e
   [11] __apple_objc     0x0000f7ca 0x00000024
 File: libkrb5support.so.0.1.debug
-Reading: libkrb5support.so.0.1.debug
+Reading: libkrb5support.so.0.1.debug (libkrb5support.so.0.1.debug)
 File libkrb5support.so.0.1.debug is not mach-o. Ignored.

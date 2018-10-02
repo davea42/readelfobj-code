@@ -83,6 +83,7 @@ int main(int argc, char **argv)
         unsigned endian = 0;
         unsigned offsetsize = 0;
         size_t filesize = 0;
+        finalpath[0] = 0;
 
         res = dwarf_object_detector_path(path,
             finalpath,PATHSIZE,

@@ -291,15 +291,15 @@ do_one_file(const char *s)
     struct macho_filedata_s *mfp = 0;
     int errcode = 0;
 
-    if (printfilenames) {
-        P("Reading: %s\n",s);
-    }
     res = dwarf_object_detector_path(s,tru_path_buffer,BUFFERSIZE,
         &ftype,&endian,&offsetsize,&filesize);
     if (res != DW_DLV_OK) {
         P("ERROR: Unable to read \"%s\", ignoring file\n",
             s);
         return;
+    }
+    if (printfilenames) {
+        P("Reading: %s (%s)\n",s,tru_path_buffer);
     }
     if (ftype !=  DW_FTYPE_MACH_O) {
         P("File %s is not mach-o. Ignored.\n",tru_path_buffer);
