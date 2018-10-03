@@ -100,9 +100,9 @@ int main(int argc, char **argv)
         } else if (res == DW_DLV_ERROR) {
             printf("%s type is unknown, error code %d\n",path,
                 errcode);
-        } else { 
-            /* DW_DLV_NO_ENTRY */ 
+        } else {
+            /* DW_DLV_NO_ENTRY */
             printf("%s cannot be found \n",path);
-        } 
+        }
     }
 }

@@ -186,10 +186,9 @@ dwarf_construct_macho_access_path(const char *path,
     *mp = mymp;
     return res;
 }
-  
 
 /* Here path is not essential. Pass in with "" if unknown. */
-int 
+int
 dwarf_construct_macho_access(int fd,
     const char *path,
     struct macho_filedata_s **mp,int *errcode)
@@ -225,7 +224,7 @@ dwarf_construct_macho_access(int fd,
 
 
 /* destructmacho(struct macho_filedata_s *mp) */
-int 
+int
 dwarf_destruct_macho_access(struct macho_filedata_s *mp,int *errcode)
 {
     if (mp->mo_destruct_close_fd) {

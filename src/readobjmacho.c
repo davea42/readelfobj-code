@@ -305,7 +305,6 @@ do_one_file(const char *s)
         P("File %s is not mach-o. Ignored.\n",tru_path_buffer);
         return;
     }
-    
     res = dwarf_construct_macho_access_path(tru_path_buffer,
         &mfp,&errcode);
     if (res != RO_OK) {

@@ -80,7 +80,7 @@ static void elf_print_relocation_details(elf_filedata ep,
     int isrela,LONGESTUTYPE secnum,
     struct generic_shdr * gsh);
 static void elf_print_symbols(elf_filedata ep,int is_symtab,
-    struct generic_symentry * gsym, 
+    struct generic_symentry * gsym,
     LONGESTUTYPE ecount,
     const char *secname);
 
@@ -209,7 +209,7 @@ check_dynamic_section(elf_filedata ep)
 
     /*  In case of error reading headers count might now be zero */
     for( i = 0; i < pcount; ++i,  gphdr++) {
-        const char *typename = 
+        const char *typename =
             dwarf_get_elf_program_header_type_name(
             gphdr->gp_type, buffer1,BUFFERSIZE);
 
@@ -319,7 +319,6 @@ do_one_file(const char *s)
         ep->f_copy_word = dwarf_ro_memcpy_swap_bytes;
     }
 #endif /* LITTLE- BIG-ENDIAN */
-    
     ep->f_filesize = filesize;
     ep->f_offsetsize = offsetsize;
 
@@ -327,11 +326,11 @@ do_one_file(const char *s)
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load elf header. errcode %d\n",errcode);
         return;
-    } 
+    }
     if (res == DW_DLV_NO_ENTRY) {
         P("Error: unable to find elf header.\n");
         return;
-    } 
+    }
 
     if (!only_wasted_summary) {
         elf_print_elf_header(ep);
@@ -345,13 +344,12 @@ do_one_file(const char *s)
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load symstr. errcode %d\n",errcode);
         return;
-    } 
+    }
     res =   dwarf_load_elf_dynstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load dynstr. errcode %d\n",errcode);
         return;
-    } 
-
+    }
     if (!only_wasted_summary) {
         elf_print_progheaders(ep);
         elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
@@ -370,12 +368,11 @@ do_one_file(const char *s)
                 sanitized(filename,buffer1,BUFFERSIZE));
         }
     }
-        
     if(print_symtab_sections ) {
         int symtab_ok = TRUE;
         int dynsym_ok = TRUE;
         /* Load symtab/dynsym if present. */
-        res  =dwarf_load_elf_symtab_symbols(ep,&errcode); 
+        res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
         if( res == DW_DLV_ERROR) {
             P("Error: Unable to load .symtab section. Errcode %d\n",
                 errcode);
@@ -393,7 +390,7 @@ do_one_file(const char *s)
             const char *namestr = psh->gh_namestring;
             LONGESTUTYPE link = psh->gh_link;
             if ( link != ep->f_symtab_sect_strings_sect_index){
-                P("ERROR: symtab link section " LONGESTUFMT 
+                P("ERROR: symtab link section " LONGESTUFMT
                     " mismatch with "
                     LONGESTUFMT " section\n",
                     link,
@@ -401,7 +398,7 @@ do_one_file(const char *s)
                 return;
             }
             elf_print_symbols(ep,TRUE,ep->f_symtab,
-                 ep->f_loc_symtab.g_count,namestr); 
+                ep->f_loc_symtab.g_count,namestr);
         }
         if(dynsym_ok && ep->f_dynsym_sect_index) {
             struct generic_shdr * psh = ep->f_shdr +
@@ -409,7 +406,7 @@ do_one_file(const char *s)
             const char *namestr = psh->gh_namestring;
             LONGESTUTYPE link = psh->gh_link;
             if ( link != ep->f_dynsym_sect_strings_sect_index){
-                P("ERROR: dynsym link section " LONGESTUFMT 
+                P("ERROR: dynsym link section " LONGESTUFMT
                     " mismatch with "
                     LONGESTUFMT " section\n",
                     link,
@@ -417,7 +414,7 @@ do_one_file(const char *s)
                 return;
             }
             elf_print_symbols(ep,FALSE,ep->f_dynsym,
-                 ep->f_loc_dynsym.g_count,namestr); 
+                ep->f_loc_dynsym.g_count,namestr);
         }
         if (!ep->f_dynsym_sect_index  &&
             !ep->f_symtab_sect_index) {
@@ -510,7 +507,7 @@ elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection)
     such is not needed for normal reading DWARF.  */
 static void
 elf_load_print_interp(elf_filedata ep,
-    LONGESTUTYPE offset, 
+    LONGESTUTYPE offset,
     LONGESTUTYPE size)
 {
     long cloc = 0;
@@ -648,7 +645,7 @@ elf_print_sectheaders(elf_filedata ep)
 static void
 elf_print_symbols(elf_filedata ep,
     int is_symtab,
-    struct generic_symentry * gsym, 
+    struct generic_symentry * gsym,
     LONGESTUTYPE ecount,
     const char *secname)
 {
@@ -689,12 +686,12 @@ elf_print_symbols(elf_filedata ep,
         P("  type "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_type,gsym->gs_type,
-            dwarf_get_elf_symbol_stt_type(gsym->gs_type, 
+            dwarf_get_elf_symbol_stt_type(gsym->gs_type,
                 buffer2, BUFFERSIZE));
         P(", bind "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_bind,gsym->gs_bind,
-            dwarf_get_elf_symbol_stb_string(gsym->gs_bind, 
+            dwarf_get_elf_symbol_stb_string(gsym->gs_bind,
                 buffer2,BUFFERSIZE));
         P("\n");
 
@@ -706,26 +703,24 @@ elf_print_symbols(elf_filedata ep,
                 buffer2, BUFFERSIZE));
         P(", st_shndx " LONGESTUFMT " %s",
             gsym->gs_shndx,
-            dwarf_get_elf_symbol_shn_type(gsym->gs_shndx, 
+            dwarf_get_elf_symbol_shn_type(gsym->gs_shndx,
                 buffer2,BUFFERSIZE));
         P("\n");
-
-       
-        res = dwarf_get_elf_symstr_string(ep, 
+        res = dwarf_get_elf_symstr_string(ep,
             is_symtab,gsym->gs_name,
             buffer2,BUFFERSIZE,&errcode);
         if (res != DW_DLV_OK ) {
             P("  ERROR: st_name access %s "
-                 " entry " LONGESTUFMT 
-                 " with index " LONGESTUFMT 
-                  " (" LONGESTXFMT ")" 
-                 " fails with err code %d\n",
-                 is_symtab?".symtab":".dynsym",
-                 i, gsym->gs_name, gsym->gs_name, 
-                 errcode);
+                " entry " LONGESTUFMT
+                " with index " LONGESTUFM
+                " (" LONGESTXFMT ")"
+                " fails with err code %d\n",
+                is_symtab?".symtab":".dynsym",
+                i, gsym->gs_name, gsym->gs_name,
+                errcode);
         } else {
             P("  st_name  (" LONGESTUFMT  ") %s",gsym->gs_name,
-                 buffer2);
+                buffer2);
             P("\n");
         }
     }
@@ -734,7 +729,7 @@ elf_print_symbols(elf_filedata ep,
 }
 
 static void
-elf_print_relocation_content(elf_filedata ep, 
+elf_print_relocation_content(elf_filedata ep,
     int isrela,
     struct generic_shdr * gsh,
     struct generic_rela *grela, LONGESTUTYPE count)

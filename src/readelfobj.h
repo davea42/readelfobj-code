@@ -145,16 +145,16 @@ struct in_use_s {
 
 struct elf_filedata_s {
     /*  f_ident[0] == 'E' means it is elf and
-        elf_filedata_s is the struct involved.  
-        Other means error/corruption of some kind. 
-        f_ident[1] is a version number. 
+        elf_filedata_s is the struct involved.
+        Other means error/corruption of some kind.
+        f_ident[1] is a version number.
         Only version 1 is defined. */
     char         f_ident[8];
     int          f_fd;
     int          f_printf_on_error;
 
     /* If TRUE close f_fd on destruct. */
-    int          f_destruct_close_fd; 
+    int          f_destruct_close_fd;
 
     unsigned	 f_endian;
     unsigned     f_offsetsize; /* Elf offset size, not DWARF. 32 or 64 */
@@ -230,7 +230,7 @@ int dwarf_load_elf_dynamic(elf_filedata ep, int *errcode);
 int dwarf_load_elf_symstr(elf_filedata ep, int *errcode);
 int dwarf_load_elf_dynstr(elf_filedata ep, int *errcode);
 int dwarf_load_elf_symtab_symbols(elf_filedata ep,int *errcode);
-int dwarf_load_elf_dynsym_symbols(elf_filedata ep,int *errcode); 
+int dwarf_load_elf_dynsym_symbols(elf_filedata ep,int *errcode);
 
 int dwarf_load_elf_rela(elf_filedata ep,
     LONGESTUTYPE secnum, int *errcode);
@@ -245,7 +245,7 @@ int dwarf_get_elf_symstr_string(elf_filedata ep,
 /*  The following for an elf checker/dumper. */
 const char * dwarf_get_elf_machine_name(unsigned value);
 const char * dwarf_get_elf_dynamic_table_name(
-    LONGESTUTYPE value, 
+    LONGESTUTYPE value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_program_header_type_name(
     LONGESTUTYPE value,
@@ -254,7 +254,7 @@ const char * dwarf_get_elf_section_header_flag_names(
     LONGESTUTYPE value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_st_type(
-    LONGESTUTYPE value, 
+    LONGESTUTYPE value,
     char *buffer, unsigned buflen);
 void dwarf_insert_in_use_entry(elf_filedata ep,
     const char *description,LONGESTUTYPE offset,
@@ -266,9 +266,9 @@ const char * dwarf_get_elf_symbol_shn_type(
     LONGESTUTYPE value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_symbol_stb_string(
     LONGESTUTYPE val, char *buff, unsigned buflen);
-const char * dwarf_get_elf_symbol_stt_type( LONGESTUTYPE value, 
+const char * dwarf_get_elf_symbol_stt_type( LONGESTUTYPE value,
     char *buffer, unsigned buflen);
-const char * dwarf_get_elf_osabi_name( LONGESTUTYPE value, 
+const char * dwarf_get_elf_osabi_name( LONGESTUTYPE value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_machine_name(unsigned value);
 const char * dwarf_get_elf_dynamic_table_name(

@@ -42,7 +42,7 @@ int dwarf_object_read_random(int fd,char *buf,long loc,
 
 void * dwarf_ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len);
 
-void  dwarf_safe_strcpy(char *out, long outlen, 
+void  dwarf_safe_strcpy(char *out, long outlen,
     const char *in, long inlen);
 
 #ifdef __cplusplus

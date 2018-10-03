@@ -44,20 +44,20 @@ int
 dwarf_object_read_random(int fd,char *buf,long loc,
     size_t size,int *errc)
 {
-     int scode = 0;
-     size_t rcode = 0;
-    
-     scode = lseek(fd,loc,SEEK_SET);
-     if (scode < 0) {
-          *errc = RO_ERR_SEEK;
-          return DW_DLV_ERROR;
-     }
-     rcode = read(fd,buf,size);
-     if (rcode != size) {
-         *errc = RO_ERR_READ;
-         return DW_DLV_ERROR;
-     }
-     return DW_DLV_OK;
+    int scode = 0;
+    size_t rcode = 0;
+
+    scode = lseek(fd,loc,SEEK_SET);
+    if (scode < 0) {
+        *errc = RO_ERR_SEEK;
+        return DW_DLV_ERROR;
+    }
+    rcode = read(fd,buf,size);
+    if (rcode != size) {
+        *errc = RO_ERR_READ;
+        return DW_DLV_ERROR;
+    }
+    return DW_DLV_OK;
 }
 
 /*
@@ -109,4 +109,3 @@ dwarf_safe_strcpy(char *out, long outlen, const char *in, long inlen)
         strcpy(out, in);
     }
 }
-

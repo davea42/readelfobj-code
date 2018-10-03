@@ -55,14 +55,14 @@ int cur_read_loc(FILE *fin, long* fileoffset);
 
 
 struct generic_macho_header {
-    LONGESTUTYPE   magic;     
-    LONGESTUTYPE   cputype;     
-    LONGESTUTYPE   cpusubtype;     
-    LONGESTUTYPE   filetype;  
+    LONGESTUTYPE   magic;
+    LONGESTUTYPE   cputype;
+    LONGESTUTYPE   cpusubtype;
+    LONGESTUTYPE   filetype;
     LONGESTUTYPE   ncmds;      /* number of load commands */
     LONGESTUTYPE   sizeofcmds; /* the size of all the load commands */
-    LONGESTUTYPE   flags;   
-    LONGESTUTYPE   reserved;  
+    LONGESTUTYPE   flags;
+    LONGESTUTYPE   reserved;
 };
 struct generic_macho_command {
     LONGESTUTYPE   cmd;
@@ -91,12 +91,12 @@ struct generic_section {
     char          sectname[24];
     char          segname[24];
     LONGESTUTYPE  addr;
-    LONGESTUTYPE  size; 
+    LONGESTUTYPE  size;
     LONGESTUTYPE  offset;
     LONGESTUTYPE  align;
     LONGESTUTYPE  reloff;
-    LONGESTUTYPE  nreloc; 
-    LONGESTUTYPE  flags;   
+    LONGESTUTYPE  nreloc;
+    LONGESTUTYPE  flags;
     LONGESTUTYPE  reserved1;
     LONGESTUTYPE  reserved2;
     LONGESTUTYPE  reserved3;

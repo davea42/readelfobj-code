@@ -1,4 +1,16 @@
 2018-10-03  David Anderson
+    * dwarf_machoread.c,dwarf_machoread.h,dwarf_object_detector.c,
+      dwarf_object_detector.h,dwarf_object_read_common.c,
+      dwarf_object_read_common.h,dwarf_reading.h,
+      elfem.c,generic_from_elf.c,object_detector_main.c,
+      readelfobj.c,readelfobj.h,readobjmacho.c,
+      readobjmacho.h: Removed trailing whitespace and
+      fixed indent problems.
+    * macho-loader.h: Removed many bytes of trailing whitespace.
+      Removed many tabs and alignment issues so dicheck will no
+      longer object.
+
+2018-10-03  David Anderson
     * dwarf_object_detector.c: Now handles endian 
       differences correctly for Elf.
 2018-10-02  David Anderson

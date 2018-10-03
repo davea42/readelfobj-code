@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2018, David Anderson
 All rights reserved.
 
@@ -46,7 +46,7 @@ extern "C" {
 /* DW_DLV_OK  must match RO_OK */
 /* DW_DLV_NO_ENTRY  must match FIXME */
 #define DW_DLV_OK 0
-#define DW_DLV_NO_ENTRY -1 
+#define DW_DLV_NO_ENTRY -1
 #define DW_DLV_ERROR 1
 #endif /* DW_DLV_OK */
 
@@ -81,12 +81,12 @@ extern "C" {
 #define XFMT "0x%x"
 
 /* Return values, these match the DW_DLV* of libdwarf.  */
-#define RO_NO_ENTRY  -1 
+#define RO_NO_ENTRY  -1
 #define RO_OK         0
 #define RO_ERROR      1
 
 /* even if already seen, values must match, so no #ifdef needed. */
-#define DW_DLV_NO_ENTRY  -1 
+#define DW_DLV_NO_ENTRY  -1
 #define DW_DLV_OK         0
 #define DW_DLV_ERROR      1
 

@@ -37,7 +37,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
+#ifdef HAVE_STRING_H
 #include <string.h> /* memcpy, strcpy */
+#endif /* HAVE_STRING_H */
 #include "dwarf_object_detector.h"
 
 /* This is the main() program for the object_detector executable. */
@@ -56,22 +58,21 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_DLV_OK        0
 #define DW_DLV_ERROR     1
 
-#define RO_ERR_SEEK   2
 /* Must match dwarf_reading.h list */
-#define RO_ERR_READ   3
-#define RO_ERR_MALLOC 4
-#define RO_ERR_OTHER  5
+#define RO_ERR_SEEK             2
+#define RO_ERR_READ             3
+#define RO_ERR_MALLOC           4
+#define RO_ERR_OTHER            5
 #define RO_ERR_BADOFFSETSIZE    6
 #define RO_ERR_LOADSEGOFFSETBAD 7
 #define RO_ERR_FILEOFFSETBAD    8
-#define RO_ERR_BADTYPESIZE    9 
-#define RO_ERR_TOOSMALL    10
-#define RO_ERR_ELF_VERSION    11
-#define RO_ERR_ELF_CLASS    12
-#define RO_ERR_ELF_ENDIAN    13
-#define RO_ERR_OPEN_FAIL    14
-#define RO_ERR_PATH_SIZE    15
-
+#define RO_ERR_BADTYPESIZE      9
+#define RO_ERR_TOOSMALL        10
+#define RO_ERR_ELF_VERSION     11
+#define RO_ERR_ELF_CLASS       12
+#define RO_ERR_ELF_ENDIAN      13
+#define RO_ERR_OPEN_FAIL       14
+#define RO_ERR_PATH_SIZE       15
 
 
 #ifndef EI_NIDENT
@@ -128,7 +129,7 @@ struct elf_header {
     t32 e_version;
 };
 
-static void * 
+static void *
 memcpy_swap_bytes(void *s1, const void *s2, size_t len)
 {
     void *orig_s1 = s1;

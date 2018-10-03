@@ -56,14 +56,14 @@ int cur_read_loc(FILE *fin, long* fileoffset);
 #endif /* end LITTLE- BIG-ENDIAN */
 
 struct generic_macho_header {
-    LONGESTUTYPE   magic;     
-    LONGESTUTYPE   cputype;     
-    LONGESTUTYPE   cpusubtype;     
-    LONGESTUTYPE   filetype;  
+    LONGESTUTYPE   magic;
+    LONGESTUTYPE   cputype;
+    LONGESTUTYPE   cpusubtype;
+    LONGESTUTYPE   filetype;
     LONGESTUTYPE   ncmds;      /* number of load commands */
     LONGESTUTYPE   sizeofcmds; /* the size of all the load commands */
-    LONGESTUTYPE   flags;   
-    LONGESTUTYPE   reserved;  
+    LONGESTUTYPE   flags;
+    LONGESTUTYPE   reserved;
 };
 struct generic_macho_command {
     LONGESTUTYPE   cmd;
@@ -92,12 +92,12 @@ struct generic_section {
     char          sectname[24];
     char          segname[24];
     LONGESTUTYPE  addr;
-    LONGESTUTYPE  size; 
+    LONGESTUTYPE  size;
     LONGESTUTYPE  offset;
     LONGESTUTYPE  align;
     LONGESTUTYPE  reloff;
-    LONGESTUTYPE  nreloc; 
-    LONGESTUTYPE  flags;   
+    LONGESTUTYPE  nreloc;
+    LONGESTUTYPE  flags;
     LONGESTUTYPE  reserved1;
     LONGESTUTYPE  reserved2;
     LONGESTUTYPE  reserved3;
@@ -112,9 +112,9 @@ struct macho_filedata_s {
     unsigned mo_endian;
     LONGESTUTYPE mo_filesize;
 
-    /*  32 or 64, this is the object offset size, not 
+    /*  32 or 64, this is the object offset size, not
         DWARF offset size */
-    LONGESTUTYPE mo_offsetsize; 
+    LONGESTUTYPE mo_offsetsize;
 
     void *(*mo_copy_word) (void *, const void *, size_t);
     /* Used to hold 32 and 64 header data */
@@ -130,8 +130,6 @@ struct macho_filedata_s {
 
     LONGESTUTYPE mo_dwarf_sectioncount;
     struct generic_section *mo_dwarf_sections;
-
- 
 };
 
 struct macho_filedata_s macho_filedata;

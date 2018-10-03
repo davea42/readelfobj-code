@@ -509,7 +509,7 @@ static struct em_values pt_vals[] = {
 
 /*  There are duplicates here and not all in order.  */
 const char *
-dwarf_get_elf_program_header_type_name(LONGESTUTYPE value, 
+dwarf_get_elf_program_header_type_name(LONGESTUTYPE value,
     char *buffer, unsigned buflen)
 {
     struct em_values *ev = &pt_vals[0];

@@ -110,10 +110,10 @@ dwarf_construct_elf_access(int fd,
     return DW_DLV_OK;
 }
 
-/*  Caller must zero the passed in pointer 
+/*  Caller must zero the passed in pointer
     after this returns to remind
     the caller to avoid use of the pointer. */
-int 
+int
 dwarf_destruct_elf_access(elf_filedata ep,int *errcode)
 {
     struct generic_shdr *shp = 0;
@@ -123,7 +123,7 @@ dwarf_destruct_elf_access(elf_filedata ep,int *errcode)
     free(ep->f_ehdr);
     shp = ep->f_shdr;
     shcount = ep->f_loc_shdr.g_count;
-    for(i = 0; i < shcount; ++i,++shp) { 
+    for(i = 0; i < shcount; ++i,++shp) {
         free(shp->gh_rels);
         free(shp->gh_content);
     }
@@ -140,7 +140,7 @@ dwarf_destruct_elf_access(elf_filedata ep,int *errcode)
     }
     ep->f_ident[0] = 'X';
     free(ep);
-    return DW_DLV_OK;    
+    return DW_DLV_OK;
 }
 
 
@@ -405,7 +405,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
         ASSIGN(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
         if (gshdr->gh_type != SHT_NOBITS) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
-               gshdr->gh_offset,gshdr->gh_size,1);
+                gshdr->gh_offset,gshdr->gh_size,1);
         }
     }
     free(orig_psh);
@@ -455,7 +455,7 @@ generic_shdr_from_shdr64(elf_filedata ep,
 
     orig_psh = psh;
     orig_gshdr = gshdr;
-    res = RRMOA(ep->f_fd,psh,offset,count*entsize,errcode); 
+    res = RRMOA(ep->f_fd,psh,offset,count*entsize,errcode);
     if(res != RO_OK) {
         P("Read  " LONGESTUFMT
             " bytes section headers failed\n",count*entsize);
@@ -979,7 +979,7 @@ get_dynstr_string(LONGESTUTYPE offset, LONGESTUTYPE index)
 
 int
 dwarf_get_elf_symstr_string(elf_filedata ep,
-    int is_symtab,LONGESTUTYPE index, 
+    int is_symtab,LONGESTUTYPE index,
     char *buffer, LONGESTUTYPE bufferlen,
     int*errcode)
 {
@@ -1099,7 +1099,7 @@ elf_load_progheaders32(elf_filedata ep,
         return RO_ERROR;
     }
     ep->f_phdr = gphdr;
-    ep->f_loc_phdr.g_count = generic_count; 
+    ep->f_loc_phdr.g_count = generic_count;
     dwarf_insert_in_use_entry(ep,"Elf32_Phdr block",
         offset,entsize*count,ALIGN4);
     return RO_OK;
@@ -1153,7 +1153,7 @@ elf_load_progheaders64(elf_filedata ep,
         return RO_ERROR;
     }
     ep->f_phdr = gphdr;
-    ep->f_loc_phdr.g_count = generic_count; 
+    ep->f_loc_phdr.g_count = generic_count;
     dwarf_insert_in_use_entry(ep,"Elf64_Phdr block",
         offset,entsize*count,ALIGN4);
     return RO_OK;
@@ -1527,7 +1527,6 @@ dwarf_elf_load_rel_64(elf_filedata ep,
             secnum,
             sanitized(filename,buffer1,BUFFERSIZE),
             offset,size);
-      
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
@@ -1780,7 +1779,7 @@ elf_load_elf_header32(elf_filedata ep,int *errcode)
     if (res == RO_OK) {
         dwarf_insert_in_use_entry(ep,"Elf32_Ehdr",0,
             sizeof(Elf32_Ehdr),ALIGN4);
-    } 
+    }
     return res;
 }
 static int
@@ -2038,7 +2037,7 @@ elf_load_dynamic64(elf_filedata ep,
     return RO_OK;
 }
 
-int 
+int
 dwarf_load_elf_header(elf_filedata ep,int*errcode)
 {
     unsigned offsetsize = ep->f_offsetsize;
@@ -2061,7 +2060,7 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
             " %u, which is not a valid class value.\n",
             sanitized(filename,buffer1,BUFFERSIZE),
             (unsigned)offsetsize);
-        *errcode = RO_ERR_ELF_CLASS; 
+        *errcode = RO_ERR_ELF_CLASS;
         return DW_DLV_ERROR;
     }
     return res;
@@ -2096,7 +2095,7 @@ elf_find_sym_sections(elf_filedata ep,int *errcode)
 }
 
 
-int 
+int
 dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
 {
     int res = 0;
@@ -2124,7 +2123,7 @@ dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
     res  = elf_find_sym_sections(ep,errcode);
     return res;
 }
-int 
+int
 dwarf_load_elf_progheaders(elf_filedata ep,int*errcode)
 {
     int res =  DW_DLV_NO_ENTRY;
@@ -2155,7 +2154,7 @@ dwarf_load_elf_dynamic(elf_filedata ep, int *errcode)
     unsigned offsetsize = ep->f_offsetsize;
 
     if (!ep->f_dynamic_sect_index) {
-         return DW_DLV_NO_ENTRY;
+        return DW_DLV_NO_ENTRY;
     }
     sp = ep->f_shdr + ep->f_dynamic_sect_index;
     if (offsetsize == 32) {
@@ -2195,4 +2194,3 @@ dwarf_insert_in_use_entry(elf_filedata ep,
     ep->f_in_use = e;
     ep->f_in_use_tail = e;
 }
-
