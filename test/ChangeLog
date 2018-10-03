@@ -1,3 +1,7 @@
+2018-10-03   David Anderson
+    Renamed all the test files. 1 becomes 001 etc.
+    * test010.sh, test010.base: Now test object_detector.
+    * libc.so.6, dd-irix-n32: Added to test objects.
 2018-10-01   David Anderson
     * test4.base, test5.base updated as the new readobj
       has much more detailed information in case of 
