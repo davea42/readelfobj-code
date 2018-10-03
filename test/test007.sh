@@ -1,9 +1,10 @@
 #!/bin/sh
-n=test8m
+n=test007
 base=$n.base
-o="mach-o-object32 mach-o-object64 libkrb5support.so.0.1.debug"
+o=libkrb5support.so.0.1.debug
+cmd="--only-wasted-summary"
 #echo "START test $n "
-./object_detector  $o  >junk.$n
+./readelfobj $cmd $o  >junk.$n
 diff $n.base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then

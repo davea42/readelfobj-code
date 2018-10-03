@@ -1,10 +1,9 @@
 #!/bin/sh
-n=test5
+n=test009m
 base=$n.base
-o=libkrb5support.so.0.1.debug
-cmd="--print-symtabs"
+o="mach-o-object32 mach-o-object64 libkrb5support.so.0.1.debug"
 #echo "START test $n "
-./readelfobj $cmd $o  >junk.$n
+./readobjmacho  $o  >junk.$n
 diff $n.base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then

@@ -1,9 +1,9 @@
 #!/bin/sh
-n=test9m
+n=test008m
 base=$n.base
 o="mach-o-object32 mach-o-object64 libkrb5support.so.0.1.debug"
 #echo "START test $n "
-./readobjmacho  $o  >junk.$n
+./object_detector  $o  >junk.$n
 diff $n.base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then

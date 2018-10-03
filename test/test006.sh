@@ -1,8 +1,8 @@
 #!/bin/sh
-n=test7
+n=test006
 base=$n.base
 o=libkrb5support.so.0.1.debug
-cmd="--only-wasted-summary"
+cmd="--print-wasted"
 #echo "START test $n "
 ./readelfobj $cmd $o  >junk.$n
 diff $n.base junk.$n > junk.$n.out

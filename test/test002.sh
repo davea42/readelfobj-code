@@ -1,5 +1,5 @@
 #!/bin/sh
-n=test2
+n=test002
 base=$n.base
 o=libkrb5support.so.0.1.debug
 #Version-readelfobj:
