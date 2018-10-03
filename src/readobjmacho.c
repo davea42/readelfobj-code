@@ -292,10 +292,10 @@ do_one_file(const char *s)
     int errcode = 0;
 
     res = dwarf_object_detector_path(s,tru_path_buffer,BUFFERSIZE,
-        &ftype,&endian,&offsetsize,&filesize);
+        &ftype,&endian,&offsetsize,&filesize,&errcode);
     if (res != DW_DLV_OK) {
-        P("ERROR: Unable to read \"%s\", ignoring file\n",
-            s);
+        P("ERROR: Unable to read \"%s\", ignoring file. "
+            "Errcode %d\n", s,errcode);
         return;
     }
     if (printfilenames) {

@@ -1,4 +1,7 @@
 2018-10-03  David Anderson
+    * dwarf_object_detector.h,readobjmacho.c: Nasty
+      typos. Fixed.
+2018-10-03  David Anderson
     * readelfobj.c: Previous removed a needed character
       from the end of a line. Fix is LONGESTUFM-> LONGESTUFMT
 2018-10-03  David Anderson

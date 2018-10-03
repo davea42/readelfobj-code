@@ -72,7 +72,7 @@ int dwarf_object_detector_path(const char  *path,
     unsigned *endian,
     unsigned *offsetsize,
     size_t   *filesize,
-    int * errcode;);
+    int * errcode);
 
 int dwarf_object_detector_f(FILE *f,
     unsigned *ftype,
