@@ -33,6 +33,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sys/types.h> /* fstat */
 #include <sys/stat.h> /* fstat */
 #include <string.h> /* memcpy, strcpy */
+#include "dwarf_reading.h"
 #include "dwarf_object_detector.h"
 
 /* This is library code to actually detect the type of object. */
@@ -98,11 +99,16 @@ int main(int argc, char **argv)
                 offsetsize,
                 (unsigned long)filesize);
         } else if (res == DW_DLV_ERROR) {
-            printf("%s type is unknown, error code %d\n",path,
-                errcode);
+            if (errcode == RO_ERR_NOT_A_KNOWN_TYPE) {
+                printf("%s FAIL: file type not an object-file "
+                    "Errcode %d.\n",path, errcode);
+            } else {
+                printf("%s FAIL: error opening file. "
+                    "Errcode %d.\n",path, errcode);
+            }
         } else {
             /* DW_DLV_NO_ENTRY */
-            printf("%s cannot be found \n",path);
+            printf("%s FAIL: no such file present/readable\n",path);
         }
     }
 }

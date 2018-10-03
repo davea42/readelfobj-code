@@ -73,7 +73,17 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RO_ERR_ELF_ENDIAN      13
 #define RO_ERR_OPEN_FAIL       14
 #define RO_ERR_PATH_SIZE       15
-
+#define RO_ERR_INTEGERTOOSMALL 16
+#define RO_ERR_SYMBOLSECTIONSIZE  17
+#define RO_ERR_RELSECTIONSIZE     18
+#define RO_ERR_STRINGOFFSETBIG    19
+#define RO_ERR_DYNAMICSECTIONSIZE 20
+#define RO_ERR_UNEXPECTEDZERO     21
+#define RO_ERR_PHDRCOUNTMISMATCH  22
+#define RO_ERR_SHDRCOUNTMISMATCH  23
+#define RO_ERR_RELCOUNTMISMATCH   24
+#define RO_ERR_NULL_ELF_POINTER   25
+#define RO_ERR_NOT_A_KNOWN_TYPE   26
 
 #ifndef EI_NIDENT
 #define EI_NIDENT 16
@@ -369,7 +379,8 @@ dwarf_object_detector_fd(int fd,
         return DW_DLV_OK;
     }
     /* CHECK FOR  PE object. */
-    return DW_DLV_NO_ENTRY;
+    *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
+    return DW_DLV_ERROR;
 }
 
 int

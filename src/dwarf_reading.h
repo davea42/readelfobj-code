@@ -117,6 +117,7 @@ extern "C" {
 #define RO_ERR_SHDRCOUNTMISMATCH  23
 #define RO_ERR_RELCOUNTMISMATCH   24
 #define RO_ERR_NULL_ELF_POINTER   25
+#define RO_ERR_NOT_A_KNOWN_TYPE   26
 
 #define P printf
 #define F fflush(stdout)
