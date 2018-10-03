@@ -1,3 +1,6 @@
+2018-10-03  David Anderson
+    * dwarf_object_detector.c: Now handles endian 
+      differences correctly for Elf.
 2018-10-02  David Anderson
     * dwarf_object_detector_main.c:
       to make it clearer what is main program 
