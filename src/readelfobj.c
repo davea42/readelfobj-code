@@ -712,7 +712,7 @@ elf_print_symbols(elf_filedata ep,
         if (res != DW_DLV_OK ) {
             P("  ERROR: st_name access %s "
                 " entry " LONGESTUFMT
-                " with index " LONGESTUFM
+                " with index " LONGESTUFMT
                 " (" LONGESTXFMT ")"
                 " fails with err code %d\n",
                 is_symtab?".symtab":".dynsym",

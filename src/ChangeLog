@@ -1,4 +1,7 @@
 2018-10-03  David Anderson
+    * readelfobj.c: Previous removed a needed character
+      from the end of a line. Fix is LONGESTUFM-> LONGESTUFMT
+2018-10-03  David Anderson
     * dwarf_machoread.c,dwarf_machoread.h,dwarf_object_detector.c,
       dwarf_object_detector.h,dwarf_object_read_common.c,
       dwarf_object_read_common.h,dwarf_reading.h,
