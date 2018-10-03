@@ -1,4 +1,6 @@
 2018-10-03  David Anderson
+    * dwarf_object_detector.c: Various compiler warnings
+      fixed.
     * dwarf_object_detector.h,readobjmacho.c: Nasty
       typos. Fixed.
 2018-10-03  David Anderson

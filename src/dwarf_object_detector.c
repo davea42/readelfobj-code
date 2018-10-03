@@ -168,10 +168,12 @@ memcpy_swap_bytes(void *s1, const void *s2, size_t len)
 static const char *
 getseparator (const char *f)
 {
-    const char *p, *q;
+    const char *p = 0;
+    const char *q = 0;
+    char c = 0;;
+
     p = NULL;
     q = f;
-    char c;
     do  {
         c = *q++;
         if (c == '\\' || c == '/' || c == ':') {
@@ -316,7 +318,6 @@ dwarf_object_detector_fd(int fd,
     size_t   *filesize,
     int *errcode)
 {
-    size_t resf = 0;
     struct elf_header h;
     size_t readlen = sizeof(h);
     int res = 0;
@@ -333,7 +334,7 @@ dwarf_object_detector_fd(int fd,
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
-    if (fsize <= readlen) {
+    if (fsize <= (off_t)readlen) {
         /* Not a real object file */
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
@@ -344,7 +345,7 @@ dwarf_object_detector_fd(int fd,
         return DW_DLV_ERROR;
     }
     readval = read(fd,&h,readlen);
-    if (readval != readlen) {
+    if (readval != (ssize_t)readlen) {
         *errcode = RO_ERR_READ;
         return DW_DLV_ERROR;
     }
@@ -384,10 +385,8 @@ dwarf_object_detector_path(const char  *path,
     size_t plen = strlen(path);
     size_t dsprefixlen = sizeof(DSYM_SUFFIX);
     struct stat statbuf;
-    size_t finallen = outpath_len;
     int fd = -1;
     int res = 0;
-    char *basename = 0;
 
 #if !defined(S_ISREG)
 #define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
