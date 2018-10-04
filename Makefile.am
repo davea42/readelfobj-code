@@ -4,6 +4,8 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src test
 
+CLEANFILES = config.h.in~
+
 MAINTAINERCLEANFILES = \
 Makefile.in \
 aclocal.m4 \

@@ -1,3 +1,6 @@
+2018-10-04: David Anderson
+    * configure.ac: Now version 20181003.
+    * Makefile.am: Cleans up ./config.h.in~
 2018-10-01: David Anderson
     * configure.ac: Added a check for malloc.h
       as MacOS does not have that header.

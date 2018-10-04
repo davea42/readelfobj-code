@@ -247,25 +247,27 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 version_info = @version_info@
 MAINTAINERCLEANFILES = Makefile.in
-CLEANFILES = config.h.in~ \
-  junk.test1 \
-  junk.test1.out \
-  junk.test2 \
-  junk.test2.out \
-  junk.test3 \
-  junk.test3.out \
-  junk.test4 \
-  junk.test4.out \
-  junk.test5 \
-  junk.test5.out \
-  junk.test6 \
-  junk.test6.out \
-  junk.test7 \
-  junk.test7.out \
-  junk.test8m \
-  junk.test8m.out \
-  junk.test9m \
-  junk.test9m.out \
+CLEANFILES = \
+  junk.test001 \
+  junk.test001.out \
+  junk.test002 \
+  junk.test002.out \
+  junk.test003 \
+  junk.test003.out \
+  junk.test004 \
+  junk.test004.out \
+  junk.test005 \
+  junk.test005.out \
+  junk.test006 \
+  junk.test006.out \
+  junk.test007 \
+  junk.test007.out \
+  junk.test008m \
+  junk.test008m.out \
+  junk.test009m \
+  junk.test009m.out \
+  junk.test010 \
+  junk.test010.out \
   object_detector \
   readobjmacho \
   readelfobj

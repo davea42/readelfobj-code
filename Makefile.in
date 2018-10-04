@@ -331,6 +331,7 @@ top_srcdir = @top_srcdir@
 version_info = @version_info@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src test
+CLEANFILES = config.h.in~
 MAINTAINERCLEANFILES = \
 Makefile.in \
 aclocal.m4 \
@@ -740,6 +741,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
