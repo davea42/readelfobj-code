@@ -139,6 +139,52 @@ struct elf_header {
     t32 e_version;
 };
 
+/*  Windows. Certain PE objects.
+    The following references may be of interest.
+https://msdn.microsoft.com/library/windows/desktop/ms680547(v=vs.85).aspx       #PE format overview and various machine magic numbers
+
+https://msdn.microsoft.com/en-us/library/ms809762.aspx  # describes some details of PE headers, basically an overview
+
+https://msdn.microsoft.com/en-us/library/windows/desktop/aa383751(v=vs.85).aspx #defines sizes of various types
+
+https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms680313(v=vs.85).aspx #defines IMAGE_FILE_HEADER and Machine fields (32/64)
+
+https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms680305(v=vs.85).aspx #defines IMAGE_DATA_DIRECTORY
+
+https://msdn.microsoft.com/en-us/library/windows/desktop/ms680339(v=vs.85).aspx #Defines IMAGE_OPTIONAL_HEADER and some magic numbers
+
+https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms680336(v=vs.85).aspx # defines _IMAGE_NT_HEADERS 32 64
+
+https://msdn.microsoft.com/en-us/library/windows/desktop/ms680341(v=vs.85).aspx # defines _IMAGE_SECTION_HEADER
+
+*/
+
+/* ===== START pe structures */
+
+struct dos_header {
+    t16  dh_mz;
+    char dh_dos_data[58];
+    t32  dh_image_offset;
+};
+
+#define IMAGE_DOS_SIGNATURE      0x5A4D
+#define IMAGE_DOS_REVSIGNATURE   0x4D5A
+#define IMAGE_NT_SIGNATURE       0x00004550
+#define IMAGE_FILE_MACHINE_I386  0x14c
+#define IMAGE_FILE_MACHINE_IA64  0x200
+#define IMAGE_FILE_MACHINE_AMD64 0x8886
+
+
+struct pe_image_file_header {
+    t16 im_machine;
+    t16 im_sectioncount;
+    t32 im_ignoring[3];
+    t16 im_opt_header_size;
+    t16 im_ignoringb;
+};
+
+/* ===== END pe structures */
+
 static void *
 memcpy_swap_bytes(void *s1, const void *s2, size_t len)
 {
@@ -172,6 +218,27 @@ memcpy_swap_bytes(void *s1, const void *s2, size_t len)
     }
     return orig_s1;
 }
+
+static int
+object_read_random(int fd,char *buf,long loc,
+    size_t size,int *errc)
+{
+    int scode = 0;
+    size_t rcode = 0;
+
+    scode = lseek(fd,loc,SEEK_SET);
+    if (scode < 0) {
+        *errc = RO_ERR_SEEK;
+        return DW_DLV_ERROR;
+    }
+    rcode = read(fd,buf,size);
+    if (rcode != size) {
+        *errc = RO_ERR_READ;
+        return DW_DLV_ERROR;
+    }
+    return DW_DLV_OK;
+}
+
 
 
 /*  For following MacOS file naming convention */
@@ -278,6 +345,108 @@ fill_in_elf_fields(struct elf_header *h,
     return DW_DLV_OK;
 }
 
+/*  A bit unusual in that it always sets *is_pe_flag
+    Return of DW_DLV_OK  it is a PE file we recognize. */
+static int
+is_pe_object(int fd,
+    size_t filesize,
+    unsigned *endian,
+    unsigned *offsetsize,
+    int *errcode)
+{
+    t16 dos_sig;
+    unsigned locendian = 0;
+    void *(*word_swap) (void *, const void *, size_t);
+    t32 nt_address = 0;
+    struct dos_header dhinmem;
+    t16 nt_sig = 0;
+    struct pe_image_file_header ifh;
+    int res = 0;
+
+    if (filesize < (sizeof (struct dos_header) +
+        sizeof(t32) + sizeof(struct pe_image_file_header))) {
+        *errcode = RO_ERR_TOOSMALL;
+        return DW_DLV_ERROR;
+    }
+    res = object_read_random(fd,(char *)&dhinmem,
+        0,sizeof(dhinmem),errcode);
+    if (res != DW_DLV_OK) {
+        return res;
+    }
+    dos_sig = dhinmem.dh_mz;
+    if (dos_sig == IMAGE_DOS_SIGNATURE) {
+#ifdef WORDS_BIGENDIAN
+        word_swap = memcpy_swap_bytes;
+#else  /* LITTLE ENDIAN */
+        word_swap = memcpy;
+#endif /* LITTLE- BIG-ENDIAN */
+        locendian = DW_ENDIAN_LITTLE;
+    } else if (dos_sig == IMAGE_DOS_REVSIGNATURE) {
+        locendian = DW_ENDIAN_BIG;
+#ifdef WORDS_BIGENDIAN
+        word_swap = memcpy;
+#else  /* LITTLE ENDIAN */
+        word_swap = memcpy_swap_bytes;
+#endif /* LITTLE- BIG-ENDIAN */
+    } else {
+        /* Not dos header not a PE file we recognize */
+        *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
+        return DW_DLV_ERROR;
+    }
+    ASSIGN(word_swap,nt_address, dhinmem.dh_image_offset);
+    if (filesize < nt_address) {
+        /* Not dos header not a PE file we recognize */
+        *errcode = RO_ERR_TOOSMALL;
+        return DW_DLV_ERROR;
+    }
+    if (filesize < (nt_address + sizeof(t32) +
+        sizeof(struct pe_image_file_header))) {
+        *errcode = RO_ERR_TOOSMALL;
+        /* Not dos header not a PE file we recognize */
+        return DW_DLV_ERROR;
+    }
+    res =  object_read_random(fd,(char *)&nt_sig,nt_address,
+        sizeof(nt_sig),errcode);
+    if (res != DW_DLV_OK) {
+        return res;
+    }
+    {   t32 lsig = 0;
+        ASSIGN(word_swap,lsig,nt_sig);
+        nt_sig = lsig;
+    }
+    if (nt_sig != IMAGE_NT_SIGNATURE) {
+        *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
+        return DW_DLV_ERROR;
+    }
+    res = object_read_random(fd,(char *)&ifh,
+        nt_address + sizeof(t32),
+        sizeof(struct pe_image_file_header),
+        errcode);
+    if (res != DW_DLV_OK) {
+        return res;
+    }
+    {
+        t32 machine = 0;
+
+        ASSIGN(word_swap,machine,ifh.im_machine);
+        switch(machine) {
+        case IMAGE_FILE_MACHINE_I386:
+            *offsetsize = 32;
+            *endian = locendian;
+            return DW_DLV_OK;
+        case IMAGE_FILE_MACHINE_IA64:
+        case IMAGE_FILE_MACHINE_AMD64:
+            *offsetsize = 64;
+            *endian = locendian;
+            return DW_DLV_OK;
+        }
+    }
+    /*  There are lots more machines,
+        we are unsure which are of interest. */
+    *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
+    return DW_DLV_ERROR;
+}
+
 static int
 is_mach_o_magic(struct elf_header *h,
     unsigned *endian,
@@ -378,7 +547,12 @@ dwarf_object_detector_fd(int fd,
         *filesize = (size_t)fsize;
         return DW_DLV_OK;
     }
-    /* CHECK FOR  PE object. */
+    res = is_pe_object(fd,fsize,endian,offsetsize,errcode);
+    if (res == DW_DLV_OK ) {
+        *ftype = DW_FTYPE_PE;
+        *filesize = (size_t)fsize;
+        return DW_DLV_OK;
+    }
     *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
     return DW_DLV_ERROR;
 }

@@ -1,4 +1,6 @@
 2018-10-04: David Anderson
+    * configure.ac: Now version 20181007.
+2018-10-04: David Anderson
     * configure.ac: Now version 20181003.
     * Makefile.am: Cleans up ./config.h.in~
 2018-10-01: David Anderson

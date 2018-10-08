@@ -1,3 +1,10 @@
+2018-10-07  David Anderson
+    * dwarf_macho_read.c: Delete local function, use
+      dwarf_object_read_common.c funtion for word-swapping.
+    * readelfobj_version.h: Update date string.
+    * dwarf_object_detector.c: Now detects certain
+      Windows PE object files, ones that could contain
+      DWARF information.
 2018-10-03  David Anderson
     * dwarf_object_detector.c,dwarf_reading.h,
       object_detector_main.c: Added a new error code,

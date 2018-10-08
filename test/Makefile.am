@@ -24,6 +24,8 @@ CLEANFILES = \
   junk.test009m.out \
   junk.test010 \
   junk.test010.out \
+  junk.test011 \
+  junk.test011.out \
   object_detector \
   readobjmacho \
   readelfobj
@@ -39,9 +41,25 @@ CLEANUP  \
 PICKUP  \
 ChangeLog  \
 runtests.sh \
-test2.sh  test4.sh  test6.sh \
-test1.sh test3.sh  test5.sh  test7.sh
-
-
-
+test001.sh \
+test002.sh \
+test003.sh \
+test004.sh \
+test005.sh \
+test006.sh \
+test007.sh \
+test008m.sh \
+test009m.sh \
+test010.sh \
+test011.sh \
+test001.base \
+test003.base \
+test004.base \
+test005.base \
+test006.base \
+test007.base \
+test008m.base \
+test009m.base \
+test010.base \
+test011.base 
 

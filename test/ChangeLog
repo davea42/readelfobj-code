@@ -1,3 +1,9 @@
+2018-10-07   David Anderson
+    * Makefile.am: named the addtional test files
+      properly.  
+    * test011.sh test011.base: Test showing we
+      identify a particular win32 dll.
+    * libexamine-0.dll: win32 PE dll with DWARF.
 2018-10-04   David Anderson
     * Makefile.am: cleans up junk.test010* files.
 2018-10-03   David Anderson
