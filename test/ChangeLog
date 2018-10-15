@@ -1,3 +1,7 @@
+2018-10-14   David Anderson
+    * test003.base,test004.base,test005.base,test006.base,
+      test007.base: New baselines showing the unused space
+      is alignment space, not wasted space.
 2018-10-07   David Anderson
     * Makefile.am: named the addtional test files
       properly.  

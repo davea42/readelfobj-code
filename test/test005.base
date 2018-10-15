@@ -2763,4 +2763,4 @@ Warning : Wasted .dynamic section entries: 0xa (10)
 Warning : Wasted .dynamic section space  : 0xa0 (160)
 Warning: dynamic section error: ProgHeader  2 PT_DYNAMIC offset 0xcd10 (52496)  but section 21 .dynamic offset 0x200 (512)
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
-Warning : 1 instances of wasted section space exist and total 1 bytes wasted.
+Warning : 1 instances of unused alignment space exist and total 1 bytes of alignment.

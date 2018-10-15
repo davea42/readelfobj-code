@@ -405,7 +405,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
         ASSIGN(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
         if (gshdr->gh_type != SHT_NOBITS) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
-                gshdr->gh_offset,gshdr->gh_size,1);
+                gshdr->gh_offset,gshdr->gh_size,ALIGN4);
         }
     }
     free(orig_psh);
@@ -477,7 +477,7 @@ generic_shdr_from_shdr64(elf_filedata ep,
         ASSIGN(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
         if (gshdr->gh_type != SHT_NOBITS) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
-                gshdr->gh_offset,gshdr->gh_size,1);
+                gshdr->gh_offset,gshdr->gh_size,ALIGN8);
         }
     }
     free(orig_psh);
