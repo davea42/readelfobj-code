@@ -51,11 +51,12 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* DW_DLV_OK */
 
 
-const char *dwarf_file_type[5] = {
+const char *dwarf_file_type[6] = {
 "file type unknown",
 "file type elf",
 "file type mach-o",
 "file type pe",
+"file type archive",
 0
 };
 

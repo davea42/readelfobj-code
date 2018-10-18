@@ -1,3 +1,6 @@
+2018-10-18   David Anderson
+    * test012.sh,test012.base: Now checks that archives
+      are recognized.
 2018-10-14   David Anderson
     * test003.base,test004.base,test005.base,test006.base,
       test007.base: New baselines showing the unused space

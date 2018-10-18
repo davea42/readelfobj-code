@@ -345,6 +345,25 @@ fill_in_elf_fields(struct elf_header *h,
     return DW_DLV_OK;
 }
 
+static char archive_magic[8] = { 
+'!','<','a','r','c','h','>',0x0a
+};
+static int
+is_archive_magic(struct elf_header *h) 
+{
+    int i = 0;
+    /* h is much longer than the 8 we check here. */
+    int len = sizeof(archive_magic);
+    const char *cp = (const char *)h;
+
+    for( ; i < len; ++i) {
+        if (cp[i] != archive_magic[i]) {
+             return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 /*  A bit unusual in that it always sets *is_pe_flag
     Return of DW_DLV_OK  it is a PE file we recognize. */
 static int
@@ -478,18 +497,6 @@ is_mach_o_magic(struct elf_header *h,
 }
 
 int
-dwarf_object_detector_f(FILE *f,
-    unsigned *ftype,
-    unsigned *endian,
-    unsigned *offsetsize,
-    size_t   *filesize,
-    int *errcode)
-{
-    return dwarf_object_detector_fd(fileno(f),
-        ftype,endian,offsetsize,filesize,errcode);
-}
-
-int
 dwarf_object_detector_fd(int fd,
     unsigned *ftype,
     unsigned *endian,
@@ -544,6 +551,11 @@ dwarf_object_detector_fd(int fd,
     }
     if (is_mach_o_magic(&h,endian,offsetsize)) {
         *ftype = DW_FTYPE_MACH_O;
+        *filesize = (size_t)fsize;
+        return DW_DLV_OK;
+    }
+    if (is_archive_magic(&h)) {
+        *ftype = DW_FTYPE_ARCHIVE;
         *filesize = (size_t)fsize;
         return DW_DLV_OK;
     }

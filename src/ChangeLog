@@ -1,3 +1,7 @@
+2018-10-18  David Anderson
+    * dwarf_object_detector.c,dwarf_object_detector.h,
+      object_detector_main.c: Now understands how
+      to recognize a Unix/Linux archive.
 2018-10-14  David Anderson
     * generic_from_elf.c: Flag section data as aligned (4 or 8)
       so it reports as alignment space not wasted space.

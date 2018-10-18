@@ -1,3 +1,6 @@
+2018-10-18: David Anderson
+    * configure.ac: Now version 20181018.
+      Object-detector now recognizes archives.
 2018-10-14: David Anderson
     * configure.ac: Now version 20181014.
 2018-10-04: David Anderson
