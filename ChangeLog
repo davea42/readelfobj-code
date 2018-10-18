@@ -1,4 +1,8 @@
 2018-10-18: David Anderson
+    * Removed the dwarf_object_detector_f()
+      interface completely.  Access via FILE*
+      not needed.  Use dwarf_object_detector_fd(fileno(f)...
+      if you have a FILE*.
     * configure.ac: Now version 20181018.
       Object-detector now recognizes archives.
 2018-10-14: David Anderson
