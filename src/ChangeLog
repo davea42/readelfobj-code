@@ -1,3 +1,8 @@
+2018-10-19  David Anderson
+    * dwarf_object_detector.c: Corrected the check
+      for elf-version (which must be 1).
+    * object_detector_main.c: Modified an output
+      line a little.
 2018-10-18  David Anderson
     * dwarf_object_detector.c,dwarf_object_detector.h,
       object_detector_main.c: Now understands how

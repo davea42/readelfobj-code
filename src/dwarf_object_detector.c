@@ -85,6 +85,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RO_ERR_NULL_ELF_POINTER   25
 #define RO_ERR_NOT_A_KNOWN_TYPE   26
 
+
 #ifndef EI_NIDENT
 #define EI_NIDENT 16
 #define EI_CLASS  4
@@ -298,8 +299,9 @@ fill_in_elf_fields(struct elf_header *h,
 {
     unsigned locendian = 0;
     unsigned locoffsetsize = 0;
-    unsigned version = 0;
+#if 0
     void *(*word_swap) (void *, const void *, size_t);
+#endif
 
     switch(h->e_ident[EI_CLASS]) {
     case ELFCLASS32:
@@ -315,27 +317,29 @@ fill_in_elf_fields(struct elf_header *h,
     switch(h->e_ident[EI_DATA]) {
     case ELFDATA2LSB:
         locendian = DW_ENDIAN_LITTLE;
+#if 0
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy_swap_bytes;
 #else  /* LITTLE ENDIAN */
         word_swap = memcpy;
 #endif /* LITTLE- BIG-ENDIAN */
+#endif
         break;
     case ELFDATA2MSB:
         locendian = DW_ENDIAN_BIG;
+#if 0
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy;
 #else  /* LITTLE ENDIAN */
         word_swap = memcpy_swap_bytes;
 #endif /* LITTLE- BIG-ENDIAN */
+#endif
         break;
     default:
         *errcode = RO_ERR_ELF_ENDIAN;
         return DW_DLV_ERROR;
     }
-    ASSIGN(word_swap,version,h->e_version);
-    /* e_machine, e_type need swap too if used. */
-    if (version != 1 /* EV_CURRENT */) {
+    if (h->e_ident[EI_VERSION] != 1 /* EV_CURRENT */) {
         *errcode = RO_ERR_ELF_VERSION;
         return DW_DLV_ERROR;
     }
@@ -345,11 +349,11 @@ fill_in_elf_fields(struct elf_header *h,
     return DW_DLV_OK;
 }
 
-static char archive_magic[8] = { 
+static char archive_magic[8] = {
 '!','<','a','r','c','h','>',0x0a
 };
 static int
-is_archive_magic(struct elf_header *h) 
+is_archive_magic(struct elf_header *h)
 {
     int i = 0;
     /* h is much longer than the 8 we check here. */
@@ -358,7 +362,7 @@ is_archive_magic(struct elf_header *h)
 
     for( ; i < len; ++i) {
         if (cp[i] != archive_magic[i]) {
-             return FALSE;
+            return FALSE;
         }
     }
     return TRUE;
