@@ -1,3 +1,10 @@
+2018-10-20  David Anderson
+    * dwarf_machread.c: Moved ASSIGNMO macro to this file.
+    * dwarf_machread.h: Moved ASSIGNMO macro out of here.
+    * dwarf_object_detector.c: Removed dependence on
+      the sizes of items in the various header declarations.
+      New macros TYP, SIZEOFT32, and ASNAR replace
+      the need for defining t32 or t16 or the like.
 2018-10-19  David Anderson
     * dwarf_object_detector.c: Corrected the check
       for elf-version (which must be 1).

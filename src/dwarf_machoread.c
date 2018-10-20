@@ -55,6 +55,20 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_detector.h"
 #include "macho-loader.h"
 
+#ifdef WORDS_BIGENDIAN
+#define ASSIGNMO(cpfunc,t,s)                    \
+    do {                                        \
+        unsigned tbyte = sizeof(t) - sizeof(s); \
+        t = 0;                                  \
+        cpfunc(((char *)t)+tbyte ,&s,sizeof(s)); \
+    } while (0)
+#else /* LITTLE ENDIAN */
+#define ASSIGNMO(cpfunc,t,s)               \
+    do {                                   \
+        t = 0;                             \
+        cpfunc(&t,&s,sizeof(s)); \
+    } while (0)
+#endif /* end LITTLE- BIG-ENDIAN */
 
 static char tru_path_buffer[BUFFERSIZE];
 

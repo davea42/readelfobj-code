@@ -53,6 +53,18 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define O_RDONLY 0
 #endif
 
+/*  TYP, SIZEOFT32 and ASNAR
+    mean we can use correctly-sized arrays of char for the
+    struct members instead of determing a proper integer
+    that size.
+
+    We are dealing with carefully constructed structs
+    that do not have any alignment-forced (hidden)
+    unused bytes so reading lengths from the real structs
+    works for each variable.  */
+
+#define TYP(n,l) char n[l]
+#define SIZEOFT32 4
 
 #define DW_DLV_NO_ENTRY -1
 #define DW_DLV_OK        0
@@ -100,9 +112,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DSYM_SUFFIX ".dSYM/Contents/Resources/DWARF/"
 #define PATHSIZE 2000
 
-/*  Assuming short 16 bits, unsigned 32 bits */
-typedef unsigned short t16;
-typedef unsigned t32;
 
 #ifndef  MH_MAGIC
 /* mach-o 32bit */
@@ -116,6 +125,12 @@ typedef unsigned t32;
 #endif /*  MH_MAGIC_64 */
 
 #ifdef WORDS_BIGENDIAN
+#define ASNAR(func,t,s)                         \
+    do {                                        \
+        unsigned tbyte = sizeof(t) - sizeof(s); \
+        t = 0;                                  \
+        func(((char *)t)+tbyte ,&s[0],sizeof(s));  \
+    } while (0)
 #define ASSIGN(func,t,s)                        \
     do {                                        \
         unsigned tbyte = sizeof(t) - sizeof(s); \
@@ -123,6 +138,11 @@ typedef unsigned t32;
         func(((char *)t)+tbyte ,&s,sizeof(s));  \
     } while (0)
 #else /* LITTLE ENDIAN */
+#define ASNAR(func,t,s)                         \
+    do {                                        \
+        t = 0;                                  \
+        func(&t,&s[0],sizeof(s));               \
+    } while (0)
 #define ASSIGN(func,t,s)                        \
     do {                                        \
         t = 0;                                  \
@@ -135,9 +155,9 @@ typedef unsigned t32;
 /* An incomplete elf header, good for 32 and 64bit elf */
 struct elf_header {
     unsigned char  e_ident[EI_NIDENT];
-    t16 e_type;
-    t16 e_machine;
-    t32 e_version;
+    TYP(e_type,2);
+    TYP(e_machine,2);
+    TYP(e_version,4);
 };
 
 /*  Windows. Certain PE objects.
@@ -163,9 +183,9 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ms680341(v=vs.85).aspx 
 /* ===== START pe structures */
 
 struct dos_header {
-    t16  dh_mz;
-    char dh_dos_data[58];
-    t32  dh_image_offset;
+    TYP(dh_mz,2);
+    TYP(dh_dos_data,58);
+    TYP(dh_image_offset,4);
 };
 
 #define IMAGE_DOS_SIGNATURE      0x5A4D
@@ -177,11 +197,11 @@ struct dos_header {
 
 
 struct pe_image_file_header {
-    t16 im_machine;
-    t16 im_sectioncount;
-    t32 im_ignoring[3];
-    t16 im_opt_header_size;
-    t16 im_ignoringb;
+    TYP(im_machine,2);
+    TYP(im_sectioncount,2);
+    TYP(im_ignoring,(3*4));
+    TYP(im_opt_header_size,2);
+    TYP(im_ignoringb,2);
 };
 
 /* ===== END pe structures */
@@ -377,17 +397,19 @@ is_pe_object(int fd,
     unsigned *offsetsize,
     int *errcode)
 {
-    t16 dos_sig;
+    unsigned dos_sig;
     unsigned locendian = 0;
     void *(*word_swap) (void *, const void *, size_t);
-    t32 nt_address = 0;
+    unsigned long nt_address = 0;
     struct dos_header dhinmem;
-    t16 nt_sig = 0;
+    char nt_sig_array[4];
+    unsigned long nt_sig = 0;
     struct pe_image_file_header ifh;
     int res = 0;
 
     if (filesize < (sizeof (struct dos_header) +
-        sizeof(t32) + sizeof(struct pe_image_file_header))) {
+        SIZEOFT32 + 
+        sizeof(struct pe_image_file_header))) {
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
     }
@@ -396,7 +418,8 @@ is_pe_object(int fd,
     if (res != DW_DLV_OK) {
         return res;
     }
-    dos_sig = dhinmem.dh_mz;
+    /* No swap here, want it as in the file */
+    ASSIGN(memcpy,dos_sig,dhinmem.dh_mz);
     if (dos_sig == IMAGE_DOS_SIGNATURE) {
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy_swap_bytes;
@@ -416,25 +439,26 @@ is_pe_object(int fd,
         *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
         return DW_DLV_ERROR;
     }
-    ASSIGN(word_swap,nt_address, dhinmem.dh_image_offset);
+    ASNAR(word_swap,nt_address, dhinmem.dh_image_offset);
     if (filesize < nt_address) {
         /* Not dos header not a PE file we recognize */
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
     }
-    if (filesize < (nt_address + sizeof(t32) +
+    if (filesize < (nt_address + 
+        SIZEOFT32 +
         sizeof(struct pe_image_file_header))) {
         *errcode = RO_ERR_TOOSMALL;
         /* Not dos header not a PE file we recognize */
         return DW_DLV_ERROR;
     }
-    res =  object_read_random(fd,(char *)&nt_sig,nt_address,
-        sizeof(nt_sig),errcode);
+    res =  object_read_random(fd,(char *)&nt_sig_array[0],
+        nt_address, sizeof(nt_sig_array),errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
-    {   t32 lsig = 0;
-        ASSIGN(word_swap,lsig,nt_sig);
+    {   unsigned long lsig = 0;
+        ASNAR(word_swap,lsig,nt_sig_array);
         nt_sig = lsig;
     }
     if (nt_sig != IMAGE_NT_SIGNATURE) {
@@ -442,16 +466,16 @@ is_pe_object(int fd,
         return DW_DLV_ERROR;
     }
     res = object_read_random(fd,(char *)&ifh,
-        nt_address + sizeof(t32),
+        nt_address + SIZEOFT32, 
         sizeof(struct pe_image_file_header),
         errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
     {
-        t32 machine = 0;
+        unsigned long machine = 0;
 
-        ASSIGN(word_swap,machine,ifh.im_machine);
+        ASNAR(word_swap,machine,ifh.im_machine);
         switch(machine) {
         case IMAGE_FILE_MACHINE_I386:
             *offsetsize = 32;
@@ -475,11 +499,18 @@ is_mach_o_magic(struct elf_header *h,
     unsigned *endian,
     unsigned *offsetsize)
 {
-    t32 magicval = 0;
+    unsigned long magicval = 0;
     unsigned locendian = 0;
     unsigned locoffsetsize = 0;
+    char t[4];
 
-    memcpy(&magicval,h,sizeof(magicval));
+    t[0] = h->e_ident[0];
+    t[1] = h->e_ident[1];
+    t[2] = h->e_ident[2];
+    t[3] = h->e_ident[3];
+    /*  No swapping here. Need t to match size of
+        Mach-o magic field. */
+    ASNAR(memcpy,magicval,t);
     if (magicval == MH_MAGIC) {
         locendian = DW_ENDIAN_SAME;
         locoffsetsize = 32;
@@ -515,10 +546,6 @@ dwarf_object_detector_fd(int fd,
     off_t lsval = 0;
     ssize_t readval = 0;
 
-    if (sizeof(t32) != 4 || sizeof(t16)!= 2) {
-        *errcode = RO_ERR_BADTYPESIZE;
-        return DW_DLV_ERROR;
-    }
     fsize = lseek(fd,0L,SEEK_END);
     if(fsize < 0) {
         *errcode = RO_ERR_SEEK;

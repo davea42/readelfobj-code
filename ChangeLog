@@ -1,3 +1,5 @@
+2018-10-20: David Anderson
+    * configure.ac: Now version 20181020.
 2018-10-18: David Anderson
     * Removed the dwarf_object_detector_f()
       interface completely.  Access via FILE*
