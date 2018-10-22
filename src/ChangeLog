@@ -1,3 +1,11 @@
+2018-10-22  David Anderson
+    * macho-loader.h: Removed all use of uint*_t
+      by making all these little arrays.
+    * dwarf_machoread.c,dwarf_object_detector.c: Using
+      the array form and ASNAR macro so configuring
+      is simpler.
+    * dwarf_reading.h: Removed unused typedefs.
+
 2018-10-20  David Anderson
     * dwarf_machread.c: Moved ASSIGNMO macro to this file.
     * dwarf_machread.h: Moved ASSIGNMO macro out of here.

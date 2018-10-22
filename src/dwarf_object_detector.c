@@ -62,8 +62,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     that do not have any alignment-forced (hidden)
     unused bytes so reading lengths from the real structs
     works for each variable.  */
-
+#ifndef TYP
 #define TYP(n,l) char n[l]
+#endif /* TYPE */
 #define SIZEOFT32 4
 
 #define DW_DLV_NO_ENTRY -1

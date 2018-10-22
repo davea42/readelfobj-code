@@ -55,18 +55,22 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_detector.h"
 #include "macho-loader.h"
 
+#ifndef TYP
+#define TYP(n,l) char n[l]
+#endif /* TYPE */
+
 #ifdef WORDS_BIGENDIAN
-#define ASSIGNMO(cpfunc,t,s)                    \
+#define ASNAR(func,t,s)                         \
     do {                                        \
         unsigned tbyte = sizeof(t) - sizeof(s); \
         t = 0;                                  \
-        cpfunc(((char *)t)+tbyte ,&s,sizeof(s)); \
+        func(((char *)t)+tbyte ,&s[0],sizeof(s));  \
     } while (0)
 #else /* LITTLE ENDIAN */
-#define ASSIGNMO(cpfunc,t,s)               \
-    do {                                   \
-        t = 0;                             \
-        cpfunc(&t,&s,sizeof(s)); \
+#define ASNAR(func,t,s)                         \
+    do {                                        \
+        t = 0;                                  \
+        func(&t,&s[0],sizeof(s));               \
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
 
@@ -236,13 +240,13 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
         return res;
     }
     /* Do not adjust endianness of magic, leave as-is. */
-    mfp->mo_header.magic = mh32.magic;
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.cputype,mh32.cputype);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.cpusubtype,mh32.cpusubtype);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.filetype,mh32.filetype);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.ncmds,mh32.ncmds);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.sizeofcmds,mh32.sizeofcmds);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.flags,mh32.flags);
+    ASNAR(memcpy,mfp->mo_header.magic,mh32.magic);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.cputype,mh32.cputype);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.cpusubtype,mh32.cpusubtype);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.filetype,mh32.filetype);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.ncmds,mh32.ncmds);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.sizeofcmds,mh32.sizeofcmds);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh32.flags);
     mfp->mo_header.reserved = 0;
     mfp->mo_command_count = mfp->mo_header.ncmds;
     mfp->mo_command_start_offset = sizeof(mh32);
@@ -261,14 +265,14 @@ load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
         return res;
     }
     /* Do not adjust endianness of magic, leave as-is. */
-    mfp->mo_header.magic = mh64.magic;
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.cputype,mh64.cputype);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.cpusubtype,mh64.cpusubtype);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.filetype,mh64.filetype);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.ncmds,mh64.ncmds);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.sizeofcmds,mh64.sizeofcmds);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.flags,mh64.flags);
-    ASSIGNMO(mfp->mo_copy_word,mfp->mo_header.reserved,mh64.reserved);
+    ASNAR(memcpy,mfp->mo_header.magic,mh64.magic);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.cputype,mh64.cputype);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.cpusubtype,mh64.cpusubtype);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.filetype,mh64.filetype);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.ncmds,mh64.ncmds);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.sizeofcmds,mh64.sizeofcmds);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh64.flags);
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.reserved,mh64.reserved);
     mfp->mo_command_count = mfp->mo_header.ncmds;
     mfp->mo_command_start_offset = sizeof(mh64);
     return DW_DLV_OK;
@@ -315,14 +319,14 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     if (res != DW_DLV_OK) {
         return res;
     }
-    ASSIGNMO(mfp->mo_copy_word,msp->cmd,sc.cmd);
-    ASSIGNMO(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
+    ASNAR(mfp->mo_copy_word,msp->cmd,sc.cmd);
+    ASNAR(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
     strncpy(msp->segname,sc.segname,16);
     msp->segname[16] =0;
-    ASSIGNMO(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
-    ASSIGNMO(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
-    ASSIGNMO(mfp->mo_copy_word,msp->fileoff,sc.fileoff);
-    ASSIGNMO(mfp->mo_copy_word,msp->filesize,sc.filesize);
+    ASNAR(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
+    ASNAR(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
+    ASNAR(mfp->mo_copy_word,msp->fileoff,sc.fileoff);
+    ASNAR(mfp->mo_copy_word,msp->filesize,sc.filesize);
     if (msp->fileoff > mfp->mo_filesize ||
         msp->filesize > mfp->mo_filesize) {
         /* corrupt */
@@ -334,10 +338,10 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
-    ASSIGNMO(mfp->mo_copy_word,msp->maxprot,sc.maxprot);
-    ASSIGNMO(mfp->mo_copy_word,msp->initprot,sc.initprot);
-    ASSIGNMO(mfp->mo_copy_word,msp->nsects,sc.nsects);
-    ASSIGNMO(mfp->mo_copy_word,msp->flags,sc.flags);
+    ASNAR(mfp->mo_copy_word,msp->maxprot,sc.maxprot);
+    ASNAR(mfp->mo_copy_word,msp->initprot,sc.initprot);
+    ASNAR(mfp->mo_copy_word,msp->nsects,sc.nsects);
+    ASNAR(mfp->mo_copy_word,msp->flags,sc.flags);
     msp->macho_command_index = mmpindex;
     msp->sectionsoffset = afterseghdr;
     return DW_DLV_OK;
@@ -364,14 +368,14 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     if (res != DW_DLV_OK) {
         return res;
     }
-    ASSIGNMO(mfp->mo_copy_word,msp->cmd,sc.cmd);
-    ASSIGNMO(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
+    ASNAR(mfp->mo_copy_word,msp->cmd,sc.cmd);
+    ASNAR(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
     strncpy(msp->segname,sc.segname,16);
     msp->segname[16] =0;
-    ASSIGNMO(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
-    ASSIGNMO(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
-    ASSIGNMO(mfp->mo_copy_word,msp->fileoff,sc.fileoff);
-    ASSIGNMO(mfp->mo_copy_word,msp->filesize,sc.filesize);
+    ASNAR(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
+    ASNAR(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
+    ASNAR(mfp->mo_copy_word,msp->fileoff,sc.fileoff);
+    ASNAR(mfp->mo_copy_word,msp->filesize,sc.filesize);
     if (msp->fileoff > filesize ||
         msp->filesize > filesize) {
         /* corrupt */
@@ -382,10 +386,10 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
-    ASSIGNMO(mfp->mo_copy_word,msp->maxprot,sc.maxprot);
-    ASSIGNMO(mfp->mo_copy_word,msp->initprot,sc.initprot);
-    ASSIGNMO(mfp->mo_copy_word,msp->nsects,sc.nsects);
-    ASSIGNMO(mfp->mo_copy_word,msp->flags,sc.flags);
+    ASNAR(mfp->mo_copy_word,msp->maxprot,sc.maxprot);
+    ASNAR(mfp->mo_copy_word,msp->initprot,sc.initprot);
+    ASNAR(mfp->mo_copy_word,msp->nsects,sc.nsects);
+    ASNAR(mfp->mo_copy_word,msp->flags,sc.flags);
     msp->macho_command_index = mmpindex;
     msp->sectionsoffset = afterseghdr;
     return DW_DLV_OK;
@@ -466,13 +470,13 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         secs->sectname[16] = 0;
         strncpy(secs->segname,mosec.segname,16);
         secs->segname[16] = 0;
-        ASSIGNMO(mfp->mo_copy_word,secs->addr,mosec.addr);
-        ASSIGNMO(mfp->mo_copy_word,secs->size,mosec.size);
-        ASSIGNMO(mfp->mo_copy_word,secs->offset,mosec.offset);
-        ASSIGNMO(mfp->mo_copy_word,secs->align,mosec.align);
-        ASSIGNMO(mfp->mo_copy_word,secs->reloff,mosec.reloff);
-        ASSIGNMO(mfp->mo_copy_word,secs->nreloc,mosec.nreloc);
-        ASSIGNMO(mfp->mo_copy_word,secs->flags,mosec.flags);
+        ASNAR(mfp->mo_copy_word,secs->addr,mosec.addr);
+        ASNAR(mfp->mo_copy_word,secs->size,mosec.size);
+        ASNAR(mfp->mo_copy_word,secs->offset,mosec.offset);
+        ASNAR(mfp->mo_copy_word,secs->align,mosec.align);
+        ASNAR(mfp->mo_copy_word,secs->reloff,mosec.reloff);
+        ASNAR(mfp->mo_copy_word,secs->nreloc,mosec.nreloc);
+        ASNAR(mfp->mo_copy_word,secs->flags,mosec.flags);
         if (secs->offset > mfp->mo_filesize ||
             secs->size > mfp->mo_filesize ||
             (secs->offset+secs->size) > mfp->mo_filesize) {
@@ -525,13 +529,13 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         secs->sectname[16] = 0;
         strncpy(secs->segname,mosec.segname,16);
         secs->segname[16] = 0;
-        ASSIGNMO(mfp->mo_copy_word,secs->addr,mosec.addr);
-        ASSIGNMO(mfp->mo_copy_word,secs->size,mosec.size);
-        ASSIGNMO(mfp->mo_copy_word,secs->offset,mosec.offset);
-        ASSIGNMO(mfp->mo_copy_word,secs->align,mosec.align);
-        ASSIGNMO(mfp->mo_copy_word,secs->reloff,mosec.reloff);
-        ASSIGNMO(mfp->mo_copy_word,secs->nreloc,mosec.nreloc);
-        ASSIGNMO(mfp->mo_copy_word,secs->flags,mosec.flags);
+        ASNAR(mfp->mo_copy_word,secs->addr,mosec.addr);
+        ASNAR(mfp->mo_copy_word,secs->size,mosec.size);
+        ASNAR(mfp->mo_copy_word,secs->offset,mosec.offset);
+        ASNAR(mfp->mo_copy_word,secs->align,mosec.align);
+        ASNAR(mfp->mo_copy_word,secs->reloff,mosec.reloff);
+        ASNAR(mfp->mo_copy_word,secs->nreloc,mosec.nreloc);
+        ASNAR(mfp->mo_copy_word,secs->flags,mosec.flags);
         if (secs->offset > mfp->mo_filesize ||
             secs->size > mfp->mo_filesize ||
             (secs->offset+secs->size) > mfp->mo_filesize) {
@@ -623,8 +627,8 @@ dwarf_load_macho_commands(struct macho_filedata_s *mfp,int *errcode)
         if (res != RO_OK) {
             return res;
         }
-        ASSIGNMO(mfp->mo_copy_word,mcp->cmd,mc.cmd);
-        ASSIGNMO(mfp->mo_copy_word,mcp->cmdsize,mc.cmdsize);
+        ASNAR(mfp->mo_copy_word,mcp->cmd,mc.cmd);
+        ASNAR(mfp->mo_copy_word,mcp->cmdsize,mc.cmdsize);
         mcp->offset_this_command = curoff;
         curoff += mcp->cmdsize;
         cmdspace += mcp->cmdsize;

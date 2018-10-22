@@ -37,11 +37,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-/* uint*_t are for macho-loader.h */
-#define uint16_t  unsigned DW_TYPEOF_16BIT
-#define uint32_t  unsigned DW_TYPEOF_32BIT
-#define uint8_t  unsigned char
-
 #ifndef DW_DLV_OK
 /* DW_DLV_OK  must match RO_OK */
 /* DW_DLV_NO_ENTRY  must match FIXME */
