@@ -1,3 +1,6 @@
+2018-10-22: David Anderson
+    * configure.ac: 20181021. Removed no-longer-needed
+      type-size checking.
 2018-10-20: David Anderson
     * configure.ac: Now version 20181020.
 2018-10-18: David Anderson
