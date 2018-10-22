@@ -925,8 +925,8 @@ struct dysymtab_command {
     uint32_t ilocalsym;    /* index to local symbols */
     uint32_t nlocalsym;    /* number of local symbols */
 
-    uint32_t iextdefsym;/* index to externally defined symbols */
-    uint32_t nextdefsym;/* number of externally defined symbols */
+    uint32_t iextdefsym;  /* index to externally defined symbols */
+    uint32_t nextdefsym;  /* number of externally defined symbols */
 
     uint32_t iundefsym;    /* index to undefined symbols */
     uint32_t nundefsym;    /* number of undefined symbols */
@@ -1058,10 +1058,13 @@ struct dylib_module {
         entries, high 16 bits are the number of
         term section entries */
 
-    uint32_t            /* for this module address of the start of */
-    objc_module_info_addr;  /*  the (__OBJC,__module_info) section */
-    uint32_t            /* for this module size of */
-    objc_module_info_size;    /*  the (__OBJC,__module_info) section */
+    /* for this module address of the start of */
+    /*  the (__OBJC,__module_info) section */
+    uint32_t objc_module_info_addr; 
+
+    /* for this module size of */
+    /*  the (__OBJC,__module_info) section */
+    uint32_t  objc_module_info_size;
 };
 
 /* a 64-bit module table entry */
@@ -1085,10 +1088,10 @@ struct dylib_module_64 {
         entries, high 16 bits are the number of
         term section entries */
 
-    uint32_t            /* for this module size of */
-        objc_module_info_size;    /*  the (__OBJC,__module_info) section */
-    uint64_t            /* for this module address of the start of */
-        objc_module_info_addr;    /*  the (__OBJC,__module_info) section */
+    uint32_t  objc_module_info_size; /* for this module size of */
+        /*  the (__OBJC,__module_info) section */
+    uint64_t objc_module_info_addr; /* for this module address of the start of */
+        /*  the (__OBJC,__module_info) section */
 };
 
 /*
@@ -1099,10 +1102,12 @@ struct dylib_module_64 {
 * reference that is being made.  The constants for the flags are defined in
 * <mach-o/nlist.h> as they are also used for symbol table entries.
 */
+#if 0 /* dwarf readers not using this
 struct dylib_reference {
     uint32_t isym:24,        /* index into the symbol table */
     flags:8;    /* flags to indicate the type of reference */
 };
+#endif /* 0 */
 
 /*
 * The twolevel_hints_command contains the offset and number of hints in the
