@@ -66,7 +66,7 @@ extern "C" {
 #endif /* DW_ENDIAN_UNKNOWN */
 
 /*  offsetsize refers to the object-file-format.
-    Elf 32 or macho-32 or PE 32, for example. 
+    Elf 32 or macho-32 or PE 32, for example.
     Not to DWARF offset sizes.  */
 
 /*  Path means look(first) for an dynsym object
@@ -79,7 +79,7 @@ extern "C" {
     For non-MacOS outpath will contain the string
     taken from path.
 
-    If DW_DLV_NO_ENTRY or DW_DLV_ERROR returned 
+    If DW_DLV_NO_ENTRY or DW_DLV_ERROR returned
     the argument values other than path
     must be considered to be in an unknown state. */
 

@@ -409,7 +409,7 @@ is_pe_object(int fd,
     int res = 0;
 
     if (filesize < (sizeof (struct dos_header) +
-        SIZEOFT32 + 
+        SIZEOFT32 +
         sizeof(struct pe_image_file_header))) {
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
@@ -446,7 +446,7 @@ is_pe_object(int fd,
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
     }
-    if (filesize < (nt_address + 
+    if (filesize < (nt_address +
         SIZEOFT32 +
         sizeof(struct pe_image_file_header))) {
         *errcode = RO_ERR_TOOSMALL;
@@ -467,7 +467,7 @@ is_pe_object(int fd,
         return DW_DLV_ERROR;
     }
     res = object_read_random(fd,(char *)&ifh,
-        nt_address + SIZEOFT32, 
+        nt_address + SIZEOFT32,
         sizeof(struct pe_image_file_header),
         errcode);
     if (res != DW_DLV_OK) {
