@@ -62,7 +62,7 @@ extern "C" {
 #endif /* 0 */
 
 #ifndef TYP
-#define TYP(n,l) char n[l];
+#define TYP(n,l) char n[l]
 #endif /* TYP */
 
 /*

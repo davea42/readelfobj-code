@@ -4,15 +4,15 @@ readelfobj \- dumps ELF object headers.
 .SH SYNOPSIS
 .B readelfobj [options] \f2objectfilename\fP ...
 .SH DESCRIPTION
-The 
+The
 .B readelfobj
 command prints and checks ELF object file headers.
-With no options (but with the required \f2objectfilename\fP) 
+With no options (but with the required \f2objectfilename\fP)
 all headers print and a short report of space wasted
 in the object prints at the end.
 .PP
 Elf files are read from first-principles using
-standard C functions (libelf is not used).  
+standard C functions (libelf is not used).
 Full checking of all fields for sanity
 ensures objects with bad headers are detected and
 reported.

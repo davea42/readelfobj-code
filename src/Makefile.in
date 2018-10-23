@@ -386,6 +386,7 @@ dwarf_object_detector.c \
 dwarf_object_detector.h \
 dwarf_machoread.h \
 dwarf_machoread.c \
+dw_elfstructs.h \
 macho-loader.h \
 sanitized.c
 
