@@ -39,21 +39,6 @@ extern int printfilenames;
 extern FILE *fin;
 
 int cur_read_loc(FILE *fin, long* fileoffset);
-#ifdef WORDS_BIGENDIAN
-#define ASSIGNMO(gp,t,s)                             \
-    do {                                        \
-        unsigned tbyte = sizeof(t) - sizeof(s); \
-        t = 0;                                  \
-        gp->mo_copy_word(((char *)t)+tbyte ,&s,sizeof(s)); \
-    } while (0)
-
-#else /* LITTLE ENDIAN */
-#define ASSIGNMO(gp,t,s)                             \
-    do {                                        \
-        t = 0;                                  \
-        gp->mo_copy_word(&t,&s,sizeof(s));    \
-    } while (0)
-#endif /* end LITTLE- BIG-ENDIAN */
 
 struct generic_macho_header {
     LONGESTUTYPE   magic;

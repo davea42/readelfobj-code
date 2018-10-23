@@ -125,12 +125,6 @@ extern "C" {
     ((fread(buf,(long)siz,1,fin)!=1)?RO_ERR_READ:RO_OK))
 #define RNMO(f,buf,siz)  ((fread(buf,siz,1,f) != 1) ? RO_ERR_READ  : RO_OK)
 #ifdef WORDS_BIGENDIAN
-#define ASSIGN(func,t,s)                             \
-    do {                                        \
-        unsigned tbyte = sizeof(t) - sizeof(s); \
-        t = 0;                                  \
-        func(((char *)t)+tbyte ,&s,sizeof(s)); \
-    } while (0)
 #define SIGN_EXTEND(dest, length)           \
     do {                                    \
         if (*(signed char *)((char *)&dest +\
@@ -141,11 +135,6 @@ extern "C" {
     } while (0)
 
 #else /* LITTLE ENDIAN */
-#define ASSIGN(func,t,s)                             \
-    do {                                        \
-        t = 0;                                  \
-        func(&t,&s,sizeof(s));    \
-    } while (0)
 #define SIGN_EXTEND(dest, length)                               \
     do {                                                        \
         if (*(signed char *)((char *)&dest + (length-1)) < 0) { \

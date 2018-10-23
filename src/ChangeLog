@@ -1,4 +1,8 @@
 2018-10-23  David Anderson
+    * dwarf_object_detector.c,dwarf_reading.h,readobjmacho.h:
+      Removed no-longer-used macro definitions such as
+      ASSIGN and ASSIGNMO.
+2018-10-23  David Anderson
     * dw_elfstructs.h: New, all-char-arrays part
       of the standard Elf.h.  Does not replace
       Elf.h.
