@@ -70,13 +70,13 @@ extern "C" {
 * 32-bit architectures.
 */
 struct mach_header {
-    TYP(magic,4); /* mach magic number identifier */;
-    TYP(cputype,4); /* cpu specifier */;
-    TYP(cpusubtype,4); /* machine specifier */;
-    TYP(filetype,4); /* type of file */;
-    TYP(ncmds,4); /* number of load commands */;
-    TYP(sizeofcmds,4); /* the size of all the load commands */;
-    TYP(flags,4); /* flags */;
+    TYP(magic,4); /* mach magic number identifier */
+    TYP(cputype,4); /* cpu specifier */
+    TYP(cpusubtype,4); /* machine specifier */
+    TYP(filetype,4); /* type of file */
+    TYP(ncmds,4); /* number of load commands */
+    TYP(sizeofcmds,4); /* the size of all the load commands */
+    TYP(flags,4); /* flags */
 };
 
 /* Constant for the magic field of the mach_header (32-bit architectures) */
@@ -88,14 +88,14 @@ struct mach_header {
 * 64-bit architectures.
 */
 struct mach_header_64 {
-    TYP(magic,4); /* mach magic number identifier */;
-    TYP(cputype,4); /* cpu specifier */;
-    TYP(cpusubtype,4); /* machine specifier */;
-    TYP(filetype,4); /* type of file */;
-    TYP(ncmds,4); /* number of load commands */;
-    TYP(sizeofcmds,4); /* the size of all the load commands */;
-    TYP(flags,4); /* flags */;
-    TYP(reserved,4); /* reserved */;
+    TYP(magic,4); /* mach magic number identifier */
+    TYP(cputype,4); /* cpu specifier */
+    TYP(cpusubtype,4); /* machine specifier */
+    TYP(filetype,4); /* type of file */
+    TYP(ncmds,4); /* number of load commands */
+    TYP(sizeofcmds,4); /* the size of all the load commands */
+    TYP(flags,4); /* flags */
+    TYP(reserved,4); /* reserved */
 };
 
 /* Constant for the magic field of the mach_header_64 (64-bit architectures) */
@@ -246,8 +246,8 @@ struct mach_header_64 {
 * padding zeroed like objects will compare byte for byte.
 */
 struct load_command {
-    TYP(cmd,4); /* type of load command */;
-    TYP(cmdsize,4); /* total size of command in bytes */;
+    TYP(cmd,4); /* type of load command */
+    TYP(cmdsize,4); /* total size of command in bytes */
 };
 
 /*
@@ -330,7 +330,7 @@ struct load_command {
 * of 4 bytes must be zero.
 */
 union lc_str {
-    TYP(offset,4); /* offset to the string */;
+    TYP(offset,4); /* offset to the string */
 #ifndef __LP64__
     char        *ptr;    /* pointer to the string */
 #endif
@@ -349,17 +349,17 @@ union lc_str {
 * reflected in cmdsize.
 */
 struct segment_command { /* for 32-bit architectures */
-    TYP(cmd,4); /* LC_SEGMENT */;
-    TYP(cmdsize,4); /* includes sizeof section structs */;
+    TYP(cmd,4); /* LC_SEGMENT */
+    TYP(cmdsize,4); /* includes sizeof section structs */
     char        segname[16];    /* segment name */
-    TYP(vmaddr,4); /* memory address of this segment */;
-    TYP(vmsize,4); /* memory size of this segment */;
-    TYP(fileoff,4); /* file offset of this segment */;
-    TYP(filesize,4); /* amount to map from the file */;
-    TYP(maxprot,4); /* maximum VM protection */;
-    TYP(initprot,4); /* initial VM protection */;
-    TYP(nsects,4); /* number of sections in segment */;
-    TYP(flags,4); /* flags */;
+    TYP(vmaddr,4); /* memory address of this segment */
+    TYP(vmsize,4); /* memory size of this segment */
+    TYP(fileoff,4); /* file offset of this segment */
+    TYP(filesize,4); /* amount to map from the file */
+    TYP(maxprot,4); /* maximum VM protection */
+    TYP(initprot,4); /* initial VM protection */
+    TYP(nsects,4); /* number of sections in segment */
+    TYP(flags,4); /* flags */
 };
 
 /*
@@ -369,17 +369,17 @@ struct segment_command { /* for 32-bit architectures */
 * command and their size is reflected in cmdsize.
 */
 struct segment_command_64 { /* for 64-bit architectures */
-    TYP(cmd,4); /* LC_SEGMENT_64 */;
-    TYP(cmdsize,4); /* includes sizeof section_64 structs */;
+    TYP(cmd,4); /* LC_SEGMENT_64 */
+    TYP(cmdsize,4); /* includes sizeof section_64 structs */
     char        segname[16];    /* segment name */
-    TYP(vmaddr,8); /* memory address of this segment */;
-    TYP(vmsize,8); /* memory size of this segment */;
-    TYP(fileoff,8); /* file offset of this segment */;
-    TYP(filesize,8); /* amount to map from the file */;
-    TYP(maxprot,4); /* maximum VM protection */;
-    TYP(initprot,4); /* initial VM protection */;
-    TYP(nsects,4); /* number of sections in segment */;
-    TYP(flags,4); /* flags */;
+    TYP(vmaddr,8); /* memory address of this segment */
+    TYP(vmsize,8); /* memory size of this segment */
+    TYP(fileoff,8); /* file offset of this segment */
+    TYP(filesize,8); /* amount to map from the file */
+    TYP(maxprot,4); /* maximum VM protection */
+    TYP(initprot,4); /* initial VM protection */
+    TYP(nsects,4); /* number of sections in segment */
+    TYP(flags,4); /* flags */
 };
 
 /* Constants for the flags field of the segment_command */
@@ -428,30 +428,30 @@ struct segment_command_64 { /* for 64-bit architectures */
 struct section { /* for 32-bit architectures */
     char        sectname[16];    /* name of this section */
     char        segname[16];    /* segment this section goes in */
-    TYP(addr,4); /* memory address of this section */;
-    TYP(size,4); /* size in bytes of this section */;
-    TYP(offset,4); /* file offset of this section */;
-    TYP(align,4); /* section alignment (power of 2) */;
-    TYP(reloff,4); /* file offset of relocation entries */;
-    TYP(nreloc,4); /* number of relocation entries */;
-    TYP(flags,4); /* flags (section type and attributes)*/;
-    TYP(reserved1,4); /* reserved (for offset or index) */;
-    TYP(reserved2,4); /* reserved (for count or sizeof) */;
+    TYP(addr,4); /* memory address of this section */
+    TYP(size,4); /* size in bytes of this section */
+    TYP(offset,4); /* file offset of this section */
+    TYP(align,4); /* section alignment (power of 2) */
+    TYP(reloff,4); /* file offset of relocation entries */
+    TYP(nreloc,4); /* number of relocation entries */
+    TYP(flags,4); /* flags (section type and attributes)*/
+    TYP(reserved1,4); /* reserved (for offset or index) */
+    TYP(reserved2,4); /* reserved (for count or sizeof) */
 };
 
 struct section_64 { /* for 64-bit architectures */
     char        sectname[16];    /* name of this section */
     char        segname[16];    /* segment this section goes in */
-    TYP(addr,8); /* memory address of this section */;
-    TYP(size,8); /* size in bytes of this section */;
-    TYP(offset,4); /* file offset of this section */;
-    TYP(align,4); /* section alignment (power of 2) */;
-    TYP(reloff,4); /* file offset of relocation entries */;
-    TYP(nreloc,4); /* number of relocation entries */;
-    TYP(flags,4); /* flags (section type and attributes)*/;
-    TYP(reserved1,4); /* reserved (for offset or index) */;
-    TYP(reserved2,4); /* reserved (for count or sizeof) */;
-    TYP(reserved3,4); /* reserved */;
+    TYP(addr,8); /* memory address of this section */
+    TYP(size,8); /* size in bytes of this section */
+    TYP(offset,4); /* file offset of this section */
+    TYP(align,4); /* section alignment (power of 2) */
+    TYP(reloff,4); /* file offset of relocation entries */
+    TYP(nreloc,4); /* number of relocation entries */
+    TYP(flags,4); /* flags (section type and attributes)*/
+    TYP(reserved1,4); /* reserved (for offset or index) */
+    TYP(reserved2,4); /* reserved (for count or sizeof) */
+    TYP(reserved3,4); /* reserved */
 };
 
 /*
@@ -629,8 +629,8 @@ struct section_64 { /* for 64-bit architectures */
 */
 struct fvmlib {
     union lc_str    name;        /* library's target pathname */
-    TYP(minor_version,4); /* library's minor version number */;
-    TYP(header_addr,4); /* library's header address */;
+    TYP(minor_version,4); /* library's minor version number */
+    TYP(header_addr,4); /* library's header address */
 };
 
 /*
@@ -641,8 +641,8 @@ struct fvmlib {
 * (THIS IS OBSOLETE and no longer supported).
 */
 struct fvmlib_command {
-    TYP(cmd,4); /* LC_IDFVMLIB or LC_LOADFVMLIB */;
-    TYP(cmdsize,4); /* includes pathname string */;
+    TYP(cmd,4); /* LC_IDFVMLIB or LC_LOADFVMLIB */
+    TYP(cmdsize,4); /* includes pathname string */
     struct fvmlib    fvmlib;        /* the library identification */
 };
 
@@ -657,9 +657,9 @@ struct fvmlib_command {
 */
 struct dylib {
     union lc_str  name;            /* library's path name */
-    TYP(timestamp,4); /* library's build time stamp */;
-    TYP(current_version,4); /* library's current version number */;
-    TYP(compatibility_version,4); /* library's compatibility vers number*/;
+    TYP(timestamp,4); /* library's build time stamp */
+    TYP(current_version,4); /* library's current version number */
+    TYP(compatibility_version,4); /* library's compatibility vers number*/
 };
 
 /*
@@ -670,9 +670,9 @@ struct dylib {
 * LC_REEXPORT_DYLIB) for each library it uses.
 */
 struct dylib_command {
-    TYP(cmd,4); /* LC_ID_DYLIB, LC_LOAD_{,WEAK_}DYLIB,;
+    TYP(cmd,4); /* LC_ID_DYLIB, LC_LOAD_{,WEAK_}DYLIB,
         LC_REEXPORT_DYLIB */
-    TYP(cmdsize,4); /* includes pathname string */;
+    TYP(cmdsize,4); /* includes pathname string */
     struct dylib    dylib;        /* the library identification */
 };
 
@@ -687,8 +687,8 @@ struct dylib_command {
 * following structure.
 */
 struct sub_framework_command {
-    TYP(cmd,4); /* LC_SUB_FRAMEWORK */;
-    TYP(cmdsize,4); /* includes umbrella string */;
+    TYP(cmd,4); /* LC_SUB_FRAMEWORK */
+    TYP(cmdsize,4); /* includes umbrella string */
     union lc_str     umbrella;    /* the umbrella framework name */
 };
 
@@ -702,8 +702,8 @@ struct sub_framework_command {
 * where the bundle is built with "-client_name client_name".
 */
 struct sub_client_command {
-    TYP(cmd,4); /* LC_SUB_CLIENT */;
-    TYP(cmdsize,4); /* includes client string */;
+    TYP(cmd,4); /* LC_SUB_CLIENT */
+    TYP(cmdsize,4); /* includes client string */
     union lc_str     client;        /* the client name */
 };
 
@@ -721,8 +721,8 @@ struct sub_client_command {
 * The name of a sub_umbrella framework is recorded in the following structure.
 */
 struct sub_umbrella_command {
-    TYP(cmd,4); /* LC_SUB_UMBRELLA */;
-    TYP(cmdsize,4); /* includes sub_umbrella string */;
+    TYP(cmd,4); /* LC_SUB_UMBRELLA */
+    TYP(cmdsize,4); /* includes sub_umbrella string */
     union lc_str     sub_umbrella;    /* the sub_umbrella framework name */
 };
 
@@ -742,8 +742,8 @@ struct sub_umbrella_command {
 * For example /usr/lib/libobjc_profile.A.dylib would be recorded as "libobjc".
 */
 struct sub_library_command {
-    TYP(cmd,4); /* LC_SUB_LIBRARY */;
-    TYP(cmdsize,4); /* includes sub_library string */;
+    TYP(cmd,4); /* LC_SUB_LIBRARY */
+    TYP(cmdsize,4); /* includes sub_library string */
     union lc_str     sub_library;    /* the sub_library name */
 };
 
@@ -757,10 +757,10 @@ struct sub_library_command {
 * (linked_modules[N/8] >> N%8) & 1
 */
 struct prebound_dylib_command {
-    TYP(cmd,4); /* LC_PREBOUND_DYLIB */;
-    TYP(cmdsize,4); /* includes strings */;
+    TYP(cmd,4); /* LC_PREBOUND_DYLIB */
+    TYP(cmdsize,4); /* includes strings */
     union lc_str    name;        /* library's path name */
-    TYP(nmodules,4); /* number of modules in library */;
+    TYP(nmodules,4); /* number of modules in library */
     union lc_str    linked_modules;    /* bit vector of linked modules */
 };
 
@@ -773,9 +773,9 @@ struct prebound_dylib_command {
 * contains string for dyld to treat like environment variable.
 */
 struct dylinker_command {
-    TYP(cmd,4); /* LC_ID_DYLINKER, LC_LOAD_DYLINKER or;
+    TYP(cmd,4); /* LC_ID_DYLINKER, LC_LOAD_DYLINKER or
         LC_DYLD_ENVIRONMENT */
-    TYP(cmdsize,4); /* includes pathname string */;
+    TYP(cmdsize,4); /* includes pathname string */
     union lc_str    name;        /* dynamic linker's path name */
 };
 
@@ -801,8 +801,8 @@ struct dylinker_command {
 * and environment variables are copied onto that stack.
 */
 struct thread_command {
-    TYP(cmd,4); /* LC_THREAD or LC_UNIXTHREAD */;
-    TYP(cmdsize,4); /* total size of this command */;
+    TYP(cmd,4); /* LC_THREAD or LC_UNIXTHREAD */
+    TYP(cmdsize,4); /* total size of this command */
     /* uint32_t flavor           flavor of thread state */
     /* uint32_t count           count of longs in thread state */
     /* struct XXX_thread_state state   thread state for this flavor */
@@ -818,10 +818,10 @@ struct thread_command {
 * routines (used for C++ static constructors) in the library.
 */
 struct routines_command { /* for 32-bit architectures */
-    TYP(cmd,4); /* LC_ROUTINES */;
-    TYP(cmdsize,4); /* total size of this command */;
-    TYP(init_address,4); /* address of initialization routine */;
-    TYP(init_module,4); /* index into the module table that */;
+    TYP(cmd,4); /* LC_ROUTINES */
+    TYP(cmdsize,4); /* total size of this command */
+    TYP(init_address,4); /* address of initialization routine */
+    TYP(init_module,4); /* index into the module table that */
         /*  the init routine is defined in */
     TYP(reserved1,4);
     TYP(reserved2,4);
@@ -835,10 +835,10 @@ struct routines_command { /* for 32-bit architectures */
 * The 64-bit routines command.  Same use as above.
 */
 struct routines_command_64 { /* for 64-bit architectures */
-    TYP(cmd,4); /* LC_ROUTINES_64 */;
-    TYP(cmdsize,4); /* total size of this command */;
-    TYP(init_address,8); /* address of initialization routine */;
-    TYP(init_module,8); /* index into the module table that */;
+    TYP(cmd,4); /* LC_ROUTINES_64 */
+    TYP(cmdsize,4); /* total size of this command */
+    TYP(init_address,8); /* address of initialization routine */
+    TYP(init_module,8); /* index into the module table that */
         /*  the init routine is defined in */
     TYP(reserved1,8);
     TYP(reserved2,8);
@@ -854,12 +854,12 @@ struct routines_command_64 { /* for 64-bit architectures */
 * <nlist.h> and <stab.h>.
 */
 struct symtab_command {
-    TYP(cmd,4); /* LC_SYMTAB */;
-    TYP(cmdsize,4); /* sizeof(struct symtab_command) */;
-    TYP(symoff,4); /* symbol table offset */;
-    TYP(nsyms,4); /* number of symbol table entries */;
-    TYP(stroff,4); /* string table offset */;
-    TYP(strsize,4); /* string table size in bytes */;
+    TYP(cmd,4); /* LC_SYMTAB */
+    TYP(cmdsize,4); /* sizeof(struct symtab_command) */
+    TYP(symoff,4); /* symbol table offset */
+    TYP(nsyms,4); /* number of symbol table entries */
+    TYP(stroff,4); /* string table offset */
+    TYP(strsize,4); /* string table size in bytes */
 };
 
 /*
@@ -903,8 +903,8 @@ struct symtab_command {
 * off the section structures.
 */
 struct dysymtab_command {
-    TYP(cmd,4); /* LC_DYSYMTAB */;
-    TYP(cmdsize,4); /* sizeof(struct dysymtab_command) */;
+    TYP(cmd,4); /* LC_DYSYMTAB */
+    TYP(cmdsize,4); /* sizeof(struct dysymtab_command) */
 
     /*
     * The symbols indicated by symoff and nsyms of the LC_SYMTAB load command
@@ -921,14 +921,14 @@ struct dysymtab_command {
     * binding (indirectly through the module table and the reference symbol
     * table when this is a dynamically linked shared library file).
     */
-    TYP(ilocalsym,4); /* index to local symbols */;
-    TYP(nlocalsym,4); /* number of local symbols */;
+    TYP(ilocalsym,4); /* index to local symbols */
+    TYP(nlocalsym,4); /* number of local symbols */
 
-    TYP(iextdefsym,4); /* index to externally defined symbols */;
-    TYP(nextdefsym,4); /* number of externally defined symbols */;
+    TYP(iextdefsym,4); /* index to externally defined symbols */
+    TYP(nextdefsym,4); /* number of externally defined symbols */
 
-    TYP(iundefsym,4); /* index to undefined symbols */;
-    TYP(nundefsym,4); /* number of undefined symbols */;
+    TYP(iundefsym,4); /* index to undefined symbols */
+    TYP(nundefsym,4); /* number of undefined symbols */
 
     /*
     * For the for the dynamic binding process to find which module a symbol
@@ -938,8 +938,8 @@ struct dysymtab_command {
     * library file.  For executable and object modules the defined external
     * symbols are sorted by name and is use as the table of contents.
     */
-    TYP(tocoff,4); /* file offset to table of contents */;
-    TYP(ntoc,4); /* number of entries in table of contents */;
+    TYP(tocoff,4); /* file offset to table of contents */
+    TYP(ntoc,4); /* number of entries in table of contents */
 
     /*
     * To support dynamic binding of "modules" (whole object files) the symbol
@@ -950,8 +950,8 @@ struct dysymtab_command {
     * shared library file.  For executable and object modules the file only
     * contains one module so everything in the file belongs to the module.
     */
-    TYP(modtaboff,4); /* file offset to module table */;
-    TYP(nmodtab,4); /* number of module table entries */;
+    TYP(modtaboff,4); /* file offset to module table */
+    TYP(nmodtab,4); /* number of module table entries */
 
     /*
     * To support dynamic module binding the module structure for each module
@@ -962,8 +962,8 @@ struct dysymtab_command {
     * executable and object modules the defined external symbols and the
     * undefined external symbols indicates the external references.
     */
-    TYP(extrefsymoff,4); /* offset to referenced symbol table */;
-    TYP(nextrefsyms,4); /* number of referenced symbol table entries */;
+    TYP(extrefsymoff,4); /* offset to referenced symbol table */
+    TYP(nextrefsyms,4); /* number of referenced symbol table entries */
 
     /*
     * The sections that contain "symbol pointers" and "routine stubs" have
@@ -975,8 +975,8 @@ struct dysymtab_command {
     * the symbol table to the symbol that the pointer or stub is referring to.
     * The indirect symbol table is ordered to match the entries in the section.
     */
-    TYP(indirectsymoff,4); /* file offset to the indirect symbol table */;
-    TYP(nindirectsyms,4); /* number of indirect symbol table entries */;
+    TYP(indirectsymoff,4); /* file offset to the indirect symbol table */
+    TYP(nindirectsyms,4); /* number of indirect symbol table entries */
 
     /*
     * To support relocating an individual module in a library file quickly the
@@ -1005,16 +1005,16 @@ struct dysymtab_command {
     * remaining external relocation entries for them (for merged sections
     * remaining relocation entries must be local).
     */
-    TYP(extreloff,4); /* offset to external relocation entries */;
-    TYP(nextrel,4); /* number of external relocation entries */;
+    TYP(extreloff,4); /* offset to external relocation entries */
+    TYP(nextrel,4); /* number of external relocation entries */
 
     /*
     * All the local relocation entries are grouped together (they are not
     * grouped by their module since they are only used if the object is moved
     * from it staticly link edited address).
     */
-    TYP(locreloff,4); /* offset to local relocation entries */;
-    TYP(nlocrel,4); /* number of local relocation entries */;
+    TYP(locreloff,4); /* offset to local relocation entries */
+    TYP(nlocrel,4); /* number of local relocation entries */
 };
 
 /*
@@ -1030,30 +1030,30 @@ struct dysymtab_command {
 
 /* a table of contents entry */
 struct dylib_table_of_contents {
-    TYP(symbol_index,4); /* the defined external symbol;
+    TYP(symbol_index,4); /* the defined external symbol
         (index into the symbol table) */
-    TYP(module_index,4); /* index into the module table this symbol;
+    TYP(module_index,4); /* index into the module table this symbol
         is defined in */
 };
 
 /* a module table entry */
 struct dylib_module {
-    TYP(module_name,4); /* the module name (index into string table) */;
+    TYP(module_name,4); /* the module name (index into string table) */
 
-    TYP(iextdefsym,4); /* index into externally defined symbols */;
-    TYP(nextdefsym,4); /* number of externally defined symbols */;
-    TYP(irefsym,4); /* index into reference symbol table */;
-    TYP(nrefsym,4); /* number of reference symbol table entries */;
-    TYP(ilocalsym,4); /* index into symbols for local symbols */;
-    TYP(nlocalsym,4); /* number of local symbols */;
+    TYP(iextdefsym,4); /* index into externally defined symbols */
+    TYP(nextdefsym,4); /* number of externally defined symbols */
+    TYP(irefsym,4); /* index into reference symbol table */
+    TYP(nrefsym,4); /* number of reference symbol table entries */
+    TYP(ilocalsym,4); /* index into symbols for local symbols */
+    TYP(nlocalsym,4); /* number of local symbols */
 
-    TYP(iextrel,4); /* index into external relocation entries */;
-    TYP(nextrel,4); /* number of external relocation entries */;
+    TYP(iextrel,4); /* index into external relocation entries */
+    TYP(nextrel,4); /* number of external relocation entries */
 
-    TYP(iinit_iterm,4); /* low 16 bits are the index into the init;
+    TYP(iinit_iterm,4); /* low 16 bits are the index into the init
         section, high 16 bits are the index into
         the term section */
-    TYP(ninit_nterm,4); /* low 16 bits are the number of init section;
+    TYP(ninit_nterm,4); /* low 16 bits are the number of init section
         entries, high 16 bits are the number of
         term section entries */
 
@@ -1068,28 +1068,28 @@ struct dylib_module {
 
 /* a 64-bit module table entry */
 struct dylib_module_64 {
-    TYP(module_name,4); /* the module name (index into string table) */;
+    TYP(module_name,4); /* the module name (index into string table) */
 
-    TYP(iextdefsym,4); /* index into externally defined symbols */;
-    TYP(nextdefsym,4); /* number of externally defined symbols */;
-    TYP(irefsym,4); /* index into reference symbol table */;
-    TYP(nrefsym,4); /* number of reference symbol table entries */;
-    TYP(ilocalsym,4); /* index into symbols for local symbols */;
-    TYP(nlocalsym,4); /* number of local symbols */;
+    TYP(iextdefsym,4); /* index into externally defined symbols */
+    TYP(nextdefsym,4); /* number of externally defined symbols */
+    TYP(irefsym,4); /* index into reference symbol table */
+    TYP(nrefsym,4); /* number of reference symbol table entries */
+    TYP(ilocalsym,4); /* index into symbols for local symbols */
+    TYP(nlocalsym,4); /* number of local symbols */
 
-    TYP(iextrel,4); /* index into external relocation entries */;
-    TYP(nextrel,4); /* number of external relocation entries */;
+    TYP(iextrel,4); /* index into external relocation entries */
+    TYP(nextrel,4); /* number of external relocation entries */
 
-    TYP(iinit_iterm,4); /* low 16 bits are the index into the init;
+    TYP(iinit_iterm,4); /* low 16 bits are the index into the init
         section, high 16 bits are the index into
         the term section */
-    TYP(ninit_nterm,4); /* low 16 bits are the number of init section;
+    TYP(ninit_nterm,4); /* low 16 bits are the number of init section
         entries, high 16 bits are the number of
         term section entries */
 
-    TYP(objc_module_info_size,4); /* for this module size of */;
+    TYP(objc_module_info_size,4); /* for this module size of */
         /*  the (__OBJC,__module_info) section */
-    TYP(objc_module_info_addr,8); /* for this module address of the start of */;
+    TYP(objc_module_info_addr,8); /* for this module address of the start of */
         /*  the (__OBJC,__module_info) section */
 };
 
@@ -1101,7 +1101,7 @@ struct dylib_module_64 {
 * reference that is being made.  The constants for the flags are defined in
 * <mach-o/nlist.h> as they are also used for symbol table entries.
 */
-#if 0 /* dwarf readers not using this
+#if 0 /* dwarf readers not using this */
 struct dylib_reference {
     uint32_t isym:24,        /* index into the symbol table */
     flags:8;    /* flags to indicate the type of reference */
@@ -1113,10 +1113,10 @@ struct dylib_reference {
 * two-level namespace lookup hints table.
 */
 struct twolevel_hints_command {
-    TYP(cmd,4); /* LC_TWOLEVEL_HINTS */;
-    TYP(cmdsize,4); /* sizeof(struct twolevel_hints_command) */;
-    TYP(offset,4); /* offset to the hint table */;
-    TYP(nhints,4); /* number of hints in the hint table */;
+    TYP(cmd,4); /* LC_TWOLEVEL_HINTS */
+    TYP(cmdsize,4); /* sizeof(struct twolevel_hints_command) */
+    TYP(offset,4); /* offset to the hint table */
+    TYP(nhints,4); /* number of hints in the hint table */
 };
 
 /*
@@ -1155,9 +1155,9 @@ struct twolevel_hint {
 * input file.
 */
 struct prebind_cksum_command {
-    TYP(cmd,4); /* LC_PREBIND_CKSUM */;
-    TYP(cmdsize,4); /* sizeof(struct prebind_cksum_command) */;
-    TYP(cksum,4); /* the check sum or zero */;
+    TYP(cmd,4); /* LC_PREBIND_CKSUM */
+    TYP(cmdsize,4); /* sizeof(struct prebind_cksum_command) */
+    TYP(cksum,4); /* the check sum or zero */
 };
 
 /*
@@ -1165,8 +1165,8 @@ struct prebind_cksum_command {
 * identifies an object produced by the static link editor.
 */
 struct uuid_command {
-    TYP(cmd,4); /* LC_UUID */;
-    TYP(cmdsize,4); /* sizeof(struct uuid_command) */;
+    TYP(cmd,4); /* LC_UUID */
+    TYP(cmdsize,4); /* sizeof(struct uuid_command) */
     unsigned char uuid[16];    /* the 128-bit uuid */
 };
 
@@ -1175,8 +1175,8 @@ struct uuid_command {
 * the current run path used to find @rpath prefixed dylibs.
 */
 struct rpath_command {
-    TYP(cmd,4); /* LC_RPATH */;
-    TYP(cmdsize,4); /* includes string */;
+    TYP(cmd,4); /* LC_RPATH */
+    TYP(cmdsize,4); /* includes string */
     union lc_str path;        /* path to add to run path */
 };
 
@@ -1185,13 +1185,13 @@ struct rpath_command {
 * of data in the __LINKEDIT segment.
 */
 struct linkedit_data_command {
-    TYP(cmd,4); /* LC_CODE_SIGNATURE, LC_SEGMENT_SPLIT_INFO,;
+    TYP(cmd,4); /* LC_CODE_SIGNATURE, LC_SEGMENT_SPLIT_INFO,
         LC_FUNCTION_STARTS, LC_DATA_IN_CODE,
         LC_DYLIB_CODE_SIGN_DRS or
         LC_LINKER_OPTIMIZATION_HINT. */
-    TYP(cmdsize,4); /* sizeof(struct linkedit_data_command) */;
-    TYP(dataoff,4); /* file offset of data in __LINKEDIT segment */;
-    TYP(datasize,4); /* file size of data in __LINKEDIT segment */;
+    TYP(cmdsize,4); /* sizeof(struct linkedit_data_command) */
+    TYP(dataoff,4); /* file offset of data in __LINKEDIT segment */
+    TYP(datasize,4); /* file size of data in __LINKEDIT segment */
 };
 
 /*
@@ -1199,11 +1199,11 @@ struct linkedit_data_command {
 * of an encrypted segment.
 */
 struct encryption_info_command {
-    TYP(cmd,4); /* LC_ENCRYPTION_INFO */;
-    TYP(cmdsize,4); /* sizeof(struct encryption_info_command) */;
-    TYP(cryptoff,4); /* file offset of encrypted range */;
-    TYP(cryptsize,4); /* file size of encrypted range */;
-    TYP(cryptid,4); /* which enryption system,;
+    TYP(cmd,4); /* LC_ENCRYPTION_INFO */
+    TYP(cmdsize,4); /* sizeof(struct encryption_info_command) */
+    TYP(cryptoff,4); /* file offset of encrypted range */
+    TYP(cryptsize,4); /* file size of encrypted range */
+    TYP(cryptid,4); /* which enryption system,
         0 means not-encrypted yet */
 };
 
@@ -1212,13 +1212,13 @@ struct encryption_info_command {
 * of an encrypted segment (for use in x86_64 targets).
 */
 struct encryption_info_command_64 {
-    TYP(cmd,4); /* LC_ENCRYPTION_INFO_64 */;
-    TYP(cmdsize,4); /* sizeof(struct encryption_info_command_64) */;
-    TYP(cryptoff,4); /* file offset of encrypted range */;
-    TYP(cryptsize,4); /* file size of encrypted range */;
-    TYP(cryptid,4); /* which enryption system,;
+    TYP(cmd,4); /* LC_ENCRYPTION_INFO_64 */
+    TYP(cmdsize,4); /* sizeof(struct encryption_info_command_64) */
+    TYP(cryptoff,4); /* file offset of encrypted range */
+    TYP(cryptsize,4); /* file size of encrypted range */
+    TYP(cryptid,4); /* which enryption system,
         0 means not-encrypted yet */
-    TYP(pad,4); /* padding to make this struct's size a multiple;
+    TYP(pad,4); /* padding to make this struct's size a multiple
         of 8 bytes */
 };
 
@@ -1227,13 +1227,13 @@ struct encryption_info_command_64 {
 * binary was built to run.
 */
 struct version_min_command {
-    TYP(cmd,4); /* LC_VERSION_MIN_MACOSX or;
+    TYP(cmd,4); /* LC_VERSION_MIN_MACOSX or
         LC_VERSION_MIN_IPHONEOS or
         LC_VERSION_MIN_WATCHOS or
         LC_VERSION_MIN_TVOS */
-    TYP(cmdsize,4); /* sizeof(struct min_version_command) */;
-    TYP(version,4); /* X.Y.Z is encoded in nibbles xxxx.yy.zz */;
-    TYP(sdk,4); /* X.Y.Z is encoded in nibbles xxxx.yy.zz */;
+    TYP(cmdsize,4); /* sizeof(struct min_version_command) */
+    TYP(version,4); /* X.Y.Z is encoded in nibbles xxxx.yy.zz */
+    TYP(sdk,4); /* X.Y.Z is encoded in nibbles xxxx.yy.zz */
 };
 
 /*
@@ -1245,8 +1245,8 @@ struct version_min_command {
 * to interpret it.
 */
 struct dyld_info_command {
-    TYP(cmd,4); /* LC_DYLD_INFO or LC_DYLD_INFO_ONLY */;
-    TYP(cmdsize,4); /* sizeof(struct dyld_info_command) */;
+    TYP(cmd,4); /* LC_DYLD_INFO or LC_DYLD_INFO_ONLY */
+    TYP(cmdsize,4); /* sizeof(struct dyld_info_command) */
 
     /*
     * Dyld rebases an image whenever dyld loads it at an address different
@@ -1259,8 +1259,8 @@ struct dyld_info_command {
     * like "every n'th offset for m times" can be encoded in a few
     * bytes.
     */
-    TYP(rebase_off,4); /* file offset to rebase info */;
-    TYP(rebase_size,4); /* size of rebase info */;
+    TYP(rebase_off,4); /* file offset to rebase info */
+    TYP(rebase_size,4); /* size of rebase info */
 
     /*
     * Dyld binds an image during the loading process, if the image
@@ -1274,8 +1274,8 @@ struct dyld_info_command {
     * like for runs of pointers initialzed to the same value can be
     * encoded in a few bytes.
     */
-    TYP(bind_off,4); /* file offset to binding info */;
-    TYP(bind_size,4); /* size of binding info */;
+    TYP(bind_off,4); /* file offset to binding info */
+    TYP(bind_size,4); /* size of binding info */
 
     /*
     * Some C++ programs require dyld to unique symbols so that all
@@ -1292,8 +1292,8 @@ struct dyld_info_command {
     * that is detected when the weak_bind information is processed
     * and the call to operator new is then rebound.
     */
-    TYP(weak_bind_off,4); /* file offset to weak binding info */;
-    TYP(weak_bind_size,4); /* size of weak binding info */;
+    TYP(weak_bind_off,4); /* file offset to weak binding info */
+    TYP(weak_bind_size,4); /* size of weak binding info */
 
     /*
     * Some uses of external symbols do not need to be bound immediately.
@@ -1307,8 +1307,8 @@ struct dyld_info_command {
     * the offset to lazy_bind_off to get the information on what
     * to bind.
     */
-    TYP(lazy_bind_off,4); /* file offset to lazy binding info */;
-    TYP(lazy_bind_size,4); /* size of lazy binding infs */;
+    TYP(lazy_bind_off,4); /* file offset to lazy binding info */
+    TYP(lazy_bind_size,4); /* size of lazy binding infs */
 
     /*
     * The symbols exported by a dylib are encoded in a trie.  This
@@ -1343,8 +1343,8 @@ struct dyld_info_command {
     * edge points to.
     *
     */
-    TYP(export_off,4); /* file offset to lazy binding info */;
-    TYP(export_size,4); /* size of lazy binding infs */;
+    TYP(export_off,4); /* file offset to lazy binding info */
+    TYP(export_size,4); /* size of lazy binding infs */
 };
 
 /*
@@ -1413,9 +1413,9 @@ struct dyld_info_command {
 * The linker_option_command contains linker options embedded in object files.
 */
 struct linker_option_command {
-    TYP(cmd,4); /* LC_LINKER_OPTION only used in MH_OBJECT filetypes */;
+    TYP(cmd,4); /* LC_LINKER_OPTION only used in MH_OBJECT filetypes */
     TYP(cmdsize,4);
-    TYP(count,4); /* number of strings */;
+    TYP(count,4); /* number of strings */
     /* concatenation of zero terminated UTF8 strings.
         Zero filled at end to align */
 };
@@ -1430,10 +1430,10 @@ struct linker_option_command {
 * zeroed. (THIS IS OBSOLETE and no longer supported).
 */
 struct symseg_command {
-    TYP(cmd,4); /* LC_SYMSEG */;
-    TYP(cmdsize,4); /* sizeof(struct symseg_command) */;
-    TYP(offset,4); /* symbol segment offset */;
-    TYP(size,4); /* symbol segment size in bytes */;
+    TYP(cmd,4); /* LC_SYMSEG */
+    TYP(cmdsize,4); /* sizeof(struct symseg_command) */
+    TYP(offset,4); /* symbol segment offset */
+    TYP(size,4); /* symbol segment size in bytes */
 };
 
 /*
@@ -1443,8 +1443,8 @@ struct symseg_command {
 * (THIS IS OBSOLETE and no longer supported).
 */
 struct ident_command {
-    TYP(cmd,4); /* LC_IDENT */;
-    TYP(cmdsize,4); /* strings that follow this command */;
+    TYP(cmd,4); /* LC_IDENT */
+    TYP(cmdsize,4); /* strings that follow this command */
 };
 
 /*
@@ -1454,10 +1454,10 @@ struct ident_command {
 * memory).
 */
 struct fvmfile_command {
-    TYP(cmd,4); /* LC_FVMFILE */;
-    TYP(cmdsize,4); /* includes pathname string */;
+    TYP(cmd,4); /* LC_FVMFILE */
+    TYP(cmdsize,4); /* includes pathname string */
     union lc_str    name;        /* files pathname */
-    TYP(header_addr,4); /* files virtual address */;
+    TYP(header_addr,4); /* files virtual address */
 };
 
 
@@ -1468,10 +1468,10 @@ struct fvmfile_command {
 * field will contain the stack size need for the main thread.
 */
 struct entry_point_command {
-    TYP(cmd,4); /* LC_MAIN only used in MH_EXECUTE filetypes */;
-    TYP(cmdsize,4); /* 24 */;
-    TYP(entryoff,8); /* file (__TEXT) offset of main() */;
-    TYP(stacksize,8); /* if not zero, initial stack size */;
+    TYP(cmd,4); /* LC_MAIN only used in MH_EXECUTE filetypes */
+    TYP(cmdsize,4); /* 24 */
+    TYP(entryoff,8); /* file (__TEXT) offset of main() */
+    TYP(stacksize,8); /* if not zero, initial stack size */
 };
 
 
@@ -1480,9 +1480,9 @@ struct entry_point_command {
 * the version of the sources used to build the binary.
 */
 struct source_version_command {
-    TYP(cmd,4); /* LC_SOURCE_VERSION */;
-    TYP(cmdsize,4); /* 16 */;
-    TYP(version,8); /* A.B.C.D.E packed as a24.b10.c10.d10.e10 */;
+    TYP(cmd,4); /* LC_SOURCE_VERSION */
+    TYP(cmdsize,4); /* 16 */
+    TYP(version,8); /* A.B.C.D.E packed as a24.b10.c10.d10.e10 */
 };
 
 
@@ -1492,9 +1492,9 @@ struct source_version_command {
 * describes a range of data in a code section.
 */
 struct data_in_code_entry {
-    TYP(offset,4); /* from mach_header to start of data range*/;
-    TYP(length,2); /* number of bytes in data range */;
-    TYP(kind,2); /* a DICE_KIND_* value */;
+    TYP(offset,4); /* from mach_header to start of data range*/
+    TYP(length,2); /* number of bytes in data range */
+    TYP(kind,2); /* a DICE_KIND_* value */
 };
 #define DICE_KIND_DATA              0x0001
 #define DICE_KIND_JUMP_TABLE8       0x0002
