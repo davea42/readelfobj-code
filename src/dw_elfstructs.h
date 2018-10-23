@@ -39,7 +39,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     of Elf64 fields.
 
     It is expected code including this will have included
-    an official Elf.h (for various definitions needed) 
+    an official <elf.h> (for various definitions needed) 
     before including this.
 
     The structs were all officially defined so files
