@@ -190,7 +190,8 @@ print_macho_segments(struct macho_filedata_s *mfp)
 {
     LONGESTUTYPE segmentcount = mfp->mo_segment_count;
     LONGESTUTYPE i = 0;
-    struct generic_segment_command *cmdp = mfp->mo_segment_commands;
+    struct generic_macho_segment_command *cmdp = 
+        mfp->mo_segment_commands;
 
     P("  Segments count:" LONGESTUFMT " starting at "
         LONGESTXFMT8 ":\n",segmentcount,mfp->mo_command_start_offset);
@@ -214,7 +215,7 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp)
 {
     LONGESTUTYPE i = 0;
     LONGESTUTYPE count = mfp->mo_dwarf_sectioncount;
-    struct generic_section * gsp = 0;
+    struct generic_macho_section * gsp = 0;
 
     gsp = mfp->mo_dwarf_sections;
 
@@ -259,11 +260,11 @@ print_macho_header(struct macho_filedata_s *mfp)
         " cpusubtype: " LONGESTXFMT "\n",
         mfp->mo_header.cputype,
         mfp->mo_header.cpusubtype);
-    P("  offset size       : "  LONGESTUFMT "\n",
+    P("  offset size       : %u\n",
         mfp->mo_offsetsize/8);
-    P("  endian            : %s \n",
-        (mfp->mo_endian ==  DW_ENDIAN_BIG)?"BIGENDIAN":
-        ((mfp->mo_endian ==  DW_ENDIAN_LITTLE)?"LITTLEENDIAN":
+    P("  endian            : %s\n",
+        (mfp->mo_byteorder ==  DW_ENDIAN_BIG)?"BIGENDIAN":
+        ((mfp->mo_byteorder ==  DW_ENDIAN_LITTLE)?"LITTLEENDIAN":
         "Unknown-error"));
     P("  file size         : " LONGESTXFMT8 "\n",mfp->mo_filesize);
     P("  filetype          : " LONGESTXFMT
@@ -315,18 +316,18 @@ do_one_file(const char *s)
 #ifdef WORDS_BIGENDIAN
     if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_OPPOSITE ) {
         mfp->mo_copy_word = ro_memcpy_swap_bytes;
-        mfp->mo_endian = DW_ENDIAN_LITTLE;
+        mfp->mo_byteorder = DW_ENDIAN_LITTLE;
     } else {
         mfp->mo_copy_word = memcpy;
-        mfp->mo_endian = DW_ENDIAN_BIG;
+        mfp->mo_byteorder = DW_ENDIAN_BIG;
     }
 #else  /* LITTLE ENDIAN */
     if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_SAME ) {
         mfp->mo_copy_word = memcpy;
-        mfp->mo_endian = DW_ENDIAN_LITTLE;
+        mfp->mo_byteorder = DW_ENDIAN_LITTLE;
     } else {
         mfp->mo_copy_word = dwarf_ro_memcpy_swap_bytes;
-        mfp->mo_endian = DW_ENDIAN_BIG;
+        mfp->mo_byteorder = DW_ENDIAN_BIG;
     }
 #endif /* LITTLE- BIG-ENDIAN */
 

@@ -3,7 +3,7 @@ Reading: mach-o-object32 (mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-o
 Mach-o Magic:  0xfeedface
   cputype           : 0x7 cpusubtype: 0x3
   offset size       : 4
-  endian            : LITTLEENDIAN 
+  endian            : LITTLEENDIAN
   file size         : 0x0000e859
   filetype          : 0xa DSYM (debug sections present)
   number of commands: 0x7
@@ -44,7 +44,7 @@ Reading: mach-o-object64 (mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-o
 Mach-o Magic:  0xfeedfacf
   cputype           : 0x1000007 cpusubtype: 0x3
   offset size       : 8
-  endian            : LITTLEENDIAN 
+  endian            : LITTLEENDIAN
   file size         : 0x0000f7ee
   filetype          : 0xa DSYM (debug sections present)
   number of commands: 0x7

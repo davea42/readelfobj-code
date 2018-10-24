@@ -56,7 +56,7 @@ struct generic_macho_command {
     LONGESTUTYPE   offset_this_command;
 };
 
-struct generic_segment_command {
+struct generic_macho_segment_command {
     LONGESTUTYPE   cmd;
     LONGESTUTYPE   cmdsize;
     char segname[16];
@@ -72,7 +72,7 @@ struct generic_segment_command {
     LONGESTUTYPE   sectionsoffset;
 };
 
-struct generic_section {
+struct generic_macho_section {
     /* Larger than in file, room for NUL guaranteed */
     char          sectname[24];
     char          segname[24];
@@ -99,7 +99,10 @@ struct macho_filedata_s {
 
     /*  32 or 64, this is the object offset size, not
         DWARF offset size */
-    LONGESTUTYPE mo_offsetsize;
+    Dwarf_Small mo_offsetsize;
+    Dwarf_Small mo_pointersize;
+    Dwarf_Small mo_ftype;
+    Dwarf_Small mo_byteorder;
 
     void *(*mo_copy_word) (void *, const void *, size_t);
     /* Used to hold 32 and 64 header data */

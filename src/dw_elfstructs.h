@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2018, David Anderson
 All rights reserved.
 
@@ -39,7 +39,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     of Elf64 fields.
 
     It is expected code including this will have included
-    an official <elf.h> (for various definitions needed) 
+    an official <elf.h> (for various definitions needed)
     before including this.
 
     The structs were all officially defined so files
@@ -47,6 +47,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     there will not be gaps and we need not deal with
     alignment-gaps.
 */
+
+#ifndef DW_ELFSTRUCTS_H
+#define DW_ELFSTRUCTS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #ifndef EI_NIDENT
 #define EI_NIDENT 16
@@ -56,25 +63,25 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define TYP(n,l) char n[l]
 #endif
 
-typedef struct 
+typedef struct
 {
     unsigned char e_ident[EI_NIDENT];
-    TYP(e_type,2);    
-    TYP(e_machine,2);    
-    TYP(e_version,4);    
-    TYP(e_entry,4);    
-    TYP(e_phoff,4);    
-    TYP(e_shoff,4);    
-    TYP(e_flags,4);    
-    TYP(e_ehsize,2);    
-    TYP(e_phentsize,2);    
-    TYP(e_phnum,2);    
-    TYP(e_shentsize,2);    
-    TYP(e_shnum,2);    
-    TYP(e_shstrndx,2);    
+    TYP(e_type,2);
+    TYP(e_machine,2);
+    TYP(e_version,4);
+    TYP(e_entry,4);
+    TYP(e_phoff,4);
+    TYP(e_shoff,4);
+    TYP(e_flags,4);
+    TYP(e_ehsize,2);
+    TYP(e_phentsize,2);
+    TYP(e_phnum,2);
+    TYP(e_shentsize,2);
+    TYP(e_shnum,2);
+    TYP(e_shstrndx,2);
 } dw_elf32_ehdr;
 
-typedef struct 
+typedef struct
 {
     unsigned char e_ident[EI_NIDENT];
     TYP(e_type,2);
@@ -86,7 +93,7 @@ typedef struct
     TYP(e_flags,4);
     TYP(e_ehsize,2);
     TYP(e_phentsize,2);
-    TYP(e_phnum,2);     
+    TYP(e_phnum,2);
     TYP(e_shentsize,2);
     TYP(e_shnum,2);
     TYP(e_shstrndx,2);
@@ -94,26 +101,26 @@ typedef struct
 
 typedef struct
 {
-    TYP(p_type,4); 
-    TYP(p_offset,4); 
-    TYP(p_vaddr,4); 
-    TYP(p_paddr,4); 
-    TYP(p_filesz,4); 
-    TYP(p_memsz,4); 
-    TYP(p_flags,4); 
-    TYP(p_align,4); 
+    TYP(p_type,4);
+    TYP(p_offset,4);
+    TYP(p_vaddr,4);
+    TYP(p_paddr,4);
+    TYP(p_filesz,4);
+    TYP(p_memsz,4);
+    TYP(p_flags,4);
+    TYP(p_align,4);
 } dw_elf32_phdr;
 
 typedef struct
 {
-    TYP(p_type,4); 
-    TYP(p_flags,4); 
-    TYP(p_offset,8); 
-    TYP(p_vaddr,8); 
-    TYP(p_paddr,8); 
-    TYP(p_filesz,8); 
-    TYP(p_memsz,8); 
-    TYP(p_align,8); 
+    TYP(p_type,4);
+    TYP(p_flags,4);
+    TYP(p_offset,8);
+    TYP(p_vaddr,8);
+    TYP(p_paddr,8);
+    TYP(p_filesz,8);
+    TYP(p_memsz,8);
+    TYP(p_align,8);
 } dw_elf64_phdr;
 
 typedef struct
@@ -203,4 +210,8 @@ typedef struct
 } dw_elf64_dyn;
 
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
+#endif /* DW_ELFSTRUCTS_H */

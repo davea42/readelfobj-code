@@ -76,8 +76,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 static char tru_path_buffer[BUFFERSIZE];
 
-static void destructmacho(struct macho_filedata_s *mp);
-
 static struct commands_text_s {
    const char *name;
    unsigned long val;
@@ -195,14 +193,13 @@ dwarf_construct_macho_access(int fd,
     mfp->mo_ident[1] = 1;
     mfp->mo_offsetsize = offsetsize;
     mfp->mo_filesize = filesize;
-    mfp->mo_endian = endian;
+    mfp->mo_byteorder = endian;
     mfp->mo_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;
 }
 
 
-/* destructmacho(struct macho_filedata_s *mp) */
 int
 dwarf_destruct_macho_access(struct macho_filedata_s *mp,int *errcode)
 {
@@ -299,7 +296,7 @@ dwarf_load_macho_header(struct macho_filedata_s *mfp, int *errcode)
 static int
 load_segment_command_content32(struct macho_filedata_s *mfp,
     struct generic_macho_command *mmp,
-    struct generic_segment_command *msp,
+    struct generic_macho_segment_command *msp,
     LONGESTUTYPE mmpindex,
     int *errcode)
 {
@@ -349,7 +346,7 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
 static int
 load_segment_command_content64(struct macho_filedata_s *mfp,
     struct generic_macho_command *mmp,
-    struct generic_segment_command *msp,
+    struct generic_macho_segment_command *msp,
     LONGESTUTYPE mmpindex,int *errcode)
 {
     struct segment_command_64 sc;
@@ -400,13 +397,14 @@ dwarf_macho_load_segment_commands(struct macho_filedata_s *mfp,int *errcode)
 {
     LONGESTUTYPE i = 0;
     struct generic_macho_command *mmp = 0;
-    struct generic_segment_command *msp = 0;
+    struct generic_macho_segment_command *msp = 0;
 
     if(mfp->mo_segment_count < 1) {
         return DW_DLV_OK;
     }
-    mfp->mo_segment_commands = (struct generic_segment_command *)
-        calloc(sizeof(struct generic_segment_command),mfp->mo_segment_count);
+    mfp->mo_segment_commands = (struct generic_macho_segment_command *)
+        calloc(sizeof(struct generic_macho_segment_command),
+        mfp->mo_segment_count);
     if(!mfp->mo_segment_commands) {
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
@@ -434,19 +432,20 @@ dwarf_macho_load_segment_commands(struct macho_filedata_s *mfp,int *errcode)
 
 static int
 dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
-    struct generic_segment_command *segp,
+    struct generic_macho_segment_command *segp,
     LONGESTUTYPE segi,int *errcode)
 {
     LONGESTUTYPE seci = 0;
     LONGESTUTYPE seccount = segp->nsects;
-    struct generic_section * secp = 0;
+    struct generic_macho_section * secp = 0;
     LONGESTUTYPE secalloc = seccount+1;
     LONGESTUTYPE curoff = segp->sectionsoffset;
     LONGESTUTYPE shdrlen = sizeof(struct section);
 
-    struct generic_section *secs = 0;
+    struct generic_macho_section *secs = 0;
 
-    secs = (struct generic_section *)calloc(sizeof(struct generic_section),
+    secs = (struct generic_macho_section *)calloc(
+        sizeof(struct generic_macho_section),
         secalloc);
     if(!secs) {
         *errcode = RO_ERR_MALLOC;
@@ -457,8 +456,10 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
     secs->offset_of_sec_rec = curoff;
     /*  Leave 0 section all zeros except our offset,
         elf-like in a sense */
+    secs->dwarfsectname = "";
     ++secs;
-    for (; seci < seccount; ++seci,++secs,curoff += shdrlen ) {
+    seci = 1;
+    for (; seci < secalloc; ++seci,++secs,curoff += shdrlen ) {
         struct section mosec;
         int res = 0;
 
@@ -493,20 +494,20 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
 }
 static int
 dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
-    struct generic_segment_command *segp,
+    struct generic_macho_segment_command *segp,
     LONGESTUTYPE segi,
     int *errcode)
 {
     LONGESTUTYPE seci = 0;
     LONGESTUTYPE seccount = segp->nsects;
-    struct generic_section * secp = 0;
+    struct generic_macho_section * secp = 0;
     LONGESTUTYPE secalloc = seccount+1;
     LONGESTUTYPE curoff = segp->sectionsoffset;
     LONGESTUTYPE shdrlen = sizeof(struct section_64);
-    struct generic_section *secs = 0;
+    struct generic_macho_section *secs = 0;
 
-    secs = (struct generic_section *)calloc(sizeof(struct generic_section),
-        secalloc);
+    secs = (struct generic_macho_section *)
+        calloc(sizeof(struct generic_macho_section), secalloc);
     if(!secs) {
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
@@ -516,8 +517,10 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
     secs->offset_of_sec_rec = curoff;
     /*  Leave 0 section all zeros except our offset,
         elf-like in a sense */
+    secs->dwarfsectname = "";
+    seci = 1;
     ++secs;
-    for (; seci < seccount; ++seci,++secs,curoff += shdrlen ) {
+    for (; seci < secalloc; ++seci,++secs,curoff += shdrlen ) {
         int res = 0;
         struct section_64 mosec;
 
@@ -553,19 +556,21 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
 
 static int
 dwarf_macho_load_dwarf_section_details(struct macho_filedata_s *mfp,
-    struct generic_segment_command *segp,
+    struct generic_macho_segment_command *segp,
     LONGESTUTYPE segi,int *errcode)
 {
     LONGESTUTYPE seci = 0;
     LONGESTUTYPE seccount = segp->nsects;
-    struct generic_section * secp = 0;
+    struct generic_macho_section * secp = 0;
     LONGESTUTYPE secalloc = seccount+1;
     int res = 0;
 
     if (mfp->mo_offsetsize == 32) {
-        res = dwarf_macho_load_dwarf_section_details32(mfp,segp,segi,errcode);
+        res = dwarf_macho_load_dwarf_section_details32(mfp,
+            segp,segi,errcode);
     } else if (mfp->mo_offsetsize == 64) {
-        res = dwarf_macho_load_dwarf_section_details64(mfp,segp,segi,errcode);
+        res = dwarf_macho_load_dwarf_section_details64(mfp,
+            segp,segi,errcode);
     } else {
         *errcode = RO_ERR_BADOFFSETSIZE;
         return DW_DLV_ERROR;
@@ -578,8 +583,8 @@ dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,int *errcode)
 {
     LONGESTUTYPE segi = 0;
 
-    struct generic_segment_command *segp = mfp->mo_segment_commands;
-    struct generic_section * secp = 0;
+    struct generic_macho_segment_command *segp = mfp->mo_segment_commands;
+    struct generic_macho_section * secp = 0;
     for ( ; segi < mfp->mo_segment_count; ++segi,++segp) {
         int res = 0;
 
