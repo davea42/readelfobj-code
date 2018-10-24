@@ -75,6 +75,7 @@ struct generic_section {
     /* Larger than in file, room for NUL guaranteed */
     char          sectname[24];
     char          segname[24];
+    const char *  dwarfsectname;
     LONGESTUTYPE  addr;
     LONGESTUTYPE  size;
     LONGESTUTYPE  offset;
@@ -87,6 +88,7 @@ struct generic_section {
     LONGESTUTYPE  reserved3;
     LONGESTUTYPE  generic_segment_num;
     LONGESTUTYPE  offset_of_sec_rec;
+    unsigned char *loaded_data;
 };
 
 
