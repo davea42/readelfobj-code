@@ -62,7 +62,7 @@ struct generic_macho_command {
 struct generic_macho_segment_command {
     Dwarf_Unsigned   cmd;
     Dwarf_Unsigned   cmdsize;
-    char segname[16];
+    char             segname[24];
     Dwarf_Unsigned   vmaddr;
     Dwarf_Unsigned   vmsize;
     Dwarf_Unsigned   fileoff;
