@@ -152,6 +152,7 @@ struct elf_filedata_s {
     char         f_ident[8];
     int          f_fd;
     int          f_printf_on_error;
+    char *       f_path; /* non-null if known. Must be freed */
 
     /* If TRUE close f_fd on destruct. */
     int          f_destruct_close_fd;

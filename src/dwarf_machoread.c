@@ -53,7 +53,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 #include "dwarf_machoread.h"
 #include "dwarf_object_detector.h"
-#include "macho-loader.h"
+#include "dwarf_macho_loader.h"
 
 #ifndef TYP
 #define TYP(n,l) char n[l]
@@ -73,72 +73,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         func(&t,&s[0],sizeof(s));               \
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
-
-static char tru_path_buffer[BUFFERSIZE];
-
-static struct commands_text_s {
-   const char *name;
-   unsigned long val;
-} commandname [] = {
-{"LC_SEGMENT",    0x1},
-{"LC_SYMTAB",     0x2},
-{"LC_SYMSEG",     0x3},
-{"LC_THREAD",     0x4 },
-{"LC_UNIXTHREAD", 0x5},
-{"LC_LOADFVMLIB", 0x6},
-{"LC_IDFVMLIB",   0x7  },
-{"LC_IDENT",      0x8  },
-{"LC_FVMFILE",    0x9  },
-{"LC_PREPAGE",    0xa  },
-{"LC_DYSYMTAB",   0xb  },
-{"LC_LOAD_DYLIB", 0xc  },
-{"LC_ID_DYLIB",   0xd  },
-{"LC_LOAD_DYLINKER", 0xe },
-{"LC_ID_DYLINKER",0xf },
-{"LC_PREBOUND_DYLIB", 0x10 },
-{"LC_ROUTINES",   0x11 },
-{"LC_SUB_FRAMEWORK", 0x12 },
-{"LC_SUB_UMBRELLA", 0x13  },
-{"LC_SUB_CLIENT", 0x14  },
-{"LC_SUB_LIBRARY",0x15  },
-{"LC_TWOLEVEL_HINTS", 0x16 },
-{"LC_PREBIND_CKSUM",  0x17 },
-{"LC_LOAD_WEAK_DYLIB", (0x18 | LC_REQ_DYLD)},
-{"LC_SEGMENT_64",   0x19 },
-{"LC_ROUTINES_64",  0x1a    },
-{"LC_UUID",         0x1b    },
-{"LC_RPATH",       (0x1c | LC_REQ_DYLD) },
-{"LC_CODE_SIGNATURE", 0x1d },
-{"LC_SEGMENT_SPLIT_INFO", 0x1e},
-{"LC_REEXPORT_DYLIB", (0x1f | LC_REQ_DYLD)},
-{"LC_LAZY_LOAD_DYLIB", 0x20},
-{"LC_ENCRYPTION_INFO", 0x21},
-{"LC_DYLD_INFO",    0x22   },
-{"LC_DYLD_INFO_ONLY", (0x22|LC_REQ_DYLD)},
-{"LC_LOAD_UPWARD_DYLIB", (0x23 | LC_REQ_DYLD) },
-{"LC_VERSION_MIN_MACOSX", 0x24   },
-{"LC_VERSION_MIN_IPHONEOS", 0x25},
-{"LC_FUNCTION_STARTS", 0x26 },
-{"LC_DYLD_ENVIRONMENT", 0x27 },
-{"LC_MAIN", (0x28|LC_REQ_DYLD)},
-{0,0}
-};
-
-/* was get_command_name */
-int
-dwarf_get_macho_command_name(LONGESTUTYPE v,const char ** name,int *errcode)
-{
-    unsigned i = 0;
-
-    for( ; commandname[i].name; i++) {
-        if (v==commandname[i].val) {
-            *name = commandname[i].name;
-            return DW_DLV_OK;
-        }
-    }
-    *name = "";
-    return DW_DLV_NO_ENTRY;
-}
 
 int
 dwarf_construct_macho_access_path(const char *path,
@@ -192,6 +126,7 @@ dwarf_construct_macho_access(int fd,
     mfp->mo_ident[0] = 'M';
     mfp->mo_ident[1] = 1;
     mfp->mo_offsetsize = offsetsize;
+    mfp->mo_path = strdup(path);
     mfp->mo_filesize = filesize;
     mfp->mo_byteorder = endian;
     mfp->mo_destruct_close_fd = FALSE;
@@ -200,19 +135,13 @@ dwarf_construct_macho_access(int fd,
 }
 
 
-int
-dwarf_destruct_macho_access(struct macho_filedata_s *mp,int *errcode)
+void
+dwarf_destruct_macho_access(struct macho_filedata_s *mp)
 {
     if (mp->mo_destruct_close_fd) {
         close(mp->mo_fd);
         mp->mo_fd = -1;
     }
-#if 0
-    if (mp->mo_file) {
-        fclose(mp->mo_file);
-        mp->mo_file = 0;
-    }
-#endif
     if (mp->mo_commands){
         free(mp->mo_commands);
         mp->mo_commands = 0;
@@ -221,8 +150,23 @@ dwarf_destruct_macho_access(struct macho_filedata_s *mp,int *errcode)
         free(mp->mo_segment_commands);
         mp->mo_segment_commands = 0;
     }
+    free((char *)mp->mo_path);
+    if (mp->mo_dwarf_sections) {
+        struct generic_macho_section *sp = 0;
+        Dwarf_Unsigned i = 0;
+
+        sp = mp->mo_dwarf_sections;
+        for( i=0; i < mp->mo_dwarf_sectioncount; ++i,++sp) {
+            if (sp->loaded_data) {
+                free(sp->loaded_data);
+                sp->loaded_data = 0;
+            }
+        }
+        free(mp->mo_dwarf_sections);
+        mp->mo_dwarf_sections = 0;
+    }
     memset(mp,0,sizeof(*mp));
-    return DW_DLV_OK;
+    return;
 }
 
 /* load_macho_header32(struct macho_filedata_s *mfp)*/
@@ -437,7 +381,6 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
 {
     LONGESTUTYPE seci = 0;
     LONGESTUTYPE seccount = segp->nsects;
-    struct generic_macho_section * secp = 0;
     LONGESTUTYPE secalloc = seccount+1;
     LONGESTUTYPE curoff = segp->sectionsoffset;
     LONGESTUTYPE shdrlen = sizeof(struct section);
@@ -500,7 +443,6 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
 {
     LONGESTUTYPE seci = 0;
     LONGESTUTYPE seccount = segp->nsects;
-    struct generic_macho_section * secp = 0;
     LONGESTUTYPE secalloc = seccount+1;
     LONGESTUTYPE curoff = segp->sectionsoffset;
     LONGESTUTYPE shdrlen = sizeof(struct section_64);
@@ -559,10 +501,6 @@ dwarf_macho_load_dwarf_section_details(struct macho_filedata_s *mfp,
     struct generic_macho_segment_command *segp,
     LONGESTUTYPE segi,int *errcode)
 {
-    LONGESTUTYPE seci = 0;
-    LONGESTUTYPE seccount = segp->nsects;
-    struct generic_macho_section * secp = 0;
-    LONGESTUTYPE secalloc = seccount+1;
     int res = 0;
 
     if (mfp->mo_offsetsize == 32) {
@@ -575,16 +513,16 @@ dwarf_macho_load_dwarf_section_details(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_BADOFFSETSIZE;
         return DW_DLV_ERROR;
     }
-    return DW_DLV_OK;
+    return res;
 }
 
 static int
-dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,int *errcode)
+dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,
+    int *errcode)
 {
     LONGESTUTYPE segi = 0;
 
     struct generic_macho_segment_command *segp = mfp->mo_segment_commands;
-    struct generic_macho_section * secp = 0;
     for ( ; segi < mfp->mo_segment_count; ++segi,++segp) {
         int res = 0;
 
@@ -626,8 +564,6 @@ dwarf_load_macho_commands(struct macho_filedata_s *mfp,int *errcode)
     }
     mcp = mfp->mo_commands;
     for ( ; cmdi < mfp->mo_header.ncmds; ++cmdi,++mcp ) {
-        int res = 0;
-
         res = RRMOA(mfp->mo_fd,&mc,curoff,sizeof(mc),errcode);
         if (res != RO_OK) {
             return res;

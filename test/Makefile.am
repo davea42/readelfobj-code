@@ -28,6 +28,8 @@ CLEANFILES = \
   junk.test011.out \
   junk.test012 \
   junk.test012.out \
+  junk.test013m \
+  junk.test013m.out \
   object_detector \
   readobjmacho \
   readelfobj
@@ -40,28 +42,32 @@ check:
 EXTRA_DIST = \
 README  \
 CLEANUP  \
-PICKUP  \
+PICKUP    \
 ChangeLog  \
 runtests.sh \
-test001.sh \
-test002.sh \
-test003.sh \
-test004.sh \
-test005.sh \
-test006.sh \
-test007.sh \
+test001.sh  \
+test002.sh  \
+test003.sh  \
+test004.sh  \
+test005.sh  \
+test006.sh  \
+test007.sh  \
 test008m.sh \
 test009m.sh \
-test010.sh \
-test011.sh \
+test010.sh  \
+test011.sh  \
+test012.sh  \
+test013m.sh \
 test001.base \
-test003.base \
-test004.base \
-test005.base \
-test006.base \
-test007.base \
+test003.base  \
+test004.base  \
+test005.base  \
+test006.base  \
+test007.base  \
 test008m.base \
 test009m.base \
-test010.base \
-test011.base 
+test010.base  \
+test011.base  \
+test012.base  \
+test013m.base 
 

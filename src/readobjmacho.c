@@ -50,7 +50,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
 #include "dwarf_reading.h"
-#include "macho-loader.h"
+#include "dwarf_macho_loader.h"
 #include "dwarf_object_detector.h"
 #include "dwarf_object_read_common.h"
 #include "dwarf_machoread.h"
@@ -117,7 +117,8 @@ static struct commands_text_s {
 {0,0}
 };
 
-const char *get_command_name(LONGESTUTYPE v)
+static const char *
+get_command_name(LONGESTUTYPE v)
 {
     unsigned i = 0;
 
@@ -190,7 +191,7 @@ print_macho_segments(struct macho_filedata_s *mfp)
 {
     LONGESTUTYPE segmentcount = mfp->mo_segment_count;
     LONGESTUTYPE i = 0;
-    struct generic_macho_segment_command *cmdp = 
+    struct generic_macho_segment_command *cmdp =
         mfp->mo_segment_commands;
 
     P("  Segments count:" LONGESTUFMT " starting at "
@@ -337,7 +338,7 @@ do_one_file(const char *s)
     if (res != DW_DLV_OK) {
         P("Warning: %s macho-header not loaded giving up. Error %d",
             tru_path_buffer,errcode);
-        dwarf_destruct_macho_access(mfp,&errcode);
+        dwarf_destruct_macho_access(mfp);
         return;
     }
     print_macho_header(mfp);
@@ -345,7 +346,7 @@ do_one_file(const char *s)
     print_macho_commands(mfp);
     print_macho_segments(mfp);
     print_macho_dwarf_sections(mfp);
-    dwarf_destruct_macho_access(mfp,&errcode);
+    dwarf_destruct_macho_access(mfp);
 }
 
 int

@@ -13717,6 +13717,47 @@ _ACEOF
 
 
 
+# unused attribute
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+static unsigned int foo(unsigned int x, __attribute__ ((unused)) int y){
+    unsigned int x2 = x + 1;
+    return x2;
+}
+int goo() {
+    unsigned int y = 0;
+    y = foo(12, y);
+}
+         
+int
+main ()
+{
+
+         
+  ;
+  return 0;
+}
+    
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  
+     have_unused="yes"
+     
+$as_echo "@%:@define HAVE_UNUSED_ATTRIBUTE 1" >>confdefs.h
+
+    
+else
+  have_unused="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether \"unused\" attribute is available" >&5
+$as_echo_n "checking whether \"unused\" attribute is available... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${have_unused}" >&5
+$as_echo "${have_unused}" >&6; }
+
+
 
 ac_config_files="$ac_config_files Makefile src/Makefile test/Makefile"
 

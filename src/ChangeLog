@@ -1,4 +1,14 @@
 2018-10-24  David Anderson
+    * dwarf_macho_loader.h: Renamed from macho-loader.h
+    * dwarf_machoread.c,dwarf_machoread.h, readelfobj.c,
+      readobjmacho.c,generic_from_elf.c,dwarf_object_read_common.c,
+      readelfobj.h:
+      Cleaning up 
+      compiler warnings, indent errors, and trailing whitespace.
+    * dwarf_object_detector.c: Now allows outpath, outlen
+      of the dwarf_object_detector_path() call to be zero,
+      suppressing macho dSYM subdirectory checks.
+2018-10-24  David Anderson
     * dw_elfstructs.h: Eliminated trailing whitespace.
     * dwarf_machoread.h,dwarf_machoread.c,readobjmacho.c,
       readobjmacho.h: A small step unifying with libdwarf version

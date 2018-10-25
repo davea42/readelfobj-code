@@ -48,6 +48,12 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "readelfobj.h"
 #include "sanitized.h"
 
+#ifdef HAVE_UNUSED_ATTRIBUTE
+#define  UNUSEDARG __attribute__ ((unused))
+#else
+#define  UNUSEDARG
+#endif
+
 static char buffer6[BUFFERSIZE];
 static char buffer3[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
@@ -122,6 +128,7 @@ dwarf_construct_elf_access(int fd,
     mfp->f_offsetsize = offsetsize;
     mfp->f_filesize = filesize;
     mfp->f_endian = endian;
+    mfp->f_path = strdup(path);
     mfp->f_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;
@@ -131,7 +138,8 @@ dwarf_construct_elf_access(int fd,
     after this returns to remind
     the caller to avoid use of the pointer. */
 int
-dwarf_destruct_elf_access(elf_filedata ep,int *errcode)
+dwarf_destruct_elf_access(elf_filedata ep,
+    UNUSEDARG int *errcode)
 {
     struct generic_shdr *shp = 0;
     LONGESTUTYPE shcount = 0;
@@ -150,6 +158,7 @@ dwarf_destruct_elf_access(elf_filedata ep,int *errcode)
     free(ep->f_dynamic);
     free(ep->f_symtab_sect_strings);
     free(ep->f_dynsym_sect_strings);
+    free(ep->f_path);
 
     /* if TRUE close f_fd on destruct.*/
     if (ep->f_destruct_close_fd) {
@@ -165,7 +174,8 @@ dwarf_destruct_elf_access(elf_filedata ep,int *errcode)
 
 static int
 generic_ehdr_from_32(elf_filedata ep,
-    struct generic_ehdr *ehdr, dw_elf32_ehdr *e, int *errcode)
+    struct generic_ehdr *ehdr, dw_elf32_ehdr *e,
+    UNUSEDARG int *errcode)
 {
     int i = 0;
 
@@ -196,7 +206,8 @@ generic_ehdr_from_32(elf_filedata ep,
 
 static int
 generic_ehdr_from_64(elf_filedata ep,
-    struct generic_ehdr *ehdr, dw_elf64_ehdr *e,int *errcode)
+    struct generic_ehdr *ehdr, dw_elf64_ehdr *e,
+    UNUSEDARG int *errcode)
 {
     int i = 0;
 
@@ -364,7 +375,7 @@ generic_phdr_from_phdr64(elf_filedata ep,
     return RO_OK;
 }
 
-int
+static int
 generic_shdr_from_shdr32(elf_filedata ep,
     LONGESTUTYPE * count_out,
     LONGESTUTYPE offset,
@@ -436,7 +447,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
     return RO_OK;
 }
 
-int
+static int
 generic_shdr_from_shdr64(elf_filedata ep,
     LONGESTUTYPE * count_out,
     LONGESTUTYPE offset,
@@ -666,11 +677,9 @@ dwarf_generic_elf_load_symbols64(elf_filedata ep,
 
 static int
 dwarf_generic_elf_load_symbols(elf_filedata  ep,
-    int is_symtab,
     int secnum,const char *secname,
     struct generic_shdr *psh,
     struct generic_symentry **gsym_out,
-    LONGESTUTYPE offset,LONGESTUTYPE size,
     LONGESTUTYPE *count_out,int *errcode)
 {
     int res = 0;
@@ -713,7 +722,6 @@ dwarf_load_elf_dynsym_symbols(elf_filedata ep, int*errcode)
     LONGESTUTYPE secnum = ep->f_dynsym_sect_index;
     struct generic_shdr * psh = 0;
     const char *namestr = 0;
-    int is_symtab = FALSE;
 
     if(!secnum) {
         return DW_DLV_NO_ENTRY;
@@ -722,11 +730,9 @@ dwarf_load_elf_dynsym_symbols(elf_filedata ep, int*errcode)
     namestr = psh->gh_namestring;
 
     res = dwarf_generic_elf_load_symbols(ep,
-        is_symtab,
         secnum,namestr,
         psh,
         &gsym,
-        psh->gh_offset,psh->gh_size,
         &count,errcode);
     if (res == DW_DLV_OK) {
         ep->f_dynsym = gsym;
@@ -743,7 +749,6 @@ dwarf_load_elf_symtab_symbols(elf_filedata ep, int*errcode)
     LONGESTUTYPE secnum = ep->f_symtab_sect_index;
     struct generic_shdr * psh = 0;
     const char *namestr = 0;
-    int is_symtab = TRUE;
 
     if(!secnum) {
         return DW_DLV_NO_ENTRY;
@@ -752,11 +757,9 @@ dwarf_load_elf_symtab_symbols(elf_filedata ep, int*errcode)
     namestr = psh->gh_namestring;
 
     res = dwarf_generic_elf_load_symbols(ep,
-        is_symtab,
         secnum,namestr,
         psh,
         &gsym,
-        psh->gh_offset,psh->gh_size,
         &count,errcode);
     if (res == DW_DLV_OK) {
         ep->f_symtab = gsym;
@@ -866,7 +869,7 @@ generic_rel_from_rel32(elf_filedata ep,
     return DW_DLV_OK;
 }
 
-int
+static int
 generic_rel_from_rel64(elf_filedata ep,
     struct generic_shdr * gsh,
     dw_elf64_rel *relp,
@@ -1176,12 +1179,11 @@ elf_load_progheaders64(elf_filedata ep,
 }
 
 
-int
+static int
 elf_load_sectheaders32(elf_filedata ep,
     LONGESTUTYPE offset,LONGESTUTYPE entsize,
     LONGESTUTYPE count,int *errcode)
 {
-    struct generic_shdr *gshdr = 0;
     LONGESTUTYPE generic_count = 0;
     int res = 0;
 
@@ -1224,8 +1226,7 @@ elf_load_sectheaders32(elf_filedata ep,
     return RO_OK;
 }
 
-
-int
+static int
 elf_load_sectheaders64(elf_filedata ep,
     LONGESTUTYPE offset,LONGESTUTYPE entsize,
     LONGESTUTYPE count,int*errcode)
@@ -1666,13 +1667,12 @@ dwarf_load_elf_rela(elf_filedata ep,
     struct generic_rela *grp = 0;
     LONGESTUTYPE count_read = 0;
     int res = 0;
-    int is_rela = TRUE;
 
     if (!ep) {
         *errcode = RO_ERR_NULL_ELF_POINTER;
         return DW_DLV_ERROR;
     }
-    offsetsize == ep->f_offsetsize;
+    offsetsize = ep->f_offsetsize;
     generic_count = ep->f_loc_shdr.g_count;
     if (secnum >= generic_count) {
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
@@ -1709,14 +1709,12 @@ dwarf_load_elf_rel(elf_filedata ep,
     struct generic_rela *grp = 0;
     LONGESTUTYPE count_read = 0;
     int res = 0;
-    int is_rela = FALSE;
-
 
     if (!ep) {
         *errcode = RO_ERR_NULL_ELF_POINTER;
         return DW_DLV_ERROR;
     }
-    offsetsize == ep->f_offsetsize;
+    offsetsize = ep->f_offsetsize;
     generic_count = ep->f_loc_shdr.g_count;
     if (secnum >= generic_count) {
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
@@ -1957,7 +1955,7 @@ generic_dyn_from_dyn64(elf_filedata ep,
 }
 
 
-int
+static int
 elf_load_dynamic32(elf_filedata ep,
     LONGESTUTYPE offset,LONGESTUTYPE size, int*errcode)
 {
@@ -2005,7 +2003,7 @@ elf_load_dynamic32(elf_filedata ep,
     return RO_OK;
 }
 
-int
+static int
 elf_load_dynamic64(elf_filedata ep,
     LONGESTUTYPE offset,LONGESTUTYPE size,int *errcode)
 {
@@ -2055,54 +2053,54 @@ elf_load_dynamic64(elf_filedata ep,
 
 static int validate_struct_sizes(int*errcode)
 {
-  
+
     if (sizeof(Elf32_Ehdr) != sizeof(dw_elf32_ehdr)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf64_Ehdr) != sizeof(dw_elf64_ehdr)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf32_Shdr) != sizeof(dw_elf32_shdr)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf64_Shdr) != sizeof(dw_elf64_shdr)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf32_Phdr) != sizeof(dw_elf32_phdr)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf64_Phdr) != sizeof(dw_elf64_phdr)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf32_Rel) != sizeof(dw_elf32_rel)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf64_Rel) != sizeof(dw_elf64_rel)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf32_Rela) != sizeof(dw_elf32_rela)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf64_Rela) != sizeof(dw_elf64_rela)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf32_Sym) != sizeof(dw_elf32_sym)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     if (sizeof(Elf64_Sym) != sizeof(dw_elf64_sym)) {
-         *errcode = RO_ERR_BADTYPESIZE;
-         return DW_DLV_ERROR;
+        *errcode = RO_ERR_BADTYPESIZE;
+        return DW_DLV_ERROR;
     }
     return DW_DLV_OK;
 }
@@ -2112,7 +2110,7 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
 {
     unsigned offsetsize = ep->f_offsetsize;
     int res = 0;
-  
+
     res = validate_struct_sizes(errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -2142,7 +2140,8 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
 }
 
 static int
-elf_find_sym_sections(elf_filedata ep,int *errcode)
+elf_find_sym_sections(elf_filedata ep,
+    UNUSEDARG int *errcode)
 {
     struct generic_shdr* psh = 0;
     LONGESTUTYPE i = 0;

@@ -1,3 +1,6 @@
+2018-10-24: David Anderson
+    * configure.ac: Set a define if UNUSEDARG
+      is available to suppress some compiler warnings.
 2018-10-22: David Anderson
     * configure.ac: 20181021. Removed no-longer-needed
       type-size checking.

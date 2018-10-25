@@ -117,6 +117,34 @@ AC_C_BIGENDIAN
 AC_CHECK_SIZEOF([unsigned long long])
 AC_CHECK_SIZEOF([unsigned long])
 
+# unused attribute
+AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM(
+         [[
+static unsigned int foo(unsigned int x, __attribute__ ((unused)) int y){
+    unsigned int x2 = x + 1;
+    return x2;
+}
+int goo() {
+    unsigned int y = 0;
+    y = foo(12, y);
+}
+         ]],
+         [[
+         ]])
+    ],
+    [
+     have_unused="yes"
+     AC_DEFINE(
+         [HAVE_UNUSED_ATTRIBUTE], [1],
+         [Set to 1 if __attribute__ ((unused)) is available.])
+    ],
+    [have_unused="no"])
+
+AC_MSG_CHECKING([whether "unused" attribute is available])
+AC_MSG_RESULT([${have_unused}])
+
+
 
 AC_CONFIG_FILES([
 Makefile

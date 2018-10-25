@@ -76,8 +76,7 @@ static void elf_print_elf_header(elf_filedata ep);
 static void elf_print_progheaders(elf_filedata ep);
 static void elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE);
 static void elf_print_sectheaders(elf_filedata ep);
-static void elf_print_relocation_details(elf_filedata ep,
-    int isrela,LONGESTUTYPE secnum,
+static void elf_print_relocation_details(int isrela,
     struct generic_shdr * gsh);
 static void elf_print_symbols(elf_filedata ep,int is_symtab,
     struct generic_symentry * gsym,
@@ -276,7 +275,6 @@ static void
 do_one_file(const char *s)
 {
     int res = 0;
-    int obj_is_little_endian = FALSE;
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
@@ -440,7 +438,7 @@ do_one_file(const char *s)
                     return;
                 } else if (res == DW_DLV_OK) {
                     ++reloc_count;
-                    elf_print_relocation_details(ep,FALSE,i,psh);
+                    elf_print_relocation_details(FALSE,psh);
                 }
             } else if (!strncmp(namestr,".rela.",6)) {
                 res = dwarf_load_elf_rela(ep,i,&errcode);
@@ -452,7 +450,7 @@ do_one_file(const char *s)
                     return;
                 } else if (res == DW_DLV_OK) {
                     ++reloc_count;
-                    elf_print_relocation_details(ep,TRUE,i,psh);
+                    elf_print_relocation_details(TRUE,psh);
                 }
             }
         }
@@ -510,8 +508,6 @@ elf_load_print_interp(elf_filedata ep,
     LONGESTUTYPE offset,
     LONGESTUTYPE size)
 {
-    long cloc = 0;
-    long j = 0;
     long res = 0;
     char *buf = 0;
     int errcode = 0;
@@ -661,7 +657,6 @@ elf_print_symbols(elf_filedata ep,
     }
 
     for(i = 0; i < ecount; ++i,++gsym) {
-        char *symstr = 0;
         int errcode = 0;
         int res;
 
@@ -729,7 +724,7 @@ elf_print_symbols(elf_filedata ep,
 }
 
 static void
-elf_print_relocation_content(elf_filedata ep,
+elf_print_relocation_content(
     int isrela,
     struct generic_shdr * gsh,
     struct generic_rela *grela, LONGESTUTYPE count)
@@ -740,7 +735,6 @@ elf_print_relocation_content(elf_filedata ep,
     P("Section " LONGESTUFMT ": %s\n",
         gsh->gh_secnum,
         sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE));
-
     for(i = 0; i < count; ++i,grela++) {
         P("[" LONGESTUFMT "] ",i);
         P(" targ_offset "
@@ -770,20 +764,16 @@ elf_print_relocation_content(elf_filedata ep,
 }
 
 static void
-elf_print_relocation_details(elf_filedata ep,
-    int isrela,LONGESTUTYPE secnum,
+elf_print_relocation_details(
+    int isrela,
     struct generic_shdr * gsh)
 {
     struct generic_rela *grela = 0;
-    int errcode;
     LONGESTUTYPE count  = 0;
-    LONGESTUTYPE i  = 0;
-    int res = 0;
 
     count = gsh->gh_relcount;
     grela = gsh->gh_rels;
-
-    elf_print_relocation_content(ep,isrela,gsh,grela,count);
+    elf_print_relocation_content(isrela,gsh,grela,count);
 }
 
 static void

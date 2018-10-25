@@ -77,6 +77,7 @@ int main(int argc, char **argv)
 {
     int ct = 1;
     int errcode = 0;
+    int zero_outpath = 0;
 
     for( ;ct < argc ; ct++) {
         char *path = argv[ct];
@@ -85,16 +86,25 @@ int main(int argc, char **argv)
         unsigned endian = 0;
         unsigned offsetsize = 0;
         size_t filesize = 0;
+        char *finalpathp = finalpath;
         finalpath[0] = 0;
 
+        if (!strcmp(path,"-z")) {
+            zero_outpath = 1;
+            continue;
+        }
+        if (zero_outpath) {
+            finalpathp = 0;
+        }
+
         res = dwarf_object_detector_path(path,
-            finalpath,PATHSIZE,
+            finalpathp,PATHSIZE,
             &ftype, &endian, &offsetsize,&filesize,
             &errcode);
         if (res == DW_DLV_OK) {
             printf("%s (%s), type %u %s, endian "
                 "%u %s, offsetsize %u, filesize %lu\n",
-                path,finalpath,
+                path,finalpathp?finalpathp:"no-final-path",
                 ftype,dwarf_file_type[ftype],
                 endian,dwarf_endian_type[endian],
                 offsetsize,
