@@ -30,6 +30,8 @@ CLEANFILES = \
   junk.test012.out \
   junk.test013m \
   junk.test013m.out \
+  junk.test014m \
+  junk.test014m.out \
   object_detector \
   readobjmacho \
   readelfobj
@@ -69,5 +71,10 @@ test009m.base \
 test010.base  \
 test011.base  \
 test012.base  \
-test013m.base 
+test013m.base \
+test014m.base \
+mach-o-object32 \	
+mach-o-object32.dSYM \
+mach-o-object64	\
+mach-o-object64.dSYM
 

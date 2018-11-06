@@ -1,3 +1,7 @@
+2018-11-05   David Anderson
+    * test008m.base: Updated to match corrected mach-o endian test.
+    * test014m.sh: New test.
+    * test013m.sh: Updated.
 2018-10-18   David Anderson
     * test012.sh,test012.base: Now checks that archives
       are recognized.

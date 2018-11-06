@@ -1,3 +1,6 @@
+2018-11-05: David Anderson
+    * configure.ac: Rev now 20181105. We fixed magic number detection
+      for pe, mach-o.
 2018-10-24: David Anderson
     * configure.ac: Set a define if UNUSEDARG
       is available to suppress some compiler warnings.
