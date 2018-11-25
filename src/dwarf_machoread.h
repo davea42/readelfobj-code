@@ -133,9 +133,8 @@ typedef struct macho_filedata_s * macho_filedata;
 
 int dwarf_construct_macho_access_path(const char *path,
     macho_filedata *mp, int *errcode);
-int dwarf_construct_macho_access(int fd,const
-    char *path, macho_filedata *mp,
-    int *errcode);
+int dwarf_construct_macho_access(int fd,const char *path, 
+    macho_filedata *mp, int *errcode);
 int dwarf_load_macho_header(macho_filedata mfp,int *errcode);
 int dwarf_load_macho_commands(macho_filedata mfp,int *errcode);
 void dwarf_destruct_macho_access(macho_filedata mp);

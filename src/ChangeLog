@@ -1,3 +1,8 @@
+2018-11-25  David Anderson
+    * dwarf_machoread.h: Minor reformat of one declaration.
+    * dwarf_machoread.c,dwarf_object_detector.c,
+      generic_from_elf.c: All the ASNAR defines for
+      big-endian machines were missing an & character.
 2018-11-05  David Anderson
     * dwarf_object_detector.c: Corrected the broken mach-o
       and pe magic number detection. See new function magic_copy().
