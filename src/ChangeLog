@@ -1,4 +1,9 @@
 2018-11-25  David Anderson
+    * Makefile.am: Now buils readobjpe executable.
+    * dwarf_pe_descr.h,dwarf_peread.c,dwarf_peread.h,
+      dwarf_reading.h,readobjpe.c: This prints
+      PE files object headers.
+2018-11-25  David Anderson
     * dwarf_machoread.h: Minor reformat of one declaration.
     * dwarf_machoread.c,dwarf_object_detector.c,
       generic_from_elf.c: All the ASNAR defines for

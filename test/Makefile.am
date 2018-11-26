@@ -60,6 +60,9 @@ test010.sh  \
 test011.sh  \
 test012.sh  \
 test013m.sh \
+test014m.sh \
+test015p.sh \
+test016p.sh \
 test001.base \
 test003.base  \
 test004.base  \
@@ -73,8 +76,12 @@ test011.base  \
 test012.base  \
 test013m.base \
 test014m.base \
-mach-o-object32 \	
+test015p.base \
+test016p.base \
+mach-o-object32 \
 mach-o-object32.dSYM \
 mach-o-object64	\
-mach-o-object64.dSYM
+mach-o-object64.dSYM \
+libexamine-0.dll \
+libkrb5support.so.0.1.debug 
 

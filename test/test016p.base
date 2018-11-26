@@ -1,1 +1,153 @@
-junk
+Reading: libexamine-0.dll
+File: libexamine-0.dll  Object type letter: P version: 80
+ 64bit?         : no
+ filesize       : 950777
+ offsetsize     : 32
+ pointersize    : 32
+ ftype          : 0
+ byteorder      : 2
+ nthdroffset    : 0x00000084
+ Opt-hdr-offset : 0x00000098
+ Opt-hdr-size   : 0x000000e0
+ symtab-offset  : 0x000ca600
+ strtab-offset  : 0x000ddc38
+ strtab-size    : 0x0000a5c1
+ sectable-offset: 0x00000178
+nt header
+  machine       : 0x0000014c
+  NumberOfSects : 0x00000011
+  PtrToSymTab   : 0x000ca600
+  NumberofSyms  : 0x0000113c
+  OptHdrSize    : 0x000000e0
+  Charctrstics  : 0x00002106
+Optional Header
+  Magic         : 0x0000010b
+  SectionAlign  : 0x00000000
+  SizeOfHeadrs  : 0x00000600
+Display 18 sections.
+Section 0 fileoff: 0x00000000
+  Name:                         :                      
+  VirtSize       : 0x00000000  (0)
+  VirtAddr       : 0x00000000  (0)
+  Raw size       : 0x00000000  (0)
+  Ptr To Rawdata : 0x00000000  (0)
+  Characteristics: 0x00000000  (0)
+Section 1 fileoff: 0x00000178
+  Name:                 .text   :                .text 
+  VirtSize       : 0x00082a54  (535124)
+  VirtAddr       : 0x00001000  (4096)
+  Raw size       : 0x00082c00  (535552)
+  Ptr To Rawdata : 0x00000600  (1536)
+  Characteristics: 0x60500060  (1615855712)
+Section 2 fileoff: 0x000001a0
+  Name:                 .data   :                .data 
+  VirtSize       : 0x000011f0  (4592)
+  VirtAddr       : 0x00084000  (540672)
+  Raw size       : 0x00001200  (4608)
+  Ptr To Rawdata : 0x00083200  (537088)
+  Characteristics: 0xc0600040  (3227516992)
+Section 3 fileoff: 0x000001c8
+  Name:                .rdata   :               .rdata 
+  VirtSize       : 0x0001e824  (124964)
+  VirtAddr       : 0x00086000  (548864)
+  Raw size       : 0x0001ea00  (125440)
+  Ptr To Rawdata : 0x00084400  (541696)
+  Characteristics: 0x40600040  (1080033344)
+Section 4 fileoff: 0x000001f0
+  Name:                  .bss   :                 .bss 
+  VirtSize       : 0x00004628  (17960)
+  VirtAddr       : 0x000a5000  (675840)
+  Raw size       : 0x00000000  (0)
+  Ptr To Rawdata : 0x00000000  (0)
+  Characteristics: 0xc0600080  (3227517056)
+Section 5 fileoff: 0x00000218
+  Name:                .edata   :               .edata 
+  VirtSize       : 0x000008b2  (2226)
+  VirtAddr       : 0x000aa000  (696320)
+  Raw size       : 0x00000a00  (2560)
+  Ptr To Rawdata : 0x000a2e00  (667136)
+  Characteristics: 0x40300040  (1076887616)
+Section 6 fileoff: 0x00000240
+  Name:                .idata   :               .idata 
+  VirtSize       : 0x00001080  (4224)
+  VirtAddr       : 0x000ab000  (700416)
+  Raw size       : 0x00001200  (4608)
+  Ptr To Rawdata : 0x000a3800  (669696)
+  Characteristics: 0xc0300040  (3224371264)
+Section 7 fileoff: 0x00000268
+  Name:                  .CRT   :                 .CRT 
+  VirtSize       : 0x0000002c  (44)
+  VirtAddr       : 0x000ad000  (708608)
+  Raw size       : 0x00000200  (512)
+  Ptr To Rawdata : 0x000a4a00  (674304)
+  Characteristics: 0xc0300040  (3224371264)
+Section 8 fileoff: 0x00000290
+  Name:                  .tls   :                 .tls 
+  VirtSize       : 0x00000020  (32)
+  VirtAddr       : 0x000ae000  (712704)
+  Raw size       : 0x00000200  (512)
+  Ptr To Rawdata : 0x000a4c00  (674816)
+  Characteristics: 0xc0300040  (3224371264)
+Section 9 fileoff: 0x000002b8
+  Name:                .reloc   :               .reloc 
+  VirtSize       : 0x000057f0  (22512)
+  VirtAddr       : 0x000af000  (716800)
+  Raw size       : 0x00005800  (22528)
+  Ptr To Rawdata : 0x000a4e00  (675328)
+  Characteristics: 0x42300040  (1110442048)
+Section 10 fileoff: 0x000002e0
+  Name:                    /4   :       .debug_aranges 
+  VirtSize       : 0x00000140  (320)
+  VirtAddr       : 0x000b5000  (741376)
+  Raw size       : 0x00000200  (512)
+  Ptr To Rawdata : 0x000aa600  (697856)
+  Characteristics: 0x42100040  (1108344896)
+Section 11 fileoff: 0x00000308
+  Name:                   /19   :          .debug_info 
+  VirtSize       : 0x00019bca  (105418)
+  VirtAddr       : 0x000b6000  (745472)
+  Raw size       : 0x00019c00  (105472)
+  Ptr To Rawdata : 0x000aa800  (698368)
+  Characteristics: 0x42100040  (1108344896)
+Section 12 fileoff: 0x00000330
+  Name:                   /31   :        .debug_abbrev 
+  VirtSize       : 0x00001b17  (6935)
+  VirtAddr       : 0x000d0000  (851968)
+  Raw size       : 0x00001c00  (7168)
+  Ptr To Rawdata : 0x000c4400  (803840)
+  Characteristics: 0x42100040  (1108344896)
+Section 13 fileoff: 0x00000358
+  Name:                   /45   :          .debug_line 
+  VirtSize       : 0x00001382  (4994)
+  VirtAddr       : 0x000d2000  (860160)
+  Raw size       : 0x00001400  (5120)
+  Ptr To Rawdata : 0x000c6000  (811008)
+  Characteristics: 0x42100040  (1108344896)
+Section 14 fileoff: 0x00000380
+  Name:                   /57   :         .debug_frame 
+  VirtSize       : 0x00000f2c  (3884)
+  VirtAddr       : 0x000d4000  (868352)
+  Raw size       : 0x00001000  (4096)
+  Ptr To Rawdata : 0x000c7400  (816128)
+  Characteristics: 0x42300040  (1110442048)
+Section 15 fileoff: 0x000003a8
+  Name:                   /70   :           .debug_str 
+  VirtSize       : 0x00000360  (864)
+  VirtAddr       : 0x000d5000  (872448)
+  Raw size       : 0x00000400  (1024)
+  Ptr To Rawdata : 0x000c8400  (820224)
+  Characteristics: 0x42100040  (1108344896)
+Section 16 fileoff: 0x000003d0
+  Name:                   /81   :           .debug_loc 
+  VirtSize       : 0x00001917  (6423)
+  VirtAddr       : 0x000d6000  (876544)
+  Raw size       : 0x00001a00  (6656)
+  Ptr To Rawdata : 0x000c8800  (821248)
+  Characteristics: 0x42100040  (1108344896)
+Section 17 fileoff: 0x000003f8
+  Name:                   /92   :        .debug_ranges 
+  VirtSize       : 0x00000270  (624)
+  VirtAddr       : 0x000d8000  (884736)
+  Raw size       : 0x00000400  (1024)
+  Ptr To Rawdata : 0x000ca200  (827904)
+  Characteristics: 0x42100040  (1108344896)

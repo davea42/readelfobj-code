@@ -3,3 +3,4 @@
 cp ../src/readelfobj .
 cp ../src/object_detector .
 cp ../src/readobjmacho .
+cp ../src/readobjpe .

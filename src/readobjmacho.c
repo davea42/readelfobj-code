@@ -154,7 +154,7 @@ main(int argc,char **argv)
             }
             if((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
-                P("Version-readelfobj: %s\n",
+                P("Version-readobjmacho: %s\n",
                     READELFOBJ_VERSION_DATE_STR);
                 printed_version = TRUE;
                 continue;

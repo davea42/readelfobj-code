@@ -92,7 +92,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = readelfobj$(EXEEXT) readobjmacho$(EXEEXT) \
-	object_detector$(EXEEXT)
+	readobjpe$(EXEEXT) object_detector$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -142,6 +142,15 @@ readobjmacho_LDADD = $(LDADD)
 readobjmacho_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readobjmacho_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+am_readobjpe_OBJECTS = readobjpe-readobjpe.$(OBJEXT) \
+	readobjpe-dwarf_object_read_common.$(OBJEXT) \
+	readobjpe-dwarf_object_detector.$(OBJEXT) \
+	readobjpe-dwarf_peread.$(OBJEXT) readobjpe-sanitized.$(OBJEXT)
+readobjpe_OBJECTS = $(am_readobjpe_OBJECTS)
+readobjpe_LDADD = $(LDADD)
+readobjpe_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readobjpe_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -177,9 +186,9 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(object_detector_SOURCES) $(readelfobj_SOURCES) \
-	$(readobjmacho_SOURCES)
+	$(readobjmacho_SOURCES) $(readobjpe_SOURCES)
 DIST_SOURCES = $(object_detector_SOURCES) $(readelfobj_SOURCES) \
-	$(readobjmacho_SOURCES)
+	$(readobjmacho_SOURCES) $(readobjpe_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -369,6 +378,7 @@ generic_from_elf.c  \
 readelfobj_version.h \
 readelfobj.c \
 dwarf_reading.h \
+dw_elfstructs.h \
 readelfobj.h \
 sanitized.h \
 sanitized.c
@@ -386,12 +396,27 @@ dwarf_object_detector.c \
 dwarf_object_detector.h \
 dwarf_machoread.h \
 dwarf_machoread.c \
-dw_elfstructs.h \
 dwarf_macho_loader.h \
 sanitized.c
 
 readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
 readobjmacho_CPPFLAGS = \
+-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
+
+readobjpe_SOURCES = readobjpe.c \
+sanitized.h \
+dwarf_object_read_common.c \
+dwarf_object_read_common.h \
+dwarf_reading.h \
+dwarf_object_detector.c \
+dwarf_object_detector.h \
+dwarf_peread.h \
+dwarf_peread.c \
+dwarf_pe_descr.h \
+sanitized.c
+
+readobjpe_CFLAGS = $(RO_CFLAGS_WARN)
+readobjpe_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 object_detector_SOURCES = object_detector_main.c \
@@ -501,6 +526,10 @@ readobjmacho$(EXEEXT): $(readobjmacho_OBJECTS) $(readobjmacho_DEPENDENCIES) $(EX
 	@rm -f readobjmacho$(EXEEXT)
 	$(AM_V_CCLD)$(readobjmacho_LINK) $(readobjmacho_OBJECTS) $(readobjmacho_LDADD) $(LIBS)
 
+readobjpe$(EXEEXT): $(readobjpe_OBJECTS) $(readobjpe_DEPENDENCIES) $(EXTRA_readobjpe_DEPENDENCIES) 
+	@rm -f readobjpe$(EXEEXT)
+	$(AM_V_CCLD)$(readobjpe_LINK) $(readobjpe_OBJECTS) $(readobjpe_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -520,6 +549,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_object_read_common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-readobjmacho.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-sanitized.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-dwarf_object_detector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-dwarf_object_read_common.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-dwarf_peread.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-readobjpe.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-sanitized.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -726,6 +760,76 @@ readobjmacho-sanitized.obj: sanitized.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readobjmacho-sanitized.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
+
+readobjpe-readobjpe.o: readobjpe.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-readobjpe.o -MD -MP -MF $(DEPDIR)/readobjpe-readobjpe.Tpo -c -o readobjpe-readobjpe.o `test -f 'readobjpe.c' || echo '$(srcdir)/'`readobjpe.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-readobjpe.Tpo $(DEPDIR)/readobjpe-readobjpe.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobjpe.c' object='readobjpe-readobjpe.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-readobjpe.o `test -f 'readobjpe.c' || echo '$(srcdir)/'`readobjpe.c
+
+readobjpe-readobjpe.obj: readobjpe.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-readobjpe.obj -MD -MP -MF $(DEPDIR)/readobjpe-readobjpe.Tpo -c -o readobjpe-readobjpe.obj `if test -f 'readobjpe.c'; then $(CYGPATH_W) 'readobjpe.c'; else $(CYGPATH_W) '$(srcdir)/readobjpe.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-readobjpe.Tpo $(DEPDIR)/readobjpe-readobjpe.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='readobjpe.c' object='readobjpe-readobjpe.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-readobjpe.obj `if test -f 'readobjpe.c'; then $(CYGPATH_W) 'readobjpe.c'; else $(CYGPATH_W) '$(srcdir)/readobjpe.c'; fi`
+
+readobjpe-dwarf_object_read_common.o: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-dwarf_object_read_common.o -MD -MP -MF $(DEPDIR)/readobjpe-dwarf_object_read_common.Tpo -c -o readobjpe-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-dwarf_object_read_common.Tpo $(DEPDIR)/readobjpe-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='readobjpe-dwarf_object_read_common.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
+
+readobjpe-dwarf_object_read_common.obj: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-dwarf_object_read_common.obj -MD -MP -MF $(DEPDIR)/readobjpe-dwarf_object_read_common.Tpo -c -o readobjpe-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-dwarf_object_read_common.Tpo $(DEPDIR)/readobjpe-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='readobjpe-dwarf_object_read_common.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
+
+readobjpe-dwarf_object_detector.o: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-dwarf_object_detector.o -MD -MP -MF $(DEPDIR)/readobjpe-dwarf_object_detector.Tpo -c -o readobjpe-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-dwarf_object_detector.Tpo $(DEPDIR)/readobjpe-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='readobjpe-dwarf_object_detector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
+
+readobjpe-dwarf_object_detector.obj: dwarf_object_detector.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-dwarf_object_detector.obj -MD -MP -MF $(DEPDIR)/readobjpe-dwarf_object_detector.Tpo -c -o readobjpe-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-dwarf_object_detector.Tpo $(DEPDIR)/readobjpe-dwarf_object_detector.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='readobjpe-dwarf_object_detector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+
+readobjpe-dwarf_peread.o: dwarf_peread.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-dwarf_peread.o -MD -MP -MF $(DEPDIR)/readobjpe-dwarf_peread.Tpo -c -o readobjpe-dwarf_peread.o `test -f 'dwarf_peread.c' || echo '$(srcdir)/'`dwarf_peread.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-dwarf_peread.Tpo $(DEPDIR)/readobjpe-dwarf_peread.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_peread.c' object='readobjpe-dwarf_peread.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-dwarf_peread.o `test -f 'dwarf_peread.c' || echo '$(srcdir)/'`dwarf_peread.c
+
+readobjpe-dwarf_peread.obj: dwarf_peread.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-dwarf_peread.obj -MD -MP -MF $(DEPDIR)/readobjpe-dwarf_peread.Tpo -c -o readobjpe-dwarf_peread.obj `if test -f 'dwarf_peread.c'; then $(CYGPATH_W) 'dwarf_peread.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_peread.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-dwarf_peread.Tpo $(DEPDIR)/readobjpe-dwarf_peread.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_peread.c' object='readobjpe-dwarf_peread.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-dwarf_peread.obj `if test -f 'dwarf_peread.c'; then $(CYGPATH_W) 'dwarf_peread.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_peread.c'; fi`
+
+readobjpe-sanitized.o: sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-sanitized.o -MD -MP -MF $(DEPDIR)/readobjpe-sanitized.Tpo -c -o readobjpe-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-sanitized.Tpo $(DEPDIR)/readobjpe-sanitized.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readobjpe-sanitized.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
+
+readobjpe-sanitized.obj: sanitized.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-sanitized.obj -MD -MP -MF $(DEPDIR)/readobjpe-sanitized.Tpo -c -o readobjpe-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-sanitized.Tpo $(DEPDIR)/readobjpe-sanitized.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sanitized.c' object='readobjpe-sanitized.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

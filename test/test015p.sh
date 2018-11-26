@@ -1,5 +1,5 @@
 #!/bin/sh
-n=test015m
+n=test015p
 base=$n.base
 o=libexamine-0.dll
 #echo "START test $n "

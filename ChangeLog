@@ -1,3 +1,6 @@
+2018-11-25: David Anderson
+    * configure.ac: Rev now 20181125. Added a PE object header
+      printing program: readobjpe.
 2018-11-05: David Anderson
     * configure.ac: Rev now 20181105. We fixed magic number detection
       for pe, mach-o.
