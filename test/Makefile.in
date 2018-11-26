@@ -276,6 +276,10 @@ CLEANFILES = \
   junk.test013m.out \
   junk.test014m \
   junk.test014m.out \
+  junk.test015p \
+  junk.test015p.out \
+  junk.test016p \
+  junk.test016p.out \
   object_detector \
   readobjmacho \
   readelfobj
