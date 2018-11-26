@@ -1,4 +1,6 @@
 2018-11-25  David Anderson
+    * readobjpe.c: Removed debug printf.
+2018-11-25  David Anderson
     * dwarf_machoread.h,dwarf_object_detector.c,dwarf_pe_descr.h,
       dwarf_peread.c,dwarf_peread.h,readobjpe.c: Fixing indents
       and removing trailing whitespace.

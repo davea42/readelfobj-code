@@ -38,6 +38,7 @@ CLEANFILES = \
   junk.test016p.out \
   object_detector \
   readobjmacho \
+  readobjpe \
   readelfobj
 
 

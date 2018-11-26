@@ -1,4 +1,7 @@
 2018-11-25   David Anderson
+    * CLEANUP: Missing a couple files to remove.
+    * Makefile.am: Lists all the files to remove now.
+2018-11-25   David Anderson
     * test015p.sh, test015p.base: New test case for pe.
     * test016p.sh, test016p.base: New test case for pe.
 2018-11-05   David Anderson

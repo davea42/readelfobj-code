@@ -212,7 +212,6 @@ do_one_file(const char *name)
         return;
     }
     pe_headers_display(pep);
-printf("dadebug now sections");
     pe_sections_display(pep);
     dwarf_destruct_pe_access(pep);
 }

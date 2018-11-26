@@ -2,3 +2,5 @@
 rm junk*
 rm readelfobj
 rm object_detector
+rm readobjmacho
+rm readobjpe
