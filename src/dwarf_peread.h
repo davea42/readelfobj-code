@@ -103,8 +103,8 @@ struct dwarf_pe_generic_optional_header
 
 struct dwarf_pe_generic_image_section_header
 {
-    unsigned char *name; /* Name must be freed */
-    unsigned char *dwarfsectname; /* Name must be freed */
+    char *name; /* Name must be freed */
+    char *dwarfsectname; /* Name must be freed */
     Dwarf_Unsigned SecHeaderOffset; /* offset in object file */
         /* union { */
         /* Dwarf_Unsigned PhysicalAddress; */
@@ -157,7 +157,7 @@ typedef struct pe_filedata_s {
     struct dwarf_pe_generic_image_section_header *pe_sectionptr;
 
     Dwarf_Unsigned pe_string_table_size;
-    unsigned char *pe_string_table;
+    char          *pe_string_table;
 } dwarf_pe_object_access_internals_t;
 
 int dwarf_construct_pe_access_path(const char *path,

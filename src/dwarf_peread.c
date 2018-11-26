@@ -74,7 +74,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 static unsigned long
-magic_copy(unsigned char *d, unsigned len)
+magic_copy(char *d, unsigned len)
 {
     unsigned i = 0;
     unsigned long v = 0;
@@ -82,7 +82,7 @@ magic_copy(unsigned char *d, unsigned len)
     v = d[0];
     for(i = 1 ; i < len; ++i) {
         v <<= 8;
-        v |=  d[i];
+        v |=  0xff&d[i];
     }
     return v;
 }
@@ -112,28 +112,33 @@ pe_section_name_get(dwarf_pe_object_access_internals_t *pep,
 
     if (name_array[0] == '/') {
         long v = 0;
+        unsigned long u = 0;
         const char *s = 0;
-        size_t slen = 0;
         char temp_array[9];
 
         memcpy(temp_array,name_array+1,7);
         temp_array[7] = 0;
         v = atoi(temp_array);
-        if (v > pep->pe_string_table_size) {
+        if (v < 0) {
             *errcode = DW_DLE_STRING_OFFSET_BAD;
             return DW_DLV_ERROR;
         }
-        s = pep->pe_string_table +v;
+        u = v;
+        if (u > pep->pe_string_table_size) {
+            *errcode = DW_DLE_STRING_OFFSET_BAD;
+            return DW_DLV_ERROR;
+        }
+        s = pep->pe_string_table +u;
         *name_out = s;
         return DW_DLV_OK;
     }
-    *name_out = name_array; 
+    *name_out = name_array;
     return DW_DLV_OK;
 }
 
 #if 0
 
-static Dwarf_Endianness 
+static Dwarf_Endianness
 pe_get_byte_order (void *obj)
 {
     dwarf_pe_object_access_internals_t *pep =
@@ -142,7 +147,7 @@ pe_get_byte_order (void *obj)
 }
 
 
-static Dwarf_Small 
+static Dwarf_Small
 pe_get_length_size (void *obj)
 {
     dwarf_pe_object_access_internals_t *pep =
@@ -150,7 +155,7 @@ pe_get_length_size (void *obj)
     return pep->pe_offsetsize/8;
 }
 
-static Dwarf_Small 
+static Dwarf_Small
 pe_get_pointer_size (void *obj)
 {
     dwarf_pe_object_access_internals_t *pep =
@@ -159,7 +164,7 @@ pe_get_pointer_size (void *obj)
 }
 
 
-static Dwarf_Unsigned 
+static Dwarf_Unsigned
 pe_get_section_count (void *obj)
 {
     dwarf_pe_object_access_internals_t *pep =
@@ -167,7 +172,7 @@ pe_get_section_count (void *obj)
     return pep->pe_section_count;
 }
 
-static int 
+static int
 pe_get_section_info (void *obj,
     Dwarf_Half section_index,
     Dwarf_Obj_Access_Section *return_section,
@@ -196,15 +201,14 @@ pe_get_section_info (void *obj,
 
 static int
 load_optional_header32(dwarf_pe_object_access_internals_t *pep,
-    Dwarf_Unsigned offset, int*errcode )   
+    Dwarf_Unsigned offset, int*errcode)
 {
     int res = 0;
     IMAGE_OPTIONAL_HEADER32 hdr;
 
     pep->pe_optional_header_size = sizeof(IMAGE_OPTIONAL_HEADER32);
- 
     res =  dwarf_object_read_random(pep->pe_fd,
-        (char *)&hdr, 
+        (char *)&hdr,
         offset, sizeof(IMAGE_OPTIONAL_HEADER32), errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -221,13 +225,13 @@ load_optional_header32(dwarf_pe_object_access_internals_t *pep,
         hdr.SizeOfImage);
     ASNAR(pep->pe_copy_word,pep->pe_OptionalHeader.SizeOfHeaders,
         hdr.SizeOfHeaders);
-    pep->pe_OptionalHeader.SizeOfDataDirEntry = 
+    pep->pe_OptionalHeader.SizeOfDataDirEntry =
         sizeof(IMAGE_DATA_DIRECTORY);
     return DW_DLV_OK;
 }
 static int
 load_optional_header64(dwarf_pe_object_access_internals_t *pep,
-    Dwarf_Unsigned offset, int*errcode )   
+    Dwarf_Unsigned offset, int*errcode )
 {
     IMAGE_OPTIONAL_HEADER64 hdr;
     int res = 0;
@@ -235,7 +239,7 @@ load_optional_header64(dwarf_pe_object_access_internals_t *pep,
     pep->pe_optional_header_size = sizeof(IMAGE_OPTIONAL_HEADER64);
 
     res =  dwarf_object_read_random(pep->pe_fd,
-        (char *)&hdr, 
+        (char *)&hdr,
         offset, sizeof(IMAGE_OPTIONAL_HEADER64), errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -252,11 +256,12 @@ load_optional_header64(dwarf_pe_object_access_internals_t *pep,
         hdr.SizeOfImage);
     ASNAR(pep->pe_copy_word,pep->pe_OptionalHeader.SizeOfHeaders,
         hdr.SizeOfHeaders);
-    pep->pe_OptionalHeader.SizeOfDataDirEntry = 
+    pep->pe_OptionalHeader.SizeOfDataDirEntry =
         sizeof(IMAGE_DATA_DIRECTORY);
     return DW_DLV_OK;
 }
 
+#if 0
 static int
 pe_load_section (void *obj, unsigned section_index,
     unsigned char **return_data, int *error)
@@ -294,6 +299,7 @@ pe_load_section (void *obj, unsigned section_index,
     }
     return DW_DLV_NO_ENTRY;
 }
+#endif /* 0 */
 
 void
 dwarf_destruct_pe_access(
@@ -336,7 +342,7 @@ dwarf_pe_load_dwarf_section_headers(
     dwarf_pe_object_access_internals_t *pep,int *errcode)
 {
     Dwarf_Unsigned i = 0;
-    Dwarf_Unsigned input_count = 
+    Dwarf_Unsigned input_count =
         pep->pe_FileHeader.NumberOfSections;
     Dwarf_Unsigned offset_in_input = pep->pe_section_table_offset;
     Dwarf_Unsigned section_hdr_size = sizeof(IMAGE_SECTION_HEADER);
@@ -357,7 +363,7 @@ dwarf_pe_load_dwarf_section_headers(
         *errcode = DW_DLE_PE_OFFSET_BAD;
         return DW_DLV_ERROR;
     }
-    pep->pe_sectionptr = 
+    pep->pe_sectionptr =
         (struct dwarf_pe_generic_image_section_header * )
         calloc(pep->pe_section_count,
         sizeof(struct dwarf_pe_generic_image_section_header));
@@ -372,7 +378,7 @@ dwarf_pe_load_dwarf_section_headers(
     sec_outp->name = strdup("");
     sec_outp->dwarfsectname = strdup("");
     sec_outp++;
-    for ( ;  i < input_count; 
+    for ( ;  i < input_count;
         ++i, cur_offset += section_hdr_size, sec_outp++) {
 
         int res = 0;
@@ -392,7 +398,7 @@ dwarf_pe_load_dwarf_section_headers(
         res = pe_section_name_get(pep,
             safe_name,&expname,errcode);
         if (res != DW_DLV_OK) {
-           return res;
+            return res;
         }
         sec_outp->dwarfsectname = strdup(expname);
 
@@ -431,7 +437,6 @@ dwarf_load_pe_sections(
 {
     struct dos_header dhinmem;
     IMAGE_FILE_HEADER ifh;
-    unsigned segment_command_count = 0;
     void *(*word_swap) (void *, const void *, size_t);
     unsigned locendian = 0;
     int res = 0;
@@ -453,9 +458,9 @@ dwarf_load_pe_sections(
     dos_sig = magic_copy((char *)dhinmem.dh_mz,
         sizeof(dhinmem.dh_mz));
     if (dos_sig == IMAGE_DOS_SIGNATURE) {
-       /*  IMAGE_DOS_SIGNATURE assumes bytes reversed by little-endian
-           load, so we intrepet a match the other way. */
-       /* BIG ENDIAN. From looking at hex characters in object  */
+        /*  IMAGE_DOS_SIGNATURE assumes bytes reversed by little-endian
+            load, so we intrepet a match the other way. */
+        /* BIG ENDIAN. From looking at hex characters in object  */
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy;
 #else  /* LITTLE ENDIAN */
@@ -463,13 +468,13 @@ dwarf_load_pe_sections(
 #endif /* LITTLE- BIG-ENDIAN */
         locendian = DW_ENDIAN_BIG;
     } else if (dos_sig == IMAGE_DOS_REVSIGNATURE) {
-       /* raw load, so  intrepet a match the other way. */
-       /* LITTLE ENDIAN */
+        /* raw load, so  intrepet a match the other way. */
+        /* LITTLE ENDIAN */
 #ifdef WORDS_BIGENDIAN
         word_swap = dwarf_ro_memcpy_swap_bytes;
-#else  /* LITTLE ENDIAN */
+#else   /* LITTLE ENDIAN */
         word_swap = memcpy;
-#endif /* LITTLE- BIG-ENDIAN */
+#endif  /* LITTLE- BIG-ENDIAN */
         locendian = DW_ENDIAN_LITTLE;
     } else {
         /* Not dos header not a PE file we recognize */
@@ -536,7 +541,7 @@ dwarf_load_pe_sections(
     if (pep->pe_offsetsize == 32) {
         res = load_optional_header32(pep,
             pep->pe_optional_header_offset,errcode);
-        pep->pe_optional_header_size = sizeof(IMAGE_OPTIONAL_HEADER32); 
+        pep->pe_optional_header_size = sizeof(IMAGE_OPTIONAL_HEADER32);
     } else if (pep->pe_offsetsize == 64) {
         res = load_optional_header64(pep,
             pep->pe_optional_header_offset,errcode);
@@ -551,29 +556,29 @@ dwarf_load_pe_sections(
 
     pep->pe_section_table_offset = pep->pe_optional_header_offset
         + pep->pe_optional_header_size;
-    pep->pe_symbol_table_offset  = 
+    pep->pe_symbol_table_offset =
         pep->pe_FileHeader.PointerToSymbolTable;
     if (pep->pe_symbol_table_offset >= pep->pe_filesize) {
-         *errcode = DW_DLE_OFFSET_SIZE;
-         return DW_DLV_ERROR;
+        *errcode = DW_DLE_OFFSET_SIZE;
+        return DW_DLV_ERROR;
     }
     if (pep->pe_symbol_table_offset) {
-        pep->pe_string_table_offset  = 
+        pep->pe_string_table_offset  =
             pep->pe_symbol_table_offset +
             (pep->pe_FileHeader.NumberOfSymbols *
             IMAGE_SIZEOF_SYMBOL);
     }
 
     if (pep->pe_string_table_offset >= pep->pe_filesize) {
-         *errcode = DW_DLE_OFFSET_SIZE;
-         pep->pe_string_table_size = 0; 
-         return DW_DLV_ERROR;
+        *errcode = DW_DLE_OFFSET_SIZE;
+        pep->pe_string_table_size = 0;
+        return DW_DLV_ERROR;
     }
     if (pep->pe_string_table_offset) {
         /*  https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#coff-string-table  */
         /* The first 4 bytes of the string table contain
             the size of the string table. */
-        char size_field[4]; 
+        char size_field[4];
 
         memset(size_field,0,sizeof(size_field));
         res =  dwarf_object_read_random(pep->pe_fd,
@@ -588,7 +593,7 @@ dwarf_load_pe_sections(
             *errcode = DW_DLE_PE_OFFSET_BAD;
             return DW_DLV_ERROR;
         }
-        pep->pe_string_table = 
+        pep->pe_string_table =
             (char *)malloc(pep->pe_string_table_size);
         if (!pep->pe_string_table) {
             *errcode = DW_DLE_ALLOC_FAIL;
@@ -597,11 +602,10 @@ dwarf_load_pe_sections(
         res = dwarf_object_read_random(pep->pe_fd,
             pep->pe_string_table, pep->pe_string_table_offset,
             pep->pe_string_table_size,errcode);
-        if (res != DW_DLV_OK) {     
+        if (res != DW_DLV_OK) {
             return res;
         }
     }
-        
     res = dwarf_pe_load_dwarf_section_headers(pep,errcode);
     return res;
 }

@@ -1,4 +1,8 @@
 2018-11-25  David Anderson
+    * dwarf_machoread.h,dwarf_object_detector.c,dwarf_pe_descr.h,
+      dwarf_peread.c,dwarf_peread.h,readobjpe.c: Fixing indents
+      and removing trailing whitespace.
+2018-11-25  David Anderson
     * Makefile.am: Now buils readobjpe executable.
     * dwarf_pe_descr.h,dwarf_peread.c,dwarf_peread.h,
       dwarf_reading.h,readobjpe.c: This prints

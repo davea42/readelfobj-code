@@ -35,9 +35,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-#define IMAGE_DOS_SIGNATURE 0x5a4d /* le on disk 'M' 'Z' */
+#define IMAGE_DOS_SIGNATURE    0x5a4d /* le on disk 'M' 'Z' */
 #define IMAGE_DOS_REVSIGNATURE 0x4d5a /* be on disk */
-#define IMAGE_NT_SIGNATURE 0x00004550 
+#define IMAGE_NT_SIGNATURE     0x00004550
 
 #ifndef TYP
 #define TYP(n,l) char n[l]
@@ -183,7 +183,7 @@ typedef struct
 
 typedef struct
 {
-    unsigned char Name[IMAGE_SIZEOF_SHORT_NAME];
+    char Name[IMAGE_SIZEOF_SHORT_NAME];
     union {
         TYP(PhysicalAddress,4);
         TYP(VirtualSize,4);

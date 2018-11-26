@@ -125,13 +125,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MH_CIGAM_64 0xcffaedfe
 #endif /*  MH_MAGIC_64 */
 
-static unsigned long 
+static unsigned long
 magic_copy(unsigned char *d, unsigned len)
 {
     unsigned i = 0;
     unsigned long v = 0;
-    
-    v = d[0]; 
+
+    v = d[0];
     for(i = 1 ; i < len; ++i) {
         v <<= 8;
         v |=  d[i];
@@ -427,23 +427,23 @@ is_pe_object(int fd,
     dos_sig = magic_copy((unsigned char *)dhinmem.dh_mz,
         sizeof(dhinmem.dh_mz));
     if (dos_sig == IMAGE_DOS_SIGNATURE) {
-       /*  IMAGE_DOS_SIGNATURE assumes bytes reversed by little-endian
-           load, so we intrepet a match the other way. */
-       /*  BIG ENDIAN. From looking at hex characters in object  */
+        /*  IMAGE_DOS_SIGNATURE assumes bytes reversed by little-endian
+            load, so we intrepet a match the other way. */
+        /*  BIG ENDIAN. From looking at hex characters in object  */
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy;
-#else  /* LITTLE ENDIAN */
+#else   /* LITTLE ENDIAN */
         word_swap = memcpy_swap_bytes;
-#endif /* LITTLE- BIG-ENDIAN */
+#endif  /* LITTLE- BIG-ENDIAN */
         locendian = DW_ENDIAN_BIG;
     } else if (dos_sig == IMAGE_DOS_REVSIGNATURE) {
-       /* raw load, so  intrepet a match the other way. */
-       /* LITTLE ENDIAN */
+        /* raw load, so  intrepet a match the other way. */
+        /* LITTLE ENDIAN */
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy_swap_bytes;
-#else  /* LITTLE ENDIAN */
+#else   /* LITTLE ENDIAN */
         word_swap = memcpy;
-#endif /* LITTLE- BIG-ENDIAN */
+#endif  /* LITTLE- BIG-ENDIAN */
         locendian = DW_ENDIAN_LITTLE;
     } else {
         /* Not dos header not a PE file we recognize */

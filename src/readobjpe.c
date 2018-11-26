@@ -69,29 +69,28 @@ pe_sections_display(dwarf_pe_object_access_internals_t *pep)
     printf("Display " LONGESTUFMT " sections.\n",
         count);
     for( ; i < count; ++i) {
-        struct dwarf_pe_generic_image_section_header *sp = 
+        struct dwarf_pe_generic_image_section_header *sp =
             pep->pe_sectionptr + i;
 
-        printf("Section " LONGESTUFMT " fileoff: " 
+        printf("Section " LONGESTUFMT " fileoff: "
             LONGESTXFMT8 "\n",
-            i,sp->SecHeaderOffset);   
+            i,sp->SecHeaderOffset);
         printf("  Name:  %20s   : %20s \n",
             sp->name,sp->dwarfsectname);
-        printf("  VirtSize       : " LONGESTXFMT8 
-            "  (" LONGESTUFMT ")\n", 
+        printf("  VirtSize       : " LONGESTXFMT8
+            "  (" LONGESTUFMT ")\n",
             sp->VirtualSize,sp->VirtualSize);
-        printf("  VirtAddr       : " LONGESTXFMT8 
-            "  (" LONGESTUFMT ")\n", 
+        printf("  VirtAddr       : " LONGESTXFMT8
+            "  (" LONGESTUFMT ")\n",
             sp->VirtualAddress,sp->VirtualAddress);
-        printf("  Raw size       : " LONGESTXFMT8 
-            "  (" LONGESTUFMT ")\n", 
+        printf("  Raw size       : " LONGESTXFMT8
+            "  (" LONGESTUFMT ")\n",
             sp->SizeOfRawData,sp->SizeOfRawData);
-        printf("  Ptr To Rawdata : " LONGESTXFMT8 
-            "  (" LONGESTUFMT ")\n", 
+        printf("  Ptr To Rawdata : " LONGESTXFMT8
+            "  (" LONGESTUFMT ")\n",
             sp->PointerToRawData,sp->PointerToRawData);
-
-        printf("  Characteristics: " LONGESTXFMT8 
-            "  (" LONGESTUFMT ")\n", 
+        printf("  Characteristics: " LONGESTXFMT8
+            "  (" LONGESTUFMT ")\n",
             sp->Characteristics,sp->Characteristics);
     }
 }
@@ -172,13 +171,12 @@ do_one_file(const char *name)
         printf("ERROR: Unable to read \"%s\", ignoring file. "
             "Errcode %d\n", name,errcode);
         return;
-    }   
+    }
     printf("Reading: %s\n",name);
     if (ftype !=  DW_FTYPE_PE) {
         printf("File %s is not pe. Ignored.\n",name);
         return;
     }
-    
     res = dwarf_construct_pe_access_path(name,
         &pep,&errcode);
     if (res != RO_OK) {
