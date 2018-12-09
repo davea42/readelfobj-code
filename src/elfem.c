@@ -82,11 +82,13 @@ standard_table_name(struct em_values *em,
             continue;
         }
         curslen = strlen(ev->em_name);
-        if (curslen < remaining ) {
+        if (curslen < remaining) {
+            if (next > 1) {
+                buffer[next++] = ' ';
+            }
             strcpy(buffer+next,ev->em_name);
             next += curslen;
             remaining -= curslen;
-            buffer[next++] = ' ';
             buffer[next] = 0;
         } else {
             /* no more room, should never happen */

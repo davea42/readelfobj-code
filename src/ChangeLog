@@ -1,3 +1,13 @@
+2018-12-09  David Anderson
+    * elfem.c: Refined the entry-name lookup so there
+      is no wasted blank space at the end.
+    * generic_from_elf.c: Loading the symstr and dynstr
+      now check the right fields and work properly.
+    * readelfobj.c: Improved the appearance and completeness
+      of the output of the dynamic section printout
+      (readelfobj option: --print-dynamic).
+    * readelfobj.h: Ensure the original standard DT_ Elf symbols
+      are defined.
 2018-11-25  David Anderson
     * readobjpe.c: Removed debug printf.
 2018-11-25  David Anderson

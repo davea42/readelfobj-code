@@ -911,13 +911,16 @@ dwarf_load_elf_dynstr(elf_filedata ep, int *errcode)
     LONGESTUTYPE strsectindex  =0;
     LONGESTUTYPE strsectlength = 0;
 
-        if (!ep->f_dynsym_sect_index) {
+        if (!ep->f_dynsym_sect_strings_sect_index) {
             return DW_DLV_NO_ENTRY;
         }
-        strsectindex = ep->f_dynsym_sect_index;
+        strsectindex = ep->f_dynsym_sect_strings_sect_index;
         strsectlength = ep->f_dynsym_sect_strings_max;
         strpsh = ep->f_shdr + strsectindex;
-        ep->f_dynsym_sect_strings = malloc(strsectlength);
+        /*  Alloc an extra byte as a guaranteed NUL byte
+            at the end of the strings in case the section
+            is corrupted and lacks a NUL at end. */
+        ep->f_dynsym_sect_strings = calloc(1,strsectlength+1);
         if(!ep->f_dynsym_sect_strings) {
             P("ERROR: Unable to malloc " LONGESTXFMT " bytes for "
                 "dynsym strings table\n",strsectlength);
@@ -948,13 +951,16 @@ dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
     LONGESTUTYPE strsectindex  =0;
     LONGESTUTYPE strsectlength = 0;
 
-    if (!ep->f_symtab_sect_index) {
+    if (!ep->f_symtab_sect_strings_sect_index) {
         return DW_DLV_NO_ENTRY;
     }
     strsectindex = ep->f_symtab_sect_strings_sect_index;
     strsectlength = ep->f_symtab_sect_strings_max;
     strpsh = ep->f_shdr + strsectindex;
-    ep->f_symtab_sect_strings = malloc(strsectlength);
+    /*  Alloc an extra byte as a guaranteed NUL byte
+        at the end of the strings in case the section
+        is corrupted and lacks a NUL at end. */
+    ep->f_symtab_sect_strings = calloc(1,strsectlength+1);
     if(!ep->f_symtab_sect_strings) {
         P("ERROR: Unable to malloc " LONGESTXFMT " bytes for "
             "symtab strings table\n",strsectlength);
@@ -999,7 +1005,7 @@ get_dynstr_string(LONGESTUTYPE offset, LONGESTUTYPE index)
 int
 dwarf_get_elf_symstr_string(elf_filedata ep,
     int is_symtab,LONGESTUTYPE index,
-    char *buffer, LONGESTUTYPE bufferlen,
+    char **str_out,
     int*errcode)
 {
     const char *errstring = 0;
@@ -1008,19 +1014,15 @@ dwarf_get_elf_symstr_string(elf_filedata ep,
         if(index >= ep->f_symtab_sect_strings_max) {
             *errcode = RO_ERR_STRINGOFFSETBIG;
             return DW_DLV_ERROR;
-        } else {
-            errstring = ep->f_symtab_sect_strings + index;
         }
-        dwarf_safe_strcpy(buffer,bufferlen,errstring,strlen(errstring));
+        *str_out = ep->f_symtab_sect_strings + index;
         return DW_DLV_OK;
     }
     if(index >= ep->f_dynsym_sect_strings_max) {
         *errcode = RO_ERR_STRINGOFFSETBIG;
         return DW_DLV_ERROR;
-    } else {
-        errstring = ep->f_dynsym_sect_strings + index;
-    }
-    dwarf_safe_strcpy(buffer,bufferlen,errstring,strlen(errstring));
+    } 
+    *str_out = ep->f_dynsym_sect_strings + index;
     return DW_DLV_OK;
 }
 

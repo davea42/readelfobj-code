@@ -39,6 +39,92 @@ extern "C" {
 extern char *filename;
 extern int printfilenames;
 
+/* Standard Elf dynamic tags. */
+#ifndef DT_NULL
+#define DT_NULL 0
+#endif
+#ifndef DT_NEEDED
+#define DT_NEEDED 1
+#endif
+#ifndef DT_PLTRELSZ
+#define DT_PLTRELSZ 2
+#endif
+#ifndef DT_PLTGOT
+#define DT_PLTGOT 3
+#endif
+#ifndef DT_HASH
+#define DT_HASH 4
+#endif
+#ifndef DT_STRTAB
+#define DT_STRTAB 5
+#endif
+#ifndef DT_SYMTAB
+#define DT_SYMTAB 6
+#endif
+#ifndef DT_RELA
+#define DT_RELA 7
+#endif
+#ifndef DT_RELASZ
+#define DT_RELASZ 8
+#endif
+#ifndef DT_RELAENT
+#define DT_RELAENT 9
+#endif
+#ifndef DT_STRSZ
+#define DT_STRSZ 
+#endif
+
+#ifndef DT_SYMENT
+#define DT_SYMENT 11
+#endif
+
+#ifndef DT_INIT
+#define DT_INIT 12
+#endif
+
+#ifndef DT_FINI
+#define DT_FINI 13
+#endif
+
+#ifndef DT_SONAME
+#define DT_SONAME 14
+#endif
+
+#ifndef DT_RPATH
+#define DT_RPATH 15
+#endif
+
+#ifndef DT_SYMBOLIC
+#define DT_SYMBOLIC 16
+#endif
+
+#ifndef DT_REL
+#define DT_REL 17
+#endif
+#ifndef DT_RELSZ
+#define DT_RELSZ 18
+#endif
+
+#ifndef DT_RELENT
+#define DT_RELENT 19
+#endif
+
+#ifndef DT_PLTREL
+#define DT_PLTREL 20
+#endif
+
+#ifndef DT_DEBUG
+#define DT_DEBUG 21
+#endif
+
+#ifndef DT_TEXTREL
+#define DT_TEXTREL 22
+#endif
+
+#ifndef DT_JMPREL
+#define DT_JMPREL 23
+#endif
+
 /*  Use this for rel too. */
 struct generic_rela {
     int          gr_isrela; /* 0 means rel, non-zero means rela */
@@ -238,9 +324,15 @@ int dwarf_load_elf_rela(elf_filedata ep,
 int dwarf_load_elf_rel(elf_filedata ep,
     LONGESTUTYPE secnum, int *errcode);
 
+/*  Gets sh_strtab if is_symtab TRUE.
+    Gets sh_dynstr if is_symtab FALSE. 
+    Returns pointer to the in-mem string
+    through strptr.
+*/
 int dwarf_get_elf_symstr_string(elf_filedata ep,
-    int is_symtab,LONGESTUTYPE index,
-    char *buffer, LONGESTUTYPE bufferlen,
+    int is_symtab,
+    LONGESTUTYPE index,
+    char **strptr,
     int *errcode);
 
 /*  The following for an elf checker/dumper. */

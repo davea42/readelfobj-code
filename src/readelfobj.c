@@ -343,7 +343,7 @@ do_one_file(const char *s)
         P("Error: unable to load symstr. errcode %d\n",errcode);
         return;
     }
-    res =   dwarf_load_elf_dynstr(ep,&errcode);
+    res = dwarf_load_elf_dynstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load dynstr. errcode %d\n",errcode);
         return;
@@ -659,6 +659,7 @@ elf_print_symbols(elf_filedata ep,
     for(i = 0; i < ecount; ++i,++gsym) {
         int errcode = 0;
         int res;
+        char *localstr = 0;
 
 
         P("[%3d]",(int)i);
@@ -703,7 +704,7 @@ elf_print_symbols(elf_filedata ep,
         P("\n");
         res = dwarf_get_elf_symstr_string(ep,
             is_symtab,gsym->gs_name,
-            buffer2,BUFFERSIZE,&errcode);
+            &localstr,&errcode);
         if (res != DW_DLV_OK ) {
             P("  ERROR: st_name access %s "
                 " entry " LONGESTUFMT
@@ -715,7 +716,7 @@ elf_print_symbols(elf_filedata ep,
                 errcode);
         } else {
             P("  st_name  (" LONGESTUFMT  ") %s",gsym->gs_name,
-                buffer2);
+                localstr);
             P("\n");
         }
     }
@@ -1179,6 +1180,7 @@ elf_print_dynamic(elf_filedata ep)
     LONGESTUTYPE i = 0;
     struct generic_dynentry *gbuffer = 0;
     struct generic_shdr *dynamicsect = 0;
+    int errcode = 0;
 
     if (!ep->f_dynamic_sect_index) {
         P("No .dynamic section exists in %s\n",
@@ -1204,25 +1206,115 @@ elf_print_dynamic(elf_filedata ep)
             ep->f_dynamic_sect_index,
             bufcount,
             ep->f_loc_dynamic.g_offset);
-        P("  name                             value\n");
     } else {
         P("No content exists in %s\n",
             sanitized(dynamicsect->gh_namestring,buffer6,BUFFERSIZE));
         return RO_ERROR;
     }
     gbuffer = ep->f_dynamic;
+    printf(" Tag          Name             Value\n");
     for(i = 0; i < bufcount; ++i,++gbuffer) {
         const char *name = 0;
+        char *targname = "";
 
         name = dwarf_get_elf_dynamic_table_name(gbuffer->gd_tag,
             buffer6,BUFFERSIZE);
-        P("  Tag: "
-            LONGESTXFMT8 " %-15s "
-            LONGESTXFMT8 " (" LONGESTUFMT ")\n",
+  
+        switch(gbuffer->gd_tag) { 
+        case DT_NULL:
+            break;
+        case DT_NEEDED: {
+               int res = 0;
+
+               res = dwarf_get_elf_symstr_string(ep,
+                   FALSE,gbuffer->gd_val,
+                   &targname,&errcode);
+               if (res != DW_DLV_OK) {
+                   targname = "Cannot access string";
+               }
+            }
+            break;
+        case DT_PLTRELSZ:
+            break;
+        case DT_PLTGOT:
+            break;
+        case DT_HASH:
+            targname = "DT_HASH";
+            break;
+        case DT_STRTAB: 
+            /* offset of string table */
+        {
+            struct generic_shdr *hstr = 0;
+            hstr = ep->f_shdr + 
+                ep->f_dynsym_sect_strings_sect_index;
+            if (gbuffer->gd_val != hstr->gh_offset) {
+                targname = "Does not match section header offset";
+            } 
+        }
+            break;
+        case DT_SYMTAB:
+            break;
+        case DT_RELA:
+            break;
+        case DT_RELASZ:
+            break;
+        case DT_RELAENT:
+            break;
+        case DT_STRSZ:
+            break;
+        case DT_SYMENT:
+            break;
+        case DT_INIT:
+            break;
+        case DT_FINI:
+            break;
+        case DT_SONAME: {
+               int res = 0;
+
+               res = dwarf_get_elf_symstr_string(ep,
+                   FALSE,gbuffer->gd_val,&targname,&errcode);
+               if (res != DW_DLV_OK) {
+                   targname = "Cannot access string";
+               }
+            }
+            break;
+        case DT_RPATH: {
+               int res = 0;
+
+               res = dwarf_get_elf_symstr_string(ep,
+                   FALSE,gbuffer->gd_val,&targname,&errcode);
+               if (res != DW_DLV_OK) {
+                   targname = "Cannot access string";
+               }
+            }
+            break;
+        case DT_SYMBOLIC:
+            break;
+        case DT_REL:
+            break;
+        case DT_RELSZ:
+            break;
+        case DT_RELENT:
+            break;
+        case DT_PLTREL:
+            break;
+        case DT_DEBUG:
+            break;
+        case DT_TEXTREL:
+            break;
+        case DT_JMPREL:
+            break;
+        }
+
+
+        P(" " 
+            LONGESTXFMT8 " %-16s "
+            LONGESTXFMT8 " (" LONGESTUFMT ") %s\n",
             gbuffer->gd_tag,
             name,
             gbuffer->gd_val,
-            gbuffer->gd_val);
+            gbuffer->gd_val,
+            targname);
     }
     return RO_OK;
 }
