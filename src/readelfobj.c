@@ -736,7 +736,7 @@ elf_print_symbols(elf_filedata ep,
                 errcode);
         } else {
             P("  st_name  (" LONGESTUFMT  ") %s",gsym->gs_name,
-                localstr);
+                sanitized(localstr,buffer1,BUFFERSIZE));
             P("\n");
         }
     }
