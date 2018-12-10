@@ -38,6 +38,44 @@ extern "C" {
 
 extern char *filename;
 extern int printfilenames;
+/* Standard Elf section types. */
+#ifndef SHT_NULL
+#define SHT_NULL 0
+#endif
+#ifndef SHT_PROGBITS
+#define SHT_PROGBITS 1
+#endif
+#ifndef SHT_SYMTAB
+#define SHT_SYMTAB 2
+#endif
+#ifndef SHT_STRTAB
+#define SHT_STRTAB 3
+#endif
+#ifndef SHT_RELA
+#define SHT_RELA 4
+#endif
+
+#ifndef SHT_HASH
+#define SHT_HASH 5
+#endif
+#ifndef SHT_DYNAMIC
+#define SHT_DYNAMIC 6
+#endif
+#ifndef SHT_NOTE
+#define SHT_NOTE 7
+#endif
+#ifndef SHT_NOBITS
+#define SHT_NOBITS 8
+#endif
+#ifndef SHT_REL
+#define SHT_REL  9
+#endif
+#ifndef SHT_SHLIB
+#define SHT_SHLIB 10
+#endif
+#ifndef SHT_DYNSYM
+#define SHT_DYNSYM 11
+#endif
 
 /* Standard Elf dynamic tags. */
 #ifndef DT_NULL

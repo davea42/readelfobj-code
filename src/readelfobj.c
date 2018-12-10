@@ -129,6 +129,13 @@ main(int argc,char **argv)
                 P("%s",Usage);
                 exit(0);
             }
+            if(strcmp(argv[0],"--all") == 0) {
+                print_symtab_sections= 1;
+                print_wasted= 1;
+                print_reloc_sections= 1;
+                print_dynamic_sections= 1;
+                continue;
+            }
             if(strcmp(argv[0],"--print-symtabs") == 0) {
                 print_symtab_sections= 1;
                 continue;
@@ -646,10 +653,23 @@ elf_print_symbols(elf_filedata ep,
     const char *secname)
 {
     LONGESTUTYPE i = 0;
+    struct location *locp = 0;
 
+    if(is_symtab) {
+        locp = &ep->f_loc_symtab;
+    } else {
+        locp = &ep->f_loc_dynsym;
+    }
+    if (!locp) {
+        P("ERROR: the %s symbols section missing, not printable\n",
+            secname);
+        return;
+    }
     P("\n");
-    P("Symbols from %s: " LONGESTUFMT "\n",
-        sanitized(secname,buffer1,BUFFERSIZE),ecount);
+    P("Symbols from %s: " LONGESTUFMT 
+        " at offset " LONGESTXFMT "\n",
+        sanitized(secname,buffer1,BUFFERSIZE),ecount,
+        locp->g_offset);
     P("{\n");
     if(ecount > 0) {
         P("[Index] Value    Size    Type              "

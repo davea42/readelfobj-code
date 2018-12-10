@@ -115,6 +115,7 @@ extern "C" {
 #define RO_ERR_NOT_A_KNOWN_TYPE   26
 #define RO_ERR_SIZE_SMALL         27
 #define RO_ERR_FILE_WRONG_TYPE    28
+#define RO_ERR_ELF_STRING_SECT    29
 
 #define P printf
 #define F fflush(stdout)

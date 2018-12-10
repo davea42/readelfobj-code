@@ -1,3 +1,11 @@
+2018-12-10  David Anderson
+    * dwarf_reading.h: Added error code about strings table
+      and the syms that link to them.
+    * generic_from_elf.c: Add checks on getting right
+      strings tables.
+    * readelfobj.1: Document --all.
+    * readelfobj.c: Add --all option.
+    * readelfobj.h: More complete standard Elf defines now.
 2018-12-09  David Anderson
     * elfem.c: Refined the entry-name lookup so there
       is no wasted blank space at the end.

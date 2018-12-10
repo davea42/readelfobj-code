@@ -728,7 +728,6 @@ dwarf_load_elf_dynsym_symbols(elf_filedata ep, int*errcode)
     }
     psh = ep->f_shdr + secnum;
     namestr = psh->gh_namestring;
-
     res = dwarf_generic_elf_load_symbols(ep,
         secnum,namestr,
         psh,
@@ -2142,30 +2141,79 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
 }
 
 static int
+validate_links(elf_filedata ep,
+    LONGESTUTYPE knownsect,
+    LONGESTUTYPE string_sect,
+    int *errcode)
+{
+    struct generic_shdr* pshk = 0;
+
+    if (!knownsect) {
+        return DW_DLV_OK;
+    }
+    if (!string_sect) {
+        *errcode = RO_ERR_ELF_STRING_SECT;
+        return DW_DLV_ERROR;
+    }
+    pshk = ep->f_shdr + knownsect;
+    if (string_sect != pshk->gh_link) {
+        *errcode = RO_ERR_ELF_STRING_SECT;
+        return DW_DLV_ERROR;
+    }
+    return DW_DLV_OK;
+  
+  
+}
+
+static int
 elf_find_sym_sections(elf_filedata ep,
-    UNUSEDARG int *errcode)
+    int *errcode)
 {
     struct generic_shdr* psh = 0;
     LONGESTUTYPE i = 0;
     LONGESTUTYPE count = 0;
+    int res = 0;
 
     count = ep->f_loc_shdr.g_count;
     psh = ep->f_shdr;
     for (i = 0; i < count; ++psh,++i) {
         const char *name = psh->gh_namestring;
+        if (psh->gh_type == SHT_NOBITS) {
+            /*  No data here. */
+            continue;
+        }
         if (!strcmp(name,".dynsym")) {
             ep->f_dynsym_sect_index = i;
+            ep->f_loc_dynsym.g_offset = psh->gh_offset;
         } else if (!strcmp(name,".dynstr")) {
             ep->f_dynsym_sect_strings_sect_index = i;
             ep->f_dynsym_sect_strings_max = psh->gh_size;
         } else if (!strcmp(name,".symtab")) {
             ep->f_symtab_sect_index = i;
+            ep->f_loc_symtab.g_offset = psh->gh_offset;
         } else if (!strcmp(name,".strtab")) {
             ep->f_symtab_sect_strings_sect_index = i;
             ep->f_symtab_sect_strings_max = psh->gh_size;
         } else if (!strcmp(name,".dynamic")) {
             ep->f_dynamic_sect_index = i;
+            ep->f_loc_dynamic.g_offset = psh->gh_offset;
         }
+    }
+
+    res = validate_links(ep,ep->f_dynsym_sect_index, 
+        ep->f_dynsym_sect_strings_sect_index,errcode);
+    if (res!= DW_DLV_OK) {
+        return res;
+    }
+    res = validate_links(ep,ep->f_symtab_sect_index, 
+        ep->f_symtab_sect_strings_sect_index,errcode);
+    if (res!= DW_DLV_OK) {
+        return res;
+    }
+    res = validate_links(ep,ep->f_dynamic_sect_index, 
+        ep->f_dynsym_sect_strings_sect_index,errcode);
+    if (res!= DW_DLV_OK) {
+        return res;
     }
     return DW_DLV_OK;
 }

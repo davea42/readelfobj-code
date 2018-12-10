@@ -3,7 +3,7 @@ Elf object file libkrb5support.so.0.1.debug
   ident[class] 0x2   ELFCLASS64
   ident[data] 0x1   ELFDATA2LSB
   file version 0x1
-  osabi        0x0 (ELFOSABI_NONE )
+  osabi        0x0 (ELFOSABI_NONE)
   ident[version] 0x0   unknown
   type 0x3 ET_DYN Shared object file
   machine 0x3e EM_X86_64
@@ -14,31 +14,31 @@ Elf object file libkrb5support.so.0.1.debug
 
 Program header count 7
 {
-Program header 0  type (PT_LOAD ) 0x1
+Program header 0  type (PT_LOAD) 0x1
   offset 0x0 (0), vaddr 0x0 (0), paddr 0x0 (0)
   filesz 0xc53c (50492), memsz 0xc53c (50492)
   flags 0x5 PF_X PF_R, align 0x200000 (2097152)
-Program header 1  type (PT_LOAD ) 0x1
+Program header 1  type (PT_LOAD) 0x1
   offset 0xccc8 (52424), vaddr 0x20ccc8 (2149576), paddr 0x20ccc8 (2149576)
   filesz 0x7a0 (1952), memsz 0x980 (2432)
   flags 0x6 PF_W PF_R, align 0x200000 (2097152)
-Program header 2  type (PT_DYNAMIC ) 0x2
+Program header 2  type (PT_DYNAMIC) 0x2
   offset 0xcd10 (52496), vaddr 0x20cd10 (2149648), paddr 0x20cd10 (2149648)
   filesz 0x230 (560), memsz 0x230 (560)
   flags 0x6 PF_W PF_R, align 0x8 (8)
-Program header 3  type (PT_NOTE ) 0x4
+Program header 3  type (PT_NOTE) 0x4
   offset 0x1c8 (456), vaddr 0x1c8 (456), paddr 0x1c8 (456)
   filesz 0x24 (36), memsz 0x24 (36)
   flags 0x4 PF_R, align 0x4 (4)
-Program header 4  type (PT_GNU_EH_FRAME PT_SUNW_EH_FRAME ) 0x6474e550
+Program header 4  type (PT_GNU_EH_FRAME PT_SUNW_EH_FRAME) 0x6474e550
   offset 0xa634 (42548), vaddr 0xa634 (42548), paddr 0xa634 (42548)
   filesz 0x474 (1140), memsz 0x474 (1140)
   flags 0x4 PF_R, align 0x4 (4)
-Program header 5  type (PT_GNU_STACK ) 0x6474e551
+Program header 5  type (PT_GNU_STACK) 0x6474e551
   offset 0x0 (0), vaddr 0x0 (0), paddr 0x0 (0)
   filesz 0x0 (0), memsz 0x0 (0)
   flags 0x6 PF_W PF_R, align 0x8 (8)
-Program header 6  type (PT_GNU_RELRO ) 0x6474e552
+Program header 6  type (PT_GNU_RELRO) 0x6474e552
   offset 0xccc8 (52424), vaddr 0x20ccc8 (2149576), paddr 0x20ccc8 (2149576)
   filesz 0x338 (824), memsz 0x338 (824)
   flags 0x4 PF_R, align 0x1 (1)
@@ -48,202 +48,162 @@ String section data at 0x20f1b (134939) length 0x184 (388)
 Section count: 39
 {
 Section 0, name 0 
-  type 0x0 (SHT_NULL ), flags 0x0
+  type 0x0 (SHT_NULL), flags 0x0
   addr 0x0 (0) offset 0x0 (0), size 0
   link 0, info 0, align 0, entsize 0
 Section 1, name 27 .note.gnu.build-id
-  type 0x7 (SHT_NOTE ), flags 0x2 (SHF_ALLOC )
+  type 0x7 (SHT_NOTE), flags 0x2 (SHF_ALLOC)
   addr 0x1c8 (456) offset 0x1c8 (456), size 36
   link 0, info 0, align 4, entsize 0
 Section 2, name 46 .gnu.hash
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x1f0 (496) offset 0x1f0 (496), size 696
   link 3, info 0, align 8, entsize 0
 Section 3, name 56 .dynsym
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x4a8 (1192) offset 0x1f0 (496), size 4008
   link 4, info 2, align 8, entsize 24
 Section 4, name 64 .dynstr
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x1450 (5200) offset 0x1f0 (496), size 2797
   link 0, info 0, align 1, entsize 0
 Section 5, name 72 .gnu.version
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x1f3e (7998) offset 0x1f0 (496), size 334
   link 3, info 0, align 2, entsize 2
 Section 6, name 85 .gnu.version_d
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x2090 (8336) offset 0x1f0 (496), size 84
   link 4, info 3, align 8, entsize 0
 Section 7, name 100 .gnu.version_r
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x20e8 (8424) offset 0x1f0 (496), size 128
   link 4, info 2, align 8, entsize 0
 Section 8, name 115 .rela.dyn
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x2168 (8552) offset 0x1f0 (496), size 936
   link 3, info 0, align 8, entsize 24
 Section 9, name 125 .rela.plt
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x2510 (9488) offset 0x1f0 (496), size 2592
   link 3, info 11, align 8, entsize 24
 Section 10, name 135 .init
-  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x6 (Unknown)
   addr 0x2f30 (12080) offset 0x1f0 (496), size 26
   link 0, info 0, align 4, entsize 0
 Section 11, name 130 .plt
-  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x6 (Unknown)
   addr 0x2f50 (12112) offset 0x1f0 (496), size 1744
   link 0, info 0, align 16, entsize 16
 Section 12, name 141 .text
-  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x6 (Unknown)
   addr 0x3620 (13856) offset 0x1f0 (496), size 26988
   link 0, info 0, align 16, entsize 0
 Section 13, name 147 .fini
-  type 0x8 (SHT_NOBITS ), flags 0x6 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x6 (Unknown)
   addr 0x9f8c (40844) offset 0x1f0 (496), size 9
   link 0, info 0, align 4, entsize 0
 Section 14, name 153 .rodata
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0x9fa0 (40864) offset 0x200 (512), size 1684
   link 0, info 0, align 32, entsize 0
 Section 15, name 161 .eh_frame_hdr
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0xa634 (42548) offset 0x200 (512), size 1140
   link 0, info 0, align 4, entsize 0
 Section 16, name 175 .eh_frame
-  type 0x8 (SHT_NOBITS ), flags 0x2 (SHF_ALLOC )
+  type 0x8 (SHT_NOBITS), flags 0x2 (SHF_ALLOC)
   addr 0xaaa8 (43688) offset 0x200 (512), size 6804
   link 0, info 0, align 8, entsize 0
 Section 17, name 185 .init_array
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20ccc8 (2149576) offset 0x200 (512), size 8
   link 0, info 0, align 8, entsize 0
 Section 18, name 197 .fini_array
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20ccd0 (2149584) offset 0x200 (512), size 24
   link 0, info 0, align 8, entsize 0
 Section 19, name 209 .jcr
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20cce8 (2149608) offset 0x200 (512), size 8
   link 0, info 0, align 8, entsize 0
 Section 20, name 214 .data.rel.ro
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20ccf0 (2149616) offset 0x200 (512), size 32
   link 0, info 0, align 16, entsize 0
 Section 21, name 227 .dynamic
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20cd10 (2149648) offset 0x200 (512), size 560
   link 4, info 0, align 8, entsize 16
 Section 22, name 236 .got
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20cf40 (2150208) offset 0x200 (512), size 184
   link 0, info 0, align 8, entsize 8
 Section 23, name 241 .got.plt
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20d000 (2150400) offset 0x200 (512), size 888
   link 0, info 0, align 8, entsize 8
 Section 24, name 250 .data
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20d380 (2151296) offset 0x200 (512), size 232
   link 0, info 0, align 16, entsize 0
 Section 25, name 256 .bss
-  type 0x8 (SHT_NOBITS ), flags 0x3 (Unknown)
+  type 0x8 (SHT_NOBITS), flags 0x3 (Unknown)
   addr 0x20d480 (2151552) offset 0x200 (512), size 456
   link 0, info 0, align 32, entsize 0
 Section 26, name 261 .comment
-  type 0x1 (SHT_PROGBITS ), flags 0x30 (Unknown)
+  type 0x1 (SHT_PROGBITS), flags 0x30 (Unknown)
   addr 0x0 (0) offset 0x200 (512), size 44
   link 0, info 0, align 1, entsize 1
 Section 27, name 270 .debug_aranges
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0x22c (556), size 752
   link 0, info 0, align 1, entsize 0
 Section 28, name 285 .debug_info
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0x51c (1308), size 37619
   link 0, info 0, align 1, entsize 0
 Section 29, name 297 .debug_abbrev
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0x980f (38927), size 10499
   link 0, info 0, align 1, entsize 0
 Section 30, name 311 .debug_line
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0xc112 (49426), size 10162
   link 0, info 0, align 1, entsize 0
 Section 31, name 323 .debug_str
-  type 0x1 (SHT_PROGBITS ), flags 0x30 (Unknown)
+  type 0x1 (SHT_PROGBITS), flags 0x30 (Unknown)
   addr 0x0 (0) offset 0xe8c4 (59588), size 3305
   link 0, info 0, align 1, entsize 1
 Section 32, name 334 .debug_loc
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0xf5ad (62893), size 53623
   link 0, info 0, align 1, entsize 0
 Section 33, name 345 .debug_ranges
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0x1c724 (116516), size 3840
   link 0, info 0, align 1, entsize 0
 Section 34, name 359 .gdb_index
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0x1d624 (120356), size 14525
   link 0, info 0, align 1, entsize 0
 Section 35, name 370 .gnu_debugaltlink
-  type 0x1 (SHT_PROGBITS ), flags 0x0
+  type 0x1 (SHT_PROGBITS), flags 0x0
   addr 0x0 (0) offset 0x20ee1 (134881), size 58
   link 0, info 0, align 1, entsize 0
 Section 36, name 17 .shstrtab
-  type 0x3 (SHT_STRTAB ), flags 0x0
+  type 0x3 (SHT_STRTAB), flags 0x0
   addr 0x0 (0) offset 0x20f1b (134939), size 388
   link 0, info 0, align 1, entsize 0
 Section 37, name 1 .symtab
-  type 0x2 (SHT_SYMTAB ), flags 0x0
+  type 0x2 (SHT_SYMTAB), flags 0x0
   addr 0x0 (0) offset 0x210a0 (135328), size 8208
   link 38, info 177, align 8, entsize 24
 Section 38, name 9 .strtab
-  type 0x3 (SHT_STRTAB ), flags 0x0
+  type 0x3 (SHT_STRTAB), flags 0x0
   addr 0x0 (0) offset 0x230b0 (143536), size 5936
   link 0, info 0, align 1, entsize 0
 }
-
-Section .dynamic (21): Entries:35 Offset:0x00000200
-  name                             value
-  Tag: 0x4e4728203a434347 (Unknown)       0x322e382e34202955 (3615889321919261013)
-  Tag: 0x3132313331303220 (Unknown)       0x4820646552282032 (5197264356318388274)
-  Tag: 0x322e382e34207461 (Unknown)       0x3c0029372d (257700738861)
-  Tag: 0x8000008bf0002 (Unknown)       0x37f000000000 (61503931678720)
-  Tag: 0xba200000000 (Unknown)       0x362000000000 (59511066853376)
-  Tag: 0x8300000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x3c00000000 (257698037760)
-  Tag: 0x8000018f00002 (Unknown)       0x43a000000000 (74354473828352)
-  Tag: 0xcdf00000000 (Unknown)       0x36b000000000 (60129542144000)
-  Tag: 0x4a00000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x800002fcd0002 (Unknown)       0x508000000000 (88510686035968)
-  Tag: 0x8d00000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x8000031460002 (Unknown)       0x511000000000 (89129161326592)
-  Tag: 0xc4f00000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x8000041ba0002 (Unknown)       0x5d6000000000 (102666898243584)
-  Tag: 0x73500000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x800004bbb0002 (Unknown)       0x64a000000000 (110638357544960)
-  Tag: 0x6b500000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x8000052f40002 (Unknown)       0x6b6000000000 (118060061032448)
-  Tag: 0x3200000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x80000538b0002 (Unknown)       0x6ba000000000 (118334938939392)
-  Tag: 0xfb00000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x8000058300002 (Unknown)       0x6ca000000000 (119434450567168)
-  Tag: 0xcf500000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-  Tag: 0x8000062bc0002 (Unknown)       0x79a000000000 (133728101728256)
-  Tag: 0x94100000000 (Unknown)       0x00000000 (0)
-  Tag: 0x00000000 (DT_NULL )      0x2c00000000 (188978561024)
-Warning : Wasted .dynamic section entries: 0xa (10)
-Warning : Wasted .dynamic section space  : 0xa0 (160)
-Warning: dynamic section error: ProgHeader  2 PT_DYNAMIC offset 0xcd10 (52496)  but section 21 .dynamic offset 0x200 (512)
+No .dynamic section in  libkrb5support.so.0.1.debug
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
 Warning : 1 instances of unused alignment space exist and total 1 bytes of alignment.
