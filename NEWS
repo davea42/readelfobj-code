@@ -1,5 +1,8 @@
 2018-12-18 
   Now nothing here depends on elf.h (though it will
-  be #included if it exists) or libelf.h.
+  be #included if it exists) or libelf.
+  Known to build with ./configure on 32 and 64bit Linux and
+  also (running sh) on MinGW.
+  Use 'make check' to verify correct behavior.
 2018-08-21 
   Beginning autoconf/automake setup
