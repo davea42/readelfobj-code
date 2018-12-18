@@ -40,7 +40,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
-#include <elf.h>
+#ifdef HAVE_ELF_H
+#include <elf.h> 
+#endif /* HAVE_ELF_H */
 #include "dw_elfstructs.h"
 #include "dwarf_reading.h"
 #include "dwarf_object_detector.h"
@@ -2054,7 +2056,9 @@ elf_load_dynamic64(elf_filedata ep,
 
 static int validate_struct_sizes(int*errcode)
 {
-
+#ifdef HAVE_ELF_H
+    /*  This is a sanity check when we have an elf.h
+        to check against. */
     if (sizeof(Elf32_Ehdr) != sizeof(dw_elf32_ehdr)) {
         *errcode = RO_ERR_BADTYPESIZE;
         return DW_DLV_ERROR;
@@ -2103,6 +2107,7 @@ static int validate_struct_sizes(int*errcode)
         *errcode = RO_ERR_BADTYPESIZE;
         return DW_DLV_ERROR;
     }
+#endif /* HAVE_ELF_H */
     return DW_DLV_OK;
 }
 

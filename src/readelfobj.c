@@ -46,7 +46,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <elf.h>
+#ifdef HAVE_ELF_H
+#include <elf.h> 
+#endif /* HAVE_ELF_H */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */

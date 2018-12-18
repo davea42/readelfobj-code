@@ -1,3 +1,8 @@
+2018-12-18  David Anderson
+    * elfem.c,generic_from_elf.c,readelfobj.c: Only include
+      elf.h if it exists.
+    * readelfobj.h: Define basic Elf header values
+      if we do not have elf.h to define them.
 2018-12-10  David Anderson
     * dwarf_reading.h: Added error code about strings table
       and the syms that link to them.

@@ -51,7 +51,9 @@ THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
 #include "config.h"
 #include <stdio.h>
 #include <string.h>
+#ifdef HAVE_ELF_H
 #include <elf.h>
+#endif /* HAVE_ELF_H */
 #include "dwarf_reading.h"
 #include "readelfobj.h"
 
