@@ -4,5 +4,17 @@
   Known to build with ./configure on 32 and 64bit Linux and
   also (running sh) on MinGW.
   Use 'make check' to verify correct behavior.
+
+  In All Environments:
+  Since git repositories do not record timestamps
+  after copying files from a git repository (or off of a
+  device (USB etc)) a 'configure' or 'make' may fail
+  to work entirely correctly.
+  From the readelfobj directory do
+    sh scripts/fixdate.sh
+  to restore a sensible set of file timestamps 
+  for 'configure' and 'make' to work.
+  The scripts/fixdate.sh script is always safe to run.
+
 2018-08-21 
   Beginning autoconf/automake setup

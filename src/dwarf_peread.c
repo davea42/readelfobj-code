@@ -704,7 +704,7 @@ dwarf_construct_pe_access(int fd,
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
-    Dwarf_Unsigned filesize = 0;
+    size_t filesize = 0;
     dwarf_pe_object_access_internals_t *mfp = 0;
     int      res = 0;
 

@@ -1,5 +1,6 @@
 2018-12-18  David Anderson
-    * readobjpe.c: the local variable filesize should be a size_t,
+    * dwarf_peread.c,readobjpe.c: the local variable 
+      filesize should be a size_t,
       not a Dwarf_Unsigned. Fixed.
 2018-12-18  David Anderson
     * elfem.c,generic_from_elf.c,readelfobj.c: Only include

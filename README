@@ -1,19 +1,30 @@
-                                 README 
+                           README 
+Last update: December 18, 2018
 
 readelfobj is a program that reads elf object files
 and prints the header information.
 It also checks for certain errors including
 wasted space in the object files.
 
-It relies on a minimal elf.h but it does not
-depend on any library except standard libc.
+It does not depend on any object-file
+specific Elf, Mach-o or Windows libraries or headers.
 
-It also dumps relocation sections and Elf symtab
-sections.
+It also dumps Elf relocation sections and Elf symtab
+sections and dynamic.
 
 To dump DWARF section contents one should use 
-dwarfdump or GNU readelf, not readelfobj.
+dwarfdump or GNU readelf.
 
+In All Environments:
+  Since git repositories do not record timestamps
+  after copying files from a git repository (or off of a
+  device (USB etc)) a 'configure' or 'make' may fail
+  to work entirely correctly.
+  From the readelfobj directory do
+    sh scripts/fixdate.sh
+  to restore a sensible set of file timestamps
+  for 'configure' and 'make' to work.
+  The scripts/fixdate.sh script is always safe to run.
 
 To update configure, update configure.ac and/or
 one or more Makefile.am and do, in the top level
