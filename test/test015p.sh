@@ -5,6 +5,7 @@ o=libexamine-0.dll
 #echo "START test $n "
 ./object_detector  $o  >junk.$n
 diff $n.base junk.$n > junk.$n.out
+dos2unix junk.$n
 if [ $? -ne 0 ]
 then
   head -30 junk.$n.out

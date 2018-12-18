@@ -206,13 +206,13 @@ Section 38, name 9 .strtab
 }
 Listing Used Areas
 []        offset       length  finaloffset    name
-[  0] 0x00000000 0x00000000 0x00000000 Shdr target
-[  1] 0x00000000 0x00000000 0x00000000 Phdr target
+[  0] 0x00000000 0x00000000 0x00000000 Phdr target
+[  1] 0x00000000 0x00000000 0x00000000 Shdr target
 [  2] 0x00000000 0x00000040 0x00000040 Elf64_Ehdr
 [  3] 0x00000000 0x0000c53c 0x0000c53c Phdr target
 [  4] 0x00000040 0x00000188 0x000001c8 Elf64_Phdr block
-[  5] 0x000001c8 0x00000024 0x000001ec Shdr target
-[  6] 0x000001c8 0x00000024 0x000001ec Phdr target
+[  5] 0x000001c8 0x00000024 0x000001ec Phdr target
+[  6] 0x000001c8 0x00000024 0x000001ec Shdr target
 [  7] 0x00000200 0x0000002c 0x0000022c Shdr target
 [  8] 0x0000022c 0x000002f0 0x0000051c Shdr target
 [  9] 0x0000051c 0x000092f3 0x0000980f Shdr target

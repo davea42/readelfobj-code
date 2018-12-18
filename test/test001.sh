@@ -3,7 +3,8 @@ n=test001
 base=$n.base
 o=libkrb5support.so.0.1.debug
 #echo "START test $n "
-./readelfobj --help $o  >junk.$n
+./readelfobj --help $o >junk.$n
+dos2unix junk.$n
 diff  $n.base junk.$n  > junk.$n.out
 if [ $? -ne 0 ]
 then

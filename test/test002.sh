@@ -5,6 +5,7 @@ o=libkrb5support.so.0.1.debug
 #Version-readelfobj:
 #echo "START test $n "
 ./readelfobj --version   >junk.$n
+dos2unix junk.$n
 grep 'Version-readelfobj:' <junk.$n >junk.$n.out
 if [ $? -eq 0 ]
 then

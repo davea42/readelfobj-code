@@ -5,6 +5,7 @@ o="testarch.a"
 cmd=""
 #echo "START test $n "
 ./object_detector  $cmd $o  >junk.$n
+dos2unix junk.$n
 diff $n.base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then

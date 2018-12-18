@@ -6,6 +6,7 @@ base=$n.base
 o=kask2/dwarfdump_G4
 #echo "START test $n "
 ./object_detector  $o  >junk.$n
+dos2unix junk.$n
 diff $n.base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then
