@@ -160,7 +160,7 @@ do_one_file(const char *name)
     unsigned locendian = DW_ENDIAN_UNKNOWN;
     dwarf_pe_object_access_internals_t *pep = 0;
     int errcode = 0;
-    Dwarf_Unsigned filesize = 0;
+    size_t filesize = 0;
     int res = 0;
     int fd = -1;
     int lib_owns_fd = TRUE;

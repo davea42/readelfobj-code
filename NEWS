@@ -1,2 +1,5 @@
+2018-12-18 
+  Now nothing here depends on elf.h (though it will
+  be #included if it exists) or libelf.h.
 2018-08-21 
   Beginning autoconf/automake setup
