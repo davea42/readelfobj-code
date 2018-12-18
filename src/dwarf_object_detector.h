@@ -65,6 +65,11 @@ extern "C" {
 #define DW_ENDIAN_OPPOSITE 4
 #endif /* DW_ENDIAN_UNKNOWN */
 
+#ifndef O_BINARY
+/* Unix does not need O_BINARY. MinGW does. */
+#define O_BINARY 0
+#endif
+
 /*  offsetsize refers to the object-file-format.
     Elf 32 or macho-32 or PE 32, for example.
     Not to DWARF offset sizes.  */

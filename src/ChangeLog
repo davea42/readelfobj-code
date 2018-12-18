@@ -1,4 +1,12 @@
 2018-12-18  David Anderson
+    * dwarf_machoread.c,dwarf_object_detector.c,dwarf_peread.c,
+      generic_from_elf.c: Add O_BINARY to open() for MinGW.
+    * dwarf_object_detector.h,dwarf_reading.h: Define 
+      O_BINARY 0 if it's not defined by system headers.
+    * readelfobj.c: Add an additional test in the qsort
+      comparator so we are guaranteed consistent sorting
+      for the regression tests.
+2018-12-18  David Anderson
     * dwarf_peread.c,readobjpe.c: the local variable 
       filesize should be a size_t,
       not a Dwarf_Unsigned. Fixed.

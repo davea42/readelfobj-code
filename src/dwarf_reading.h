@@ -63,6 +63,11 @@ extern "C" {
 #define uint64_t  unsigned long
 #endif
 
+#ifndef O_BINARY
+/*  Will be non-zero on MinGW */
+#define O_BINARY 0
+#endif
+
 #define TRUE 1
 #define FALSE 0
 

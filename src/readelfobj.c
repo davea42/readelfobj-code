@@ -178,8 +178,8 @@ main(int argc,char **argv)
                 continue;
             }
             ++filecount;
-            do_one_file(filename);
             fclose(fin);
+            do_one_file(filename);
         }
         if (!filecount && !printed_version) {
             printf("%s\n",Usage);
@@ -953,6 +953,8 @@ comproffset(const void *l_in, const void *r_in)
 {
     const struct in_use_s *l = l_in;
     const struct in_use_s *r = r_in;
+    int strfield = 0;
+
     if( l->u_offset < r->u_offset) {
         return -1;
     }
@@ -965,7 +967,11 @@ comproffset(const void *l_in, const void *r_in)
     if( l->u_lastbyte > r->u_lastbyte) {
         return 1;
     }
-    return 0;
+    /*  When shdr and phdr (etc) use a specific area
+        we want a consistent ordering of the report
+        so regression tests work right. */
+    strfield = strcmp(l->u_name,r->u_name);
+    return strfield;
 }
 
 

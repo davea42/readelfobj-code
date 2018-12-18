@@ -642,14 +642,14 @@ dwarf_object_detector_path(const char  *path,
         cp = dw_stpcpy(outpath,path);
         cp = dw_stpcpy(cp,DSYM_SUFFIX);
         dw_stpcpy(cp,getbasename(path));
-        fd = open(outpath,O_RDONLY);
+        fd = open(outpath,O_RDONLY|O_BINARY);
         if (fd < 0) {
             *outpath = 0;
-            fd = open(path,O_RDONLY);
+            fd = open(path,O_RDONLY|O_BINARY);
             dw_stpcpy(outpath,path);
         }
     } else {
-        fd = open(path,O_RDONLY);
+        fd = open(path,O_RDONLY|O_BINARY);
     }
     if (fd < 0) {
         if (have_outpath) {

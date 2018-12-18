@@ -677,7 +677,7 @@ dwarf_construct_pe_access_path(const char *path,
     int res = 0;
     dwarf_pe_object_access_internals_t *mymp = 0;
 
-    fd = open(path, O_RDONLY);
+    fd = open(path, O_RDONLY|O_BINARY);
     if (fd < 0) {
         *errcode = DW_DLE_OPEN_FAIL;
         return DW_DLV_ERROR;

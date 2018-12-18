@@ -84,7 +84,7 @@ dwarf_construct_elf_access_path(const char *path,
     int res = 0;
     elf_filedata mymp = 0;
 
-    fd = open(path, O_RDONLY);
+    fd = open(path, O_RDONLY|O_BINARY);
     if (fd < 0) {
         *errcode = RO_ERR_PATH_SIZE;
         return DW_DLV_ERROR;
@@ -488,6 +488,9 @@ generic_shdr_from_shdr64(elf_filedata ep,
     if(res != RO_OK) {
         P("Read  " LONGESTUFMT
             " bytes section headers failed\n",count*entsize);
+        P("Read  offset " LONGESTXFMT " length "
+            LONGESTXFMT " off+len " LONGESTXFMT "\n",
+            offset,count*entsize,offset + (count*entsize));
         free(psh);
         free(gshdr);
         return res;

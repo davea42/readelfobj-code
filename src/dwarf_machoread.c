@@ -82,7 +82,7 @@ dwarf_construct_macho_access_path(const char *path,
     int res = 0;
     struct macho_filedata_s *mymp = 0;
 
-    fd = open(path, O_RDONLY);
+    fd = open(path, O_RDONLY|O_BINARY);
     if (fd < 0) {
         *errcode = RO_ERR_PATH_SIZE;
         return DW_DLV_ERROR;
