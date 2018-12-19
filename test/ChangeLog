@@ -1,3 +1,11 @@
+2018-12-19   David Anderson
+    * test001.sh,test002.sh,test003.sh,test004.sh,
+      test005.sh,test006.sh,test007.sh,test008m.sh,
+      test009m.sh,test010.sh,test011.sh,test012.sh,
+      test013m.sh,test014m.sh,test015p.sh,test016p.sh,
+      test017.sh: now have dos2unix -q as one way
+      to get the output formatted right on Windows MinGW
+      so diff works ok without useless dos2unix messages.
 2018-11-25   David Anderson
     * CLEANUP: Missing a couple files to remove.
     * Makefile.am: Lists all the files to remove now.

@@ -5,7 +5,7 @@ o="dd-irix-n32 libc.so.6  libkrb5support.so.0.1.debug"
 cmd=""
 #echo "START test $n "
 ./object_detector  $cmd $o  >junk.$n
-dos2unix junk.$n
+dos2unix -q junk.$n
 diff $n.base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then

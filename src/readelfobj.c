@@ -47,7 +47,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <time.h>
 #ifdef HAVE_ELF_H
-#include <elf.h> 
+#include <elf.h>
 #endif /* HAVE_ELF_H */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
@@ -668,7 +668,7 @@ elf_print_symbols(elf_filedata ep,
         return;
     }
     P("\n");
-    P("Symbols from %s: " LONGESTUFMT 
+    P("Symbols from %s: " LONGESTUFMT
         " at offset " LONGESTXFMT "\n",
         sanitized(secname,buffer1,BUFFERSIZE),ecount,
         locp->g_offset);
@@ -1247,19 +1247,19 @@ elf_print_dynamic(elf_filedata ep)
 
         name = dwarf_get_elf_dynamic_table_name(gbuffer->gd_tag,
             buffer6,BUFFERSIZE);
-  
-        switch(gbuffer->gd_tag) { 
+
+        switch(gbuffer->gd_tag) {
         case DT_NULL:
             break;
         case DT_NEEDED: {
-               int res = 0;
+            int res = 0;
 
-               res = dwarf_get_elf_symstr_string(ep,
-                   FALSE,gbuffer->gd_val,
-                   &targname,&errcode);
-               if (res != DW_DLV_OK) {
-                   targname = "Cannot access string";
-               }
+            res = dwarf_get_elf_symstr_string(ep,
+                FALSE,gbuffer->gd_val,
+                &targname,&errcode);
+            if (res != DW_DLV_OK) {
+                targname = "Cannot access string";
+            }
             }
             break;
         case DT_PLTRELSZ:
@@ -1269,15 +1269,15 @@ elf_print_dynamic(elf_filedata ep)
         case DT_HASH:
             targname = "DT_HASH";
             break;
-        case DT_STRTAB: 
+        case DT_STRTAB:
             /* offset of string table */
         {
             struct generic_shdr *hstr = 0;
-            hstr = ep->f_shdr + 
+            hstr = ep->f_shdr +
                 ep->f_dynsym_sect_strings_sect_index;
             if (gbuffer->gd_val != hstr->gh_offset) {
                 targname = "Does not match section header offset";
-            } 
+            }
         }
             break;
         case DT_SYMTAB:
@@ -1297,23 +1297,23 @@ elf_print_dynamic(elf_filedata ep)
         case DT_FINI:
             break;
         case DT_SONAME: {
-               int res = 0;
+            int res = 0;
 
-               res = dwarf_get_elf_symstr_string(ep,
-                   FALSE,gbuffer->gd_val,&targname,&errcode);
-               if (res != DW_DLV_OK) {
-                   targname = "Cannot access string";
-               }
+            res = dwarf_get_elf_symstr_string(ep,
+                FALSE,gbuffer->gd_val,&targname,&errcode);
+            if (res != DW_DLV_OK) {
+                targname = "Cannot access string";
+            }
             }
             break;
         case DT_RPATH: {
-               int res = 0;
+            int res = 0;
 
-               res = dwarf_get_elf_symstr_string(ep,
-                   FALSE,gbuffer->gd_val,&targname,&errcode);
-               if (res != DW_DLV_OK) {
-                   targname = "Cannot access string";
-               }
+            res = dwarf_get_elf_symstr_string(ep,
+                FALSE,gbuffer->gd_val,&targname,&errcode);
+            if (res != DW_DLV_OK) {
+                targname = "Cannot access string";
+            }
             }
             break;
         case DT_SYMBOLIC:
@@ -1335,7 +1335,7 @@ elf_print_dynamic(elf_filedata ep)
         }
 
 
-        P(" " 
+        P(" "
             LONGESTXFMT8 " %-16s "
             LONGESTXFMT8 " (" LONGESTUFMT ") %s\n",
             gbuffer->gd_tag,

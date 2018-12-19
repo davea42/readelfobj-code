@@ -1,3 +1,11 @@
+2018-12-19  David Anderson
+    * dwarf_object_detector.c: Change
+      IMAGE_FILE_MACHINE_AMD64 from the incorrect 0x8886
+      to 0x8664 (per MS documentation).
+    * generic_from_elf.c: Fixed indents and removed
+      trailing whitespace. Removed unused local variables.
+    * readelfobj.c: REmoved trailing whitespace.Fixed indents.
+    * readobjpe.c: REmoved unused local variables.
 2018-12-18  David Anderson
     * dwarf_machoread.c,dwarf_object_detector.c,dwarf_peread.c,
       generic_from_elf.c: Add O_BINARY to open() for MinGW.

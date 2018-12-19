@@ -156,14 +156,10 @@ do_one_file(const char *name)
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
-    Dwarf_Unsigned access = 0;
-    unsigned locendian = DW_ENDIAN_UNKNOWN;
     dwarf_pe_object_access_internals_t *pep = 0;
     int errcode = 0;
     size_t filesize = 0;
     int res = 0;
-    int fd = -1;
-    int lib_owns_fd = TRUE;
 
     res = dwarf_object_detector_path(name,0,0,
         &ftype,&endian,&offsetsize,&filesize,&errcode);

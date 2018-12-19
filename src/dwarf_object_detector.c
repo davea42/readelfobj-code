@@ -197,7 +197,7 @@ struct dos_header {
 #define IMAGE_NT_SIGNATURE       0x00004550
 #define IMAGE_FILE_MACHINE_I386  0x14c
 #define IMAGE_FILE_MACHINE_IA64  0x200
-#define IMAGE_FILE_MACHINE_AMD64 0x8886
+#define IMAGE_FILE_MACHINE_AMD64 0x8664
 
 
 struct pe_image_file_header {

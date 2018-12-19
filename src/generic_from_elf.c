@@ -41,7 +41,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
 #ifdef HAVE_ELF_H
-#include <elf.h> 
+#include <elf.h>
 #endif /* HAVE_ELF_H */
 #include "dw_elfstructs.h"
 #include "dwarf_reading.h"
@@ -1012,8 +1012,6 @@ dwarf_get_elf_symstr_string(elf_filedata ep,
     char **str_out,
     int*errcode)
 {
-    const char *errstring = 0;
-
     if (is_symtab) {
         if(index >= ep->f_symtab_sect_strings_max) {
             *errcode = RO_ERR_STRINGOFFSETBIG;
@@ -1025,7 +1023,7 @@ dwarf_get_elf_symstr_string(elf_filedata ep,
     if(index >= ep->f_dynsym_sect_strings_max) {
         *errcode = RO_ERR_STRINGOFFSETBIG;
         return DW_DLV_ERROR;
-    } 
+    }
     *str_out = ep->f_dynsym_sect_strings + index;
     return DW_DLV_OK;
 }
@@ -2169,8 +2167,6 @@ validate_links(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     return DW_DLV_OK;
-  
-  
 }
 
 static int
@@ -2208,17 +2204,17 @@ elf_find_sym_sections(elf_filedata ep,
         }
     }
 
-    res = validate_links(ep,ep->f_dynsym_sect_index, 
+    res = validate_links(ep,ep->f_dynsym_sect_index,
         ep->f_dynsym_sect_strings_sect_index,errcode);
     if (res!= DW_DLV_OK) {
         return res;
     }
-    res = validate_links(ep,ep->f_symtab_sect_index, 
+    res = validate_links(ep,ep->f_symtab_sect_index,
         ep->f_symtab_sect_strings_sect_index,errcode);
     if (res!= DW_DLV_OK) {
         return res;
     }
-    res = validate_links(ep,ep->f_dynamic_sect_index, 
+    res = validate_links(ep,ep->f_dynamic_sect_index,
         ep->f_dynsym_sect_strings_sect_index,errcode);
     if (res!= DW_DLV_OK) {
         return res;
