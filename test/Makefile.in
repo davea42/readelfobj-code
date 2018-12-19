@@ -282,6 +282,8 @@ CLEANFILES = \
   junk.test016p.out \
   junk.test017 \
   junk.test017.out \
+  junk.test018p \
+  junk.test018p.out \
   object_detector \
   readobjmacho \
   readobjpe \
@@ -309,6 +311,8 @@ test013m.sh \
 test014m.sh \
 test015p.sh \
 test016p.sh \
+test017.sh \
+test018p.sh \
 test001.base \
 test003.base  \
 test004.base  \
@@ -324,11 +328,14 @@ test013m.base \
 test014m.base \
 test015p.base \
 test016p.base \
+test017.base \
+test018p.base \
 mach-o-object32 \
 mach-o-object32.dSYM \
 mach-o-object64	\
 mach-o-object64.dSYM \
 libexamine-0.dll \
+kask-dwarfdump_64.exe \
 libkrb5support.so.0.1.debug 
 
 all: all-am
