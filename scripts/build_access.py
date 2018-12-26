@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import re
 
 # Turn a set of  #define X 12
 # and so on into
@@ -23,12 +24,27 @@ import sys
 #  dwarf_elf_rel_xxx.h
 # declare function dwarf_get_elf_rel_xxx()
 
+def okhex(c):
+  o= ord(c)
+  if o <= ord('f') and o  >= ord('a'):
+    return "y"
+  if o <= ord('F') and o  >= ord('A'):
+    return "y"
+  if o <= ord('9') and o  >= ord('0'):
+    return "y"
+  return "n"
 
 def alldig(s):
-  for c in s:
-    if ord(c) < ord('0') or ord(c) > ord('9'):
-       return "n" 
-  return "y"
+  if s.startswith('0x') == 1 or s.startswith('0X'):
+    for c in s[2:]:
+      #print("dadebug check ",c)
+      if okhex(c) == "n":
+         return "n"
+    return "y" 
+  else:
+    if s.isdigit() == 0:
+      return "n"
+    return "y"
 
 
 def do_line(fname,l,hfile,cfile):
@@ -44,7 +60,7 @@ def do_line(fname,l,hfile,cfile):
   n=wds[1]
   v=wds[2]
   if alldig(v) == "n":
-     print("dadebug skipping t")
+     print("dadebug skipping ",n,v)
      # redef. We just use one name, not the alternates
      return
 
@@ -57,10 +73,6 @@ def do_line(fname,l,hfile,cfile):
 
   rstr = 'return "%s";'%n
   print("    case",n,": "+rstr,file=cfile) 
-  print(rstr,file=cfile)
-
-
-
 
 def write_output(fname,lines,type,outprefix):
   outhname = outprefix+"_"+type+".h"
@@ -78,6 +90,7 @@ def write_output(fname,lines,type,outprefix):
     sys.exit(1)
 
   print("/* Created by build_access.py */",file=hfile)
+  print("/* returns string of length 0 if invalid arg */",file=hfile)
   funcname="dwarf_get_elf_relocname_" + type
   print("const char * "+funcname+ "(unsigned long);",file=hfile)
 
@@ -85,6 +98,7 @@ def write_output(fname,lines,type,outprefix):
   print('#include "%s"'%outhname,file=cfile)
   print("",file=cfile)
 
+  print("/* returns string of length 0 if invalid arg */",file=cfile)
   print("const char * ",file=cfile)
   print(funcname + "(unsigned long val)",file=cfile)
   print("{",file=cfile)
@@ -94,13 +108,13 @@ def write_output(fname,lines,type,outprefix):
   for l in lines:
      ct = int(ct) +1
      do_line(fname,l,hfile,cfile)
-     if int(ct) > 3:
-       print(" Terminating on count",file=hfile)
-       print(" Terminating on count",file=cfile)
-       hfile.close()
-       cfile.close()
-       print(" Terminating on count")
-       sys.exit(1)
+     #if int(ct) > 3:
+     #  print(" Terminating on count",file=hfile)
+     #  print(" Terminating on count",file=cfile)
+     #  hfile.close()
+     #  cfile.close()
+     #  print(" Terminating on count")
+     #  sys.exit(1)
   print("    }",file=cfile)
   print('return "";',file=cfile)
 
