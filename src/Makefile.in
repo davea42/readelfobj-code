@@ -125,7 +125,7 @@ object_detector_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 am_readelfobj_OBJECTS = readelfobj-dwarf_object_detector.$(OBJEXT) \
 	readelfobj-dwarf_object_read_common.$(OBJEXT) \
 	readelfobj-dwarf_elf_naming.$(OBJEXT) \
-	readelfobj-generic_from_elf.$(OBJEXT) \
+	readelfobj-dwarf_load_elf_headers.$(OBJEXT) \
 	readelfobj-readelfobj.$(OBJEXT) readelfobj-sanitized.$(OBJEXT)
 readelfobj_OBJECTS = $(am_readelfobj_OBJECTS)
 readelfobj_LDADD = $(LDADD)
@@ -374,7 +374,7 @@ dwarf_object_detector.c \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
 dwarf_elf_naming.c \
-generic_from_elf.c  \
+dwarf_load_elf_headers.c \
 readelfobj_version.h \
 readelfobj.c \
 dwarf_reading.h \
@@ -539,9 +539,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-object_detector_main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_naming.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_load_elf_headers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_read_common.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_machoread.Po@am__quote@
@@ -649,19 +649,19 @@ readelfobj-dwarf_elf_naming.obj: dwarf_elf_naming.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_elf_naming.obj `if test -f 'dwarf_elf_naming.c'; then $(CYGPATH_W) 'dwarf_elf_naming.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_elf_naming.c'; fi`
 
-readelfobj-generic_from_elf.o: generic_from_elf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf.o -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf.Tpo -c -o readelfobj-generic_from_elf.o `test -f 'generic_from_elf.c' || echo '$(srcdir)/'`generic_from_elf.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf.Tpo $(DEPDIR)/readelfobj-generic_from_elf.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf.c' object='readelfobj-generic_from_elf.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-dwarf_load_elf_headers.o: dwarf_load_elf_headers.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_load_elf_headers.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_load_elf_headers.Tpo -c -o readelfobj-dwarf_load_elf_headers.o `test -f 'dwarf_load_elf_headers.c' || echo '$(srcdir)/'`dwarf_load_elf_headers.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_load_elf_headers.Tpo $(DEPDIR)/readelfobj-dwarf_load_elf_headers.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_load_elf_headers.c' object='readelfobj-dwarf_load_elf_headers.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf.o `test -f 'generic_from_elf.c' || echo '$(srcdir)/'`generic_from_elf.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_load_elf_headers.o `test -f 'dwarf_load_elf_headers.c' || echo '$(srcdir)/'`dwarf_load_elf_headers.c
 
-readelfobj-generic_from_elf.obj: generic_from_elf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf.obj -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf.Tpo -c -o readelfobj-generic_from_elf.obj `if test -f 'generic_from_elf.c'; then $(CYGPATH_W) 'generic_from_elf.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-generic_from_elf.Tpo $(DEPDIR)/readelfobj-generic_from_elf.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='generic_from_elf.c' object='readelfobj-generic_from_elf.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-dwarf_load_elf_headers.obj: dwarf_load_elf_headers.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_load_elf_headers.obj -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_load_elf_headers.Tpo -c -o readelfobj-dwarf_load_elf_headers.obj `if test -f 'dwarf_load_elf_headers.c'; then $(CYGPATH_W) 'dwarf_load_elf_headers.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_load_elf_headers.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_load_elf_headers.Tpo $(DEPDIR)/readelfobj-dwarf_load_elf_headers.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_load_elf_headers.c' object='readelfobj-dwarf_load_elf_headers.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-generic_from_elf.obj `if test -f 'generic_from_elf.c'; then $(CYGPATH_W) 'generic_from_elf.c'; else $(CYGPATH_W) '$(srcdir)/generic_from_elf.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_load_elf_headers.obj `if test -f 'dwarf_load_elf_headers.c'; then $(CYGPATH_W) 'dwarf_load_elf_headers.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_load_elf_headers.c'; fi`
 
 readelfobj-readelfobj.o: readelfobj.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-readelfobj.o -MD -MP -MF $(DEPDIR)/readelfobj-readelfobj.Tpo -c -o readelfobj-readelfobj.o `test -f 'readelfobj.c' || echo '$(srcdir)/'`readelfobj.c

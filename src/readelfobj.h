@@ -1121,7 +1121,7 @@ int dwarf_load_elf_rel(elf_filedata ep,
     LONGESTUTYPE secnum, int *errcode);
 
 /*  Gets sh_strtab if is_symtab TRUE.
-    Gets sh_dynstr if is_symtab FALSE. 
+    Gets sh_dynstr if is_symtab FALSE.
     Returns pointer to the in-mem string
     through strptr.
 */

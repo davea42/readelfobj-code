@@ -13,7 +13,7 @@ dwarf_object_detector.c \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
 dwarf_elf_naming.c \
-generic_from_elf.c  \
+dwarf_load_elf_headers.c \
 readelfobj_version.h \
 readelfobj.c \
 dwarf_reading.h \
