@@ -918,9 +918,6 @@ extern int printfilenames;
 #endif
 
 
-
-
-
 /*  Use this for rel too. */
 struct generic_rela {
     int          gr_isrela; /* 0 means rel, non-zero means rela */
