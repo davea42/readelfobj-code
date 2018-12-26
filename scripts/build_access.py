@@ -24,6 +24,11 @@ import sys
 # declare function dwarf_get_elf_rel_xxx()
 
 
+def alldig(s):
+  for c in s:
+    if ord(c) < ord('0') or ord(c) > ord('9'):
+       return "n" 
+  return "y"
 
 
 def do_line(fname,l,hfile,cfile):
@@ -35,8 +40,13 @@ def do_line(fname,l,hfile,cfile):
     print("ERROR. Improper define input",wds);
     sys.exit(1)
     return
+  
   n=wds[1]
   v=wds[2]
+  if alldig(v) == "n":
+     print("dadebug skipping t")
+     # redef. We just use one name, not the alternates
+     return
 
   print("#ifndef",n,file=hfile) 
   fmt1= "#define %-20s %s"%(n,v)
@@ -44,11 +54,11 @@ def do_line(fname,l,hfile,cfile):
   fmt2= "#endif /* %s */"%n
   print(fmt2,file=hfile)
 
-  b = ""
-  while (len(b) + len(n)) < 20:
-     b = b + ' '
-  istring = '{"%s",' + b + v + '},'
-  print(istring%n,file=cfile)
+
+  rstr = 'return "%s";'%n
+  print("    case",n,": "+rstr,file=cfile) 
+  print(rstr,file=cfile)
+
 
 
 
@@ -74,13 +84,11 @@ def write_output(fname,lines,type,outprefix):
   print("/* Created by build_access.py */",file=cfile)
   print('#include "%s"'%outhname,file=cfile)
   print("",file=cfile)
-  print("struct rel_s {",file=cfile)
-  print("  const char *relname;",file=cfile);
-  print("  unsigned long relval;",file=cfile);
-  print("};",file=cfile)
 
-  print("static struct rel_s ervals local_errstr[] =",file=cfile)
+  print("const char * ",file=cfile)
+  print(funcname + "(unsigned long val)",file=cfile)
   print("{",file=cfile)
+  print("    switch(val) {",file=cfile)
 
   ct = 0
   for l in lines:
@@ -93,8 +101,10 @@ def write_output(fname,lines,type,outprefix):
        cfile.close()
        print(" Terminating on count")
        sys.exit(1)
+  print("    }",file=cfile)
+  print('return "";',file=cfile)
 
-  print("};",file=cfile)
+  print("}",file=cfile)
   cfile.close()
   hfile.close()
 
