@@ -11,10 +11,10 @@
   device (USB etc)) a 'configure' or 'make' may fail
   to work entirely correctly.
   From the readelfobj directory do
-    sh scripts/fixdate.sh
+    sh scripts/FIX-CONFIGURE-TIMES
   to restore a sensible set of file timestamps 
   for 'configure' and 'make' to work.
-  The scripts/fixdate.sh script is always safe to run.
+  The scripts/FIX-CONFIGURE-TIMES script is always safe to run.
 
 2018-08-21 
   Beginning autoconf/automake setup

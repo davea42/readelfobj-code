@@ -124,7 +124,7 @@ object_detector_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	-o $@
 am_readelfobj_OBJECTS = readelfobj-dwarf_object_detector.$(OBJEXT) \
 	readelfobj-dwarf_object_read_common.$(OBJEXT) \
-	readelfobj-elfem.$(OBJEXT) \
+	readelfobj-dwarf_elf_naming.$(OBJEXT) \
 	readelfobj-generic_from_elf.$(OBJEXT) \
 	readelfobj-readelfobj.$(OBJEXT) readelfobj-sanitized.$(OBJEXT)
 readelfobj_OBJECTS = $(am_readelfobj_OBJECTS)
@@ -373,7 +373,7 @@ dwarf_object_detector.h \
 dwarf_object_detector.c \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
-elfem.c \
+dwarf_elf_naming.c \
 generic_from_elf.c  \
 readelfobj_version.h \
 readelfobj.c \
@@ -538,9 +538,9 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-object_detector_main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_naming.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_read_common.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-elfem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-generic_from_elf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
@@ -635,19 +635,19 @@ readelfobj-dwarf_object_read_common.obj: dwarf_object_read_common.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
 
-readelfobj-elfem.o: elfem.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-elfem.o -MD -MP -MF $(DEPDIR)/readelfobj-elfem.Tpo -c -o readelfobj-elfem.o `test -f 'elfem.c' || echo '$(srcdir)/'`elfem.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-elfem.Tpo $(DEPDIR)/readelfobj-elfem.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='elfem.c' object='readelfobj-elfem.o' libtool=no @AMDEPBACKSLASH@
+readelfobj-dwarf_elf_naming.o: dwarf_elf_naming.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_elf_naming.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_elf_naming.Tpo -c -o readelfobj-dwarf_elf_naming.o `test -f 'dwarf_elf_naming.c' || echo '$(srcdir)/'`dwarf_elf_naming.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_elf_naming.Tpo $(DEPDIR)/readelfobj-dwarf_elf_naming.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_elf_naming.c' object='readelfobj-dwarf_elf_naming.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-elfem.o `test -f 'elfem.c' || echo '$(srcdir)/'`elfem.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_elf_naming.o `test -f 'dwarf_elf_naming.c' || echo '$(srcdir)/'`dwarf_elf_naming.c
 
-readelfobj-elfem.obj: elfem.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-elfem.obj -MD -MP -MF $(DEPDIR)/readelfobj-elfem.Tpo -c -o readelfobj-elfem.obj `if test -f 'elfem.c'; then $(CYGPATH_W) 'elfem.c'; else $(CYGPATH_W) '$(srcdir)/elfem.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-elfem.Tpo $(DEPDIR)/readelfobj-elfem.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='elfem.c' object='readelfobj-elfem.obj' libtool=no @AMDEPBACKSLASH@
+readelfobj-dwarf_elf_naming.obj: dwarf_elf_naming.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_elf_naming.obj -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_elf_naming.Tpo -c -o readelfobj-dwarf_elf_naming.obj `if test -f 'dwarf_elf_naming.c'; then $(CYGPATH_W) 'dwarf_elf_naming.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_elf_naming.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_elf_naming.Tpo $(DEPDIR)/readelfobj-dwarf_elf_naming.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_elf_naming.c' object='readelfobj-dwarf_elf_naming.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-elfem.obj `if test -f 'elfem.c'; then $(CYGPATH_W) 'elfem.c'; else $(CYGPATH_W) '$(srcdir)/elfem.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_elf_naming.obj `if test -f 'dwarf_elf_naming.c'; then $(CYGPATH_W) 'dwarf_elf_naming.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_elf_naming.c'; fi`
 
 readelfobj-generic_from_elf.o: generic_from_elf.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-generic_from_elf.o -MD -MP -MF $(DEPDIR)/readelfobj-generic_from_elf.Tpo -c -o readelfobj-generic_from_elf.o `test -f 'generic_from_elf.c' || echo '$(srcdir)/'`generic_from_elf.c
