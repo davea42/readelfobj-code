@@ -20,7 +20,7 @@ cc -c dwarf_elf_reloc_x86_64.c
 cc -c dwarf_elf_reloc_aarch64.c 
 rm *.o
 
-cp dwarf_elf_reloc_386.c \
+list="dwarf_elf_reloc_386.c \
  dwarf_elf_reloc_386.h \
  dwarf_elf_reloc_aarch64.c \
  dwarf_elf_reloc_aarch64.h \
@@ -33,7 +33,10 @@ cp dwarf_elf_reloc_386.c \
  dwarf_elf_reloc_ppc64.c \
  dwarf_elf_reloc_ppc64.h \
  dwarf_elf_reloc_x86_64.c \
- dwarf_elf_reloc_x86_64.h  ../src
+ dwarf_elf_reloc_x86_64.h"
+set -x
+cp $list ../src
+rm $list
 
 
 
