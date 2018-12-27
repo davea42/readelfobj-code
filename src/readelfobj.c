@@ -63,6 +63,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_elf_reloc_mips.h"	
 #include "dwarf_elf_reloc_ppc.h"
 #include "dwarf_elf_reloc_arm.h"  
+#include "dwarf_elf_reloc_aarch64.h"  
 #include "dwarf_elf_reloc_ppc64.h"	
 #include "dwarf_elf_reloc_x86_64.h"
 
@@ -810,6 +811,9 @@ get_elf_reloc_name(
         break;
     case EM_ARM:
         tname = dwarf_get_elf_relocname_arm(type);
+        break;
+    case EM_AARCH64:
+        tname = dwarf_get_elf_relocname_aarch64(type);
         break;
     case EM_MIPS:
     case EM_MIPS_RS3_LE:

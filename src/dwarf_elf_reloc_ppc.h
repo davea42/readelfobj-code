@@ -286,3 +286,90 @@ const char * dwarf_get_elf_relocname_ppc(unsigned long);
 #ifndef R_PPC_GOT_DTPREL16_HA
 #define R_PPC_GOT_DTPREL16_HA 94
 #endif /* R_PPC_GOT_DTPREL16_HA */
+#ifndef R_PPC_TLSGD
+#define R_PPC_TLSGD          95
+#endif /* R_PPC_TLSGD */
+#ifndef R_PPC_TLSLD
+#define R_PPC_TLSLD          96
+#endif /* R_PPC_TLSLD */
+#ifndef R_PPC_EMB_NADDR32
+#define R_PPC_EMB_NADDR32    101
+#endif /* R_PPC_EMB_NADDR32 */
+#ifndef R_PPC_EMB_NADDR16
+#define R_PPC_EMB_NADDR16    102
+#endif /* R_PPC_EMB_NADDR16 */
+#ifndef R_PPC_EMB_NADDR16_LO
+#define R_PPC_EMB_NADDR16_LO 103
+#endif /* R_PPC_EMB_NADDR16_LO */
+#ifndef R_PPC_EMB_NADDR16_HI
+#define R_PPC_EMB_NADDR16_HI 104
+#endif /* R_PPC_EMB_NADDR16_HI */
+#ifndef R_PPC_EMB_NADDR16_HA
+#define R_PPC_EMB_NADDR16_HA 105
+#endif /* R_PPC_EMB_NADDR16_HA */
+#ifndef R_PPC_EMB_SDAI16
+#define R_PPC_EMB_SDAI16     106
+#endif /* R_PPC_EMB_SDAI16 */
+#ifndef R_PPC_EMB_SDA2I16
+#define R_PPC_EMB_SDA2I16    107
+#endif /* R_PPC_EMB_SDA2I16 */
+#ifndef R_PPC_EMB_SDA2REL
+#define R_PPC_EMB_SDA2REL    108
+#endif /* R_PPC_EMB_SDA2REL */
+#ifndef R_PPC_EMB_SDA21
+#define R_PPC_EMB_SDA21      109
+#endif /* R_PPC_EMB_SDA21 */
+#ifndef R_PPC_EMB_MRKREF
+#define R_PPC_EMB_MRKREF     110
+#endif /* R_PPC_EMB_MRKREF */
+#ifndef R_PPC_EMB_RELSEC16
+#define R_PPC_EMB_RELSEC16   111
+#endif /* R_PPC_EMB_RELSEC16 */
+#ifndef R_PPC_EMB_RELST_LO
+#define R_PPC_EMB_RELST_LO   112
+#endif /* R_PPC_EMB_RELST_LO */
+#ifndef R_PPC_EMB_RELST_HI
+#define R_PPC_EMB_RELST_HI   113
+#endif /* R_PPC_EMB_RELST_HI */
+#ifndef R_PPC_EMB_RELST_HA
+#define R_PPC_EMB_RELST_HA   114
+#endif /* R_PPC_EMB_RELST_HA */
+#ifndef R_PPC_EMB_BIT_FLD
+#define R_PPC_EMB_BIT_FLD    115
+#endif /* R_PPC_EMB_BIT_FLD */
+#ifndef R_PPC_EMB_RELSDA
+#define R_PPC_EMB_RELSDA     116
+#endif /* R_PPC_EMB_RELSDA */
+#ifndef R_PPC_DIAB_SDA21_LO
+#define R_PPC_DIAB_SDA21_LO  180
+#endif /* R_PPC_DIAB_SDA21_LO */
+#ifndef R_PPC_DIAB_SDA21_HI
+#define R_PPC_DIAB_SDA21_HI  181
+#endif /* R_PPC_DIAB_SDA21_HI */
+#ifndef R_PPC_DIAB_SDA21_HA
+#define R_PPC_DIAB_SDA21_HA  182
+#endif /* R_PPC_DIAB_SDA21_HA */
+#ifndef R_PPC_DIAB_RELSDA_LO
+#define R_PPC_DIAB_RELSDA_LO 183
+#endif /* R_PPC_DIAB_RELSDA_LO */
+#ifndef R_PPC_DIAB_RELSDA_HI
+#define R_PPC_DIAB_RELSDA_HI 184
+#endif /* R_PPC_DIAB_RELSDA_HI */
+#ifndef R_PPC_DIAB_RELSDA_HA
+#define R_PPC_DIAB_RELSDA_HA 185
+#endif /* R_PPC_DIAB_RELSDA_HA */
+#ifndef R_PPC_IRELATIVE
+#define R_PPC_IRELATIVE      248
+#endif /* R_PPC_IRELATIVE */
+#ifndef R_PPC_REL16
+#define R_PPC_REL16          249
+#endif /* R_PPC_REL16 */
+#ifndef R_PPC_REL16_LO
+#define R_PPC_REL16_LO       250
+#endif /* R_PPC_REL16_LO */
+#ifndef R_PPC_REL16_HI
+#define R_PPC_REL16_HI       251
+#endif /* R_PPC_REL16_HI */
+#ifndef R_PPC_REL16_HA
+#define R_PPC_REL16_HA       252
+#endif /* R_PPC_REL16_HA */

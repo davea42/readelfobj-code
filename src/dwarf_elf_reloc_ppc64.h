@@ -223,3 +223,36 @@ const char * dwarf_get_elf_relocname_ppc64(unsigned long);
 #ifndef R_PPC64_DTPREL32
 #define R_PPC64_DTPREL32     110
 #endif /* R_PPC64_DTPREL32 */
+#ifndef R_PPC64_ADDR16_HIGHA
+#define R_PPC64_ADDR16_HIGHA 111
+#endif /* R_PPC64_ADDR16_HIGHA */
+#ifndef R_PPC64_TPREL16_HIGH
+#define R_PPC64_TPREL16_HIGH 112
+#endif /* R_PPC64_TPREL16_HIGH */
+#ifndef R_PPC64_TPREL16_HIGHA
+#define R_PPC64_TPREL16_HIGHA 113
+#endif /* R_PPC64_TPREL16_HIGHA */
+#ifndef R_PPC64_DTPREL16_HIGH
+#define R_PPC64_DTPREL16_HIGH 114
+#endif /* R_PPC64_DTPREL16_HIGH */
+#ifndef R_PPC64_DTPREL16_HIGHA
+#define R_PPC64_DTPREL16_HIGHA 115
+#endif /* R_PPC64_DTPREL16_HIGHA */
+#ifndef R_PPC64_JMP_IREL
+#define R_PPC64_JMP_IREL     247
+#endif /* R_PPC64_JMP_IREL */
+#ifndef R_PPC64_IRELATIVE
+#define R_PPC64_IRELATIVE    248
+#endif /* R_PPC64_IRELATIVE */
+#ifndef R_PPC64_REL16
+#define R_PPC64_REL16        249
+#endif /* R_PPC64_REL16 */
+#ifndef R_PPC64_REL16_LO
+#define R_PPC64_REL16_LO     250
+#endif /* R_PPC64_REL16_LO */
+#ifndef R_PPC64_REL16_HI
+#define R_PPC64_REL16_HI     251
+#endif /* R_PPC64_REL16_HI */
+#ifndef R_PPC64_REL16_HA
+#define R_PPC64_REL16_HA     252
+#endif /* R_PPC64_REL16_HA */

@@ -118,3 +118,9 @@ const char * dwarf_get_elf_relocname_x86_64(unsigned long);
 #ifndef R_X86_64_RELATIVE64
 #define R_X86_64_RELATIVE64  38
 #endif /* R_X86_64_RELATIVE64 */
+#ifndef R_X86_64_GOTPCRELX
+#define R_X86_64_GOTPCRELX   41
+#endif /* R_X86_64_GOTPCRELX */
+#ifndef R_X86_64_REX_GOTPCRELX
+#define R_X86_64_REX_GOTPCRELX 42
+#endif /* R_X86_64_REX_GOTPCRELX */

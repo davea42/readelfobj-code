@@ -1,8 +1,9 @@
 2018-12-27  David Anderson
+    * added dwarf_elf_reloc_aarch64.h, dwarf_elf_reloc_aarch64.c:
     * dwarf_elf_reloc_386.c,dwarf_elf_reloc_386.h,dwarf_elf_reloc_arm.c,
       dwarf_elf_reloc_arm.h,dwarf_elf_reloc_mips.c,dwarf_elf_reloc_mips.h,
       dwarf_elf_reloc_ppc.c,dwarf_elf_reloc_ppc.h,dwarf_elf_reloc_ppc64.c,
-      dwarf_elf_reloc_ppc64.h,dwarf_elf_reloc_x86_64.c,dwarf_elf_reloc_x86_64.h:
+      dwarf_elf_reloc_ppc64.h,dwarf_elf_reloc_x86_64.c,dwarf_elf_reloc_x86_64.h: Updated the list of defines with additional names.
     * Makefile.am: Build the new reloc naming headers.
     * dwarf_load_elf_headers.c: Corrected bugs in reading relocations.
     * readelfobj.c: Now loads all section headers, symtabs,

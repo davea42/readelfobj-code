@@ -38,3 +38,5 @@
 #define R_X86_64_TLSDESC         36
 #define R_X86_64_IRELATIVE       37
 #define R_X86_64_RELATIVE64      38
+#define R_X86_64_GOTPCRELX	41
+#define R_X86_64_REX_GOTPCRELX	42

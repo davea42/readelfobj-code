@@ -80,6 +80,17 @@ dwarf_get_elf_relocname_ppc64(unsigned long val)
     case R_PPC64_DTPMOD32 : return "R_PPC64_DTPMOD32";
     case R_PPC64_TPREL32 : return "R_PPC64_TPREL32";
     case R_PPC64_DTPREL32 : return "R_PPC64_DTPREL32";
+    case R_PPC64_ADDR16_HIGHA : return "R_PPC64_ADDR16_HIGHA";
+    case R_PPC64_TPREL16_HIGH : return "R_PPC64_TPREL16_HIGH";
+    case R_PPC64_TPREL16_HIGHA : return "R_PPC64_TPREL16_HIGHA";
+    case R_PPC64_DTPREL16_HIGH : return "R_PPC64_DTPREL16_HIGH";
+    case R_PPC64_DTPREL16_HIGHA : return "R_PPC64_DTPREL16_HIGHA";
+    case R_PPC64_JMP_IREL : return "R_PPC64_JMP_IREL";
+    case R_PPC64_IRELATIVE : return "R_PPC64_IRELATIVE";
+    case R_PPC64_REL16 : return "R_PPC64_REL16";
+    case R_PPC64_REL16_LO : return "R_PPC64_REL16_LO";
+    case R_PPC64_REL16_HI : return "R_PPC64_REL16_HI";
+    case R_PPC64_REL16_HA : return "R_PPC64_REL16_HA";
     }
 return "";
 }

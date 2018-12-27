@@ -45,6 +45,8 @@ dwarf_get_elf_relocname_x86_64(unsigned long val)
     case R_X86_64_TLSDESC : return "R_X86_64_TLSDESC";
     case R_X86_64_IRELATIVE : return "R_X86_64_IRELATIVE";
     case R_X86_64_RELATIVE64 : return "R_X86_64_RELATIVE64";
+    case R_X86_64_GOTPCRELX : return "R_X86_64_GOTPCRELX";
+    case R_X86_64_REX_GOTPCRELX : return "R_X86_64_REX_GOTPCRELX";
     }
 return "";
 }

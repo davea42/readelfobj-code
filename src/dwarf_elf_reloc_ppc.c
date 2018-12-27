@@ -101,6 +101,35 @@ dwarf_get_elf_relocname_ppc(unsigned long val)
     case R_PPC_GOT_DTPREL16_LO : return "R_PPC_GOT_DTPREL16_LO";
     case R_PPC_GOT_DTPREL16_HI : return "R_PPC_GOT_DTPREL16_HI";
     case R_PPC_GOT_DTPREL16_HA : return "R_PPC_GOT_DTPREL16_HA";
+    case R_PPC_TLSGD : return "R_PPC_TLSGD";
+    case R_PPC_TLSLD : return "R_PPC_TLSLD";
+    case R_PPC_EMB_NADDR32 : return "R_PPC_EMB_NADDR32";
+    case R_PPC_EMB_NADDR16 : return "R_PPC_EMB_NADDR16";
+    case R_PPC_EMB_NADDR16_LO : return "R_PPC_EMB_NADDR16_LO";
+    case R_PPC_EMB_NADDR16_HI : return "R_PPC_EMB_NADDR16_HI";
+    case R_PPC_EMB_NADDR16_HA : return "R_PPC_EMB_NADDR16_HA";
+    case R_PPC_EMB_SDAI16 : return "R_PPC_EMB_SDAI16";
+    case R_PPC_EMB_SDA2I16 : return "R_PPC_EMB_SDA2I16";
+    case R_PPC_EMB_SDA2REL : return "R_PPC_EMB_SDA2REL";
+    case R_PPC_EMB_SDA21 : return "R_PPC_EMB_SDA21";
+    case R_PPC_EMB_MRKREF : return "R_PPC_EMB_MRKREF";
+    case R_PPC_EMB_RELSEC16 : return "R_PPC_EMB_RELSEC16";
+    case R_PPC_EMB_RELST_LO : return "R_PPC_EMB_RELST_LO";
+    case R_PPC_EMB_RELST_HI : return "R_PPC_EMB_RELST_HI";
+    case R_PPC_EMB_RELST_HA : return "R_PPC_EMB_RELST_HA";
+    case R_PPC_EMB_BIT_FLD : return "R_PPC_EMB_BIT_FLD";
+    case R_PPC_EMB_RELSDA : return "R_PPC_EMB_RELSDA";
+    case R_PPC_DIAB_SDA21_LO : return "R_PPC_DIAB_SDA21_LO";
+    case R_PPC_DIAB_SDA21_HI : return "R_PPC_DIAB_SDA21_HI";
+    case R_PPC_DIAB_SDA21_HA : return "R_PPC_DIAB_SDA21_HA";
+    case R_PPC_DIAB_RELSDA_LO : return "R_PPC_DIAB_RELSDA_LO";
+    case R_PPC_DIAB_RELSDA_HI : return "R_PPC_DIAB_RELSDA_HI";
+    case R_PPC_DIAB_RELSDA_HA : return "R_PPC_DIAB_RELSDA_HA";
+    case R_PPC_IRELATIVE : return "R_PPC_IRELATIVE";
+    case R_PPC_REL16 : return "R_PPC_REL16";
+    case R_PPC_REL16_LO : return "R_PPC_REL16_LO";
+    case R_PPC_REL16_HI : return "R_PPC_REL16_HI";
+    case R_PPC_REL16_HA : return "R_PPC_REL16_HA";
     }
 return "";
 }

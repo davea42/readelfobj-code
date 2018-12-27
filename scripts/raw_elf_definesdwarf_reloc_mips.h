@@ -39,3 +39,23 @@
 #define R_MIPS_SCN_DISP              32
 #define	R_MIPS_REL16                 33
 #define R_MIPS_ADD_IMMEDIATE         34
+#define R_MIPS_PJUMP		35
+#define R_MIPS_RELGOT		36
+#define R_MIPS_JALR		37
+#define R_MIPS_TLS_DTPMOD32	38
+#define R_MIPS_TLS_DTPREL32	39
+#define R_MIPS_TLS_DTPMOD64	40
+#define R_MIPS_TLS_DTPREL64	41
+#define R_MIPS_TLS_GD		42
+#define R_MIPS_TLS_LDM		43
+#define R_MIPS_TLS_DTPREL_HI16	44
+#define R_MIPS_TLS_DTPREL_LO16	45
+#define R_MIPS_TLS_GOTTPREL	46
+#define R_MIPS_TLS_TPREL32	47 
+#define R_MIPS_TLS_TPREL_HI16	49
+#define R_MIPS_TLS_TPREL_LO16	50
+#define R_MIPS_GLOB_DAT		51
+#define R_MIPS_COPY		126
+#define R_MIPS_JUMP_SLOT        127
+#define R_MIPS_NUM		128
+

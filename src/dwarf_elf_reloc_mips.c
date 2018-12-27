@@ -41,6 +41,25 @@ dwarf_get_elf_relocname_mips(unsigned long val)
     case R_MIPS_SCN_DISP : return "R_MIPS_SCN_DISP";
     case R_MIPS_REL16 : return "R_MIPS_REL16";
     case R_MIPS_ADD_IMMEDIATE : return "R_MIPS_ADD_IMMEDIATE";
+    case R_MIPS_PJUMP : return "R_MIPS_PJUMP";
+    case R_MIPS_RELGOT : return "R_MIPS_RELGOT";
+    case R_MIPS_JALR : return "R_MIPS_JALR";
+    case R_MIPS_TLS_DTPMOD32 : return "R_MIPS_TLS_DTPMOD32";
+    case R_MIPS_TLS_DTPREL32 : return "R_MIPS_TLS_DTPREL32";
+    case R_MIPS_TLS_DTPMOD64 : return "R_MIPS_TLS_DTPMOD64";
+    case R_MIPS_TLS_DTPREL64 : return "R_MIPS_TLS_DTPREL64";
+    case R_MIPS_TLS_GD : return "R_MIPS_TLS_GD";
+    case R_MIPS_TLS_LDM : return "R_MIPS_TLS_LDM";
+    case R_MIPS_TLS_DTPREL_HI16 : return "R_MIPS_TLS_DTPREL_HI16";
+    case R_MIPS_TLS_DTPREL_LO16 : return "R_MIPS_TLS_DTPREL_LO16";
+    case R_MIPS_TLS_GOTTPREL : return "R_MIPS_TLS_GOTTPREL";
+    case R_MIPS_TLS_TPREL32 : return "R_MIPS_TLS_TPREL32";
+    case R_MIPS_TLS_TPREL_HI16 : return "R_MIPS_TLS_TPREL_HI16";
+    case R_MIPS_TLS_TPREL_LO16 : return "R_MIPS_TLS_TPREL_LO16";
+    case R_MIPS_GLOB_DAT : return "R_MIPS_GLOB_DAT";
+    case R_MIPS_COPY : return "R_MIPS_COPY";
+    case R_MIPS_JUMP_SLOT : return "R_MIPS_JUMP_SLOT";
+    case R_MIPS_NUM : return "R_MIPS_NUM";
     }
 return "";
 }

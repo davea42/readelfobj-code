@@ -129,6 +129,7 @@ am_readelfobj_OBJECTS = readelfobj-dwarf_object_detector.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_mips.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_ppc.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_arm.$(OBJEXT) \
+	readelfobj-dwarf_elf_reloc_aarch64.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_ppc64.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_x86_64.$(OBJEXT) \
 	readelfobj-dwarf_load_elf_headers.$(OBJEXT) \
@@ -388,6 +389,8 @@ dwarf_elf_reloc_ppc.c    \
 dwarf_elf_reloc_ppc.h    \
 dwarf_elf_reloc_arm.c    \
 dwarf_elf_reloc_arm.h    \
+dwarf_elf_reloc_aarch64.c \
+dwarf_elf_reloc_aarch64.h \
 dwarf_elf_reloc_ppc64.c	 \
 dwarf_elf_reloc_ppc64.h	 \
 dwarf_elf_reloc_x86_64.c \
@@ -558,6 +561,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-object_detector_main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_naming.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_386.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_arm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_mips.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_ppc.Po@am__quote@
@@ -728,6 +732,20 @@ readelfobj-dwarf_elf_reloc_arm.obj: dwarf_elf_reloc_arm.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_elf_reloc_arm.c' object='readelfobj-dwarf_elf_reloc_arm.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_elf_reloc_arm.obj `if test -f 'dwarf_elf_reloc_arm.c'; then $(CYGPATH_W) 'dwarf_elf_reloc_arm.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_elf_reloc_arm.c'; fi`
+
+readelfobj-dwarf_elf_reloc_aarch64.o: dwarf_elf_reloc_aarch64.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_elf_reloc_aarch64.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Tpo -c -o readelfobj-dwarf_elf_reloc_aarch64.o `test -f 'dwarf_elf_reloc_aarch64.c' || echo '$(srcdir)/'`dwarf_elf_reloc_aarch64.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Tpo $(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_elf_reloc_aarch64.c' object='readelfobj-dwarf_elf_reloc_aarch64.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_elf_reloc_aarch64.o `test -f 'dwarf_elf_reloc_aarch64.c' || echo '$(srcdir)/'`dwarf_elf_reloc_aarch64.c
+
+readelfobj-dwarf_elf_reloc_aarch64.obj: dwarf_elf_reloc_aarch64.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_elf_reloc_aarch64.obj -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Tpo -c -o readelfobj-dwarf_elf_reloc_aarch64.obj `if test -f 'dwarf_elf_reloc_aarch64.c'; then $(CYGPATH_W) 'dwarf_elf_reloc_aarch64.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_elf_reloc_aarch64.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Tpo $(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_elf_reloc_aarch64.c' object='readelfobj-dwarf_elf_reloc_aarch64.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_elf_reloc_aarch64.obj `if test -f 'dwarf_elf_reloc_aarch64.c'; then $(CYGPATH_W) 'dwarf_elf_reloc_aarch64.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_elf_reloc_aarch64.c'; fi`
 
 readelfobj-dwarf_elf_reloc_ppc64.o: dwarf_elf_reloc_ppc64.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_elf_reloc_ppc64.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_elf_reloc_ppc64.Tpo -c -o readelfobj-dwarf_elf_reloc_ppc64.o `test -f 'dwarf_elf_reloc_ppc64.c' || echo '$(srcdir)/'`dwarf_elf_reloc_ppc64.c

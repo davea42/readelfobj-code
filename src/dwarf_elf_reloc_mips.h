@@ -106,3 +106,60 @@ const char * dwarf_get_elf_relocname_mips(unsigned long);
 #ifndef R_MIPS_ADD_IMMEDIATE
 #define R_MIPS_ADD_IMMEDIATE 34
 #endif /* R_MIPS_ADD_IMMEDIATE */
+#ifndef R_MIPS_PJUMP
+#define R_MIPS_PJUMP         35
+#endif /* R_MIPS_PJUMP */
+#ifndef R_MIPS_RELGOT
+#define R_MIPS_RELGOT        36
+#endif /* R_MIPS_RELGOT */
+#ifndef R_MIPS_JALR
+#define R_MIPS_JALR          37
+#endif /* R_MIPS_JALR */
+#ifndef R_MIPS_TLS_DTPMOD32
+#define R_MIPS_TLS_DTPMOD32  38
+#endif /* R_MIPS_TLS_DTPMOD32 */
+#ifndef R_MIPS_TLS_DTPREL32
+#define R_MIPS_TLS_DTPREL32  39
+#endif /* R_MIPS_TLS_DTPREL32 */
+#ifndef R_MIPS_TLS_DTPMOD64
+#define R_MIPS_TLS_DTPMOD64  40
+#endif /* R_MIPS_TLS_DTPMOD64 */
+#ifndef R_MIPS_TLS_DTPREL64
+#define R_MIPS_TLS_DTPREL64  41
+#endif /* R_MIPS_TLS_DTPREL64 */
+#ifndef R_MIPS_TLS_GD
+#define R_MIPS_TLS_GD        42
+#endif /* R_MIPS_TLS_GD */
+#ifndef R_MIPS_TLS_LDM
+#define R_MIPS_TLS_LDM       43
+#endif /* R_MIPS_TLS_LDM */
+#ifndef R_MIPS_TLS_DTPREL_HI16
+#define R_MIPS_TLS_DTPREL_HI16 44
+#endif /* R_MIPS_TLS_DTPREL_HI16 */
+#ifndef R_MIPS_TLS_DTPREL_LO16
+#define R_MIPS_TLS_DTPREL_LO16 45
+#endif /* R_MIPS_TLS_DTPREL_LO16 */
+#ifndef R_MIPS_TLS_GOTTPREL
+#define R_MIPS_TLS_GOTTPREL  46
+#endif /* R_MIPS_TLS_GOTTPREL */
+#ifndef R_MIPS_TLS_TPREL32
+#define R_MIPS_TLS_TPREL32   47
+#endif /* R_MIPS_TLS_TPREL32 */
+#ifndef R_MIPS_TLS_TPREL_HI16
+#define R_MIPS_TLS_TPREL_HI16 49
+#endif /* R_MIPS_TLS_TPREL_HI16 */
+#ifndef R_MIPS_TLS_TPREL_LO16
+#define R_MIPS_TLS_TPREL_LO16 50
+#endif /* R_MIPS_TLS_TPREL_LO16 */
+#ifndef R_MIPS_GLOB_DAT
+#define R_MIPS_GLOB_DAT      51
+#endif /* R_MIPS_GLOB_DAT */
+#ifndef R_MIPS_COPY
+#define R_MIPS_COPY          126
+#endif /* R_MIPS_COPY */
+#ifndef R_MIPS_JUMP_SLOT
+#define R_MIPS_JUMP_SLOT     127
+#endif /* R_MIPS_JUMP_SLOT */
+#ifndef R_MIPS_NUM
+#define R_MIPS_NUM           128
+#endif /* R_MIPS_NUM */

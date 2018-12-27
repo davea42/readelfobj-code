@@ -21,6 +21,8 @@ dwarf_elf_reloc_ppc.c    \
 dwarf_elf_reloc_ppc.h    \
 dwarf_elf_reloc_arm.c    \
 dwarf_elf_reloc_arm.h    \
+dwarf_elf_reloc_aarch64.c \
+dwarf_elf_reloc_aarch64.h \
 dwarf_elf_reloc_ppc64.c	 \
 dwarf_elf_reloc_ppc64.h	 \
 dwarf_elf_reloc_x86_64.c \
