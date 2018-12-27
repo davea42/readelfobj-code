@@ -59,6 +59,12 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "readelfobj.h"
 #include "sanitized.h"
 #include "readelfobj_version.h"
+#include "dwarf_elf_reloc_386.h" 
+#include "dwarf_elf_reloc_mips.h"	
+#include "dwarf_elf_reloc_ppc.h"
+#include "dwarf_elf_reloc_arm.h"  
+#include "dwarf_elf_reloc_ppc64.h"	
+#include "dwarf_elf_reloc_x86_64.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -78,7 +84,7 @@ static void elf_print_elf_header(elf_filedata ep);
 static void elf_print_progheaders(elf_filedata ep);
 static void elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE);
 static void elf_print_sectheaders(elf_filedata ep);
-static void elf_print_relocation_details(int isrela,
+static void elf_print_relocation_details(elf_filedata ep,int isrela,
     struct generic_shdr * gsh);
 static void elf_print_symbols(elf_filedata ep,int is_symtab,
     struct generic_symentry * gsym,
@@ -332,9 +338,11 @@ do_one_file(const char *s)
     res = dwarf_load_elf_header(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load elf header. errcode %d\n",errcode);
+        dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
     if (res == DW_DLV_NO_ENTRY) {
+        dwarf_destruct_elf_access(ep,&errcode);
         P("Error: unable to find elf header.\n");
         return;
     }
@@ -350,11 +358,13 @@ do_one_file(const char *s)
     res = dwarf_load_elf_symstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load symstr. errcode %d\n",errcode);
+        dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
     res = dwarf_load_elf_dynstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load dynstr. errcode %d\n",errcode);
+        dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
     if (!only_wasted_summary) {
@@ -375,23 +385,18 @@ do_one_file(const char *s)
                 sanitized(filename,buffer1,BUFFERSIZE));
         }
     }
+    res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
+    if( res == DW_DLV_ERROR) {
+        P("Error: Unable to load .dynsym section. Errcode %d\n",
+            errcode);
+    }
+    res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
+    if( res == DW_DLV_ERROR) {
+        P("Error: Unable to load .symtab section. Errcode %d\n",
+            errcode);
+    }
     if(print_symtab_sections ) {
-        int symtab_ok = TRUE;
-        int dynsym_ok = TRUE;
-        /* Load symtab/dynsym if present. */
-        res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
-        if( res == DW_DLV_ERROR) {
-            P("Error: Unable to load .symtab section. Errcode %d\n",
-                errcode);
-            symtab_ok = FALSE;
-        }
-        res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
-        if( res == DW_DLV_ERROR) {
-            P("Error: Unable to load .dynsym section. Errcode %d\n",
-                errcode);
-            dynsym_ok = FALSE;
-        }
-        if (symtab_ok && ep->f_symtab_sect_index) {
+        if (ep->f_symtab_sect_index) {
             struct generic_shdr * psh = ep->f_shdr +
                 ep->f_symtab_sect_index;
             const char *namestr = psh->gh_namestring;
@@ -402,12 +407,13 @@ do_one_file(const char *s)
                     LONGESTUFMT " section\n",
                     link,
                     ep->f_symtab_sect_strings_sect_index);
+                dwarf_destruct_elf_access(ep,&errcode);
                 return;
             }
             elf_print_symbols(ep,TRUE,ep->f_symtab,
                 ep->f_loc_symtab.g_count,namestr);
         }
-        if(dynsym_ok && ep->f_dynsym_sect_index) {
+        if(ep->f_dynsym_sect_index) {
             struct generic_shdr * psh = ep->f_shdr +
                 ep->f_dynsym_sect_index;
             const char *namestr = psh->gh_namestring;
@@ -418,6 +424,7 @@ do_one_file(const char *s)
                     LONGESTUFMT " section\n",
                     link,
                     ep->f_dynsym_sect_strings_sect_index);
+                dwarf_destruct_elf_access(ep,&errcode);
                 return;
             }
             elf_print_symbols(ep,FALSE,ep->f_dynsym,
@@ -432,11 +439,10 @@ do_one_file(const char *s)
     if(print_reloc_sections) {
         unsigned reloc_count = 0;
         LONGESTUTYPE i = 0;
-        struct generic_shdr * psh = 0;
+        struct generic_shdr *psh = ep->f_shdr;
 
-        psh = ep->f_shdr;
         for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
-            const char *namestr = ep->f_shdr->gh_namestring;
+            const char *namestr = psh->gh_namestring;
             if(!strncmp(namestr,".rel.",5)) {
                 res = dwarf_load_elf_rel(ep,i,&errcode);
                 if(res == DW_DLV_ERROR) {
@@ -444,11 +450,9 @@ do_one_file(const char *s)
                         LONGESTUFMT " Error code %d file:%s \n",
                         i,errcode,
                         sanitized(filename,buffer1,BUFFERSIZE));
+                    dwarf_destruct_elf_access(ep,&errcode);
                     return;
-                } else if (res == DW_DLV_OK) {
-                    ++reloc_count;
-                    elf_print_relocation_details(FALSE,psh);
-                }
+                } 
             } else if (!strncmp(namestr,".rela.",6)) {
                 res = dwarf_load_elf_rela(ep,i,&errcode);
                 if(res == DW_DLV_ERROR) {
@@ -456,11 +460,26 @@ do_one_file(const char *s)
                         LONGESTUFMT " Error code %d file:%s \n",
                         i,errcode,
                         sanitized(filename,buffer1,BUFFERSIZE));
+                    dwarf_destruct_elf_access(ep,&errcode);
                     return;
-                } else if (res == DW_DLV_OK) {
-                    ++reloc_count;
-                    elf_print_relocation_details(TRUE,psh);
                 }
+            }
+        } 
+    } 
+    if(print_reloc_sections) {
+        unsigned reloc_count = 0;
+        LONGESTUTYPE i = 0;
+        struct generic_shdr * psh = 0;
+
+        psh = ep->f_shdr;
+        for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+            const char *namestr = psh->gh_namestring;
+            if(!strncmp(namestr,".rel.",5)) {
+                ++reloc_count;
+                elf_print_relocation_details(ep,FALSE,psh);
+            } else if (!strncmp(namestr,".rela.",6)) {
+                ++reloc_count;
+                elf_print_relocation_details(ep,TRUE,psh);
             }
         }
         if (reloc_count == 0) {
@@ -488,6 +507,7 @@ do_one_file(const char *s)
     }
     check_dynamic_section(ep);
     report_wasted_space(ep);
+    dwarf_destruct_elf_access(ep,&errcode);
 }
 static void
 elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection)
@@ -746,8 +766,67 @@ elf_print_symbols(elf_filedata ep,
     return;
 }
 
+static int
+get_elf_symtab_symbol_name( elf_filedata ep,
+    unsigned long symnum,
+    char **localstr_out, 
+    int *errcode)
+{
+    int is_symtab = TRUE;
+    int res = 0;
+
+    struct generic_symentry *gsym = 0;
+    if (symnum >= ep->f_loc_symtab.g_count) {
+        return DW_DLV_NO_ENTRY;
+    }
+    gsym = ep->f_symtab + symnum;
+    res = dwarf_get_elf_symstr_string(ep,
+            is_symtab,gsym->gs_name,
+            localstr_out,errcode);
+    return res;
+}
+
+static int
+get_elf_reloc_name(
+    LONGESTUTYPE machine,
+    LONGESTUTYPE type,
+    const char **typename_out,
+    int *errcode)
+{
+    const char *tname = 0;
+
+    switch(machine) {
+    case EM_386:
+        tname = dwarf_get_elf_relocname_386(type);
+        break;
+    case EM_X86_64:
+        tname = dwarf_get_elf_relocname_x86_64(type);
+        break;
+    case EM_PPC:
+        tname =dwarf_get_elf_relocname_ppc(type);
+        break;
+    case EM_PPC64:
+        tname = dwarf_get_elf_relocname_ppc64(type);
+        break;
+    case EM_ARM:
+        tname = dwarf_get_elf_relocname_arm(type);
+        break;
+    case EM_MIPS:
+    case EM_MIPS_RS3_LE:
+    case EM_MIPS_X:
+        tname= dwarf_get_elf_relocname_mips(type);
+        break;
+    default:
+        tname = "(name uncertain)";
+        break;
+    }
+    *typename_out = tname;
+    return DW_DLV_OK;
+}
+
 static void
 elf_print_relocation_content(
+    elf_filedata ep,
     int isrela,
     struct generic_shdr * gsh,
     struct generic_rela *grela, LONGESTUTYPE count)
@@ -755,32 +834,55 @@ elf_print_relocation_content(
     LONGESTUTYPE i = 0;
 
     P("\n");
-    P("Section " LONGESTUFMT ": %s\n",
+    P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT "\n",
         gsh->gh_secnum,
-        sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE));
+        sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
+        count);
+    P(" [i]   offset   info        type symbol %s\n",isrela?"    addend":""); 
     for(i = 0; i < count; ++i,grela++) {
+        char *localstr = 0;
+        unsigned long symnum = grela->gr_sym;
+        int errcode = 0;
+        char *symname = "";
+        const char *typename = "";
+
+        if (grela->gr_sym != STN_UNDEF) {
+            get_elf_symtab_symbol_name(
+                ep,
+                grela->gr_sym,
+                &symname,
+                &errcode);
+        } else {
+            symname = (char *)"STN_UNDEF";
+        }
+        if (grela->gr_type) {
+           get_elf_reloc_name(ep->f_ehdr->ge_machine,grela->gr_type,&typename,&errcode);
+        }
+
+
         P("[" LONGESTUFMT "] ",i);
-        P(" targ_offset "
-            LONGESTXFMT " (" LONGESTUFMT ")",
-            grela->gr_offset,
+    
+        P(" "
+            LONGESTXFMT8,
             grela->gr_offset);
-        P(", info "
-            LONGESTXFMT " (" LONGESTUFMT ")\n",
-            grela->gr_info,
+        P(" "
+            LONGESTXFMT8, 
             grela->gr_info);
-        P(" sym "
-            LONGESTXFMT " (" LONGESTUFMT ")",
-            grela->gr_sym,
-            grela->gr_sym);
-        P(", type "
-            LONGESTXFMT " (" LONGESTUFMT ")\n",
-            grela->gr_type,
+        P(" "
+            "%-14s " 
+            LONGESTUFMT,
+            typename,
             grela->gr_type);
+
+        P(" "
+            LONGESTUFMT " %s",
+            grela->gr_sym,
+            symname?sanitized(symname,buffer1,BUFFERSIZE):"");
         if (isrela) {
-            P(" addend "
-                LONGESTSFMT "\n" ,
-                grela->gr_sym);
-            }
+            P(" "
+                LONGESTSFMT ,
+                grela->gr_addend);
+        }
         P("\n");
     }
     return;
@@ -788,6 +890,7 @@ elf_print_relocation_content(
 
 static void
 elf_print_relocation_details(
+    elf_filedata ep,
     int isrela,
     struct generic_shdr * gsh)
 {
@@ -796,7 +899,7 @@ elf_print_relocation_details(
 
     count = gsh->gh_relcount;
     grela = gsh->gh_rels;
-    elf_print_relocation_content(isrela,gsh,grela,count);
+    elf_print_relocation_content(ep,isrela,gsh,grela,count);
 }
 
 static void

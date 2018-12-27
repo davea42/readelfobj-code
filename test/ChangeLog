@@ -1,3 +1,6 @@
+2018-12-27   David Anderson
+    * test004.base,test017.base: Now these reflect the corrected loading
+      and printing of relocations.
 2018-12-19   David Anderson
     * test001.sh,test002.sh,test003.sh,test004.sh,
       test005.sh,test006.sh,test007.sh,test008m.sh,

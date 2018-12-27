@@ -204,6 +204,11 @@ Section 38, name 9 .strtab
   addr 0x0 (0) offset 0x230b0 (143536), size 5936
   link 0, info 0, align 1, entsize 0
 }
-No .rel or .rela sections were found in libkrb5support.so.0.1.debug
+
+Section 0: .rela.dyn reloccount: 0
+ [i]   offset   info        type symbol     addend
+
+Section 0: .rela.plt reloccount: 0
+ [i]   offset   info        type symbol     addend
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
 Warning : 1 instances of unused alignment space exist and total 1 bytes of alignment.

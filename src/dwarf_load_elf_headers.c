@@ -160,13 +160,15 @@ dwarf_destruct_elf_access(elf_filedata ep,
     free(ep->f_dynamic);
     free(ep->f_symtab_sect_strings);
     free(ep->f_dynsym_sect_strings);
-    free(ep->f_path);
+    free(ep->f_symtab);
+    free(ep->f_dynsym);
 
     /* if TRUE close f_fd on destruct.*/
     if (ep->f_destruct_close_fd) {
         close(ep->f_fd);
     }
     ep->f_ident[0] = 'X';
+    free(ep->f_path);
     free(ep);
     return DW_DLV_OK;
 }
@@ -801,7 +803,7 @@ generic_rel_from_rela32(elf_filedata ep,
         ASNAR(ep->f_copy_word,grel->gr_addend,relp->r_addend);
         SIGN_EXTEND(grel->gr_addend,sizeof(relp->r_addend));
         grel->gr_isrela = TRUE;
-        grel->gr_sym  = grel->gr_info >>8; /* ELF32_R_SYM */
+        grel->gr_sym  = grel->gr_info>>8; /* ELF32_R_SYM */
         grel->gr_type = grel->gr_info  & 0xff; /* ELF32_R_TYPE */
     }
     return DW_DLV_OK;
@@ -816,6 +818,7 @@ generic_rel_from_rela64(elf_filedata ep,
     LONGESTUTYPE ecount = 0;
     LONGESTUTYPE size = gsh->gh_size;
     LONGESTUTYPE size2 = 0;
+    LONGESTUTYPE sizeg = 0;
     LONGESTUTYPE i = 0;
 
     ecount = size/sizeof(dw_elf64_rela);
@@ -833,9 +836,9 @@ generic_rel_from_rela64(elf_filedata ep,
         ASNAR(ep->f_copy_word,grel->gr_info,relp->r_info);
         ASNAR(ep->f_copy_word,grel->gr_addend,relp->r_addend);
         SIGN_EXTEND(grel->gr_addend,sizeof(relp->r_addend));
-        grel->gr_sym  = grel->gr_info >>8; /* ELF64_R_SYM */
+        grel->gr_sym  = grel->gr_info >>32; /* ELF64_R_SYM */
         grel->gr_isrela = TRUE;
-        grel->gr_type = grel->gr_info  & 0xff; /* ELF64_R_TYPE */
+        grel->gr_type = grel->gr_info  & 0xffffffff; /* ELF64_R_TYPE */
     }
     return DW_DLV_OK;
 }
@@ -1287,10 +1290,11 @@ dwarf_elf_load_rela_32(elf_filedata ep,
     LONGESTUTYPE count = 0;
     LONGESTUTYPE size = 0;
     LONGESTUTYPE size2 = 0;
+    LONGESTUTYPE sizeg = 0;
     LONGESTUTYPE offset = 0;
     int res = 0;
     dw_elf32_rela *relp = 0;
-    LONGESTUTYPE reclen = sizeof(dw_elf32_rela);
+    LONGESTUTYPE object_reclen = sizeof(dw_elf32_rela);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1316,14 +1320,14 @@ dwarf_elf_load_rela_32(elf_filedata ep,
             return RO_ERROR;
     }
 
-    count = (long)(size/reclen);
-    size2 = count * reclen;
+    count = (long)(size/object_reclen);
+    size2 = count * object_reclen;
     if(size != size2) {
         P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
             ": " LONGESTUFMT
             " not divisible by "
             LONGESTUFMT "\n",
-            secnum, size,reclen);
+            secnum, size,object_reclen);
         return RO_ERROR;
     }
     relp = (dw_elf32_rela *)malloc(size);
@@ -1348,14 +1352,15 @@ dwarf_elf_load_rela_32(elf_filedata ep,
             offset,size);
         return res;
     }
-    grel = (struct generic_rela *)malloc(size2);
+    sizeg = count*sizeof(struct generic_rela);
+    grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
         P("ERROR: Could not malloc whole generic reloc section "
             LONGESTUFMT " of %s "
-            "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
+            " size " LONGESTUFMT "\n",
             secnum,
             sanitized(filename,buffer1,BUFFERSIZE),
-            offset,size);
+            sizeg);
         return RO_ERR_MALLOC;
     }
     res = generic_rel_from_rela32(ep,gsh,relp,grel,errcode);
@@ -1383,10 +1388,11 @@ dwarf_elf_load_rel_32(elf_filedata ep,
     LONGESTUTYPE count = 0;
     LONGESTUTYPE size = 0;
     LONGESTUTYPE size2 = 0;
+    LONGESTUTYPE sizeg = 0;
     LONGESTUTYPE offset = 0;
     int res = 0;
     dw_elf32_rel* relp = 0;
-    LONGESTUTYPE reclen = sizeof(dw_elf32_rel);
+    LONGESTUTYPE object_reclen = sizeof(dw_elf32_rel);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1411,14 +1417,14 @@ dwarf_elf_load_rel_32(elf_filedata ep,
             return RO_ERROR;
     }
 
-    count = size/reclen;
-    size2 = count * reclen;
+    count = size/object_reclen;
+    size2 = count * object_reclen;
     if(size != size2) {
         P("Bogus size of relocations. Section " LONGESTUFMT
             ": " LONGESTUFMT
             " not divisible by "
             LONGESTUFMT "\n",
-            secnum, size,reclen);
+            secnum, size,object_reclen);
         return RO_ERROR;
     }
     relp = (dw_elf32_rel *)malloc(size);
@@ -1442,14 +1448,15 @@ dwarf_elf_load_rel_32(elf_filedata ep,
             offset,size);
         return res;
     }
-    grel = (struct generic_rela *)malloc(size2);
+    sizeg = count *sizeof(struct generic_rela);
+    grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
         P("ERROR: Could not malloc whole generic reloc section "
             LONGESTUFMT " of %s "
-            "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
+            " size " LONGESTUFMT "\n",
             secnum,
             sanitized(filename,buffer1,BUFFERSIZE),
-            offset,size);
+            sizeg);
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
@@ -1476,10 +1483,11 @@ dwarf_elf_load_rel_64(elf_filedata ep,
     LONGESTUTYPE count = 0;
     LONGESTUTYPE size = 0;
     LONGESTUTYPE size2 = 0;
+    LONGESTUTYPE sizeg = 0;
     LONGESTUTYPE offset = 0;
     int res = 0;
     dw_elf64_rel* relp = 0;
-    LONGESTUTYPE reclen = sizeof(dw_elf64_rel);
+    LONGESTUTYPE object_reclen = sizeof(dw_elf64_rel);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1506,14 +1514,14 @@ dwarf_elf_load_rel_64(elf_filedata ep,
             return RO_ERROR;
     }
 
-    count = size/reclen;
-    size2 = count * reclen;
+    count = size/object_reclen;
+    size2 = count * object_reclen;
     if(size != size2) {
         P("Bogus size of relocations. Section " LONGESTUFMT
             ": " LONGESTUFMT
             " not divisible by "
             LONGESTUFMT "\n",
-            secnum, size,reclen);
+            secnum, size,object_reclen);
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1539,15 +1547,16 @@ dwarf_elf_load_rel_64(elf_filedata ep,
             offset,size);
         return res;
     }
-    grel = (struct generic_rela *)malloc(size2);
+    sizeg = count*sizeof(struct generic_rela);
+    grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
         free(relp);
         P("ERROR: Could not malloc whole generic reloc section "
             LONGESTUFMT " of %s "
-            "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
+            " size " LONGESTUFMT "\n",
             secnum,
             sanitized(filename,buffer1,BUFFERSIZE),
-            offset,size);
+            sizeg);
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
@@ -1571,12 +1580,13 @@ dwarf_elf_load_rela_64(elf_filedata ep,LONGESTUTYPE secnum,
     LONGESTUTYPE *count_out,int *errcode)
 {
     LONGESTUTYPE count = 0;
-    LONGESTUTYPE size = 0;
-    LONGESTUTYPE size2 = 0;
+    LONGESTUTYPE size = 0; 
+    LONGESTUTYPE size2 = 0; 
+    LONGESTUTYPE sizeg = 0; 
     LONGESTUTYPE offset = 0;
     int res = 0;
     dw_elf64_rela *relp = 0;
-    LONGESTUTYPE reclen = sizeof(dw_elf64_rela);
+    LONGESTUTYPE object_reclen = sizeof(dw_elf64_rela);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1603,17 +1613,18 @@ dwarf_elf_load_rela_64(elf_filedata ep,LONGESTUTYPE secnum,
             *errcode = RO_ERR_FILEOFFSETBAD;
             return RO_ERROR;
     }
-    count = (long)(size/reclen);
-    size2 = count * reclen;
+    count = (long)(size/object_reclen);
+    size2 = count * object_reclen;
     if(size != size2) {
         P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
             ": " LONGESTUFMT
             " not divisible by "
             LONGESTUFMT "\n",
-            secnum, size,reclen);
+            secnum, size,object_reclen);
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
     }
+    /* Here want native rela size from the file */
     relp = (dw_elf64_rela *)malloc(size);
     if(!relp) {
         P("ERROR: Could not malloc whole reloc section "
@@ -1636,7 +1647,9 @@ dwarf_elf_load_rela_64(elf_filedata ep,LONGESTUTYPE secnum,
             offset,size);
         return res;
     }
-    grel = (struct generic_rela *)malloc(size2);
+    sizeg = count*sizeof(struct generic_rela);
+    /* Here want generic-record size from the file */
+    grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
         free(relp);
         P("ERROR: Could not malloc whole generic reloc section "
@@ -1683,6 +1696,9 @@ dwarf_load_elf_rela(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     gshdr = ep->f_shdr +secnum;
+    if (gshdr->gh_type == SHT_NOBITS) {
+        return DW_DLV_NO_ENTRY;
+    }
     if (offsetsize == 32) {
         res = dwarf_elf_load_rela_32(ep,
             secnum,gshdr,&grp,&count_read,errcode);
@@ -1725,6 +1741,9 @@ dwarf_load_elf_rel(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     gshdr = ep->f_shdr +secnum;
+    if (gshdr->gh_type == SHT_NOBITS) {
+        return DW_DLV_NO_ENTRY;
+    }
     if (offsetsize == 32) {
         res = dwarf_elf_load_rel_32(ep,
             secnum,gshdr,&grp,&count_read,errcode);

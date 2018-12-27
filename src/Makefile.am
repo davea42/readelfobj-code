@@ -7,12 +7,24 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 bin_PROGRAMS = readelfobj readobjmacho readobjpe object_detector
 
-readelfobj_SOURCES =  \
-dwarf_object_detector.h \
-dwarf_object_detector.c \
+readelfobj_SOURCES =    \
+dwarf_object_detector.h  \
+dwarf_object_detector.c   \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
-dwarf_elf_naming.c \
+dwarf_elf_naming.c   \
+dwarf_elf_reloc_386.c \
+dwarf_elf_reloc_386.h  \
+dwarf_elf_reloc_mips.c	\
+dwarf_elf_reloc_mips.h	 \
+dwarf_elf_reloc_ppc.c    \
+dwarf_elf_reloc_ppc.h    \
+dwarf_elf_reloc_arm.c    \
+dwarf_elf_reloc_arm.h    \
+dwarf_elf_reloc_ppc64.c	 \
+dwarf_elf_reloc_ppc64.h	 \
+dwarf_elf_reloc_x86_64.c \
+dwarf_elf_reloc_x86_64.h \
 dwarf_load_elf_headers.c \
 readelfobj_version.h \
 readelfobj.c \
@@ -21,6 +33,7 @@ dw_elfstructs.h \
 readelfobj.h \
 sanitized.h \
 sanitized.c
+
 readelfobj_CFLAGS = $(RO_CFLAGS_WARN)
 readelfobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
