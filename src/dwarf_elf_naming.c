@@ -64,6 +64,52 @@ struct em_values {
 };
 
 static const char *
+standard_bitmap_table_name(struct em_values *em,
+    LONGESTUTYPE value,
+    char *buffer,
+    unsigned buflen)
+{
+    struct em_values *ev = em;
+    unsigned next = 0;
+    unsigned remaining = buflen - 30;
+
+    if (buflen < 60) {
+        return "(Error:  buffer len too short).";
+    }
+    buffer[next++] = '(';
+    buffer[next] = 0;
+    for (;  ev->em_name; ev++) {
+        unsigned curslen = 0;
+        LONGESTUTYPE mval = value&ev->em_number;
+        if (mval != ev->em_number) {
+            continue;
+        }
+        curslen = strlen(ev->em_name);
+        if (curslen < remaining) {
+            if (next > 1) {
+                buffer[next++] = ' ';
+            }
+            strcpy(buffer+next,ev->em_name);
+            next += curslen;
+            remaining -= curslen;
+            buffer[next] = 0;
+        } else {
+            /* no more room, should never happen */
+            break;
+        }
+    }
+    if (buffer[1] == 0) {
+        /*  Found no matches. Bogus number or incomplete table. */
+        strcpy(buffer,"(Unknown)");
+    } else {
+        buffer[next++] = ')';
+        buffer[next] = 0;
+    }
+    return buffer;
+}
+
+
+static const char *
 standard_table_name(struct em_values *em,
     LONGESTUTYPE value,
     char *buffer,
@@ -633,7 +679,7 @@ dwarf_get_elf_section_header_flag_names(LONGESTUTYPE value, char *buffer,
     struct em_values *ev = &shf_vals[0];
     const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
+    out = standard_bitmap_table_name(ev, value,buffer,buflen);
     return out;
 }
 

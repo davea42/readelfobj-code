@@ -620,51 +620,75 @@ elf_print_progheaders(elf_filedata ep)
     P("}\n");
 }
 
+static int
+section_is_debug(const char *sname)
+{
+    if (!strncmp(sname,".rel",4)) {
+        return FALSE;
+    }
+    if (!strncmp(sname,".debug_",7)) {
+        return TRUE;
+    }
+    if (!strncmp(sname,".zdebug_",8)) {
+        return TRUE;
+    }
+    if (!strcmp(sname,".eh_frame")) {
+        return TRUE;
+    }
+    if (!strncmp(sname,".gdb_index",10)) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static void
 elf_print_sectheaders(elf_filedata ep)
 {
     struct generic_shdr *gshdr = 0;
     LONGESTUTYPE generic_count = 0;
     LONGESTUTYPE i = 0;
+    LONGESTUTYPE debug_sect_count = 0;
+    LONGESTUTYPE debug_sect_size = 0;
 
     gshdr = ep->f_shdr;
     generic_count = ep->f_loc_shdr.g_count;
     P("\n");
     P("Section count: " LONGESTUFMT "\n",generic_count);
+    P(" [i] offset      size        name         (flags)(link,info,align)\n"); 
     P("{\n");
     for(i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr = sanitized(gshdr->gh_namestring,
             buffer1,BUFFERSIZE);
 
-        P("Section " LONGESTUFMT ", name " LONGESTUFMT " %s\n",
-            i,gshdr->gh_name, namestr);
-        P("  type " LONGESTXFMT " %s",gshdr->gh_type,
-            dwarf_get_elf_section_header_st_type(gshdr->gh_type,buffer2,
-                BUFFERSIZE));
-        if(gshdr->gh_flags == 0) {
-            P(", flags " LONGESTXFMT ,gshdr->gh_flags);
+        if (section_is_debug(namestr)) {
+            debug_sect_count++;
+            debug_sect_size += gshdr->gh_size;
+        }
+        P("[" LONGESTUFMT2 "]", i);
+        P(" " LONGESTXFMT8,gshdr->gh_offset);
+        P(" " LONGESTXFMT8,gshdr->gh_size);
+        /*P(" (" LONGESTUFMT8 ") ",gshdr->gh_size); */
+        P(" %-14s",namestr);
+        /*P(" "  LONGESTXFMT,gshdr->gh_flags); */
+        if(!gshdr->gh_flags) {
+            P(" (0)");
         } else {
-            P(", flags "  LONGESTXFMT,gshdr->gh_flags);
             P(" %s",
                 dwarf_get_elf_section_header_flag_names(
                     gshdr->gh_flags,
                     buffer2,BUFFERSIZE));
         }
-        P("\n");
-
-        P("  addr " LONGESTXFMT " (" LONGESTUFMT ")",
-            gshdr->gh_addr,gshdr->gh_addr);
-        P(" offset " LONGESTXFMT " (" LONGESTUFMT ")"  ,
-            gshdr->gh_offset,gshdr->gh_offset);
-        P(", size " LONGESTUFMT ,gshdr->gh_size);
-        P("\n");
-
-        P("  link " LONGESTUFMT ,gshdr->gh_link);
-        P(", info " LONGESTUFMT ,gshdr->gh_info);
-        P(", align " LONGESTUFMT ,gshdr->gh_addralign);
-        P(", entsize " LONGESTUFMT  ,gshdr->gh_entsize);
+        
+        if (gshdr->gh_link || gshdr->gh_info || gshdr->gh_addralign) {
+            P("(" LONGESTUFMT ,gshdr->gh_link);
+            P("," LONGESTXFMT ,gshdr->gh_info);
+            P("," LONGESTXFMT ")" ,gshdr->gh_addralign);
+        }
         P("\n");
     }
+    P("Summary: " LONGESTUFMT " bytes for " 
+        LONGESTUFMT " debug sections\n",
+        debug_sect_size,debug_sect_count);
     P("}\n");
 }
 
@@ -913,36 +937,36 @@ elf_print_elf_header(elf_filedata ep)
     int c = 0;
 
     P("Elf object file %s\n",sanitized(filename,buffer1,BUFFERSIZE));
-    P("  ident bytes: ");
+    P(" Elf Header ident bytes: ");
     for(i = 0; i < EI_NIDENT; i++) {
         c = ep->f_ehdr->ge_ident[i];
         P(" %02x",c);
     }
     P("\n");
     i = ep->f_ehdr->ge_ident[EI_CLASS];
-    P("  ident[class] " LONGESTXFMT "   %s\n",i,
+    P("  File class    = " LONGESTXFMT "   %s\n",i,
         (i == ELFCLASSNONE)? "ELFCLASSNONE":
         (i == ELFCLASS32) ? "ELFCLASS32" :
         (i == ELFCLASS64) ? "ELFCLASS64" :
         "unknown ");
     c = ep->f_ehdr->ge_ident[EI_DATA];
-    P("  ident[data] %#x   %s\n",c,(c == ELFDATANONE)? "ELFDATANONE":
+    P("  Data encoding = %#x   %s\n",c,(c == ELFDATANONE)? "ELFDATANONE":
         (c == ELFDATA2MSB)? "ELFDATA2MSB":
         (c == ELFDATA2LSB) ? "ELFDATA2LSB":
         "Invalid object encoding");
     i = ep->f_ehdr->ge_ident[EI_VERSION];
-    P("  file version " LONGESTXFMT "\n", i);
+    P("  file version  = " LONGESTXFMT "\n", i);
     i = ep->f_ehdr->ge_ident[EI_OSABI];
-    P("  osabi        " LONGESTXFMT " %s\n",
+    P("  OS ABI        " LONGESTXFMT " %s\n",
         i,
         dwarf_get_elf_osabi_name(i,buffer1,BUFFERSIZE));
 
     i = ep->f_ehdr->ge_ident[EI_ABIVERSION];
-    P("  ident[version] " LONGESTXFMT "   %s\n",i,
+    P("  ABI version   = " LONGESTXFMT "   %s\n",i,
         (i == EV_CURRENT)? "EV_CURRENT":
         "unknown");
     i = ep->f_ehdr->ge_type;
-    P("  type " LONGESTXFMT " %s\n",i,(i == ET_NONE)? "ET_NONE No file type":
+    P("  e_type  : " LONGESTXFMT " (%s)\n",i,(i == ET_NONE)? "ET_NONE No file type":
         (i == ET_REL)? "ET_REL Relocatable file":
         (i == ET_EXEC)? "ET_EXEC Executable file":
         (i == ET_DYN)? "ET_DYN Shared object file":
@@ -950,27 +974,18 @@ elf_print_elf_header(elf_filedata ep)
         (i >= 0xff00 && i < 0xffff)? "Processor-specific type":
         "unknown");
     /* See http://www.uxsglobal.com/developers/gabi/latest/ch4.eheader.html  */
-    P("  machine " LONGESTXFMT" %s\n",ep->f_ehdr->ge_machine,
+    P("  e_machine  : " LONGESTXFMT" (%s)\n",ep->f_ehdr->ge_machine,
         dwarf_get_elf_machine_name(ep->f_ehdr->ge_machine));
-    P("  Entry " LONGESTXFMT "  prog hdr off: "
-        LONGESTXFMT "   sec hdr off "
-        LONGESTXFMT "\n",
-        ep->f_ehdr->ge_entry,
-        ep->f_ehdr->ge_phoff,
-        ep->f_ehdr->ge_shoff);
-    P("  Flags " LONGESTXFMT,ep->f_ehdr->ge_flags);
-    /* FIXME print flags */
-    P("\tEhdrsize " LONGESTUFMT "  Proghdrsize "
-        LONGESTUFMT "  Sechdrsize "
-        LONGESTUFMT "\n",
-        ep->f_ehdr->ge_ehsize,
-        ep->f_ehdr->ge_phentsize,
-        ep->f_ehdr->ge_shentsize);
-    P("              P-hdrcount  "
-        LONGESTUFMT "  S-hdrcount "
-        LONGESTUFMT "\n",
-        ep->f_ehdr->ge_phnum,
-        ep->f_ehdr->ge_shnum);
+    P("  e_version  : " LONGESTXFMT  "\n", ep->f_ehdr->ge_version);
+    P("  e_entry    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_entry);
+    P("  e_phoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_phoff); 
+    P("  e_shoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_shoff); 
+    P("  e_flags    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_flags);
+    P("  e_ehsize   : " LONGESTXFMT  "\n", ep->f_ehdr->ge_ehsize);  
+    P("  e_phentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_phentsize);
+    P("  e_phnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_phnum);
+    P("  e_shentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_shentsize);
+    P("  e_shnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_shnum);
     if(ep->f_ehdr->ge_shstrndx == SHN_UNDEF) {
         P("  Section strings are not present e_shstrndx ==SHN_UNDEF\n");
     } else {

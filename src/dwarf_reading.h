@@ -49,6 +49,8 @@ extern "C" {
 #define LONGESTXFMT  "0x%llx"
 #define LONGESTXFMT8 "0x%08llx"
 #define LONGESTUFMT  "%llu"
+#define LONGESTUFMT2  "%2llu"
+#define LONGESTUFMT8 "%08llu"
 #define LONGESTSFMT  "%lld"
 #define LONGESTUTYPE unsigned long long
 #define LONGESTSTYPE long long
@@ -57,6 +59,8 @@ extern "C" {
 #define LONGESTXFMT  "0x%lx"
 #define LONGESTXFMT8 "0x%08lx"
 #define LONGESTUFMT  "%lu"
+#define LONGESTUFMT2  "%2lu"
+#define LONGESTUFMT8 "%08lu"
 #define LONGESTSFMT  "%ld"
 #define LONGESTUTYPE unsigned long
 #define LONGESTSTYPE long

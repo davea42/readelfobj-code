@@ -1,3 +1,9 @@
+2018-12-28  David Anderson
+    * readobjelf.c: Revise the elf header and section header
+      output to be more like dwarfdump --elf yet more complete
+      than dwarfdump.
+    * dwarf_elf_naming.c: Correctly match bitmap values.
+    * dwarf_reading.h: Add UFMT8 and UFMT2
 2018-12-27  David Anderson
     * added dwarf_elf_reloc_aarch64.h, dwarf_elf_reloc_aarch64.c:
     * dwarf_elf_reloc_386.c,dwarf_elf_reloc_386.h,dwarf_elf_reloc_arm.c,
