@@ -1580,9 +1580,9 @@ dwarf_elf_load_rela_64(elf_filedata ep,LONGESTUTYPE secnum,
     LONGESTUTYPE *count_out,int *errcode)
 {
     LONGESTUTYPE count = 0;
-    LONGESTUTYPE size = 0; 
-    LONGESTUTYPE size2 = 0; 
-    LONGESTUTYPE sizeg = 0; 
+    LONGESTUTYPE size = 0;
+    LONGESTUTYPE size2 = 0;
+    LONGESTUTYPE sizeg = 0;
     LONGESTUTYPE offset = 0;
     int res = 0;
     dw_elf64_rela *relp = 0;

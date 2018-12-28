@@ -2,7 +2,7 @@
 #include "dwarf_elf_reloc_386.h"
 
 /* returns string of length 0 if invalid arg */
-const char * 
+const char *
 dwarf_get_elf_relocname_386(unsigned long val)
 {
     switch(val) {

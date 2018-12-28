@@ -99,7 +99,7 @@ def write_output(fname,lines,type,outprefix):
   print("",file=cfile)
 
   print("/* returns string of length 0 if invalid arg */",file=cfile)
-  print("const char * ",file=cfile)
+  print("const char *",file=cfile)
   print(funcname + "(unsigned long val)",file=cfile)
   print("{",file=cfile)
   print("    switch(val) {",file=cfile)

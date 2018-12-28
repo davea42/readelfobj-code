@@ -2,7 +2,7 @@
 #include "dwarf_elf_reloc_mips.h"
 
 /* returns string of length 0 if invalid arg */
-const char * 
+const char *
 dwarf_get_elf_relocname_mips(unsigned long val)
 {
     switch(val) {

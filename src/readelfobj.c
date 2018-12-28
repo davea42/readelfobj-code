@@ -59,12 +59,12 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "readelfobj.h"
 #include "sanitized.h"
 #include "readelfobj_version.h"
-#include "dwarf_elf_reloc_386.h" 
-#include "dwarf_elf_reloc_mips.h"	
+#include "dwarf_elf_reloc_386.h"
+#include "dwarf_elf_reloc_mips.h"
 #include "dwarf_elf_reloc_ppc.h"
-#include "dwarf_elf_reloc_arm.h"  
-#include "dwarf_elf_reloc_aarch64.h"  
-#include "dwarf_elf_reloc_ppc64.h"	
+#include "dwarf_elf_reloc_arm.h"
+#include "dwarf_elf_reloc_aarch64.h"
+#include "dwarf_elf_reloc_ppc64.h"
 #include "dwarf_elf_reloc_x86_64.h"
 
 #define TRUE 1
@@ -453,7 +453,7 @@ do_one_file(const char *s)
                         sanitized(filename,buffer1,BUFFERSIZE));
                     dwarf_destruct_elf_access(ep,&errcode);
                     return;
-                } 
+                }
             } else if (!strncmp(namestr,".rela.",6)) {
                 res = dwarf_load_elf_rela(ep,i,&errcode);
                 if(res == DW_DLV_ERROR) {
@@ -465,8 +465,8 @@ do_one_file(const char *s)
                     return;
                 }
             }
-        } 
-    } 
+        }
+    }
     if(print_reloc_sections) {
         unsigned reloc_count = 0;
         LONGESTUTYPE i = 0;
@@ -654,7 +654,7 @@ elf_print_sectheaders(elf_filedata ep)
     generic_count = ep->f_loc_shdr.g_count;
     P("\n");
     P("Section count: " LONGESTUFMT "\n",generic_count);
-    P(" [i] offset      size        name         (flags)(link,info,align)\n"); 
+    P(" [i] offset      size        name         (flags)(link,info,align)\n");
     P("{\n");
     for(i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr = sanitized(gshdr->gh_namestring,
@@ -678,7 +678,6 @@ elf_print_sectheaders(elf_filedata ep)
                     gshdr->gh_flags,
                     buffer2,BUFFERSIZE));
         }
-        
         if (gshdr->gh_link || gshdr->gh_info || gshdr->gh_addralign) {
             P("(" LONGESTUFMT ,gshdr->gh_link);
             P("," LONGESTXFMT ,gshdr->gh_info);
@@ -686,7 +685,7 @@ elf_print_sectheaders(elf_filedata ep)
         }
         P("\n");
     }
-    P("Summary: " LONGESTUFMT " bytes for " 
+    P("Summary: " LONGESTUFMT " bytes for "
         LONGESTUFMT " debug sections\n",
         debug_sect_size,debug_sect_count);
     P("}\n");
@@ -794,7 +793,7 @@ elf_print_symbols(elf_filedata ep,
 static int
 get_elf_symtab_symbol_name( elf_filedata ep,
     unsigned long symnum,
-    char **localstr_out, 
+    char **localstr_out,
     int *errcode)
 {
     int is_symtab = TRUE;
@@ -806,8 +805,8 @@ get_elf_symtab_symbol_name( elf_filedata ep,
     }
     gsym = ep->f_symtab + symnum;
     res = dwarf_get_elf_symstr_string(ep,
-            is_symtab,gsym->gs_name,
-            localstr_out,errcode);
+        is_symtab,gsym->gs_name,
+        localstr_out,errcode);
     return res;
 }
 
@@ -866,7 +865,7 @@ elf_print_relocation_content(
         gsh->gh_secnum,
         sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
         count);
-    P(" [i]   offset   info        type symbol %s\n",isrela?"    addend":""); 
+    P(" [i]   offset   info        type symbol %s\n",isrela?"    addend":"");
     for(i = 0; i < count; ++i,grela++) {
         char *localstr = 0;
         unsigned long symnum = grela->gr_sym;
@@ -884,20 +883,20 @@ elf_print_relocation_content(
             symname = (char *)"STN_UNDEF";
         }
         if (grela->gr_type) {
-           get_elf_reloc_name(ep->f_ehdr->ge_machine,grela->gr_type,&typename,&errcode);
+            get_elf_reloc_name(ep->f_ehdr->ge_machine,
+                grela->gr_type,&typename,&errcode);
         }
 
 
         P("[" LONGESTUFMT "] ",i);
-    
         P(" "
             LONGESTXFMT8,
             grela->gr_offset);
         P(" "
-            LONGESTXFMT8, 
+            LONGESTXFMT8,
             grela->gr_info);
         P(" "
-            "%-14s " 
+            "%-14s "
             LONGESTUFMT,
             typename,
             grela->gr_type);
@@ -908,7 +907,7 @@ elf_print_relocation_content(
             symname?sanitized(symname,buffer1,BUFFERSIZE):"");
         if (isrela) {
             P(" "
-                LONGESTSFMT ,
+                LONGESTSFMT,
                 grela->gr_addend);
         }
         P("\n");
@@ -940,7 +939,7 @@ elf_print_elf_header(elf_filedata ep)
     P(" Elf Header ident bytes: ");
     for(i = 0; i < EI_NIDENT; i++) {
         if (!(i%4)) {
-          P(" ");
+            P(" ");
         }
         c = ep->f_ehdr->ge_ident[i];
         P("%02x",c);
@@ -953,7 +952,7 @@ elf_print_elf_header(elf_filedata ep)
         (i == ELFCLASS64) ? "(ELFCLASS64" :
         "(unknown)");
     c = ep->f_ehdr->ge_ident[EI_DATA];
-    P("  Data encoding = %#x %s\n",c,(c == ELFDATANONE)? 
+    P("  Data encoding = %#x %s\n",c,(c == ELFDATANONE)?
         "(ELFDATANONE)":
         (c == ELFDATA2MSB)? "(ELFDATA2MSB)":
         (c == ELFDATA2LSB) ? "(ELFDATA2LSB)":
@@ -982,10 +981,10 @@ elf_print_elf_header(elf_filedata ep)
         dwarf_get_elf_machine_name(ep->f_ehdr->ge_machine));
     P("  e_version  : " LONGESTXFMT  "\n", ep->f_ehdr->ge_version);
     P("  e_entry    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_entry);
-    P("  e_phoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_phoff); 
-    P("  e_shoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_shoff); 
+    P("  e_phoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_phoff);
+    P("  e_shoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_shoff);
     P("  e_flags    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_flags);
-    P("  e_ehsize   : " LONGESTXFMT  "\n", ep->f_ehdr->ge_ehsize);  
+    P("  e_ehsize   : " LONGESTXFMT  "\n", ep->f_ehdr->ge_ehsize);
     P("  e_phentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_phentsize);
     P("  e_phnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_phnum);
     P("  e_shentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_shentsize);
