@@ -1,3 +1,7 @@
+2018-12-28   David Anderson
+    * test003.base,test004.base,test005.base,test006.base,
+      test017.base : Now these reflect the update elf
+      header formats.
 2018-12-27   David Anderson
     * test004.base,test017.base: Now these reflect the corrected loading
       and printing of relocations.
