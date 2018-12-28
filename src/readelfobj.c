@@ -654,7 +654,7 @@ elf_print_sectheaders(elf_filedata ep)
     generic_count = ep->f_loc_shdr.g_count;
     P("\n");
     P("Section count: " LONGESTUFMT "\n",generic_count);
-    P(" [i] offset      size        name         (flags)(link,info,align)\n");
+    P(" [i] offset      size        name         (flags)(type)(link,info,align)\n");
     P("{\n");
     for(i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr = sanitized(gshdr->gh_namestring,
@@ -678,6 +678,8 @@ elf_print_sectheaders(elf_filedata ep)
                     gshdr->gh_flags,
                     buffer2,BUFFERSIZE));
         }
+        P("%s",dwarf_get_elf_section_header_st_type(gshdr->gh_type,
+            buffer2,BUFFERSIZE));
         if (gshdr->gh_link || gshdr->gh_info || gshdr->gh_addralign) {
             P("(" LONGESTUFMT ,gshdr->gh_link);
             P("," LONGESTXFMT ,gshdr->gh_info);

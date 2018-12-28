@@ -982,6 +982,20 @@ struct generic_shdr {
         free() this if not null. */
     LONGESTUTYPE          gh_relcount;
     struct generic_rela * gh_rels;
+
+    /*  For SHT_GROUP based  grouping, which
+        group is this section in. 0 unknown,
+        1 DW_GROUP_NUMBER_BASE base DWARF, 
+        2 DW_GROUPNUMBER_DWO  dwo sections, 3+
+        are in an SHT_GROUP. GNU uses this. 
+        set with group number (3+) from SHT_GROUP
+        and the flags should have SHF_GROUP set
+        if in SHT_GROUP. Must only be in one group? */
+    LONGESTUTYPE gh_sg_section_group;
+
+    /*  For relocation based groups as created by
+        an arm compiler. FIXME figure this out. */
+    LONGESTUTYPE gh_rg_section_group;
 };
 
 struct generic_dynentry {
