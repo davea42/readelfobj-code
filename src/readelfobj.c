@@ -577,7 +577,7 @@ elf_print_progheaders(elf_filedata ep)
 
     /*  In case of error reading headers count might now be zero */
     P("\n");
-    P("Program header count " LONGESTUFMT "\n",count);
+    P("Program header count: " LONGESTUFMT "\n",count);
     P("{\n");
     for( i = 0; i < count; ++i,  gphdr++) {
         P("Program header " LONGESTUFMT ,i);
@@ -939,34 +939,38 @@ elf_print_elf_header(elf_filedata ep)
     P("Elf object file %s\n",sanitized(filename,buffer1,BUFFERSIZE));
     P(" Elf Header ident bytes: ");
     for(i = 0; i < EI_NIDENT; i++) {
+        if (!(i%4)) {
+          P(" ");
+        }
         c = ep->f_ehdr->ge_ident[i];
-        P(" %02x",c);
+        P("%02x",c);
     }
     P("\n");
     i = ep->f_ehdr->ge_ident[EI_CLASS];
-    P("  File class    = " LONGESTXFMT "   %s\n",i,
-        (i == ELFCLASSNONE)? "ELFCLASSNONE":
-        (i == ELFCLASS32) ? "ELFCLASS32" :
-        (i == ELFCLASS64) ? "ELFCLASS64" :
-        "unknown ");
+    P("  File class    = " LONGESTXFMT " %s\n",i,
+        (i == ELFCLASSNONE)? "(ELFCLASSNONE)":
+        (i == ELFCLASS32) ? "(ELFCLASS32)" :
+        (i == ELFCLASS64) ? "(ELFCLASS64" :
+        "(unknown)");
     c = ep->f_ehdr->ge_ident[EI_DATA];
-    P("  Data encoding = %#x   %s\n",c,(c == ELFDATANONE)? "ELFDATANONE":
-        (c == ELFDATA2MSB)? "ELFDATA2MSB":
-        (c == ELFDATA2LSB) ? "ELFDATA2LSB":
-        "Invalid object encoding");
+    P("  Data encoding = %#x %s\n",c,(c == ELFDATANONE)? 
+        "(ELFDATANONE)":
+        (c == ELFDATA2MSB)? "(ELFDATA2MSB)":
+        (c == ELFDATA2LSB) ? "(ELFDATA2LSB)":
+        "(Invalid object encoding)");
     i = ep->f_ehdr->ge_ident[EI_VERSION];
-    P("  file version  = " LONGESTXFMT "\n", i);
+    P("  file version  = " LONGESTXFMT " %s\n", i,
+        (i == EV_CURRENT)? "(EV_CURRENT)":
+        "(unknown)");
     i = ep->f_ehdr->ge_ident[EI_OSABI];
-    P("  OS ABI        " LONGESTXFMT " %s\n",
+    P("  OS ABI        = " LONGESTXFMT " %s\n",
         i,
         dwarf_get_elf_osabi_name(i,buffer1,BUFFERSIZE));
 
     i = ep->f_ehdr->ge_ident[EI_ABIVERSION];
-    P("  ABI version   = " LONGESTXFMT "   %s\n",i,
-        (i == EV_CURRENT)? "EV_CURRENT":
-        "unknown");
+    P("  ABI version   = " LONGESTXFMT "\n",i);
     i = ep->f_ehdr->ge_type;
-    P("  e_type  : " LONGESTXFMT " (%s)\n",i,(i == ET_NONE)? "ET_NONE No file type":
+    P("  e_type     : " LONGESTXFMT " (%s)\n",i,(i == ET_NONE)? "ET_NONE No file type":
         (i == ET_REL)? "ET_REL Relocatable file":
         (i == ET_EXEC)? "ET_EXEC Executable file":
         (i == ET_DYN)? "ET_DYN Shared object file":
