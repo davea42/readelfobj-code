@@ -1,3 +1,12 @@
+2018-12-29  David Anderson
+    * dwarf_load_elf_headers.c: Pay little attention to
+      empty sections.  Figure out what SHT_GROUPs
+      sections belong to.
+    * readelfobj.c:  Print section group information.
+    * readelfobj.h: Define DW_GROUPNUMBER_BASE,
+      DW_GROUPNUMBER_DWO
+    * sanitized.c: Make it more protective of a NULL
+      input string pointer.
 2018-12-28  David Anderson
     * readelfobj.c: Now prints section section flag names and type name.
     * readelfobj.h: New fields for section groups. Not yet used.

@@ -72,6 +72,9 @@ extern "C" {
 #define O_BINARY 0
 #endif
 
+#define DWARF_32BIT_SIZE 4
+#define DWARF_64BIT_SIZE 8
+
 #define TRUE 1
 #define FALSE 0
 
@@ -125,6 +128,7 @@ extern "C" {
 #define RO_ERR_SIZE_SMALL         27
 #define RO_ERR_FILE_WRONG_TYPE    28
 #define RO_ERR_ELF_STRING_SECT    29
+#define RO_ERR_GROUP_ERROR        30
 
 #define P printf
 #define F fflush(stdout)

@@ -224,7 +224,10 @@ no_questionable_chars(const char *s) {
 const char *
 sanitized(const char *s,char *outbuf, unsigned outbuf_len)
 {
-
+    if (!s) {
+        do_sanity_insert("",outbuf,outbuf_len);
+        return outbuf;
+    }
     if (no_questionable_chars(s)) {
         /*  The original string is safe as is. */
         return s;

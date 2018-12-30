@@ -85,6 +85,7 @@ static void elf_print_elf_header(elf_filedata ep);
 static void elf_print_progheaders(elf_filedata ep);
 static void elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE);
 static void elf_print_sectheaders(elf_filedata ep);
+static void elf_print_sg_groups(elf_filedata ep);
 static void elf_print_relocation_details(elf_filedata ep,int isrela,
     struct generic_shdr * gsh);
 static void elf_print_symbols(elf_filedata ep,int is_symtab,
@@ -100,6 +101,7 @@ int print_reloc_sections  = 0; /* .rel .rela */
 int print_dynamic_sections  = 0; /* .dynamic */
 int print_wasted  = 0; /* prints space use details */
 int only_wasted_summary = 0; /* suppress standard printing */
+int print_groups = 0; /* print group information. */
 
 static char buffer1[BUFFERSIZE];
 static char buffer2[BUFFERSIZE];
@@ -111,6 +113,7 @@ FILE *fin;
 char *Usage = "Usage: readelfobj <options> file ...\n"
     "Options:\n"
     "--print-dynamic print the .dynamic section (DT_ stuff)\n"
+    "--print-groups print the section group of each DWARF section\n"
     "--print-relocs print relocation entries (.rela & .rel)\n"
     "--print-symtabs print out all elf symbols (.symtab & .dynsym)\n"
     "--print-wasted print out details about file space use\n"
@@ -143,6 +146,10 @@ main(int argc,char **argv)
                 print_wasted= 1;
                 print_reloc_sections= 1;
                 print_dynamic_sections= 1;
+                continue;
+            }
+            if(strcmp(argv[0],"--print-groups") == 0) {
+                print_groups= 1;
                 continue;
             }
             if(strcmp(argv[0],"--print-symtabs") == 0) {
@@ -336,6 +343,9 @@ do_one_file(const char *s)
     ep->f_filesize = filesize;
     ep->f_offsetsize = offsetsize;
 
+    /* If there are no .group sections this will remain at 3. */
+    ep->f_sg_next_group_number = 3;
+
     res = dwarf_load_elf_header(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("Error: unable to load elf header. errcode %d\n",errcode);
@@ -372,6 +382,9 @@ do_one_file(const char *s)
         elf_print_progheaders(ep);
         elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
         elf_print_sectheaders(ep);
+    }
+    if (print_groups) {
+        elf_print_sg_groups(ep);
     }
     res = dwarf_load_elf_dynamic(ep,&errcode);
     if (res == DW_DLV_ERROR) {
@@ -620,27 +633,6 @@ elf_print_progheaders(elf_filedata ep)
     P("}\n");
 }
 
-static int
-section_is_debug(const char *sname)
-{
-    if (!strncmp(sname,".rel",4)) {
-        return FALSE;
-    }
-    if (!strncmp(sname,".debug_",7)) {
-        return TRUE;
-    }
-    if (!strncmp(sname,".zdebug_",8)) {
-        return TRUE;
-    }
-    if (!strcmp(sname,".eh_frame")) {
-        return TRUE;
-    }
-    if (!strncmp(sname,".gdb_index",10)) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
 static void
 elf_print_sectheaders(elf_filedata ep)
 {
@@ -657,10 +649,12 @@ elf_print_sectheaders(elf_filedata ep)
     P(" [i] offset      size        name         (flags)(type)(link,info,align)\n");
     P("{\n");
     for(i = 0; i < generic_count; i++, ++gshdr) {
-        const char *namestr = sanitized(gshdr->gh_namestring,
+        const char *namestr = 0;
+
+        namestr = sanitized(gshdr->gh_namestring,
             buffer1,BUFFERSIZE);
 
-        if (section_is_debug(namestr)) {
+        if (dwarf_load_elf_section_is_dwarf(namestr)) {
             debug_sect_count++;
             debug_sect_size += gshdr->gh_size;
         }
@@ -1472,4 +1466,30 @@ elf_print_dynamic(elf_filedata ep)
             targname);
     }
     return RO_OK;
+}
+
+static 
+void elf_print_sg_groups(elf_filedata ep)
+{
+    unsigned reloc_count = 0;
+    LONGESTUTYPE i = 0;
+    struct generic_shdr *psh = ep->f_shdr;
+
+    if (!ep->f_sg_group_set_count) {
+       P("SG Section Groups: No .group or *.dwo group present\n");
+       return;
+    }
+    P("Section Group by dwarf section\n");
+    P("  section          groupnumber\n");
+    for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+        const char *namestr = psh->gh_namestring;
+        int isdw = FALSE;
+ 
+        isdw = dwarf_load_elf_section_is_dwarf(namestr);
+        if (!isdw) {
+            continue;
+        }
+        P("  %-20s " LONGESTUFMT "\n",
+            namestr,psh->gh_sg_section_group);
+    }
 }

@@ -75,6 +75,17 @@ static char buffer1[BUFFERSIZE];
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
 
+static int
+is_empty_section(LONGESTUTYPE type)
+{
+     if (type == SHT_NOBITS) {
+         return TRUE;
+     }
+     if (type == SHT_NULL) {
+         return TRUE;
+     }
+     return FALSE;
+}
 
 int
 dwarf_construct_elf_access_path(const char *path,
@@ -295,9 +306,12 @@ generic_phdr_from_phdr32(elf_filedata ep,
         ASNAR(ep->f_copy_word,gphdr->gp_memsz,pph->p_memsz);
         ASNAR(ep->f_copy_word,gphdr->gp_flags,pph->p_flags);
         ASNAR(ep->f_copy_word,gphdr->gp_align,pph->p_align);
-        dwarf_insert_in_use_entry(ep,"Phdr target",gphdr->gp_offset,
-            gphdr->gp_filesz,
-            gphdr->gp_align);
+        if (gphdr->gp_offset ||gphdr->gp_filesz) {
+            dwarf_insert_in_use_entry(ep,"Phdr target",
+                gphdr->gp_offset,
+                gphdr->gp_filesz,
+                gphdr->gp_align);
+        }
     }
     free(orig_pph);
     *phdr_out = orig_gphdr;
@@ -363,9 +377,12 @@ generic_phdr_from_phdr64(elf_filedata ep,
         ASNAR(ep->f_copy_word,gphdr->gp_memsz,pph->p_memsz);
         ASNAR(ep->f_copy_word,gphdr->gp_flags,pph->p_flags);
         ASNAR(ep->f_copy_word,gphdr->gp_align,pph->p_align);
-        dwarf_insert_in_use_entry(ep,"Phdr target",gphdr->gp_offset,
-            gphdr->gp_filesz,
-            gphdr->gp_align);
+        if (gphdr->gp_offset ||gphdr->gp_filesz) {
+            dwarf_insert_in_use_entry(ep,"Phdr target",
+                gphdr->gp_offset,
+                gphdr->gp_filesz,
+                gphdr->gp_align);
+        }
     }
     free(orig_pph);
     *phdr_out = orig_gphdr;
@@ -422,7 +439,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
         free(gshdr);
         return res;
     }
-    for( i = 0; i < count;
+    for(i = 0; i < count;
         ++i,  psh++,gshdr++) {
         gshdr->gh_secnum = i;
         ASNAR(ep->f_copy_word,gshdr->gh_name,psh->sh_name);
@@ -435,7 +452,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
-        if (gshdr->gh_type != SHT_NOBITS) {
+        if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
                 gshdr->gh_offset,gshdr->gh_size,ALIGN4);
         }
@@ -509,7 +526,7 @@ generic_shdr_from_shdr64(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
-        if (gshdr->gh_type != SHT_NOBITS) {
+        if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
                 gshdr->gh_offset,gshdr->gh_size,ALIGN8);
         }
@@ -1048,8 +1065,8 @@ elf_load_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection,
     }
     psh = ep->f_shdr + stringsection;
     secoffset = psh->gh_offset;
-    if(psh->gh_type == SHT_NULL) {
-        P("String section type SHT_NULL!!. "
+    if(is_empty_section(psh->gh_type)) {
+        P("String section type SHT_NULL or SHT_NOBITS!!. "
             "No section string section!\n");
         return RO_ERROR;
     }
@@ -1696,7 +1713,7 @@ dwarf_load_elf_rela(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     gshdr = ep->f_shdr +secnum;
-    if (gshdr->gh_type == SHT_NOBITS) {
+    if (is_empty_section(gshdr->gh_type)) {
         return DW_DLV_NO_ENTRY;
     }
     if (offsetsize == 32) {
@@ -1741,7 +1758,7 @@ dwarf_load_elf_rel(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     gshdr = ep->f_shdr +secnum;
-    if (gshdr->gh_type == SHT_NOBITS) {
+    if (is_empty_section(gshdr->gh_type)) {
         return DW_DLV_NO_ENTRY;
     }
     if (offsetsize == 32) {
@@ -1771,7 +1788,7 @@ elf_load_sect_namestring(elf_filedata ep, int *errcode)
 {
     struct generic_shdr *gshdr = 0;
     LONGESTUTYPE generic_count = 0;
-    LONGESTUTYPE i = 0;
+    LONGESTUTYPE i = 1;
 
     gshdr = ep->f_shdr;
     generic_count = ep->f_loc_shdr.g_count;
@@ -2189,6 +2206,192 @@ validate_links(elf_filedata ep,
 }
 
 static int
+read_gs_section_group(elf_filedata ep,
+    struct generic_shdr* psh,
+    int *errcode)
+{
+    LONGESTUTYPE seclen = psh->gh_size;
+    char *data = 0;
+    char *dp = 0;
+    LONGESTUTYPE count = 0;
+    LONGESTUTYPE i = 0;
+    char dblock[4];
+    LONGESTUTYPE va = 0;
+    LONGESTUTYPE vb = 0;
+    int foundone = 0;
+    int res = 0;
+   
+    if (!psh->gh_content) {
+        if (seclen < DWARF_32BIT_SIZE) {
+            *errcode = RO_ERR_TOOSMALL;
+            return DW_DLV_ERROR;
+        }
+        data = malloc(seclen);
+        dp = data;
+        count = seclen/psh->gh_entsize;
+        if (!data) {
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_ERROR;
+        }
+        if (psh->gh_entsize != DWARF_32BIT_SIZE) {
+            *errcode = RO_ERR_BADTYPESIZE;
+            free(data);
+            return DW_DLV_ERROR;
+        }
+        res = RRMOA(ep->f_fd,data,psh->gh_offset,seclen,errcode);
+        if(res != RO_OK) {
+            P("Read  " LONGESTUFMT
+                " bytes of .group section failed\n",seclen);
+            free(data);
+            return res;
+        }
+    } else {
+        data = psh->gh_content; 
+        dp = data;
+    }
+    memcpy(dblock,dp,DWARF_32BIT_SIZE);
+    ASNAR(memcpy,va,dblock);
+    /* There is ambiguity on the endianness of this stuff. */
+    if (va != 1 && va != 0x1000000) {
+        /*  Could be corrupted elf object. */
+        *errcode = RO_ERR_GROUP_ERROR;
+        if (!psh->gh_content) {
+            free(data);
+        }
+        return DW_DLV_ERROR;
+    }
+    dp = dp + DWARF_32BIT_SIZE;
+    for( i = 1; i < count; ++i,dp += DWARF_32BIT_SIZE) {
+        LONGESTUTYPE gseca = 0;
+        LONGESTUTYPE gsecb = 0;
+        struct generic_shdr* targpsh = 0;
+
+        memcpy(dblock,dp,DWARF_32BIT_SIZE);
+        ASNAR(memcpy,gseca,dblock);
+        ASNAR(dwarf_ro_memcpy_swap_bytes,gsecb,dblock);
+        if (!gseca) {
+        }
+        if (gseca > ep->f_loc_shdr.g_count) {
+            /*  Might be confused endianness by
+                the compiler generating the SHT_GROUP.
+                This is pretty horrible. */
+            LONGESTUTYPE valr = 0;
+
+            if (gsecb > ep->f_loc_shdr.g_count) {
+                *errcode = RO_ERR_GROUP_ERROR;
+                if (!psh->gh_content) {
+                    free(data);
+                }
+                return DW_DLV_ERROR;
+            }
+            /* Ok. Yes, ugly. */
+            gseca = gsecb;
+        }
+        targpsh = ep->f_shdr + gseca;
+        if (targpsh->gh_sg_section_group) {
+            /* multi-assignment to groups. Oops. */
+            if (!psh->gh_content) {
+                free(data);
+            }
+            *errcode = RO_ERR_GROUP_ERROR;
+            return DW_DLV_ERROR;
+        }
+        targpsh->gh_sg_section_group = ep->f_sg_next_group_number;
+        ep->f_sg_group_set_count++;
+        foundone = 1;
+    }
+    if (foundone) {
+        ++ep->f_sg_next_group_number;
+    }
+    psh->gh_content = data;
+    return DW_DLV_OK;
+}
+
+static int
+endswith(const char *n,const char *q)
+{
+    unsigned long len = strlen(n);
+    unsigned long qlen = strlen(q);
+    const char *startpt = 0;
+
+    if ( len < qlen) {
+        return FALSE;
+    }
+    startpt = n + (len-qlen);
+    if (strcmp(startpt,q)) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/*  We are allowing either SHT_GROUP or .group to indicate
+    a group section, but really one should have both 
+    or neither! */
+static int 
+groupsec(LONGESTUTYPE type, const char *sname)
+{
+    if ((type == SHT_GROUP) || (!strcmp(sname,".group"))){ 
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static int
+elf_setup_sg_sectiongroups(elf_filedata ep,
+    int *errcode)
+{
+    struct generic_shdr* psh = 0;
+    LONGESTUTYPE i = 0;
+    LONGESTUTYPE count = 0;
+    int res = 0;
+
+    count = ep->f_loc_shdr.g_count;
+    psh = ep->f_shdr;
+    for (i = 0; i < count; ++psh,++i) {
+        const char *name = psh->gh_namestring;
+        if (is_empty_section(psh->gh_type)) {
+            /*  No data here. */
+            continue;
+        }
+        if (!groupsec(psh->gh_type,name)) {
+            continue;
+        }
+        /* Looks like a section group. */
+        res  =read_gs_section_group(ep,psh,errcode);
+        if (res != DW_DLV_OK) {
+            return res;
+        }
+    }
+    /*  Any sections not marked above or here are in
+        grep DW_GROUPNUMBER_BASE (1). */
+    psh = ep->f_shdr;
+    for (i = 0; i < count; ++psh,++i) {
+        const char *name = psh->gh_namestring;
+
+        if (is_empty_section(psh->gh_type)) {
+            /*  No data here. */
+            continue;
+        }
+        if (groupsec(psh->gh_type,name)) {
+            continue;
+        }
+        /* Not a section group */
+        if(endswith(name,".dwo")) { 
+            if (psh->gh_sg_section_group) {
+                /* multi-assignment to groups. Oops. */
+                *errcode = RO_ERR_GROUP_ERROR;
+                return DW_DLV_ERROR;
+            }
+            psh->gh_sg_section_group = DW_GROUPNUMBER_DWO;
+            ep->f_sg_group_set_count++;
+        } else { 
+            /* Do nothing. */
+        }
+    }
+    return DW_DLV_OK;
+}
+
+static int
 elf_find_sym_sections(elf_filedata ep,
     int *errcode)
 {
@@ -2201,7 +2404,7 @@ elf_find_sym_sections(elf_filedata ep,
     psh = ep->f_shdr;
     for (i = 0; i < count; ++psh,++i) {
         const char *name = psh->gh_namestring;
-        if (psh->gh_type == SHT_NOBITS) {
+        if (is_empty_section(psh->gh_type)) {
             /*  No data here. */
             continue;
         }
@@ -2268,6 +2471,11 @@ dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
         return res;
     }
     res  = elf_find_sym_sections(ep,errcode);
+    if (res != DW_DLV_OK) {
+        return res;
+    }
+    res = elf_setup_sg_sectiongroups(ep,errcode);
+
     return res;
 }
 int
@@ -2311,6 +2519,28 @@ dwarf_load_elf_dynamic(elf_filedata ep, int *errcode)
     }
     return res;
 }
+
+int
+dwarf_load_elf_section_is_dwarf(const char *sname)
+{
+    if (!strncmp(sname,".rel",4)) {
+        return FALSE;
+    }
+    if (!strncmp(sname,".debug_",7)) {
+        return TRUE;
+    }
+    if (!strncmp(sname,".zdebug_",8)) {
+        return TRUE;
+    }
+    if (!strcmp(sname,".eh_frame")) {
+        return TRUE;
+    }
+    if (!strncmp(sname,".gdb_index",10)) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
 
 /*  Used in object checkers. */
 void

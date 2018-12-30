@@ -1,6 +1,7 @@
 Usage: readelfobj <options> file ...
 Options:
 --print-dynamic print the .dynamic section (DT_ stuff)
+--print-groups print the section group of each DWARF section
 --print-relocs print relocation entries (.rela & .rel)
 --print-symtabs print out all elf symbols (.symtab & .dynsym)
 --print-wasted print out details about file space use

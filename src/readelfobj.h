@@ -55,6 +55,13 @@ extern int printfilenames;
 #define SHT_RELA 4
 #endif
 
+#ifndef DW_GROUPNUMBER_BASE
+#define DW_GROUPNUMBER_BASE 1
+#endif
+#ifndef DW_GROUPNUMBER_DWO
+#define DW_GROUPNUMBER_DWO  2
+#endif
+
 #ifndef SHT_HASH
 #define SHT_HASH 5
 #endif
@@ -976,6 +983,7 @@ struct generic_shdr {
         of size gh_size,  in bytes. For dwarf
         and strings mainly. free() this if not null*/
     char *       gh_content;
+
     /*  If a .rel or .rela section this will point
         to generic relocation records if such
         have been loaded.
@@ -992,6 +1000,9 @@ struct generic_shdr {
         and the flags should have SHF_GROUP set
         if in SHT_GROUP. Must only be in one group? */
     LONGESTUTYPE gh_sg_section_group;
+    /* starts at 3 for .group */
+    LONGESTUTYPE gh_sg_count_with_group;
+
 
     /*  For relocation based groups as created by
         an arm compiler. FIXME figure this out. */
@@ -1106,6 +1117,9 @@ struct elf_filedata_s {
     LONGESTUTYPE f_symtab_sect_strings_sect_index;
     LONGESTUTYPE f_symtab_sect_index;
 
+    LONGESTUTYPE f_sg_next_group_number;
+    LONGESTUTYPE f_sg_group_set_count;
+
 
 };
 typedef struct elf_filedata_s * elf_filedata;
@@ -1125,6 +1139,7 @@ int dwarf_load_elf_symstr(elf_filedata ep, int *errcode);
 int dwarf_load_elf_dynstr(elf_filedata ep, int *errcode);
 int dwarf_load_elf_symtab_symbols(elf_filedata ep,int *errcode);
 int dwarf_load_elf_dynsym_symbols(elf_filedata ep,int *errcode);
+int dwarf_load_elf_section_is_dwarf(const char *name);
 
 int dwarf_load_elf_rela(elf_filedata ep,
     LONGESTUTYPE secnum, int *errcode);
