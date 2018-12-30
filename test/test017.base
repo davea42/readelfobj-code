@@ -93,6 +93,7 @@ Section count: 36
 [35] 0x0020f041 0x00000157 .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
 Summary: 1707201 bytes for 8 debug sections
 }
+SG Section Groups: No .group or *.dwo group present
 
 Section .dynamic (20): Entries:31 Offset:0x00066d58
  Tag          Name             Value

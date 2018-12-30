@@ -146,6 +146,7 @@ main(int argc,char **argv)
                 print_wasted= 1;
                 print_reloc_sections= 1;
                 print_dynamic_sections= 1;
+                print_groups= 1;
                 continue;
             }
             if(strcmp(argv[0],"--print-groups") == 0) {
