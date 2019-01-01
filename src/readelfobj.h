@@ -999,14 +999,17 @@ struct generic_shdr {
         set with group number (3+) from SHT_GROUP
         and the flags should have SHF_GROUP set
         if in SHT_GROUP. Must only be in one group? */
-    LONGESTUTYPE gh_sg_section_group;
-    /* starts at 3 for .group */
-    LONGESTUTYPE gh_sg_count_with_group;
+    LONGESTUTYPE gh_section_group_number;
 
+    /*  Content of an SHT_GROUP section as an array
+        of integers. [0] is the version, which 
+        can only be one(1) . */
+    LONGESTUTYPE * gh_sht_group_array;
+    /*  Number of elements in the gh_sht_group_array. */
+    LONGESTUTYPE   gh_sht_group_array_count;
 
-    /*  For relocation based groups as created by
-        an arm compiler. FIXME figure this out. */
-    LONGESTUTYPE gh_rg_section_group;
+    /*   TRUE if .debug_info .eh_frame etc. */
+    char  gh_is_dwarf;
 };
 
 struct generic_dynentry {
@@ -1117,8 +1120,13 @@ struct elf_filedata_s {
     LONGESTUTYPE f_symtab_sect_strings_sect_index;
     LONGESTUTYPE f_symtab_sect_index;
 
+    /* Starts at 3. 0,1,2 used specially. */
     LONGESTUTYPE f_sg_next_group_number;
-    LONGESTUTYPE f_sg_group_set_count;
+    /* Both the following will be zero unless there
+       are explicit Elf groups. */
+    LONGESTUTYPE f_sht_group_type_section_count;
+    LONGESTUTYPE f_shf_group_flag_section_count;
+    LONGESTUTYPE f_dwo_group_section_count;
 
 
 };

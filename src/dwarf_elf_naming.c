@@ -754,6 +754,10 @@ dwarf_get_elf_section_header_st_type(LONGESTUTYPE value, char *buffer,
 }
 
 static struct em_values sto_vals[] = {
+    {"STV_DEFAULT",0}, 
+    {"STV_INTERNAL",1}, 
+    {"STV_HIDDEN",2}, 
+    {"STV_PROTECTED",3}, 
     {"STO_MIPS_OPTIONAL",0x04},  /* Symbol whose definition is optional */
     {"STO_MIPS_PLT",0x08},       /* PLT entry related dynamic table record */
     {"STO_MIPS_PIC",0x20},       /* PIC func in an object mixes PIC/non-PIC */

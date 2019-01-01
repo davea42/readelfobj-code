@@ -486,6 +486,8 @@ do_one_file(const char *s)
         LONGESTUTYPE i = 0;
         struct generic_shdr * psh = 0;
 
+        P("Relocation Sections\n");
+        P("{\n");
         psh = ep->f_shdr;
         for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
             const char *namestr = psh->gh_namestring;
@@ -501,6 +503,7 @@ do_one_file(const char *s)
             P("No .rel or .rela sections were found in %s\n",
                 sanitized(filename,buffer1,BUFFERSIZE));
         }
+        P("}\n");
     }
     if (ep->f_dynamic_sect_index &&
         ep->f_wasted_dynamic_space) {
@@ -723,6 +726,8 @@ elf_print_symbols(elf_filedata ep,
         int errcode = 0;
         int res;
         char *localstr = 0;
+        struct generic_shdr *shp = 0;
+        const char *targetsecname = "";
 
 
         P("[%3d]",(int)i);
@@ -760,10 +765,15 @@ elf_print_symbols(elf_filedata ep,
             gsym->gs_other,
             dwarf_get_elf_symbol_sto_type(gsym->gs_other,
                 buffer2, BUFFERSIZE));
-        P(", st_shndx " LONGESTUFMT " %s",
-            gsym->gs_shndx,
-            dwarf_get_elf_symbol_shn_type(gsym->gs_shndx,
-                buffer2,BUFFERSIZE));
+        P(", st_shndx " LONGESTUFMT, gsym->gs_shndx);
+        if (gsym->gs_shndx < ep->f_loc_shdr.g_count) {
+            shp = ep->f_shdr + gsym->gs_shndx;
+            targetsecname = shp->gh_namestring;
+        } else {
+            targetsecname = dwarf_get_elf_symbol_shn_type(
+                gsym->gs_shndx,buffer2,BUFFERSIZE);
+        }
+        P(" %s",targetsecname);
         P("\n");
         res = dwarf_get_elf_symstr_string(ep,
             is_symtab,gsym->gs_name,
@@ -858,10 +868,15 @@ elf_print_relocation_content(
     LONGESTUTYPE i = 0;
 
     P("\n");
-    P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT "\n",
+    P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT 
+        " links-sec: " LONGESTUFMT 
+        " symtabsec: " LONGESTUFMT "\n",
         gsh->gh_secnum,
         sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
-        count);
+        count,gsh->gh_info,
+        gsh->gh_link);
+
+
     P(" [i]   offset   info        type symbol %s\n",isrela?"    addend":"");
     for(i = 0; i < count; ++i,grela++) {
         char *localstr = 0;
@@ -1476,12 +1491,33 @@ void elf_print_sg_groups(elf_filedata ep)
     LONGESTUTYPE i = 0;
     struct generic_shdr *psh = ep->f_shdr;
 
-    if (!ep->f_sg_group_set_count) {
-       P("SG Section Groups: No .group or *.dwo group present\n");
+    if (!ep->f_sht_group_type_section_count &&
+        !ep->f_shf_group_flag_section_count &&
+        !ep->f_dwo_group_section_count ) {
+       P("Section Groups: No section groups or .dwo present. ");
        return;
     }
+    P("Section Group arrays\n"); 
+    P(" section  name      groupsections\n");
+    for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+        const char *namestr = psh->gh_namestring;
+        LONGESTUTYPE a = 1;
+        LONGESTUTYPE count = psh->gh_sht_group_array_count; 
+
+        if (!psh->gh_sht_group_array_count) {
+            continue;
+        }
+        
+        P("[" LONGESTUFMT "]  %-20s",psh->gh_secnum ,namestr); 
+        for ( ; a < count; ++a) {
+            P(" " LONGESTUFMT,psh->gh_sht_group_array[a]);
+        }
+        P("\n");
+    }
+    P("\n");
+    psh = ep->f_shdr;
     P("Section Group by dwarf section\n");
-    P("  section          groupnumber\n");
+    P("  section          groupnumber  sectionnumber\n");
     for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
         const char *namestr = psh->gh_namestring;
         int isdw = FALSE;
@@ -1490,7 +1526,20 @@ void elf_print_sg_groups(elf_filedata ep)
         if (!isdw) {
             continue;
         }
-        P("  %-20s " LONGESTUFMT "\n",
-            namestr,psh->gh_sg_section_group);
+        P("  %-20s " LONGESTUFMT 
+            "          " LONGESTUFMT "\n",
+            namestr,psh->gh_section_group_number,psh->gh_secnum);
+    }
+    if (ep->f_sht_group_type_section_count) {
+        P("  SHT_GROUP count  : " LONGESTUFMT "\n",
+            ep->f_sht_group_type_section_count);
+    }
+    if (ep->f_shf_group_flag_section_count) {
+        P("  SHF_GROUP count  : " LONGESTUFMT "\n",
+            ep->f_shf_group_flag_section_count);
+    }
+    if (ep->f_dwo_group_section_count ) {
+        P("  .dwo group count : " LONGESTUFMT "\n",
+            ep->f_dwo_group_section_count);
     }
 }

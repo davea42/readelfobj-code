@@ -55,16 +55,23 @@ Section count: 26
 [25] 0x000009c8 0x00000045 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
 Summary: 719 bytes for 8 debug sections
 }
+Section Group arrays
+ section  name      groupsections
+[1]  .group               7
+[2]  .group               9
+
 Section Group by dwarf section
-  section          groupnumber
-  .debug_types         3
-  .debug_types         4
-  .debug_info          0
-  .debug_abbrev        0
-  .debug_aranges       0
-  .debug_line          0
-  .debug_str           0
-  .eh_frame            0
+  section          groupnumber  sectionnumber
+  .debug_types         3          7
+  .debug_types         4          9
+  .debug_info          1          11
+  .debug_abbrev        1          13
+  .debug_aranges       1          14
+  .debug_line          1          16
+  .debug_str           1          18
+  .eh_frame            1          21
+  SHT_GROUP count  : 2
+  SHF_GROUP count  : 2
 No .dynamic section in  comdatex.example.o
 
 Symbols from .symtab: 24 at offset 0x848
@@ -73,126 +80,128 @@ Symbols from .symtab: 24 at offset 0x848
 [  0]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (0) 
 [  1]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1) example.c
 [  2]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 3 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .text
   st_name  (0) 
 [  3]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 5 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .data
   st_name  (0) 
 [  4]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 6 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 6 .bss
   st_name  (0) 
 [  5]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 7 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 7 .debug_types
   st_name  (0) 
 [  6]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 11 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 .debug_info
   st_name  (0) 
 [  7]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 13 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 13 .debug_abbrev
   st_name  (0) 
 [  8]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .debug_aranges
   st_name  (0) 
 [  9]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 16 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 16 .debug_line
   st_name  (0) 
 [ 10]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 18 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 18 .debug_str
   st_name  (0) 
 [ 11]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 20 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 20 .note.GNU-stack
   st_name  (0) 
 [ 12]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 21 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 21 .eh_frame
   st_name  (0) 
 [ 13]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 1 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .group
   st_name  (11) wt.f4d2f718759b142f
 [ 14]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 2 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .group
   st_name  (31) wt.636f6195ec5fbec0
 [ 15]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 9 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 9 .debug_types
   st_name  (0) 
 [ 16]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 19 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 19 .comment
   st_name  (0) 
 [ 17]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 1 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .group
   st_name  (0) 
 [ 18]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 2 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .group
   st_name  (0) 
 [ 19]  st_value 0x4 (4)
   st_size  0x8 (8), st_info 0x11 (17)
   type 0x1 (1) (STT_OBJECT), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65522 (SHN_COMMON)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65522 (SHN_COMMON)
   st_name  (51) xs
 [ 20]  st_value 0x4 (4)
   st_size  0x8 (8), st_info 0x11 (17)
   type 0x1 (1) (STT_OBJECT), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65522 (SHN_COMMON)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65522 (SHN_COMMON)
   st_name  (54) ys
 [ 21]  st_value 0x0 (0)
   st_size  0x44 (68), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 3 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .text
   st_name  (57) foo
 [ 22]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (61) goo
 [ 23]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (65) hoo
 }
+Relocation Sections
+{
 
-Section 4: .rel.text reloccount: 6
+Section 4: .rel.text reloccount: 6 links-sec: 3 symtabsec: 24
  [i]   offset   info        type symbol 
 [0]  0x0000000f 0x00001301 R_386_32       1 19 xs
 [1]  0x00000019 0x00001301 R_386_32       1 19 xs
@@ -201,18 +210,18 @@ Section 4: .rel.text reloccount: 6
 [4]  0x00000033 0x00001401 R_386_32       1 20 ys
 [5]  0x00000038 0x00001702 R_386_PC32     2 23 hoo
 
-Section 8: .rel.debug_types reloccount: 3
+Section 8: .rel.debug_types reloccount: 3 links-sec: 7 symtabsec: 24
  [i]   offset   info        type symbol 
 [0]  0x00000006 0x00000701 R_386_32       1 7 
 [1]  0x00000019 0x00000901 R_386_32       1 9 
 [2]  0x0000004c 0x00000a01 R_386_32       1 10 
 
-Section 10: .rel.debug_types reloccount: 2
+Section 10: .rel.debug_types reloccount: 2 links-sec: 9 symtabsec: 24
  [i]   offset   info        type symbol 
 [0]  0x00000006 0x00000701 R_386_32       1 7 
 [1]  0x00000019 0x00000901 R_386_32       1 9 
 
-Section 12: .rel.debug_info reloccount: 10
+Section 12: .rel.debug_info reloccount: 10 links-sec: 11 symtabsec: 24
  [i]   offset   info        type symbol 
 [0]  0x00000006 0x00000701 R_386_32       1 7 
 [1]  0x0000000c 0x00000a01 R_386_32       1 10 
@@ -225,18 +234,19 @@ Section 12: .rel.debug_info reloccount: 10
 [8]  0x00000069 0x00001301 R_386_32       1 19 xs
 [9]  0x0000007d 0x00001401 R_386_32       1 20 ys
 
-Section 15: .rel.debug_aranges reloccount: 2
+Section 15: .rel.debug_aranges reloccount: 2 links-sec: 14 symtabsec: 24
  [i]   offset   info        type symbol 
 [0]  0x00000006 0x00000601 R_386_32       1 6 
 [1]  0x00000010 0x00000201 R_386_32       1 2 
 
-Section 17: .rel.debug_line reloccount: 1
+Section 17: .rel.debug_line reloccount: 1 links-sec: 16 symtabsec: 24
  [i]   offset   info        type symbol 
 [0]  0x0000002d 0x00000201 R_386_32       1 2 
 
-Section 22: .rel.eh_frame reloccount: 1
+Section 22: .rel.eh_frame reloccount: 1 links-sec: 21 symtabsec: 24
  [i]   offset   info        type symbol 
 [0]  0x00000020 0x00000202 R_386_PC32     2 2 
+}
 Listing Used Areas
 []        offset       length  finaloffset    name
 [  0] 0x00000000 0x00000034 0x00000034 Elf32_Ehdr

@@ -78,13 +78,13 @@ static char buffer1[BUFFERSIZE];
 static int
 is_empty_section(LONGESTUTYPE type)
 {
-     if (type == SHT_NOBITS) {
-         return TRUE;
-     }
-     if (type == SHT_NULL) {
-         return TRUE;
-     }
-     return FALSE;
+    if (type == SHT_NOBITS) {
+        return TRUE;
+    }
+    if (type == SHT_NULL) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 int
@@ -163,7 +163,12 @@ dwarf_destruct_elf_access(elf_filedata ep,
     shcount = ep->f_loc_shdr.g_count;
     for(i = 0; i < shcount; ++i,++shp) {
         free(shp->gh_rels);
+        shp->gh_rels = 0;
         free(shp->gh_content);
+        shp->gh_content = 0;
+        free(shp->gh_sht_group_array);
+        shp->gh_sht_group_array = 0;
+        shp->gh_sht_group_array_count = 0;
     }
     free(ep->f_shdr);
     free(ep->f_phdr);
@@ -1008,23 +1013,6 @@ dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
     return DW_DLV_OK;
 }
 
-
-#if 0
-char *
-get_dynstr_string(LONGESTUTYPE offset, LONGESTUTYPE index)
-{
-    if(index != ep->f_dynsym_sect_strings_sect_index) {
-        P("link is " LONGESTUFMT ", sect found was " LONGESTUFMT  "\n",
-            index,
-            filedata.f_dynsym_sect_strings_sect_index);
-        return "dynsym section link does not match section of dynamic strings";
-    }
-    if(offset >= filedata.f_dynsym_sect_strings_max) {
-        return "offset beyond end of dynsym sect strings";
-    }
-    return filedata.f_dynsym_sect_strings + offset;
-}
-#endif
 
 int
 dwarf_get_elf_symstr_string(elf_filedata ep,
@@ -2205,110 +2193,9 @@ validate_links(elf_filedata ep,
     return DW_DLV_OK;
 }
 
-static int
-read_gs_section_group(elf_filedata ep,
-    struct generic_shdr* psh,
-    int *errcode)
-{
-    LONGESTUTYPE seclen = psh->gh_size;
-    char *data = 0;
-    char *dp = 0;
-    LONGESTUTYPE count = 0;
-    LONGESTUTYPE i = 0;
-    char dblock[4];
-    LONGESTUTYPE va = 0;
-    LONGESTUTYPE vb = 0;
-    int foundone = 0;
-    int res = 0;
-   
-    if (!psh->gh_content) {
-        if (seclen < DWARF_32BIT_SIZE) {
-            *errcode = RO_ERR_TOOSMALL;
-            return DW_DLV_ERROR;
-        }
-        data = malloc(seclen);
-        dp = data;
-        count = seclen/psh->gh_entsize;
-        if (!data) {
-            *errcode = RO_ERR_MALLOC;
-            return DW_DLV_ERROR;
-        }
-        if (psh->gh_entsize != DWARF_32BIT_SIZE) {
-            *errcode = RO_ERR_BADTYPESIZE;
-            free(data);
-            return DW_DLV_ERROR;
-        }
-        res = RRMOA(ep->f_fd,data,psh->gh_offset,seclen,errcode);
-        if(res != RO_OK) {
-            P("Read  " LONGESTUFMT
-                " bytes of .group section failed\n",seclen);
-            free(data);
-            return res;
-        }
-    } else {
-        data = psh->gh_content; 
-        dp = data;
-    }
-    memcpy(dblock,dp,DWARF_32BIT_SIZE);
-    ASNAR(memcpy,va,dblock);
-    /* There is ambiguity on the endianness of this stuff. */
-    if (va != 1 && va != 0x1000000) {
-        /*  Could be corrupted elf object. */
-        *errcode = RO_ERR_GROUP_ERROR;
-        if (!psh->gh_content) {
-            free(data);
-        }
-        return DW_DLV_ERROR;
-    }
-    dp = dp + DWARF_32BIT_SIZE;
-    for( i = 1; i < count; ++i,dp += DWARF_32BIT_SIZE) {
-        LONGESTUTYPE gseca = 0;
-        LONGESTUTYPE gsecb = 0;
-        struct generic_shdr* targpsh = 0;
-
-        memcpy(dblock,dp,DWARF_32BIT_SIZE);
-        ASNAR(memcpy,gseca,dblock);
-        ASNAR(dwarf_ro_memcpy_swap_bytes,gsecb,dblock);
-        if (!gseca) {
-        }
-        if (gseca > ep->f_loc_shdr.g_count) {
-            /*  Might be confused endianness by
-                the compiler generating the SHT_GROUP.
-                This is pretty horrible. */
-            LONGESTUTYPE valr = 0;
-
-            if (gsecb > ep->f_loc_shdr.g_count) {
-                *errcode = RO_ERR_GROUP_ERROR;
-                if (!psh->gh_content) {
-                    free(data);
-                }
-                return DW_DLV_ERROR;
-            }
-            /* Ok. Yes, ugly. */
-            gseca = gsecb;
-        }
-        targpsh = ep->f_shdr + gseca;
-        if (targpsh->gh_sg_section_group) {
-            /* multi-assignment to groups. Oops. */
-            if (!psh->gh_content) {
-                free(data);
-            }
-            *errcode = RO_ERR_GROUP_ERROR;
-            return DW_DLV_ERROR;
-        }
-        targpsh->gh_sg_section_group = ep->f_sg_next_group_number;
-        ep->f_sg_group_set_count++;
-        foundone = 1;
-    }
-    if (foundone) {
-        ++ep->f_sg_next_group_number;
-    }
-    psh->gh_content = data;
-    return DW_DLV_OK;
-}
 
 static int
-endswith(const char *n,const char *q)
+string_endswith(const char *n,const char *q)
 {
     unsigned long len = strlen(n);
     unsigned long qlen = strlen(q);
@@ -2325,45 +2212,220 @@ endswith(const char *n,const char *q)
 }
 
 /*  We are allowing either SHT_GROUP or .group to indicate
-    a group section, but really one should have both 
+    a group section, but really one should have both
     or neither! */
-static int 
-groupsec(LONGESTUTYPE type, const char *sname)
+static int
+elf_sht_groupsec(LONGESTUTYPE type, const char *sname)
 {
-    if ((type == SHT_GROUP) || (!strcmp(sname,".group"))){ 
+    /*  ARM compilers name SHT group "__ARM_grp<long name here>" 
+        not .group */
+    if ((type == SHT_GROUP) || (!strcmp(sname,".group"))){
         return TRUE;
     }
     return FALSE;
 }
 
+int
+elf_flagmatches(LONGESTUTYPE flagsword,LONGESTUTYPE flag)
+{
+    if ((flagsword&flag) == flag) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/*  For SHT_GROUP sections. */
 static int
-elf_setup_sg_sectiongroups(elf_filedata ep,
+read_gs_section_group(elf_filedata ep,
+    struct generic_shdr* psh,
+    int *errcode)
+{
+    LONGESTUTYPE i = 0;
+    int res = 0;
+
+    if (!psh->gh_sht_group_array) {
+        LONGESTUTYPE seclen = psh->gh_size;
+        char *data = 0;
+        char *dp = 0;
+        LONGESTUTYPE* grouparray = 0;
+        char dblock[4];
+        LONGESTUTYPE va = 0;
+        LONGESTUTYPE vb = 0;
+        LONGESTUTYPE count = 0;
+        int foundone = 0;
+
+        if (seclen < DWARF_32BIT_SIZE) {
+            *errcode = RO_ERR_TOOSMALL;
+            return DW_DLV_ERROR;
+        }
+        data = malloc(seclen);
+        if (!data) {
+            P("Group list count malloc  " LONGESTUFMT
+                " bytes fails.\n",seclen);
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_ERROR;
+        }
+        dp = data;
+        count = seclen/psh->gh_entsize;
+        if (count > ep->f_loc_shdr.g_count) {
+            /* Impossible */
+            P("Group list count  " LONGESTUFMT
+                " is larger than the section count. Impossible.\n",
+                count);
+            free(data);
+            *errcode = RO_ERR_GROUP_ERROR;
+            return DW_DLV_ERROR;
+        }
+
+        if (psh->gh_entsize != DWARF_32BIT_SIZE) {
+            P("Group list entry size  " LONGESTUFMT
+                " is larger than 4. Corrupt Elf.\n",
+                psh->gh_entsize);
+            *errcode = RO_ERR_BADTYPESIZE;
+            free(data);
+            return DW_DLV_ERROR;
+        }
+        res = RRMOA(ep->f_fd,data,psh->gh_offset,seclen,errcode);
+        if(res != RO_OK) {
+            P("Read  " LONGESTUFMT
+                " bytes of .group section failed\n",seclen);
+            free(data);
+            return res;
+        }
+        grouparray = malloc(count * sizeof(LONGESTUTYPE));
+        if (!grouparray) {
+            P("Group array count malloc  " LONGESTUFMT
+                " bytes fails.\n",count*sizeof(LONGESTUTYPE));
+            free(data);
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_ERROR;
+        }
+
+        memcpy(dblock,dp,DWARF_32BIT_SIZE);
+        ASNAR(memcpy,va,dblock);
+        /* There is ambiguity on the endianness of this stuff. */
+        if (va != 1 && va != 0x1000000) {
+            /*  Could be corrupted elf object. */
+            *errcode = RO_ERR_GROUP_ERROR;
+            free(data);
+            free(grouparray);
+            return DW_DLV_ERROR;
+        }
+        grouparray[0] = 1;
+        dp = dp + DWARF_32BIT_SIZE;
+        for( i = 1; i < count; ++i,dp += DWARF_32BIT_SIZE) {
+            LONGESTUTYPE gseca = 0;
+            LONGESTUTYPE gsecb = 0;
+            struct generic_shdr* targpsh = 0;
+
+            memcpy(dblock,dp,DWARF_32BIT_SIZE);
+            ASNAR(memcpy,gseca,dblock);
+            ASNAR(dwarf_ro_memcpy_swap_bytes,gsecb,dblock);
+            if (!gseca) {
+                free(data);
+                free(grouparray);
+                *errcode = RO_ERR_GROUP_ERROR;
+                return DW_DLV_ERROR;
+            }
+            grouparray[i] = gseca;
+            if (gseca > ep->f_loc_shdr.g_count) {
+                /*  Might be confused endianness by
+                    the compiler generating the SHT_GROUP.
+                    This is pretty horrible. */
+                LONGESTUTYPE valr = 0;
+
+                if (gsecb > ep->f_loc_shdr.g_count) {
+                    *errcode = RO_ERR_GROUP_ERROR;
+                    free(data);
+                    free(grouparray);
+                    return DW_DLV_ERROR;
+                }
+                /* Ok. Yes, ugly. */
+                gseca = gsecb;
+                grouparray[i] = gseca;
+            }
+            targpsh = ep->f_shdr + gseca;
+            if (targpsh->gh_section_group_number) {
+                /* multi-assignment to groups. Oops. */
+                free(data);
+                free(grouparray);
+                *errcode = RO_ERR_GROUP_ERROR;
+                return DW_DLV_ERROR;
+            }
+            targpsh->gh_section_group_number = 
+                ep->f_sg_next_group_number;
+            foundone = 1;
+        }
+        if (foundone) {
+            ++ep->f_sg_next_group_number;
+            ++ep->f_sht_group_type_section_count;
+        }
+        free(data);
+        psh->gh_sht_group_array = grouparray;
+        psh->gh_sht_group_array_count = count;
+    }
+    return DW_DLV_OK;
+}
+/*  Does related things.
+    A)  Counts the number of SHT_GROUP
+        and for each builds an array of the sections in the group
+        (which we expect are all DWARF-related)
+        and sets the group number in each mentioned section.
+    B)  Counts the number of SHF_GROUP flags.
+    C)  If gnu groups:
+        ensure all the DWARF sections marked with right group
+        based on A(we will mark unmarked as group 1,
+        DW_GROUPNUMBER_BASE).
+    D)  If arm groups (SHT_GROUP zero, SHF_GROUP non-zero):
+        Check the relocations of all SHF_GROUP section
+        FIXME: algorithm needed.
+
+
+    If SHT_GROUP and SHF_GROUP this is GNU groups.
+    If no SHT_GROUP and have SHF_GROUP this is
+    arm cc groups and we must use relocation information
+    to identify the group members.  
+
+    It seems(?) impossible for an object to have both
+    dwo sections and (SHF_GROUP or SHT_GROUP), but
+    we do not rule that out here.  */
+static int
+elf_setup_all_section_groups(elf_filedata ep,
     int *errcode)
 {
     struct generic_shdr* psh = 0;
+    struct generic_shdr* dwarfpsh = 0;
     LONGESTUTYPE i = 0;
     LONGESTUTYPE count = 0;
     int res = 0;
 
     count = ep->f_loc_shdr.g_count;
     psh = ep->f_shdr;
+
+    /* Does step A and step B */
     for (i = 0; i < count; ++psh,++i) {
         const char *name = psh->gh_namestring;
         if (is_empty_section(psh->gh_type)) {
             /*  No data here. */
             continue;
         }
-        if (!groupsec(psh->gh_type,name)) {
+        if (!elf_sht_groupsec(psh->gh_type,name)) {
+            /* Step B */
+            if (elf_flagmatches(psh->gh_flags,SHF_GROUP)) {
+                ep->f_shf_group_flag_section_count++;
+            }
             continue;
         }
-        /* Looks like a section group. */
+     
+        /* Looks like a section group. Do Step A. */
         res  =read_gs_section_group(ep,psh,errcode);
         if (res != DW_DLV_OK) {
             return res;
         }
     }
     /*  Any sections not marked above or here are in
-        grep DW_GROUPNUMBER_BASE (1). */
+        grep DW_GROUPNUMBER_BASE (1). 
+        Section C. */
     psh = ep->f_shdr;
     for (i = 0; i < count; ++psh,++i) {
         const char *name = psh->gh_namestring;
@@ -2372,21 +2434,34 @@ elf_setup_sg_sectiongroups(elf_filedata ep,
             /*  No data here. */
             continue;
         }
-        if (groupsec(psh->gh_type,name)) {
+        if (elf_sht_groupsec(psh->gh_type,name)) {
             continue;
         }
         /* Not a section group */
-        if(endswith(name,".dwo")) { 
-            if (psh->gh_sg_section_group) {
+        if(string_endswith(name,".dwo")) { 
+            if (psh->gh_section_group_number) {
                 /* multi-assignment to groups. Oops. */
                 *errcode = RO_ERR_GROUP_ERROR;
                 return DW_DLV_ERROR;
             }
-            psh->gh_sg_section_group = DW_GROUPNUMBER_DWO;
-            ep->f_sg_group_set_count++;
-        } else { 
+            psh->gh_is_dwarf = TRUE;
+            psh->gh_section_group_number = DW_GROUPNUMBER_DWO;
+            ep->f_dwo_group_section_count++;
+        } else if (dwarf_load_elf_section_is_dwarf(name)) { 
+            if(!psh->gh_section_group_number) {
+                psh->gh_section_group_number = DW_GROUPNUMBER_BASE;
+            }
+            psh->gh_is_dwarf = TRUE;
+        } else {
             /* Do nothing. */
         }
+    }
+    if (ep->f_sht_group_type_section_count) {
+        /*  Not ARM. Done. */
+    }
+    if (!ep->f_shf_group_flag_section_count) {
+        /*  Nothing more to do. */
+        return DW_DLV_OK;
     }
     return DW_DLV_OK;
 }
@@ -2474,7 +2549,7 @@ dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
     if (res != DW_DLV_OK) {
         return res;
     }
-    res = elf_setup_sg_sectiongroups(ep,errcode);
+    res = elf_setup_all_section_groups(ep,errcode);
 
     return res;
 }

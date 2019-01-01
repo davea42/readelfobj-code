@@ -103,1712 +103,1712 @@ Symbols from .symtab: 342 at offset 0x210a0
 [  0]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (0) 
 [  1]  st_value 0x1c8 (456)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 1 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .note.gnu.build-id
   st_name  (0) 
 [  2]  st_value 0x1f0 (496)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 2 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .gnu.hash
   st_name  (0) 
 [  3]  st_value 0x4a8 (1192)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 3 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .dynsym
   st_name  (0) 
 [  4]  st_value 0x1450 (5200)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 4 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .dynstr
   st_name  (0) 
 [  5]  st_value 0x1f3e (7998)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 5 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .gnu.version
   st_name  (0) 
 [  6]  st_value 0x2090 (8336)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 6 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 6 .gnu.version_d
   st_name  (0) 
 [  7]  st_value 0x20e8 (8424)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 7 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 7 .gnu.version_r
   st_name  (0) 
 [  8]  st_value 0x2168 (8552)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 8 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .rela.dyn
   st_name  (0) 
 [  9]  st_value 0x2510 (9488)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 9 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 9 .rela.plt
   st_name  (0) 
 [ 10]  st_value 0x2f30 (12080)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 10 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 .init
   st_name  (0) 
 [ 11]  st_value 0x2f50 (12112)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 11 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 .plt
   st_name  (0) 
 [ 12]  st_value 0x3620 (13856)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (0) 
 [ 13]  st_value 0x9f8c (40844)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 13 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 13 .fini
   st_name  (0) 
 [ 14]  st_value 0x9fa0 (40864)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (0) 
 [ 15]  st_value 0xa634 (42548)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 15 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 15 .eh_frame_hdr
   st_name  (0) 
 [ 16]  st_value 0xaaa8 (43688)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 16 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 16 .eh_frame
   st_name  (0) 
 [ 17]  st_value 0x20ccc8 (2149576)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 17 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 17 .init_array
   st_name  (0) 
 [ 18]  st_value 0x20ccd0 (2149584)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 18 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 18 .fini_array
   st_name  (0) 
 [ 19]  st_value 0x20cce8 (2149608)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 19 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 19 .jcr
   st_name  (0) 
 [ 20]  st_value 0x20ccf0 (2149616)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 20 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 20 .data.rel.ro
   st_name  (0) 
 [ 21]  st_value 0x20cd10 (2149648)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 21 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 21 .dynamic
   st_name  (0) 
 [ 22]  st_value 0x20cf40 (2150208)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 22 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 22 .got
   st_name  (0) 
 [ 23]  st_value 0x20d000 (2150400)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 23 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 23 .got.plt
   st_name  (0) 
 [ 24]  st_value 0x20d380 (2151296)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (0) 
 [ 25]  st_value 0x20d480 (2151552)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (0) 
 [ 26]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 26 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 26 .comment
   st_name  (0) 
 [ 27]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 27 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 27 .debug_aranges
   st_name  (0) 
 [ 28]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 28 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 28 .debug_info
   st_name  (0) 
 [ 29]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 29 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 29 .debug_abbrev
   st_name  (0) 
 [ 30]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 30 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 30 .debug_line
   st_name  (0) 
 [ 31]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 31 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 31 .debug_str
   st_name  (0) 
 [ 32]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 32 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 32 .debug_loc
   st_name  (0) 
 [ 33]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 33 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 33 .debug_ranges
   st_name  (0) 
 [ 34]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1) threads.c
 [ 35]  st_value 0x37f0 (14320)
   st_size  0x51 (81), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (11) loaded_test_aux
 [ 36]  st_value 0x20d380 (2151296)
   st_size  0x4 (4), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (27) flag_pthread_loaded
 [ 37]  st_value 0x20d4f0 (2151664)
   st_size  0x4 (4), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (47) loaded_test_once
 [ 38]  st_value 0x3980 (14720)
   st_size  0x77 (119), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (64) krb5int_thread_support_init__aux
 [ 39]  st_value 0x20d390 (2151312)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (97) krb5int_thread_support_init__once
 [ 40]  st_value 0x3a00 (14848)
   st_size  0xea (234), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (131) thread_termination
 [ 41]  st_value 0x20d4a0 (2151584)
   st_size  0x4 (4), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (150) key
 [ 42]  st_value 0x20d4f4 (2151668)
   st_size  0x5 (5), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (154) destructors_set
 [ 43]  st_value 0x20d500 (2151680)
   st_size  0x28 (40), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (170) destructors
 [ 44]  st_value 0x20d540 (2151744)
   st_size  0x28 (40), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (182) key_lock
 [ 45]  st_value 0xa110 (41232)
   st_size  0x14 (20), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (191) __PRETTY_FUNCTION__.4463
 [ 46]  st_value 0x20d4c0 (2151616)
   st_size  0x30 (48), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (216) tsd_if_single
 [ 47]  st_value 0xa0f0 (41200)
   st_size  0x14 (20), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (230) __PRETTY_FUNCTION__.4473
 [ 48]  st_value 0xa0d0 (41168)
   st_size  0x15 (21), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (255) __PRETTY_FUNCTION__.4487
 [ 49]  st_value 0xa0b0 (41136)
   st_size  0x13 (19), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (280) __PRETTY_FUNCTION__.4492
 [ 50]  st_value 0xa080 (41088)
   st_size  0x21 (33), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (305) __PRETTY_FUNCTION__.4499
 [ 51]  st_value 0x3620 (13856)
   st_size  0x83 (131), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (330) krb5int_thread_support_fini
 [ 52]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (358) selinux.c
 [ 53]  st_value 0x43a0 (17312)
   st_size  0x2e (46), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (368) label_mutex_init
 [ 54]  st_value 0x43d0 (17360)
   st_size  0x33a (826), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (385) push_fscreatecon
 [ 55]  st_value 0x20d5b0 (2151856)
   st_size  0x8 (8), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (402) selabel_ctx
 [ 56]  st_value 0x20d5a8 (2151848)
   st_size  0x8 (8), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (414) selabel_last_changed
 [ 57]  st_value 0x4710 (18192)
   st_size  0x6f (111), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (435) pop_fscreatecon
 [ 58]  st_value 0x36b0 (14000)
   st_size  0x4a (74), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (451) cleanup_fscreatecon
 [ 59]  st_value 0xa230 (41520)
   st_size  0x1d (29), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (471) __PRETTY_FUNCTION__.5850
 [ 60]  st_value 0xa210 (41488)
   st_size  0x16 (22), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (496) __PRETTY_FUNCTION__.5879
 [ 61]  st_value 0xa1f0 (41456)
   st_size  0x16 (22), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (521) __PRETTY_FUNCTION__.5887
 [ 62]  st_value 0xa1d0 (41424)
   st_size  0x16 (22), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (546) __PRETTY_FUNCTION__.5896
 [ 63]  st_value 0xa1b0 (41392)
   st_size  0x16 (22), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (571) __PRETTY_FUNCTION__.5904
 [ 64]  st_value 0xa190 (41360)
   st_size  0x15 (21), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (596) __PRETTY_FUNCTION__.5914
 [ 65]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (621) crtstuff.c
 [ 66]  st_value 0x20cce8 (2149608)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 19 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 19 .jcr
   st_name  (632) __JCR_LIST__
 [ 67]  st_value 0x3700 (14080)
   st_size  0x0 (0), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (645) deregister_tm_clones
 [ 68]  st_value 0x3730 (14128)
   st_size  0x0 (0), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (666) register_tm_clones
 [ 69]  st_value 0x3770 (14192)
   st_size  0x0 (0), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (685) __do_global_dtors_aux
 [ 70]  st_value 0x20d480 (2151552)
   st_size  0x1 (1), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (707) completed.6366
 [ 71]  st_value 0x20ccd0 (2149584)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 18 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 18 .fini_array
   st_name  (722) __do_global_dtors_aux_fini_array_entry
 [ 72]  st_value 0x37b0 (14256)
   st_size  0x0 (0), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (761) frame_dummy
 [ 73]  st_value 0x20ccc8 (2149576)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 17 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 17 .init_array
   st_name  (773) __frame_dummy_init_array_entry
 [ 74]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (804) init-addrinfo.c
 [ 75]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (820) plugins.c
 [ 76]  st_value 0x5110 (20752)
   st_size  0x7c (124), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (830) krb5int_free_plugin_filenames
 [ 77]  st_value 0x5190 (20880)
   st_size  0x86 (134), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (860) krb5int_plugin_file_handle_array_add
 [ 78]  st_value 0x5220 (21024)
   st_size  0x93 (147), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (897) krb5int_get_plugin_sym.isra.0
 [ 79]  st_value 0x20ccf0 (2149616)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 20 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 20 .data.rel.ro
   st_name  (927) fileexts.5885
 [ 80]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (941) errors.c
 [ 81]  st_value 0x20d600 (2151936)
   st_size  0x8 (8), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (950) fptr
 [ 82]  st_value 0x20d620 (2151968)
   st_size  0x28 (40), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (955) krb5int_error_info_support_mutex
 [ 83]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (988) k5buf.c
 [ 84]  st_value 0x64a0 (25760)
   st_size  0x114 (276), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (996) ensure_space
 [ 85]  st_value 0xa3d4 (41940)
   st_size  0xd (13), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1009) __PRETTY_FUNCTION__.5223
 [ 86]  st_value 0xa3f0 (41968)
   st_size  0x17 (23), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1034) __PRETTY_FUNCTION__.5232
 [ 87]  st_value 0xa3c0 (41920)
   st_size  0x14 (20), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1059) __PRETTY_FUNCTION__.5253
 [ 88]  st_value 0xa3a0 (41888)
   st_size  0x15 (21), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1084) __PRETTY_FUNCTION__.5258
 [ 89]  st_value 0xa380 (41856)
   st_size  0x11 (17), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1109) __PRETTY_FUNCTION__.5268
 [ 90]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1134) gmt_mktime.c
 [ 91]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1147) fake-addrinfo.c
 [ 92]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1163) utf8.c
 [ 93]  st_value 0xa420 (42016)
   st_size  0x7 (7), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1170) mask.5315
 [ 94]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1180) utf8_conv.c
 [ 95]  st_value 0x79a0 (31136)
   st_size  0x174 (372), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1192) k5_utf8s_to_ucs2s.isra.0
 [ 96]  st_value 0xa4e0 (42208)
   st_size  0x7 (7), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1217) mask
 [ 97]  st_value 0x7b20 (31520)
   st_size  0x15e (350), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1222) k5_ucs2s_to_utf8s.isra.2
 [ 98]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1247) zap.c
 [ 99]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1253) path.c
 [100]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1260) base64.c
 [101]  st_value 0xa500 (42240)
   st_size  0x41 (65), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1269) base64_chars
 [102]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1282) json.c
 [103]  st_value 0x8840 (34880)
   st_size  0x58 (88), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1289) alloc_value
 [104]  st_value 0x88a0 (34976)
   st_size  0xfe (254), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1301) encode_string
 [105]  st_value 0xa62b (42539)
   st_size  0x9 (9), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1315) quotemap_json
 [106]  st_value 0xa622 (42530)
   st_size  0x9 (9), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1329) quotemap_c
 [107]  st_value 0xa600 (42496)
   st_size  0x22 (34), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1340) needs_quote
 [108]  st_value 0x89a0 (35232)
   st_size  0x75 (117), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1352) white_spaces.isra.0
 [109]  st_value 0x8a20 (35360)
   st_size  0x259 (601), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1372) parse_string.isra.3
 [110]  st_value 0xa5e0 (42464)
   st_size  0xf (15), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1392) __PRETTY_FUNCTION__.3727
 [111]  st_value 0xa5d0 (42448)
   st_size  0x10 (16), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1417) __PRETTY_FUNCTION__.3732
 [112]  st_value 0x8d90 (36240)
   st_size  0x63 (99), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1442) array_dealloc
 [113]  st_value 0x8e00 (36352)
   st_size  0x7a (122), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1456) object_dealloc
 [114]  st_value 0x20d450 (2151504)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (1471) null_type
 [115]  st_value 0x20d430 (2151472)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (1481) bool_type
 [116]  st_value 0x20d410 (2151440)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (1491) array_type
 [117]  st_value 0x20d3f0 (2151408)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (1502) object_type
 [118]  st_value 0x20d3d0 (2151376)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (1514) string_type
 [119]  st_value 0x20d3b0 (2151344)
   st_size  0x18 (24), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (1526) number_type
 [120]  st_value 0x9650 (38480)
   st_size  0x40a (1034), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1538) parse_value
 [121]  st_value 0xa5c0 (42432)
   st_size  0xc (12), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (1550) __PRETTY_FUNCTION__.4009
 [122]  st_value 0x9aa0 (39584)
   st_size  0x1fb (507), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1575) encode_value.part.7
 [123]  st_value 0x9ca0 (40096)
   st_size  0x9b (155), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1595) encode_dict_entry
 [124]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (1613) strlcpy.c
 [125]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (621) crtstuff.c
 [126]  st_value 0xc538 (50488)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 16 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 16 .eh_frame
   st_name  (1623) __FRAME_END__
 [127]  st_value 0x20cce8 (2149608)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 19 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 19 .jcr
   st_name  (1637) __JCR_END__
 [128]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (0) 
 [129]  st_value 0x20d580 (2151808)
   st_size  0x28 (40), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (1649) labeled_mutex
 [130]  st_value 0x7f70 (32624)
   st_size  0xcc (204), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1663) krb5int_ucs2s_to_utf8s
 [131]  st_value 0x72e0 (29408)
   st_size  0x4f (79), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1686) krb5int_utf8_prev
 [132]  st_value 0x5d60 (23904)
   st_size  0x2e (46), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1704) krb5int_err_init
 [133]  st_value 0x7640 (30272)
   st_size  0xd4 (212), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1721) krb5int_utf8_strcspn
 [134]  st_value 0x20d468 (2151528)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (1742) _edata
 [135]  st_value 0x73f0 (29680)
   st_size  0x40 (64), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1749) krb5int_utf8_isdigit
 [136]  st_value 0x75a0 (30112)
   st_size  0x9a (154), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1770) krb5int_utf8_strchr
 [137]  st_value 0x6eb0 (28336)
   st_size  0x64 (100), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1790) krb5int_utf8_to_ucs2
 [138]  st_value 0x71d0 (29136)
   st_size  0x5f (95), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1811) krb5int_utf8_chars
 [139]  st_value 0x7490 (29840)
   st_size  0x5a (90), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1830) krb5int_utf8_isspace
 [140]  st_value 0x9f8c (40844)
   st_size  0x0 (0), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 13 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 13 .fini
   st_name  (1851) _fini
 [141]  st_value 0x7c80 (31872)
   st_size  0xa9 (169), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1857) krb5int_utf8s_to_ucs2s
 [142]  st_value 0x6cf0 (27888)
   st_size  0x49 (73), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1880) krb5int_utf8_charlen
 [143]  st_value 0x86c0 (34496)
   st_size  0x175 (373), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1901) k5_base64_decode
 [144]  st_value 0x50b0 (20656)
   st_size  0x5d (93), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1918) krb5int_fini_fac
 [145]  st_value 0x8040 (32832)
   st_size  0xcc (204), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1935) krb5int_ucs2les_to_utf8s
 [146]  st_value 0x20cd08 (2149640)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 20 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 20 .data.rel.ro
   st_name  (1960) __dso_handle
 [147]  st_value 0x5080 (20608)
   st_size  0x2e (46), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1973) krb5int_init_fac
 [148]  st_value 0x7130 (28976)
   st_size  0x35 (53), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (1990) krb5int_ucs2_to_utf8
 [149]  st_value 0x7230 (29232)
   st_size  0x5f (95), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2011) krb5int_utf8c_chars
 [150]  st_value 0x4c10 (19472)
   st_size  0x167 (359), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2031) krb5int_labeled_mknod
 [151]  st_value 0x73b0 (29616)
   st_size  0x36 (54), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2053) krb5int_utf8_isascii
 [152]  st_value 0x7d30 (32048)
   st_size  0xb9 (185), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2074) krb5int_utf8cs_to_ucs2s
 [153]  st_value 0x20d3a8 (2151336)
   st_size  0x8 (8), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (2098) labeled_once
 [154]  st_value 0x7430 (29744)
   st_size  0x55 (85), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2111) krb5int_utf8_isxdigit
 [155]  st_value 0x20d648 (2152008)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (2133) _end
 [156]  st_value 0x78e0 (30944)
   st_size  0xb5 (181), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2138) krb5int_utf8_strtok
 [157]  st_value 0x7290 (29328)
   st_size  0x46 (70), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2158) krb5int_utf8_offset
 [158]  st_value 0x7330 (29488)
   st_size  0x71 (113), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2178) krb5int_utf8_copy
 [159]  st_value 0x4ab0 (19120)
   st_size  0x155 (341), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2196) krb5int_labeled_creat
 [160]  st_value 0x20d468 (2151528)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (2218) __bss_start
 [161]  st_value 0x6d40 (27968)
   st_size  0x6e (110), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2230) krb5int_utf8_charlen2
 [162]  st_value 0x7800 (30720)
   st_size  0xdd (221), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2252) krb5int_utf8_strpbrk
 [163]  st_value 0x4d80 (19840)
   st_size  0x160 (352), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2273) krb5int_labeled_mkdir
 [164]  st_value 0x8110 (33040)
   st_size  0xe1 (225), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2295) krb5int_ucs2cs_to_utf8s
 [165]  st_value 0x20cd10 (2149648)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 21 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 21 .dynamic
   st_name  (2319) _DYNAMIC
 [166]  st_value 0x20d5c0 (2151872)
   st_size  0x30 (48), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 25 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .bss
   st_name  (2328) krb5int_fac
 [167]  st_value 0x7720 (30496)
   st_size  0xda (218), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2340) krb5int_utf8_strspn
 [168]  st_value 0x7540 (30016)
   st_size  0x52 (82), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2360) krb5int_utf8_isalnum
 [169]  st_value 0x40f0 (16624)
   st_size  0xe1 (225), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2381) krb5int_call_thread_support_init
 [170]  st_value 0x20d468 (2151528)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 24 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .data
   st_name  (2414) __TMC_END__
 [171]  st_value 0x20d000 (2150400)
   st_size  0x0 (0), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 23 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 23 .got.plt
   st_name  (2426) _GLOBAL_OFFSET_TABLE_
 [172]  st_value 0x8580 (34176)
   st_size  0x13e (318), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2448) k5_base64_encode
 [173]  st_value 0x74f0 (29936)
   st_size  0x43 (67), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2465) krb5int_utf8_isalpha
 [174]  st_value 0x6ca0 (27808)
   st_size  0x48 (72), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2486) krb5int_utf8_bytes
 [175]  st_value 0x2f30 (12080)
   st_size  0x0 (0), st_info 0x2 (2)
   type 0x2 (2) (STT_FUNC), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 10 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 .init
   st_name  (2505) _init
 [176]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (Unknown), st_shndx 34 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 34 .gdb_index
   st_name  (0) 
 [177]  st_value 0x8470 (33904)
   st_size  0x36 (54), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2511) k5_path_isabs
 [178]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2525) selabel_lookup
 [179]  st_value 0x6710 (26384)
   st_size  0x4d (77), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2540) krb5int_buf_add
 [180]  st_value 0x42c0 (17088)
   st_size  0x62 (98), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2556) krb5int_mutex_lock
 [181]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2575) __snprintf_chk@@GLIBC_2.3.4
 [182]  st_value 0x3850 (14416)
   st_size  0x124 (292), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2603) krb5int_pthread_loaded
 [183]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2626) free@@GLIBC_2.2.5
 [184]  st_value 0x6f20 (28448)
   st_size  0x209 (521), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2644) krb5int_ucs4_to_utf8
 [185]  st_value 0x7170 (29040)
   st_size  0x5c (92), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2665) krb5int_utf8_next
 [186]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2683) is_selinux_enabled
 [187]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2702) abort@@GLIBC_2.2.5
 [188]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2721) __errno_location@@GLIBC_2.2.5
 [189]  st_value 0x93e0 (37856)
   st_size  0x72 (114), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2751) k5_json_object_iterate
 [190]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2774) strncpy@@GLIBC_2.2.5
 [191]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2795) _ITM_deregisterTMCloneTable
 [192]  st_value 0x6380 (25472)
   st_size  0x3c (60), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2823) krb5int_vset_error
 [193]  st_value 0x63c0 (25536)
   st_size  0x44 (68), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2842) krb5int_clear_error
 [194]  st_value 0x9e40 (40512)
   st_size  0x89 (137), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2862) krb5int_strlcpy
 [195]  st_value 0x5bf0 (23536)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2878) krb5int_free_plugin_dir_func
 [196]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (2907) mkdir@@GLIBC_2.2.5
 [197]  st_value 0x9520 (38176)
   st_size  0x59 (89), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2926) k5_json_string_create_base64
 [198]  st_value 0x8e80 (36480)
   st_size  0x34 (52), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2955) k5_json_get_tid
 [199]  st_value 0x8330 (33584)
   st_size  0x13f (319), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (2971) k5_path_split
 [200]  st_value 0xa410 (42000)
   st_size  0x10 (16), st_info 0x11 (17)
   type 0x1 (1) (STT_OBJECT), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (2985) krb5int_in6addr_any
 [201]  st_value 0x4780 (18304)
   st_size  0x111 (273), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3005) krb5int_push_fscreatecon_for
 [202]  st_value 0x91d0 (37328)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3034) k5_json_object_count
 [203]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3055) __xpg_strerror_r@@GLIBC_2.3.4
 [204]  st_value 0x8fd0 (36816)
   st_size  0xba (186), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3085) k5_json_array_add
 [205]  st_value 0x94d0 (38096)
   st_size  0x42 (66), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3103) k5_json_string_create
 [206]  st_value 0x95c0 (38336)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3125) k5_json_string_unbase64
 [207]  st_value 0x5590 (21904)
   st_size  0x465 (1125), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3149) krb5int_open_plugin_dirs
 [208]  st_value 0x7df0 (32240)
   st_size  0xb9 (185), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3174) krb5int_utf8s_to_ucs2les
 [209]  st_value 0x5d90 (23952)
   st_size  0x28a (650), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3199) krb5int_get_error
 [210]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3217) vasprintf@@GLIBC_2.2.5
 [211]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x11 (17)
   type 0x1 (1) (STT_OBJECT), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (3240) HIDDEN
 [212]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3247) __open_2@@GLIBC_2.7
 [213]  st_value 0x6db0 (28080)
   st_size  0xf3 (243), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3267) krb5int_utf8_to_ucs4
 [214]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3288) context_new
 [215]  st_value 0x82f0 (33520)
   st_size  0x37 (55), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3300) krb5int_zap
 [216]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3312) opendir@@GLIBC_2.2.5
 [217]  st_value 0x4010 (16400)
   st_size  0xd5 (213), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3333) krb5int_key_delete
 [218]  st_value 0x6630 (26160)
   st_size  0x6d (109), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3352) krb5int_buf_init_dynamic
 [219]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3377) dcgettext@@GLIBC_2.2.5
 [220]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3400) strlen@@GLIBC_2.2.5
 [221]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3420) __stack_chk_fail@@GLIBC_2.4
 [222]  st_value 0x52c0 (21184)
   st_size  0x1e3 (483), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3448) krb5int_open_plugin
 [223]  st_value 0x9120 (37152)
   st_size  0x6a (106), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3468) k5_json_array_set
 [224]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3486) selinux_file_context_path
 [225]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x11 (17)
   type 0x1 (1) (STT_OBJECT), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
   st_name  (3512) krb5support_0_MIT
 [226]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3530) pthread_getspecific
 [227]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3550) strchr@@GLIBC_2.2.5
 [228]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3570) pthread_mutex_destroy@@GLIBC_2.2.5
 [229]  st_value 0x9d40 (40256)
   st_size  0x81 (129), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3605) k5_json_encode
 [230]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3620) gai_strerror@@GLIBC_2.2.5
 [231]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3646) strrchr@@GLIBC_2.2.5
 [232]  st_value 0x6aa0 (27296)
   st_size  0x40 (64), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3667) krb5int_buf_len
 [233]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3683) __assert_fail@@GLIBC_2.2.5
 [234]  st_value 0x3e70 (15984)
   st_size  0x194 (404), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3710) krb5int_key_register
 [235]  st_value 0x8f00 (36608)
   st_size  0x48 (72), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3731) k5_json_bool_create
 [236]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3751) memset@@GLIBC_2.2.5
 [237]  st_value 0x4ee0 (20192)
   st_size  0x19f (415), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3771) krb5int_labeled_open
 [238]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3792) getcwd@@GLIBC_2.2.5
 [239]  st_value 0x62d0 (25296)
   st_size  0xa2 (162), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3812) krb5int_set_error_fl
 [240]  st_value 0x90d0 (37072)
   st_size  0x45 (69), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3833) k5_json_array_get
 [241]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3851) getnameinfo@@GLIBC_2.2.5
 [242]  st_value 0x3af0 (15088)
   st_size  0x172 (370), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3876) krb5int_getspecific
 [243]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3896) selabel_close
 [244]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3910) closedir@@GLIBC_2.2.5
 [245]  st_value 0x4920 (18720)
   st_size  0x186 (390), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (3932) krb5int_labeled_fopen
 [246]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3954) getcon
 [247]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3961) __strdup@@GLIBC_2.2.5
 [248]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (3983) strcspn@@GLIBC_2.2.5
 [249]  st_value 0x8cf0 (36080)
   st_size  0x9a (154), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4004) k5_json_release
 [250]  st_value 0x9190 (37264)
   st_size  0x3e (62), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4020) k5_json_object_create
 [251]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4042) calloc@@GLIBC_2.2.5
 [252]  st_value 0x6b60 (27488)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4062) krb5int_gmt_mktime
 [253]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4081) strcmp@@GLIBC_2.2.5
 [254]  st_value 0x4330 (17200)
   st_size  0x62 (98), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4101) krb5int_mutex_unlock
 [255]  st_value 0x4270 (17008)
   st_size  0x4b (75), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4122) krb5int_mutex_free
 [256]  st_value 0x9290 (37520)
   st_size  0x141 (321), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4141) k5_json_object_set
 [257]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4160) pthread_key_create
 [258]  st_value 0x9600 (38400)
   st_size  0x4c (76), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4179) k5_json_number_create
 [259]  st_value 0x8f90 (36752)
   st_size  0x3e (62), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4201) k5_json_array_create
 [260]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4222) __gmon_start__
 [261]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4237) context_free
 [262]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4250) context_user_set
 [263]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4267) memcpy@@GLIBC_2.14
 [264]  st_value 0x5ac0 (23232)
   st_size  0x12f (303), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4286) krb5int_get_plugin_dir_data
 [265]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4314) __xmknod@@GLIBC_2.2.5
 [266]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4336) selabel_open
 [267]  st_value 0x84b0 (33968)
   st_size  0xcb (203), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4349) k5_path_join
 [268]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4362) time@@GLIBC_2.2.5
 [269]  st_value 0x9a60 (39520)
   st_size  0x31 (49), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4380) k5_json_number_value
 [270]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4401) __xstat@@GLIBC_2.2.5
 [271]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4422) readdir@@GLIBC_2.2.5
 [272]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4443) pthread_once
 [273]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4456) setfscreatecon
 [274]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4471) dlopen@@GLIBC_2.2.5
 [275]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4491) context_user_get
 [276]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4508) pthread_mutex_unlock@@GLIBC_2.2.5
 [277]  st_value 0x6410 (25616)
   st_size  0x85 (133), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4542) krb5int_set_error_info_callout_fn
 [278]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4576) malloc@@GLIBC_2.2.5
 [279]  st_value 0x54b0 (21680)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4596) krb5int_get_plugin_data
 [280]  st_value 0x6210 (25104)
   st_size  0xb3 (179), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4620) krb5int_set_error
 [281]  st_value 0x65c0 (26048)
   st_size  0x68 (104), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4638) krb5int_buf_init_fixed
 [282]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4661) pthread_setspecific
 [283]  st_value 0x54f0 (21744)
   st_size  0x4f (79), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4681) krb5int_get_plugin_func
 [284]  st_value 0x6c60 (27744)
   st_size  0x3b (59), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4705) krb5int_getnameinfo
 [285]  st_value 0xa440 (42048)
   st_size  0x20 (32), st_info 0x11 (17)
   type 0x1 (1) (STT_OBJECT), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (4725) krb5int_utf8_mintab
 [286]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4745) __vsnprintf_chk@@GLIBC_2.3.4
 [287]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4774) dlclose@@GLIBC_2.2.5
 [288]  st_value 0x5c30 (23600)
   st_size  0x12f (303), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4795) krb5int_get_plugin_dir_func
 [289]  st_value 0x9460 (37984)
   st_size  0x68 (104), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4823) k5_json_string_create_len
 [290]  st_value 0x6760 (26464)
   st_size  0x276 (630), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4849) krb5int_buf_add_fmt
 [291]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4869) realloc@@GLIBC_2.2.5
 [292]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4890) asprintf@@GLIBC_2.2.5
 [293]  st_value 0x41e0 (16864)
   st_size  0x83 (131), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4912) krb5int_mutex_alloc
 [294]  st_value 0x8200 (33280)
   st_size  0xe1 (225), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4932) krb5int_ucs2lecs_to_utf8s
 [295]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4958) pthread_key_delete
 [296]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (4977) timegm@@GLIBC_2.2.5
 [297]  st_value 0x5a80 (23168)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (4997) krb5int_free_plugin_dir_data
 [298]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5026) pthread_join
 [299]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5039) pthread_equal@@GLIBC_2.2.5
 [300]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5066) pthread_self@@GLIBC_2.2.5
 [301]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5092) pthread_create
 [302]  st_value 0x5540 (21824)
   st_size  0x47 (71), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5107) krb5int_close_plugin
 [303]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5128) open@@GLIBC_2.2.5
 [304]  st_value 0x6080 (24704)
   st_size  0x18b (395), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5146) krb5int_vset_error_fl
 [305]  st_value 0x6ae0 (27360)
   st_size  0x75 (117), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5168) krb5int_free_buf
 [306]  st_value 0x8c80 (35968)
   st_size  0x62 (98), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5185) k5_json_retain
 [307]  st_value 0x6ba0 (27552)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5200) krb5int_getaddrinfo
 [308]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5220) fopen@@GLIBC_2.2.5
 [309]  st_value 0x9580 (38272)
   st_size  0x31 (49), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5239) k5_json_string_utf8
 [310]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5259) _Jv_RegisterClasses
 [311]  st_value 0x6a50 (27216)
   st_size  0x45 (69), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5279) krb5int_buf_data
 [312]  st_value 0x66a0 (26272)
   st_size  0x6e (110), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5296) krb5int_buf_add_len
 [313]  st_value 0x5a00 (23040)
   st_size  0x72 (114), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5316) krb5int_close_plugin_dirs
 [314]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5342) creat@@GLIBC_2.2.5
 [315]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5361) freecon
 [316]  st_value 0x6020 (24608)
   st_size  0x5a (90), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5369) krb5int_free_error
 [317]  st_value 0x6be0 (27616)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5388) krb5int_freeaddrinfo
 [318]  st_value 0x9dd0 (40400)
   st_size  0x6e (110), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5409) k5_json_decode
 [319]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x20 (32)
   type 0x0 (0) (STT_NOTYPE), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5424) _ITM_registerTMCloneTable
 [320]  st_value 0x8f50 (36688)
   st_size  0x31 (49), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5450) k5_json_bool_value
 [321]  st_value 0x48a0 (18592)
   st_size  0x75 (117), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5469) krb5int_pop_fscreatecon
 [322]  st_value 0x3c70 (15472)
   st_size  0x1f5 (501), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5493) krb5int_setspecific
 [323]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5513) getfscreatecon
 [324]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5528) getaddrinfo@@GLIBC_2.2.5
 [325]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5553) context_str
 [326]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5565) strerror@@GLIBC_2.2.5
 [327]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5587) dlsym@@GLIBC_2.2.5
 [328]  st_value 0x9210 (37392)
   st_size  0x7a (122), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5606) k5_json_object_get
 [329]  st_value 0x8ec0 (36544)
   st_size  0x3b (59), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5625) k5_json_null_create
 [330]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5645) pthread_mutex_init@@GLIBC_2.2.5
 [331]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5677) __cxa_finalize@@GLIBC_2.2.5
 [332]  st_value 0xa460 (42080)
   st_size  0x80 (128), st_info 0x11 (17)
   type 0x1 (1) (STT_OBJECT), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 14 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
   st_name  (5705) krb5int_utf8_lentab
 [333]  st_value 0x69e0 (27104)
   st_size  0x64 (100), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5725) krb5int_buf_truncate
 [334]  st_value 0x7eb0 (32432)
   st_size  0xb9 (185), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5746) krb5int_utf8cs_to_ucs2les
 [335]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x22 (34)
   type 0x2 (2) (STT_FUNC), bind 0x2 (2) (STB_WEAK)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5772) pthread_mutex_lock@@GLIBC_2.2.5
 [336]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5804) dlerror@@GLIBC_2.2.5
 [337]  st_value 0x9090 (37008)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5825) k5_json_array_length
 [338]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5846) freeaddrinfo@@GLIBC_2.2.5
 [339]  st_value 0x9ed0 (40656)
   st_size  0xbb (187), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5872) krb5int_strlcat
 [340]  st_value 0x6c20 (27680)
   st_size  0x32 (50), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 12 (Unknown)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .text
   st_name  (5888) krb5int_gai_strerror
 [341]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (Unknown), st_shndx 0 (SHN_UNDEF)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
   st_name  (5909) __sprintf_chk@@GLIBC_2.3.4
 }
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target

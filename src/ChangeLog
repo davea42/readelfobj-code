@@ -1,3 +1,12 @@
+2018-12-30  David Anderson
+    * dwarf_load_elf_headers.c: Fix indents.
+      Identify SHT_GROUP more clearly and match
+      on flag to notice SHF_GROUP.
+      Now records groups in host values, so no
+      duplicate re-read.
+    * readelfobj.c:  Print section group information
+      more completely, and print relocations and
+      symtab entries more completely.
 2018-12-29  David Anderson
     * dwarf_load_elf_headers.c: Pay little attention to
       empty sections.  Figure out what SHT_GROUPs
