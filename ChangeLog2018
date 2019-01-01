@@ -1,5 +1,6 @@
-2010-01-01: David Anderson
-    * configure.ac: Rev now 20190101.
+2018-12-31: David Anderson
+    * configure.ac: Rev now 20181130. Better group, reloc,
+      and symtab printing.
 2018-11-25: David Anderson
     * configure.ac: Rev now 20181125. Added a PE object header
       printing program: readobjpe.

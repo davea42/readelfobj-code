@@ -2217,7 +2217,7 @@ string_endswith(const char *n,const char *q)
 static int
 elf_sht_groupsec(LONGESTUTYPE type, const char *sname)
 {
-    /*  ARM compilers name SHT group "__ARM_grp<long name here>" 
+    /*  ARM compilers name SHT group "__ARM_grp<long name here>"
         not .group */
     if ((type == SHT_GROUP) || (!strcmp(sname,".group"))){
         return TRUE;
@@ -2352,7 +2352,7 @@ read_gs_section_group(elf_filedata ep,
                 *errcode = RO_ERR_GROUP_ERROR;
                 return DW_DLV_ERROR;
             }
-            targpsh->gh_section_group_number = 
+            targpsh->gh_section_group_number =
                 ep->f_sg_next_group_number;
             foundone = 1;
         }
@@ -2384,7 +2384,7 @@ read_gs_section_group(elf_filedata ep,
     If SHT_GROUP and SHF_GROUP this is GNU groups.
     If no SHT_GROUP and have SHF_GROUP this is
     arm cc groups and we must use relocation information
-    to identify the group members.  
+    to identify the group members.
 
     It seems(?) impossible for an object to have both
     dwo sections and (SHF_GROUP or SHT_GROUP), but
@@ -2416,7 +2416,6 @@ elf_setup_all_section_groups(elf_filedata ep,
             }
             continue;
         }
-     
         /* Looks like a section group. Do Step A. */
         res  =read_gs_section_group(ep,psh,errcode);
         if (res != DW_DLV_OK) {
@@ -2424,7 +2423,7 @@ elf_setup_all_section_groups(elf_filedata ep,
         }
     }
     /*  Any sections not marked above or here are in
-        grep DW_GROUPNUMBER_BASE (1). 
+        grep DW_GROUPNUMBER_BASE (1).
         Section C. */
     psh = ep->f_shdr;
     for (i = 0; i < count; ++psh,++i) {
@@ -2438,7 +2437,7 @@ elf_setup_all_section_groups(elf_filedata ep,
             continue;
         }
         /* Not a section group */
-        if(string_endswith(name,".dwo")) { 
+        if(string_endswith(name,".dwo")) {
             if (psh->gh_section_group_number) {
                 /* multi-assignment to groups. Oops. */
                 *errcode = RO_ERR_GROUP_ERROR;
@@ -2447,7 +2446,7 @@ elf_setup_all_section_groups(elf_filedata ep,
             psh->gh_is_dwarf = TRUE;
             psh->gh_section_group_number = DW_GROUPNUMBER_DWO;
             ep->f_dwo_group_section_count++;
-        } else if (dwarf_load_elf_section_is_dwarf(name)) { 
+        } else if (dwarf_load_elf_section_is_dwarf(name)) {
             if(!psh->gh_section_group_number) {
                 psh->gh_section_group_number = DW_GROUPNUMBER_BASE;
             }

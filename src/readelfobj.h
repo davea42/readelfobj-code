@@ -993,16 +993,16 @@ struct generic_shdr {
 
     /*  For SHT_GROUP based  grouping, which
         group is this section in. 0 unknown,
-        1 DW_GROUP_NUMBER_BASE base DWARF, 
+        1 DW_GROUP_NUMBER_BASE base DWARF,
         2 DW_GROUPNUMBER_DWO  dwo sections, 3+
-        are in an SHT_GROUP. GNU uses this. 
+        are in an SHT_GROUP. GNU uses this.
         set with group number (3+) from SHT_GROUP
         and the flags should have SHF_GROUP set
         if in SHT_GROUP. Must only be in one group? */
     LONGESTUTYPE gh_section_group_number;
 
     /*  Content of an SHT_GROUP section as an array
-        of integers. [0] is the version, which 
+        of integers. [0] is the version, which
         can only be one(1) . */
     LONGESTUTYPE * gh_sht_group_array;
     /*  Number of elements in the gh_sht_group_array. */
@@ -1122,8 +1122,8 @@ struct elf_filedata_s {
 
     /* Starts at 3. 0,1,2 used specially. */
     LONGESTUTYPE f_sg_next_group_number;
-    /* Both the following will be zero unless there
-       are explicit Elf groups. */
+    /*  Both the following will be zero unless there
+        are explicit Elf groups. */
     LONGESTUTYPE f_sht_group_type_section_count;
     LONGESTUTYPE f_shf_group_flag_section_count;
     LONGESTUTYPE f_dwo_group_section_count;

@@ -1,0 +1,282 @@
+2018-12-30  David Anderson
+    * dwarf_load_elf_headers.c: Fix indents.
+      Identify SHT_GROUP more clearly and match
+      on flag to notice SHF_GROUP.
+      Now records groups in host values, so no
+      duplicate re-read.
+    * readelfobj.c:  Print section group information
+      more completely, and print relocations and
+      symtab entries more completely.
+2018-12-29  David Anderson
+    * dwarf_load_elf_headers.c: Pay little attention to
+      empty sections.  Figure out what SHT_GROUPs
+      sections belong to.
+    * readelfobj.c:  Print section group information.
+    * readelfobj.h: Define DW_GROUPNUMBER_BASE,
+      DW_GROUPNUMBER_DWO
+    * sanitized.c: Make it more protective of a NULL
+      input string pointer.
+2018-12-28  David Anderson
+    * readelfobj.c: Now prints section section flag names and type name.
+    * readelfobj.h: New fields for section groups. Not yet used.
+2018-12-28  David Anderson
+    * dwarf_elf_reloc_386.c,dwarf_elf_reloc_aarch64.c,
+      dwarf_elf_reloc_arm.c,dwarf_elf_reloc_mips.c,
+      dwarf_elf_reloc_ppc.c,dwarf_elf_reloc_ppc64.c,
+      dwarf_elf_reloc_x86_64.c,dwarf_load_elf_headers.c,
+      readelfobj.c: Fix tailing whitespace and indent errors.
+2018-12-28  David Anderson
+    * readobjelf.c: Revise the elf header and section header
+      output to be more like dwarfdump --elf yet more complete
+      than dwarfdump.
+    * dwarf_elf_naming.c: Correctly match bitmap values.
+    * dwarf_reading.h: Add UFMT8 and UFMT2
+2018-12-27  David Anderson
+    * added dwarf_elf_reloc_aarch64.h, dwarf_elf_reloc_aarch64.c:
+    * dwarf_elf_reloc_386.c,dwarf_elf_reloc_386.h,dwarf_elf_reloc_arm.c,
+      dwarf_elf_reloc_arm.h,dwarf_elf_reloc_mips.c,dwarf_elf_reloc_mips.h,
+      dwarf_elf_reloc_ppc.c,dwarf_elf_reloc_ppc.h,dwarf_elf_reloc_ppc64.c,
+      dwarf_elf_reloc_ppc64.h,dwarf_elf_reloc_x86_64.c,dwarf_elf_reloc_x86_64.h: Updated the list of defines with additional names.
+    * Makefile.am: Build the new reloc naming headers.
+    * dwarf_load_elf_headers.c: Corrected bugs in reading relocations.
+    * readelfobj.c: Now loads all section headers, symtabs,
+      and relocations  and prints much more information about relocations.
+2018-12-19  David Anderson
+    * dwarf_object_detector.c: Change
+      IMAGE_FILE_MACHINE_AMD64 from the incorrect 0x8886
+      to 0x8664 (per MS documentation).
+    * generic_from_elf.c: Fixed indents and removed
+      trailing whitespace. Removed unused local variables.
+    * readelfobj.c: REmoved trailing whitespace.Fixed indents.
+    * readobjpe.c: REmoved unused local variables.
+2018-12-18  David Anderson
+    * dwarf_machoread.c,dwarf_object_detector.c,dwarf_peread.c,
+      generic_from_elf.c: Add O_BINARY to open() for MinGW.
+    * dwarf_object_detector.h,dwarf_reading.h: Define 
+      O_BINARY 0 if it's not defined by system headers.
+    * readelfobj.c: Add an additional test in the qsort
+      comparator so we are guaranteed consistent sorting
+      for the regression tests.
+2018-12-18  David Anderson
+    * dwarf_peread.c,readobjpe.c: the local variable 
+      filesize should be a size_t,
+      not a Dwarf_Unsigned. Fixed.
+2018-12-18  David Anderson
+    * elfem.c,generic_from_elf.c,readelfobj.c: Only include
+      elf.h if it exists.
+    * readelfobj.h: Define basic Elf header values
+      if we do not have elf.h to define them.
+2018-12-10  David Anderson
+    * dwarf_reading.h: Added error code about strings table
+      and the syms that link to them.
+    * generic_from_elf.c: Add checks on getting right
+      strings tables.
+    * readelfobj.1: Document --all.
+    * readelfobj.c: Add --all option.
+    * readelfobj.h: More complete standard Elf defines now.
+2018-12-09  David Anderson
+    * elfem.c: Refined the entry-name lookup so there
+      is no wasted blank space at the end.
+    * generic_from_elf.c: Loading the symstr and dynstr
+      now check the right fields and work properly.
+    * readelfobj.c: Improved the appearance and completeness
+      of the output of the dynamic section printout
+      (readelfobj option: --print-dynamic).
+    * readelfobj.h: Ensure the original standard DT_ Elf symbols
+      are defined.
+2018-11-25  David Anderson
+    * readobjpe.c: Removed debug printf.
+2018-11-25  David Anderson
+    * dwarf_machoread.h,dwarf_object_detector.c,dwarf_pe_descr.h,
+      dwarf_peread.c,dwarf_peread.h,readobjpe.c: Fixing indents
+      and removing trailing whitespace.
+2018-11-25  David Anderson
+    * Makefile.am: Now buils readobjpe executable.
+    * dwarf_pe_descr.h,dwarf_peread.c,dwarf_peread.h,
+      dwarf_reading.h,readobjpe.c: This prints
+      PE files object headers.
+2018-11-25  David Anderson
+    * dwarf_machoread.h: Minor reformat of one declaration.
+    * dwarf_machoread.c,dwarf_object_detector.c,
+      generic_from_elf.c: All the ASNAR defines for
+      big-endian machines were missing an & character.
+2018-11-05  David Anderson
+    * dwarf_object_detector.c: Corrected the broken mach-o
+      and pe magic number detection. See new function magic_copy().
+2018-10-24  David Anderson
+    * dwarf_macho_loader.h: Renamed from macho-loader.h
+    * dwarf_machoread.c,dwarf_machoread.h, readelfobj.c,
+      readobjmacho.c,generic_from_elf.c,dwarf_object_read_common.c,
+      readelfobj.h:
+      Cleaning up 
+      compiler warnings, indent errors, and trailing whitespace.
+    * dwarf_object_detector.c: Now allows outpath, outlen
+      of the dwarf_object_detector_path() call to be zero,
+      suppressing macho dSYM subdirectory checks.
+2018-10-24  David Anderson
+    * dw_elfstructs.h: Eliminated trailing whitespace.
+    * dwarf_machoread.h,dwarf_machoread.c,readobjmacho.c,
+      readobjmacho.h: A small step unifying with libdwarf version
+      and inserting macho in a couple of struct names.
+2018-10-23  David Anderson
+    * dwarf_object_detector.c,dwarf_reading.h,readobjmacho.h:
+      Removed no-longer-used macro definitions such as
+      ASSIGN and ASSIGNMO.
+2018-10-23  David Anderson
+    * dw_elfstructs.h: New, all-char-arrays part
+      of the standard Elf.h.  Does not replace
+      Elf.h.
+    * readelfobj.1: Removed trailing whitespace.    
+    * Makefile.am: Adding in the new header.
+    * generic_from_elf.c: Now uses dw_elfstructs.h
+      for elf struct definitions.
+    * macho-loader.h: Corrected the TYP macro.
+2018-10-22  David Anderson
+    * macho-loader.h: Removed all use of uint*_t
+      by making all these little arrays.
+    * dwarf_machoread.c,dwarf_object_detector.c: Using
+      the array form and ASNAR macro so configuring
+      is simpler.
+    * dwarf_reading.h: Removed unused typedefs.
+
+2018-10-20  David Anderson
+    * dwarf_machread.c: Moved ASSIGNMO macro to this file.
+    * dwarf_machread.h: Moved ASSIGNMO macro out of here.
+    * dwarf_object_detector.c: Removed dependence on
+      the sizes of items in the various header declarations.
+      New macros TYP, SIZEOFT32, and ASNAR replace
+      the need for defining t32 or t16 or the like.
+2018-10-19  David Anderson
+    * dwarf_object_detector.c: Corrected the check
+      for elf-version (which must be 1).
+    * object_detector_main.c: Modified an output
+      line a little.
+2018-10-18  David Anderson
+    * dwarf_object_detector.c,dwarf_object_detector.h,
+      object_detector_main.c: Now understands how
+      to recognize a Unix/Linux archive.
+2018-10-14  David Anderson
+    * generic_from_elf.c: Flag section data as aligned (4 or 8)
+      so it reports as alignment space not wasted space.
+2018-10-07  David Anderson
+    * dwarf_macho_read.c: Delete local function, use
+      dwarf_object_read_common.c funtion for word-swapping.
+    * readelfobj_version.h: Update date string.
+    * dwarf_object_detector.c: Now detects certain
+      Windows PE object files, ones that could contain
+      DWARF information.
+2018-10-03  David Anderson
+    * dwarf_object_detector.c,dwarf_reading.h,
+      object_detector_main.c: Added a new error code,
+      so main can print a more appropriate reason for
+      failure.
+2018-10-03  David Anderson
+    * dwarf_object_detector.c: Various compiler warnings
+      fixed.
+    * dwarf_object_detector.h,readobjmacho.c: Nasty
+      typos. Fixed.
+2018-10-03  David Anderson
+    * readelfobj.c: Previous removed a needed character
+      from the end of a line. Fix is LONGESTUFM-> LONGESTUFMT
+2018-10-03  David Anderson
+    * dwarf_machoread.c,dwarf_machoread.h,dwarf_object_detector.c,
+      dwarf_object_detector.h,dwarf_object_read_common.c,
+      dwarf_object_read_common.h,dwarf_reading.h,
+      elfem.c,generic_from_elf.c,object_detector_main.c,
+      readelfobj.c,readelfobj.h,readobjmacho.c,
+      readobjmacho.h: Removed trailing whitespace and
+      fixed indent problems.
+    * macho-loader.h: Removed many bytes of trailing whitespace.
+      Removed many tabs and alignment issues so dicheck will no
+      longer object.
+
+2018-10-03  David Anderson
+    * dwarf_object_detector.c: Now handles endian 
+      differences correctly for Elf.
+2018-10-02  David Anderson
+    * dwarf_object_detector_main.c:
+      to make it clearer what is main program 
+      and to print the final macho true name of the dsym.
+    * Makefile.am: Reflect the name change to 
+      dwarf_object_detector_main.c.
+2018-10-01  David Anderson
+    * all files: Everything changes dramatically to
+      extract object loading functions from the source printing
+      things.   Major refactoring and renaming.
+2018-10-01  David Anderson
+    * elfdynamic_section.c: Deleted as part of refactoring.
+2018-09-23  David Anderson
+    * object_detector.h,reading.h:  Deleted. Replaced by dwarf_
+      versions.
+    * Makefile.am,dwarf_machoread.c,
+      dwarf_object_detector.c,dwarf_object_detector.h,
+      elfdynamic_section.c, elfem.c,fd-filedata.c,filedata.c,
+      generic_from_elf.c,object_detector.c,readelfobj.c,
+      readelfobj_version.h,readobjmacho.c,readobjmacho.h:
+      Refactored to put object code into library-like files
+      with an interface that reports errors much more sensibly
+      than before.  Looking toward using the dwarf* files
+      in libdwarf.
+2018-09-20  David Anderson
+     * reading.h: Added RO_NO_ENTRY
+     * readobjmacho.c,readobjmacho.h: Now read and print
+       macho section headers too.
+2018-09-20  David Anderson
+     * readobjmacho.c: Now we read and print the LC_SEGMENT overall data.
+2018-09-19  David Anderson
+     * readobjmacho.c, readobjmacho.h: now we correctly
+       iterate through commands. And collect segment
+       headers.
+2018-09-19  David Anderson
+     * reading.h,readobjmacho.c,readobjmacho.h: Now loads and 
+       prints mach-o header.
+2018-09-19  David Anderson
+     * Makefile.am: I adds mach-o headers.
+     * macho-loader.h: New header.
+     * object_detector.c: Moved some #defines to object_detector.h
+     * object_detector.h: Received the defines.
+     * reading.h: Have a full set of defines for 8,16,32,64 types now.
+     * readobjmacho.c: Does additional includes.
+2018-09-18  David Anderson
+     * object_detector.h: declarations object_detector.c needs
+       and that caller using object_detector.c needs.
+     * object_detector.c: New and very simple, it detects
+       key facts about Elf and Mach-o object files.
+     * Makefile.am: Now builds object_detector.
+2018-09-16  David Anderson
+     * readelfobj.c: Now detects PT_DYNAMIC vs .dynamic
+       section mismatches.
+2018-09-16  David Anderson
+     * elfdynamic_section.c: Replaces dynamic_section.c.
+       Now properly sign extends the d_tag of the dynamic section.
+     * elfem.c: Replaces em.c. Now uses LONGESTUTYPE at a
+       critical point and ensures that the tag field has enough
+       bits (64 bits).
+     * generic_from_elf.c: Replaces generic_from_elf32.c.
+       Now properly sign extends the r_addend rela field.
+     * readelfobj.c: Replaces readobj.c.
+       Added SIGN_EXTEND macro.
+2018-08-23  David Anderson
+     * generic_from_elf32.c,readobj.c,readobj.h: Now recognizing
+       alignment requirements as causing some unused space
+       and reports on such.
+       Checks unused space to verify it is all-zero-bits.
+2018-08-23  David Anderson
+     * Created readelfobj_version.h
+     * Makefile.am: Added readelfobj_version.h to the sources list.
+     * readobj.h: Now -v and --version print the version date string
+       from readelfobj_version.h.
+2018-08-22  David Anderson
+     * Makefile.am: Renamed the executable as readelfobj.
+     * dynamic_section.c,filedata.c,generic_from_elf32.c:
+       We use sanitized() for all strings and
+       add prefix ERROR: in case of an actual error.
+
+     * readobj.c: If the longest integer is < 8 bytes
+       refuse to call the Elf64 functions. Report the issue.
+       We use sanitized() for all strings and
+       add prefix ERROR: in case of an actual error.
+       If only printing wasted space, don't print the elf header.
+     * readobj.1: Created the man page.
+     * readobj.h: Now uses sizeof information from configure
+       to decide its internal types.

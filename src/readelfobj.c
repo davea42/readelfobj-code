@@ -868,8 +868,8 @@ elf_print_relocation_content(
     LONGESTUTYPE i = 0;
 
     P("\n");
-    P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT 
-        " links-sec: " LONGESTUFMT 
+    P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT
+        " links-sec: " LONGESTUFMT
         " symtabsec: " LONGESTUFMT "\n",
         gsh->gh_secnum,
         sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
@@ -1484,7 +1484,7 @@ elf_print_dynamic(elf_filedata ep)
     return RO_OK;
 }
 
-static 
+static
 void elf_print_sg_groups(elf_filedata ep)
 {
     unsigned reloc_count = 0;
@@ -1494,21 +1494,20 @@ void elf_print_sg_groups(elf_filedata ep)
     if (!ep->f_sht_group_type_section_count &&
         !ep->f_shf_group_flag_section_count &&
         !ep->f_dwo_group_section_count ) {
-       P("Section Groups: No section groups or .dwo present. ");
-       return;
+        P("Section Groups: No section groups or .dwo present. ");
+        return;
     }
-    P("Section Group arrays\n"); 
+    P("Section Group arrays\n");
     P(" section  name      groupsections\n");
     for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
         const char *namestr = psh->gh_namestring;
         LONGESTUTYPE a = 1;
-        LONGESTUTYPE count = psh->gh_sht_group_array_count; 
+        LONGESTUTYPE count = psh->gh_sht_group_array_count;
 
         if (!psh->gh_sht_group_array_count) {
             continue;
         }
-        
-        P("[" LONGESTUFMT "]  %-20s",psh->gh_secnum ,namestr); 
+        P("[" LONGESTUFMT "]  %-20s",psh->gh_secnum ,namestr);
         for ( ; a < count; ++a) {
             P(" " LONGESTUFMT,psh->gh_sht_group_array[a]);
         }
@@ -1521,12 +1520,12 @@ void elf_print_sg_groups(elf_filedata ep)
     for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
         const char *namestr = psh->gh_namestring;
         int isdw = FALSE;
- 
+
         isdw = dwarf_load_elf_section_is_dwarf(namestr);
         if (!isdw) {
             continue;
         }
-        P("  %-20s " LONGESTUFMT 
+        P("  %-20s " LONGESTUFMT
             "          " LONGESTUFMT "\n",
             namestr,psh->gh_section_group_number,psh->gh_secnum);
     }
