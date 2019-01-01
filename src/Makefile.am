@@ -83,6 +83,7 @@ man_MANS = readelfobj.1
 EXTRA_DIST = \
 COPYING \
 ChangeLog \
+ChangeLog2018 \
 NEWS \
 README 
 

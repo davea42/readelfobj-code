@@ -30,6 +30,7 @@ missing
 EXTRA_DIST = \
 COPYING \
 ChangeLog \
+ChangeLog2018 \
 NEWS \
 README
 

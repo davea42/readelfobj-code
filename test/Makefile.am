@@ -57,6 +57,7 @@ README  \
 CLEANUP  \
 PICKUP    \
 ChangeLog  \
+ChangeLog2018  \
 runtests.sh \
 test001.sh  \
 test002.sh  \
