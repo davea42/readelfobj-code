@@ -1,3 +1,8 @@
+2019-01-02  David Anderson
+     * dwarf_elf_naming.c,dwarf_load_elf_headers.c,dwarf_machoread.c,
+       readelfobj.c,readelfobj.h,readobjmacho.c: All use
+       Dwarf_Unsigned for commonality with libdwarf/dwarfdump
+       type naming.
 2019-01-01  David Anderson
      * dwarf_elf_naming.c,dwarf_load_elf_headers.c,
        readelfobj.c,readelfobj.h: Fix indents, remove

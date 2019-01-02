@@ -83,14 +83,14 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 static void do_one_file(const char *filename);
 static void elf_print_elf_header(elf_filedata ep);
 static void elf_print_progheaders(elf_filedata ep);
-static void elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE);
+static void elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned);
 static void elf_print_sectheaders(elf_filedata ep);
 static void elf_print_sg_groups(elf_filedata ep);
 static void elf_print_relocation_details(elf_filedata ep,int isrela,
     struct generic_shdr * gsh);
 static void elf_print_symbols(elf_filedata ep,int is_symtab,
     struct generic_symentry * gsym,
-    LONGESTUTYPE ecount,
+    Dwarf_Unsigned ecount,
     const char *secname);
 
 static void report_wasted_space(elf_filedata ep);
@@ -207,17 +207,17 @@ main(int argc,char **argv)
 static int
 check_dynamic_section(elf_filedata ep)
 {
-    LONGESTUTYPE pcount = ep->f_loc_phdr.g_count;
+    Dwarf_Unsigned pcount = ep->f_loc_phdr.g_count;
     struct generic_phdr *gphdr = ep->f_phdr;
     struct generic_shdr *gshdr = 0;
-    LONGESTUTYPE scount = ep->f_loc_shdr.g_count;
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE dynamic_p_offset = 0;
-    LONGESTUTYPE dynamic_p_length = 0;
-    LONGESTUTYPE dynamic_p_pnum = 0;
-    LONGESTUTYPE dynamic_s_offset = 0;
-    LONGESTUTYPE dynamic_s_length = 0;
-    LONGESTUTYPE dynamic_s_snum = 0;
+    Dwarf_Unsigned scount = ep->f_loc_shdr.g_count;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned dynamic_p_offset = 0;
+    Dwarf_Unsigned dynamic_p_length = 0;
+    Dwarf_Unsigned dynamic_p_pnum = 0;
+    Dwarf_Unsigned dynamic_s_offset = 0;
+    Dwarf_Unsigned dynamic_s_length = 0;
+    Dwarf_Unsigned dynamic_s_snum = 0;
     int foundp = FALSE;
     int founds = FALSE;
 
@@ -415,7 +415,7 @@ do_one_file(const char *s)
             struct generic_shdr * psh = ep->f_shdr +
                 ep->f_symtab_sect_index;
             const char *namestr = psh->gh_namestring;
-            LONGESTUTYPE link = psh->gh_link;
+            Dwarf_Unsigned link = psh->gh_link;
             if ( link != ep->f_symtab_sect_strings_sect_index){
                 P("ERROR: symtab link section " LONGESTUFMT
                     " mismatch with "
@@ -432,7 +432,7 @@ do_one_file(const char *s)
             struct generic_shdr * psh = ep->f_shdr +
                 ep->f_dynsym_sect_index;
             const char *namestr = psh->gh_namestring;
-            LONGESTUTYPE link = psh->gh_link;
+            Dwarf_Unsigned link = psh->gh_link;
             if ( link != ep->f_dynsym_sect_strings_sect_index){
                 P("ERROR: dynsym link section " LONGESTUFMT
                     " mismatch with "
@@ -453,7 +453,7 @@ do_one_file(const char *s)
     }
     if(print_reloc_sections) {
         unsigned reloc_count = 0;
-        LONGESTUTYPE i = 0;
+        Dwarf_Unsigned i = 0;
         struct generic_shdr *psh = ep->f_shdr;
 
         for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
@@ -483,7 +483,7 @@ do_one_file(const char *s)
     }
     if(print_reloc_sections) {
         unsigned reloc_count = 0;
-        LONGESTUTYPE i = 0;
+        Dwarf_Unsigned i = 0;
         struct generic_shdr * psh = 0;
 
         P("Relocation Sections\n");
@@ -528,7 +528,7 @@ do_one_file(const char *s)
     dwarf_destruct_elf_access(ep,&errcode);
 }
 static void
-elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection)
+elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
 {
     struct generic_shdr *psh = 0;
     if (!stringsection) {
@@ -552,8 +552,8 @@ elf_print_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection)
     such is not needed for normal reading DWARF.  */
 static void
 elf_load_print_interp(elf_filedata ep,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE size)
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned size)
 {
     long res = 0;
     char *buf = 0;
@@ -588,9 +588,9 @@ elf_load_print_interp(elf_filedata ep,
 static void
 elf_print_progheaders(elf_filedata ep)
 {
-    LONGESTUTYPE count = ep->f_loc_phdr.g_count;
+    Dwarf_Unsigned count = ep->f_loc_phdr.g_count;
     struct generic_phdr *gphdr = ep->f_phdr;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
 
     /*  In case of error reading headers count might now be zero */
     P("\n");
@@ -641,10 +641,10 @@ static void
 elf_print_sectheaders(elf_filedata ep)
 {
     struct generic_shdr *gshdr = 0;
-    LONGESTUTYPE generic_count = 0;
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE debug_sect_count = 0;
-    LONGESTUTYPE debug_sect_size = 0;
+    Dwarf_Unsigned generic_count = 0;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned debug_sect_count = 0;
+    Dwarf_Unsigned debug_sect_size = 0;
 
     gshdr = ep->f_shdr;
     generic_count = ep->f_loc_shdr.g_count;
@@ -695,10 +695,10 @@ static void
 elf_print_symbols(elf_filedata ep,
     int is_symtab,
     struct generic_symentry * gsym,
-    LONGESTUTYPE ecount,
+    Dwarf_Unsigned ecount,
     const char *secname)
 {
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     struct location *locp = 0;
 
     if(is_symtab) {
@@ -819,8 +819,8 @@ get_elf_symtab_symbol_name( elf_filedata ep,
 
 static int
 get_elf_reloc_name(
-    LONGESTUTYPE machine,
-    LONGESTUTYPE type,
+    Dwarf_Unsigned machine,
+    Dwarf_Unsigned type,
     const char **typename_out,
     int *errcode)
 {
@@ -863,9 +863,9 @@ elf_print_relocation_content(
     elf_filedata ep,
     int isrela,
     struct generic_shdr * gsh,
-    struct generic_rela *grela, LONGESTUTYPE count)
+    struct generic_rela *grela, Dwarf_Unsigned count)
 {
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
 
     P("\n");
     P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT
@@ -934,7 +934,7 @@ elf_print_relocation_details(
     struct generic_shdr * gsh)
 {
     struct generic_rela *grela = 0;
-    LONGESTUTYPE count  = 0;
+    Dwarf_Unsigned count  = 0;
 
     count = gsh->gh_relcount;
     grela = gsh->gh_rels;
@@ -944,7 +944,7 @@ elf_print_relocation_details(
 static void
 elf_print_elf_header(elf_filedata ep)
 {
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     int c = 0;
 
     P("Elf object file %s\n",sanitized(filename,buffer1,BUFFERSIZE));
@@ -1036,14 +1036,14 @@ cur_read_loc(FILE *fin_arg, long * fileoffset)
 
 static int
 is_wasted_space_zero(elf_filedata ep,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE length,
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned length,
     int *wasted_space_zero)
 {
-    LONGESTUTYPE remaining = length;
+    Dwarf_Unsigned remaining = length;
     char *allocspace = 0;
-    LONGESTUTYPE alloclen = length;
-    LONGESTUTYPE checklen = length;
+    Dwarf_Unsigned alloclen = length;
+    Dwarf_Unsigned checklen = length;
     int errcode = 0;
 
     if (length > MAXWBLOCK) {
@@ -1057,7 +1057,7 @@ is_wasted_space_zero(elf_filedata ep,
         return RO_ERROR;
     }
     while (remaining) {
-        LONGESTUTYPE i = 0;
+        Dwarf_Unsigned i = 0;
         int res = 0;
 
         if (remaining < checklen) {
@@ -1115,16 +1115,16 @@ comproffset(const void *l_in, const void *r_in)
 static void
 report_wasted_space(elf_filedata  ep)
 {
-    LONGESTUTYPE filesize = ep->f_filesize;
-    LONGESTUTYPE iucount = ep->f_in_use_count;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned filesize = ep->f_filesize;
+    Dwarf_Unsigned iucount = ep->f_in_use_count;
+    Dwarf_Unsigned i = 0;
     int res = 0;
 
     struct in_use_s *iuarray = 0;
     struct in_use_s *iupa = 0;
     struct in_use_s *iupl = 0;
     struct in_use_s *nxt = 0;
-    LONGESTUTYPE highoffset = 0;
+    Dwarf_Unsigned highoffset = 0;
     struct in_use_s low_instance;
     int firstinstance = TRUE;
 
@@ -1188,12 +1188,12 @@ report_wasted_space(elf_filedata  ep)
             continue;
         }
         if (iupa->u_offset > low_instance.u_lastbyte) {
-            LONGESTUTYPE diff = 0;
+            Dwarf_Unsigned diff = 0;
             if(iupa->u_align > 1) {
-                LONGESTUTYPE misaligned = low_instance.u_lastbyte %
+                Dwarf_Unsigned misaligned = low_instance.u_lastbyte %
                     iupa->u_align;
-                LONGESTUTYPE newlast = low_instance.u_lastbyte;
-                LONGESTUTYPE distance = 0;
+                Dwarf_Unsigned newlast = low_instance.u_lastbyte;
+                Dwarf_Unsigned distance = 0;
                 int wasted_space_zero = FALSE;
 
                 if (misaligned) {
@@ -1311,7 +1311,7 @@ report_wasted_space(elf_filedata  ep)
     }
     if (highoffset < filesize) {
         const char *p = "";
-        LONGESTUTYPE diffh = filesize - highoffset;
+        Dwarf_Unsigned diffh = filesize - highoffset;
         if (printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
@@ -1320,7 +1320,7 @@ report_wasted_space(elf_filedata  ep)
             p,
             diffh);
     } else if (highoffset > filesize) {
-        LONGESTUTYPE diffo=  highoffset - filesize;
+        Dwarf_Unsigned diffo=  highoffset - filesize;
         const char *p = "";
 
         if (printfilenames) {
@@ -1341,8 +1341,8 @@ static char buffer6[BUFFERSIZE];
 static int
 elf_print_dynamic(elf_filedata ep)
 {
-    LONGESTUTYPE bufcount = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned bufcount = 0;
+    Dwarf_Unsigned i = 0;
     struct generic_dynentry *gbuffer = 0;
     struct generic_shdr *dynamicsect = 0;
     int errcode = 0;
@@ -1488,7 +1488,7 @@ static
 void elf_print_sg_groups(elf_filedata ep)
 {
     unsigned reloc_count = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     struct generic_shdr *psh = ep->f_shdr;
 
     if (!ep->f_sht_group_type_section_count &&
@@ -1501,8 +1501,8 @@ void elf_print_sg_groups(elf_filedata ep)
     P(" section  name      groupsections\n");
     for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
         const char *namestr = psh->gh_namestring;
-        LONGESTUTYPE a = 1;
-        LONGESTUTYPE count = psh->gh_sht_group_array_count;
+        Dwarf_Unsigned a = 1;
+        Dwarf_Unsigned count = psh->gh_sht_group_array_count;
 
         if (!psh->gh_sht_group_array_count) {
             continue;

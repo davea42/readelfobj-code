@@ -118,7 +118,7 @@ static struct commands_text_s {
 };
 
 static const char *
-get_command_name(LONGESTUTYPE v)
+get_command_name(Dwarf_Unsigned v)
 {
     unsigned i = 0;
 
@@ -189,8 +189,8 @@ main(int argc,char **argv)
 static void
 print_macho_segments(struct macho_filedata_s *mfp)
 {
-    LONGESTUTYPE segmentcount = mfp->mo_segment_count;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned segmentcount = mfp->mo_segment_count;
+    Dwarf_Unsigned i = 0;
     struct generic_macho_segment_command *cmdp =
         mfp->mo_segment_commands;
 
@@ -214,8 +214,8 @@ print_macho_segments(struct macho_filedata_s *mfp)
 static void
 print_macho_dwarf_sections(struct macho_filedata_s *mfp)
 {
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE count = mfp->mo_dwarf_sectioncount;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned count = mfp->mo_dwarf_sectioncount;
     struct generic_macho_section * gsp = 0;
 
     gsp = mfp->mo_dwarf_sections;
@@ -238,7 +238,7 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp)
 static void
 print_macho_commands(struct macho_filedata_s *mfp)
 {
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     struct generic_macho_command *cmdp = 0;
 
     cmdp = mfp->mo_commands;

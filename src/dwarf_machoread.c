@@ -241,14 +241,14 @@ static int
 load_segment_command_content32(struct macho_filedata_s *mfp,
     struct generic_macho_command *mmp,
     struct generic_macho_segment_command *msp,
-    LONGESTUTYPE mmpindex,
+    Dwarf_Unsigned mmpindex,
     int *errcode)
 {
     struct segment_command sc;
     int res = 0;
-    LONGESTUTYPE filesize = mfp->mo_filesize;
-    LONGESTUTYPE segoffset = mmp->offset_this_command;
-    LONGESTUTYPE afterseghdr = segoffset + sizeof(sc);
+    Dwarf_Unsigned filesize = mfp->mo_filesize;
+    Dwarf_Unsigned segoffset = mmp->offset_this_command;
+    Dwarf_Unsigned afterseghdr = segoffset + sizeof(sc);
 
     if (mmp->offset_this_command > filesize ||
         mmp->cmdsize > filesize ||
@@ -291,13 +291,13 @@ static int
 load_segment_command_content64(struct macho_filedata_s *mfp,
     struct generic_macho_command *mmp,
     struct generic_macho_segment_command *msp,
-    LONGESTUTYPE mmpindex,int *errcode)
+    Dwarf_Unsigned mmpindex,int *errcode)
 {
     struct segment_command_64 sc;
     int res = 0;
-    LONGESTUTYPE filesize = mfp->mo_filesize;
-    LONGESTUTYPE segoffset = mmp->offset_this_command;
-    LONGESTUTYPE afterseghdr = segoffset + sizeof(sc);
+    Dwarf_Unsigned filesize = mfp->mo_filesize;
+    Dwarf_Unsigned segoffset = mmp->offset_this_command;
+    Dwarf_Unsigned afterseghdr = segoffset + sizeof(sc);
 
     if (mmp->offset_this_command > filesize ||
         mmp->cmdsize > filesize ||
@@ -339,7 +339,7 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
 static int
 dwarf_macho_load_segment_commands(struct macho_filedata_s *mfp,int *errcode)
 {
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     struct generic_macho_command *mmp = 0;
     struct generic_macho_segment_command *msp = 0;
 
@@ -377,13 +377,13 @@ dwarf_macho_load_segment_commands(struct macho_filedata_s *mfp,int *errcode)
 static int
 dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
     struct generic_macho_segment_command *segp,
-    LONGESTUTYPE segi,int *errcode)
+    Dwarf_Unsigned segi,int *errcode)
 {
-    LONGESTUTYPE seci = 0;
-    LONGESTUTYPE seccount = segp->nsects;
-    LONGESTUTYPE secalloc = seccount+1;
-    LONGESTUTYPE curoff = segp->sectionsoffset;
-    LONGESTUTYPE shdrlen = sizeof(struct section);
+    Dwarf_Unsigned seci = 0;
+    Dwarf_Unsigned seccount = segp->nsects;
+    Dwarf_Unsigned secalloc = seccount+1;
+    Dwarf_Unsigned curoff = segp->sectionsoffset;
+    Dwarf_Unsigned shdrlen = sizeof(struct section);
 
     struct generic_macho_section *secs = 0;
 
@@ -438,14 +438,14 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
 static int
 dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
     struct generic_macho_segment_command *segp,
-    LONGESTUTYPE segi,
+    Dwarf_Unsigned segi,
     int *errcode)
 {
-    LONGESTUTYPE seci = 0;
-    LONGESTUTYPE seccount = segp->nsects;
-    LONGESTUTYPE secalloc = seccount+1;
-    LONGESTUTYPE curoff = segp->sectionsoffset;
-    LONGESTUTYPE shdrlen = sizeof(struct section_64);
+    Dwarf_Unsigned seci = 0;
+    Dwarf_Unsigned seccount = segp->nsects;
+    Dwarf_Unsigned secalloc = seccount+1;
+    Dwarf_Unsigned curoff = segp->sectionsoffset;
+    Dwarf_Unsigned shdrlen = sizeof(struct section_64);
     struct generic_macho_section *secs = 0;
 
     secs = (struct generic_macho_section *)
@@ -499,7 +499,7 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
 static int
 dwarf_macho_load_dwarf_section_details(struct macho_filedata_s *mfp,
     struct generic_macho_segment_command *segp,
-    LONGESTUTYPE segi,int *errcode)
+    Dwarf_Unsigned segi,int *errcode)
 {
     int res = 0;
 
@@ -520,7 +520,7 @@ static int
 dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,
     int *errcode)
 {
-    LONGESTUTYPE segi = 0;
+    Dwarf_Unsigned segi = 0;
 
     struct generic_macho_segment_command *segp = mfp->mo_segment_commands;
     for ( ; segi < mfp->mo_segment_count; ++segi,++segp) {
@@ -540,9 +540,9 @@ dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,
 int
 dwarf_load_macho_commands(struct macho_filedata_s *mfp,int *errcode)
 {
-    LONGESTUTYPE cmdi = 0;
-    LONGESTUTYPE curoff = mfp->mo_command_start_offset;
-    LONGESTUTYPE cmdspace = 0;
+    Dwarf_Unsigned cmdi = 0;
+    Dwarf_Unsigned curoff = mfp->mo_command_start_offset;
+    Dwarf_Unsigned cmdspace = 0;
     struct load_command mc;
     struct generic_macho_command *mcp = 0;
     unsigned segment_command_count = 0;

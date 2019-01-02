@@ -36,8 +36,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
+#define Dwarf_Unsigned LONGESTUTYPE
+#define Dwarf_Signed   LONGESTSTYPE
+#define Dwarf_Small    unsigned char
+
 extern char *filename;
 extern int printfilenames;
+
 /* Standard Elf section types. */
 #ifndef SHT_NULL
 #define SHT_NULL 0
@@ -928,11 +933,11 @@ extern int printfilenames;
 /*  Use this for rel too. */
 struct generic_rela {
     int          gr_isrela; /* 0 means rel, non-zero means rela */
-    LONGESTUTYPE gr_offset;
-    LONGESTUTYPE gr_info;
-    LONGESTUTYPE gr_sym; /* From info */
-    LONGESTUTYPE gr_type; /* From info */
-    LONGESTSTYPE gr_addend;
+    Dwarf_Unsigned gr_offset;
+    Dwarf_Unsigned gr_info;
+    Dwarf_Unsigned gr_sym; /* From info */
+    Dwarf_Unsigned gr_type; /* From info */
+    Dwarf_Signed   gr_addend;
 };
 
 /*  The following are generic to simplify handling
@@ -940,44 +945,44 @@ struct generic_rela {
     the two sizes have different extraction code. */
 struct generic_ehdr {
     unsigned char ge_ident[EI_NIDENT];
-    LONGESTUTYPE ge_type;
-    LONGESTUTYPE ge_machine;
-    LONGESTUTYPE ge_version;
-    LONGESTUTYPE ge_entry;
-    LONGESTUTYPE ge_phoff;
-    LONGESTUTYPE ge_shoff;
-    LONGESTUTYPE ge_flags;
-    LONGESTUTYPE ge_ehsize;
-    LONGESTUTYPE ge_phentsize;
-    LONGESTUTYPE ge_phnum;
-    LONGESTUTYPE ge_shentsize;
-    LONGESTUTYPE ge_shnum;
-    LONGESTUTYPE ge_shstrndx;
+    Dwarf_Unsigned ge_type;
+    Dwarf_Unsigned ge_machine;
+    Dwarf_Unsigned ge_version;
+    Dwarf_Unsigned ge_entry;
+    Dwarf_Unsigned ge_phoff;
+    Dwarf_Unsigned ge_shoff;
+    Dwarf_Unsigned ge_flags;
+    Dwarf_Unsigned ge_ehsize;
+    Dwarf_Unsigned ge_phentsize;
+    Dwarf_Unsigned ge_phnum;
+    Dwarf_Unsigned ge_shentsize;
+    Dwarf_Unsigned ge_shnum;
+    Dwarf_Unsigned ge_shstrndx;
 };
 struct generic_phdr {
-    LONGESTUTYPE gp_type;
-    LONGESTUTYPE gp_flags;
-    LONGESTUTYPE gp_offset;
-    LONGESTUTYPE gp_vaddr;
-    LONGESTUTYPE gp_paddr;
-    LONGESTUTYPE gp_filesz;
-    LONGESTUTYPE gp_memsz;
-    LONGESTUTYPE gp_align;
+    Dwarf_Unsigned gp_type;
+    Dwarf_Unsigned gp_flags;
+    Dwarf_Unsigned gp_offset;
+    Dwarf_Unsigned gp_vaddr;
+    Dwarf_Unsigned gp_paddr;
+    Dwarf_Unsigned gp_filesz;
+    Dwarf_Unsigned gp_memsz;
+    Dwarf_Unsigned gp_align;
 };
 struct generic_shdr {
-    LONGESTUTYPE gh_secnum;
-    LONGESTUTYPE gh_name;
+    Dwarf_Unsigned gh_secnum;
+    Dwarf_Unsigned gh_name;
     const char * gh_namestring;
-    LONGESTUTYPE gh_type;
+    Dwarf_Unsigned gh_type;
     const char * gh_typestring;
-    LONGESTUTYPE gh_flags;
-    LONGESTUTYPE gh_addr;
-    LONGESTUTYPE gh_offset;
-    LONGESTUTYPE gh_size;
-    LONGESTUTYPE gh_link;
-    LONGESTUTYPE gh_info;
-    LONGESTUTYPE gh_addralign;
-    LONGESTUTYPE gh_entsize;
+    Dwarf_Unsigned gh_flags;
+    Dwarf_Unsigned gh_addr;
+    Dwarf_Unsigned gh_offset;
+    Dwarf_Unsigned gh_size;
+    Dwarf_Unsigned gh_link;
+    Dwarf_Unsigned gh_info;
+    Dwarf_Unsigned gh_addralign;
+    Dwarf_Unsigned gh_entsize;
 
     /*  Zero unless content read in. Malloc space
         of size gh_size,  in bytes. For dwarf
@@ -988,7 +993,7 @@ struct generic_shdr {
         to generic relocation records if such
         have been loaded.
         free() this if not null. */
-    LONGESTUTYPE          gh_relcount;
+    Dwarf_Unsigned          gh_relcount;
     struct generic_rela * gh_rels;
 
     /*  For SHT_GROUP based  grouping, which
@@ -999,14 +1004,14 @@ struct generic_shdr {
         set with group number (3+) from SHT_GROUP
         and the flags should have SHF_GROUP set
         if in SHT_GROUP. Must only be in one group? */
-    LONGESTUTYPE gh_section_group_number;
+    Dwarf_Unsigned gh_section_group_number;
 
     /*  Content of an SHT_GROUP section as an array
         of integers. [0] is the version, which
         can only be one(1) . */
-    LONGESTUTYPE * gh_sht_group_array;
+    Dwarf_Unsigned * gh_sht_group_array;
     /*  Number of elements in the gh_sht_group_array. */
-    LONGESTUTYPE   gh_sht_group_array_count;
+    Dwarf_Unsigned   gh_sht_group_array_count;
 
     /*   TRUE if .debug_info .eh_frame etc. */
     char  gh_is_dwarf;
@@ -1017,37 +1022,37 @@ struct generic_dynentry {
     /*  gd_val stands in for d_ptr and d_val union,
         the union adds nothing in practice since
         we expect ptrsize <= ulongest. */
-    LONGESTUTYPE  gd_val;
-    LONGESTUTYPE  gd_dyn_file_offset;
+    Dwarf_Unsigned  gd_val;
+    Dwarf_Unsigned  gd_dyn_file_offset;
 };
 
 struct generic_symentry {
-    LONGESTUTYPE gs_name;
-    LONGESTUTYPE gs_value;
-    LONGESTUTYPE gs_size;
-    LONGESTUTYPE gs_info;
-    LONGESTUTYPE gs_other;
-    LONGESTUTYPE gs_shndx;
+    Dwarf_Unsigned gs_name;
+    Dwarf_Unsigned gs_value;
+    Dwarf_Unsigned gs_size;
+    Dwarf_Unsigned gs_info;
+    Dwarf_Unsigned gs_other;
+    Dwarf_Unsigned gs_shndx;
     /* derived */
-    LONGESTUTYPE gs_bind;
-    LONGESTUTYPE gs_type;
+    Dwarf_Unsigned gs_bind;
+    Dwarf_Unsigned gs_type;
 };
 
 struct location {
     const char *g_name;
-    LONGESTUTYPE g_offset;
-    LONGESTUTYPE g_count;
-    LONGESTUTYPE g_entrysize;
-    LONGESTUTYPE g_totalsize;
+    Dwarf_Unsigned g_offset;
+    Dwarf_Unsigned g_count;
+    Dwarf_Unsigned g_entrysize;
+    Dwarf_Unsigned g_totalsize;
 };
 
 struct in_use_s {
     struct in_use_s *u_next;
     const char *u_name;
-    LONGESTUTYPE u_offset;
-    LONGESTUTYPE u_align;
-    LONGESTUTYPE u_length;
-    LONGESTUTYPE u_lastbyte;
+    Dwarf_Unsigned u_offset;
+    Dwarf_Unsigned u_align;
+    Dwarf_Unsigned u_length;
+    Dwarf_Unsigned u_lastbyte;
 };
 
 struct elf_filedata_s {
@@ -1066,23 +1071,23 @@ struct elf_filedata_s {
 
     unsigned	 f_endian;
     unsigned     f_offsetsize; /* Elf offset size, not DWARF. 32 or 64 */
-    LONGESTUTYPE f_filesize;
-    LONGESTUTYPE f_max_secdata_offset;
-    LONGESTUTYPE f_max_progdata_offset;
+    Dwarf_Unsigned f_filesize;
+    Dwarf_Unsigned f_max_secdata_offset;
+    Dwarf_Unsigned f_max_progdata_offset;
 
-    LONGESTUTYPE f_wasted_dynamic_count;
-    LONGESTUTYPE f_wasted_dynamic_space;
+    Dwarf_Unsigned f_wasted_dynamic_count;
+    Dwarf_Unsigned f_wasted_dynamic_space;
 
-    LONGESTUTYPE f_wasted_content_space;
-    LONGESTUTYPE f_wasted_content_count;
+    Dwarf_Unsigned f_wasted_content_space;
+    Dwarf_Unsigned f_wasted_content_count;
 
-    LONGESTUTYPE f_wasted_align_space;
-    LONGESTUTYPE f_wasted_align_count;
+    Dwarf_Unsigned f_wasted_align_space;
+    Dwarf_Unsigned f_wasted_align_count;
     void *(*f_copy_word) (void *, const void *, size_t);
 
     struct in_use_s * f_in_use;
     struct in_use_s * f_in_use_tail;
-    LONGESTUTYPE f_in_use_count;
+    Dwarf_Unsigned f_in_use_count;
 
     struct location      f_loc_ehdr;
     struct generic_ehdr* f_ehdr;
@@ -1095,38 +1100,38 @@ struct elf_filedata_s {
 
     char *f_elf_shstrings_data; /* section name strings */
     /* length of currentsection.  Might be zero..*/
-    LONGESTUTYPE  f_elf_shstrings_length;
+    Dwarf_Unsigned  f_elf_shstrings_length;
     /* size of malloc-d space */
-    LONGESTUTYPE  f_elf_shstrings_max;
+    Dwarf_Unsigned  f_elf_shstrings_max;
 
     /* This is the .dynamic section */
     struct location      f_loc_dynamic;
     struct generic_dynentry * f_dynamic;
-    LONGESTUTYPE f_dynamic_sect_index;
+    Dwarf_Unsigned f_dynamic_sect_index;
 
     /* .dynsym, .dynstr */
     struct location      f_loc_dynsym;
     struct generic_symentry* f_dynsym;
     char  *f_dynsym_sect_strings;
-    LONGESTUTYPE f_dynsym_sect_strings_max;
-    LONGESTUTYPE f_dynsym_sect_strings_sect_index;
-    LONGESTUTYPE f_dynsym_sect_index;
+    Dwarf_Unsigned f_dynsym_sect_strings_max;
+    Dwarf_Unsigned f_dynsym_sect_strings_sect_index;
+    Dwarf_Unsigned f_dynsym_sect_index;
 
     /* .symtab .strtab */
     struct location      f_loc_symtab;
     struct generic_symentry* f_symtab;
     char * f_symtab_sect_strings;
-    LONGESTUTYPE f_symtab_sect_strings_max;
-    LONGESTUTYPE f_symtab_sect_strings_sect_index;
-    LONGESTUTYPE f_symtab_sect_index;
+    Dwarf_Unsigned f_symtab_sect_strings_max;
+    Dwarf_Unsigned f_symtab_sect_strings_sect_index;
+    Dwarf_Unsigned f_symtab_sect_index;
 
     /* Starts at 3. 0,1,2 used specially. */
-    LONGESTUTYPE f_sg_next_group_number;
+    Dwarf_Unsigned f_sg_next_group_number;
     /*  Both the following will be zero unless there
         are explicit Elf groups. */
-    LONGESTUTYPE f_sht_group_type_section_count;
-    LONGESTUTYPE f_shf_group_flag_section_count;
-    LONGESTUTYPE f_dwo_group_section_count;
+    Dwarf_Unsigned f_sht_group_type_section_count;
+    Dwarf_Unsigned f_shf_group_flag_section_count;
+    Dwarf_Unsigned f_dwo_group_section_count;
 
 
 };
@@ -1150,9 +1155,9 @@ int dwarf_load_elf_dynsym_symbols(elf_filedata ep,int *errcode);
 int dwarf_load_elf_section_is_dwarf(const char *name);
 
 int dwarf_load_elf_rela(elf_filedata ep,
-    LONGESTUTYPE secnum, int *errcode);
+    Dwarf_Unsigned secnum, int *errcode);
 int dwarf_load_elf_rel(elf_filedata ep,
-    LONGESTUTYPE secnum, int *errcode);
+    Dwarf_Unsigned secnum, int *errcode);
 
 /*  Gets sh_strtab if is_symtab TRUE.
     Gets sh_dynstr if is_symtab FALSE.
@@ -1161,45 +1166,45 @@ int dwarf_load_elf_rel(elf_filedata ep,
 */
 int dwarf_get_elf_symstr_string(elf_filedata ep,
     int is_symtab,
-    LONGESTUTYPE index,
+    Dwarf_Unsigned index,
     char **strptr,
     int *errcode);
 
 /*  The following for an elf checker/dumper. */
 const char * dwarf_get_elf_machine_name(unsigned value);
 const char * dwarf_get_elf_dynamic_table_name(
-    LONGESTUTYPE value,
+    Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_program_header_type_name(
-    LONGESTUTYPE value,
+    Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_flag_names(
-    LONGESTUTYPE value,
+    Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_st_type(
-    LONGESTUTYPE value,
+    Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
 void dwarf_insert_in_use_entry(elf_filedata ep,
-    const char *description,LONGESTUTYPE offset,
-    LONGESTUTYPE length,LONGESTUTYPE align);
+    const char *description,Dwarf_Unsigned offset,
+    Dwarf_Unsigned length,Dwarf_Unsigned align);
 const char * dwarf_get_elf_symbol_sto_type(
-    LONGESTUTYPE value, char *buffer,
+    Dwarf_Unsigned value, char *buffer,
     unsigned buflen);
 const char * dwarf_get_elf_symbol_shn_type(
-    LONGESTUTYPE value, char *buffer, unsigned buflen);
+    Dwarf_Unsigned value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_symbol_stb_string(
-    LONGESTUTYPE val, char *buff, unsigned buflen);
-const char * dwarf_get_elf_symbol_stt_type( LONGESTUTYPE value,
+    Dwarf_Unsigned val, char *buff, unsigned buflen);
+const char * dwarf_get_elf_symbol_stt_type( Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
-const char * dwarf_get_elf_osabi_name( LONGESTUTYPE value,
+const char * dwarf_get_elf_osabi_name( Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_machine_name(unsigned value);
 const char * dwarf_get_elf_dynamic_table_name(
-    LONGESTUTYPE value, char *buffer, unsigned buflen);
+    Dwarf_Unsigned value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_flag_names(
-    LONGESTUTYPE value, char *buffer, unsigned buflen);
+    Dwarf_Unsigned value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_st_type_name(
-    LONGESTUTYPE value, char *buffer, unsigned buflen);
+    Dwarf_Unsigned value, char *buffer, unsigned buflen);
 
 
 

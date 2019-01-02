@@ -76,7 +76,7 @@ static char buffer1[BUFFERSIZE];
 #endif /* end LITTLE- BIG-ENDIAN */
 
 static int
-is_empty_section(LONGESTUTYPE type)
+is_empty_section(Dwarf_Unsigned type)
 {
     if (type == SHT_NOBITS) {
         return TRUE;
@@ -155,8 +155,8 @@ dwarf_destruct_elf_access(elf_filedata ep,
     UNUSEDARG int *errcode)
 {
     struct generic_shdr *shp = 0;
-    LONGESTUTYPE shcount = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned shcount = 0;
+    Dwarf_Unsigned i = 0;
 
     free(ep->f_ehdr);
     shp = ep->f_shdr;
@@ -260,17 +260,17 @@ generic_ehdr_from_64(elf_filedata ep,
 static int
 generic_phdr_from_phdr32(elf_filedata ep,
     struct generic_phdr **phdr_out,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count,
+    Dwarf_Unsigned * count_out,
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned entsize,
+    Dwarf_Unsigned count,
     int *errcode)
 {
     dw_elf32_phdr *pph =0;
     dw_elf32_phdr *orig_pph =0;
     struct generic_phdr *gphdr =0;
     struct generic_phdr *orig_gphdr =0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     int res = 0;
 
     *count_out = 0;
@@ -333,10 +333,10 @@ generic_phdr_from_phdr32(elf_filedata ep,
 static int
 generic_phdr_from_phdr64(elf_filedata ep,
     struct generic_phdr **phdr_out,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count,
+    Dwarf_Unsigned * count_out,
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned entsize,
+    Dwarf_Unsigned count,
     int *errcode)
 {
     dw_elf64_phdr *pph =0;
@@ -344,7 +344,7 @@ generic_phdr_from_phdr64(elf_filedata ep,
     struct generic_phdr *gphdr =0;
     struct generic_phdr *orig_gphdr =0;
     int res = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
 
     *count_out = 0;
     pph = (dw_elf64_phdr *)calloc(count , entsize);
@@ -403,17 +403,17 @@ generic_phdr_from_phdr64(elf_filedata ep,
 
 static int
 generic_shdr_from_shdr32(elf_filedata ep,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count,
+    Dwarf_Unsigned * count_out,
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned entsize,
+    Dwarf_Unsigned count,
     int *errcode)
 {
     dw_elf32_shdr          *psh =0;
     dw_elf32_shdr          *orig_psh =0;
     struct generic_shdr *gshdr =0;
     struct generic_shdr *orig_gshdr =0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     int res = 0;
 
     *count_out = 0;
@@ -475,17 +475,17 @@ generic_shdr_from_shdr32(elf_filedata ep,
 
 static int
 generic_shdr_from_shdr64(elf_filedata ep,
-    LONGESTUTYPE * count_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE entsize,
-    LONGESTUTYPE count,
+    Dwarf_Unsigned * count_out,
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned entsize,
+    Dwarf_Unsigned count,
     int *errcode)
 {
     dw_elf64_shdr          *psh =0;
     dw_elf64_shdr          *orig_psh =0;
     struct generic_shdr *gshdr =0;
     struct generic_shdr *orig_gshdr =0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     int res = 0;
 
     *count_out = 0;
@@ -553,12 +553,12 @@ static int
 dwarf_generic_elf_load_symbols32(elf_filedata  ep,
     int secnum,const char *secname,
     struct generic_symentry **gsym_out,
-    LONGESTUTYPE offset,LONGESTUTYPE size,
-    LONGESTUTYPE *count_out,int *errcode)
+    Dwarf_Unsigned offset,Dwarf_Unsigned size,
+    Dwarf_Unsigned *count_out,int *errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned i = 0;
     dw_elf32_sym *psym = 0;
     dw_elf32_sym *orig_psym = 0;
     struct generic_symentry * gsym = 0;
@@ -605,8 +605,8 @@ dwarf_generic_elf_load_symbols32(elf_filedata  ep,
     orig_psym = psym;
     orig_gsym = gsym;
     for ( i = 0; i < ecount; ++i,++psym,++gsym) {
-        LONGESTUTYPE bind = 0;
-        LONGESTUTYPE type = 0;
+        Dwarf_Unsigned bind = 0;
+        Dwarf_Unsigned type = 0;
 
         ASNAR(ep->f_copy_word,gsym->gs_name,psym->st_name);
         ASNAR(ep->f_copy_word,gsym->gs_value,psym->st_value);
@@ -630,12 +630,12 @@ static int
 dwarf_generic_elf_load_symbols64(elf_filedata ep,
     int secnum,const char *secname,
     struct generic_symentry **gsym_out,
-    LONGESTUTYPE offset,LONGESTUTYPE size,
-    LONGESTUTYPE *count_out,int *errcode)
+    Dwarf_Unsigned offset,Dwarf_Unsigned size,
+    Dwarf_Unsigned *count_out,int *errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned i = 0;
     dw_elf64_sym*psym = 0;
     dw_elf64_sym *orig_psym = 0;
     struct generic_symentry * gsym = 0;
@@ -684,8 +684,8 @@ dwarf_generic_elf_load_symbols64(elf_filedata ep,
     orig_psym = psym;
     orig_gsym = gsym;
     for ( i = 0; i < ecount; ++i,++psym,++gsym) {
-        LONGESTUTYPE bind = 0;
-        LONGESTUTYPE type = 0;
+        Dwarf_Unsigned bind = 0;
+        Dwarf_Unsigned type = 0;
 
         ASNAR(ep->f_copy_word,gsym->gs_name,psym->st_name);
         ASNAR(ep->f_copy_word,gsym->gs_value,psym->st_value);
@@ -709,11 +709,11 @@ dwarf_generic_elf_load_symbols(elf_filedata  ep,
     int secnum,const char *secname,
     struct generic_shdr *psh,
     struct generic_symentry **gsym_out,
-    LONGESTUTYPE *count_out,int *errcode)
+    Dwarf_Unsigned *count_out,int *errcode)
 {
     int res = 0;
     struct generic_symentry *gsym = 0;
-    LONGESTUTYPE count = 0;
+    Dwarf_Unsigned count = 0;
     const char *namestr = 0;
 
     if(!secnum) {
@@ -747,8 +747,8 @@ dwarf_load_elf_dynsym_symbols(elf_filedata ep, int*errcode)
 {
     int res = 0;
     struct generic_symentry *gsym = 0;
-    LONGESTUTYPE count = 0;
-    LONGESTUTYPE secnum = ep->f_dynsym_sect_index;
+    Dwarf_Unsigned count = 0;
+    Dwarf_Unsigned secnum = ep->f_dynsym_sect_index;
     struct generic_shdr * psh = 0;
     const char *namestr = 0;
 
@@ -773,8 +773,8 @@ dwarf_load_elf_symtab_symbols(elf_filedata ep, int*errcode)
 {
     int res = 0;
     struct generic_symentry *gsym = 0;
-    LONGESTUTYPE count = 0;
-    LONGESTUTYPE secnum = ep->f_symtab_sect_index;
+    Dwarf_Unsigned count = 0;
+    Dwarf_Unsigned secnum = ep->f_symtab_sect_index;
     struct generic_shdr * psh = 0;
     const char *namestr = 0;
 
@@ -803,10 +803,10 @@ generic_rel_from_rela32(elf_filedata ep,
     struct generic_rela *grel,
     int *errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size = gsh->gh_size;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size = gsh->gh_size;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned i = 0;
 
     ecount = size/sizeof(dw_elf32_rela);
     size2 = ecount * sizeof(dw_elf32_rela);
@@ -837,11 +837,11 @@ generic_rel_from_rela64(elf_filedata ep,
     dw_elf64_rela *relp,
     struct generic_rela *grel, int *errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size = gsh->gh_size;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE sizeg = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size = gsh->gh_size;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned sizeg = 0;
+    Dwarf_Unsigned i = 0;
 
     ecount = size/sizeof(dw_elf64_rela);
     size2 = ecount * sizeof(dw_elf64_rela);
@@ -871,10 +871,10 @@ generic_rel_from_rel32(elf_filedata ep,
     dw_elf32_rel *relp,
     struct generic_rela *grel,int *errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size = gsh->gh_size;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size = gsh->gh_size;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned i = 0;
 
     ecount = size/sizeof(dw_elf32_rel);
     size2 = ecount * sizeof(dw_elf32_rel);
@@ -904,10 +904,10 @@ generic_rel_from_rel64(elf_filedata ep,
     dw_elf64_rel *relp,
     struct generic_rela *grel,int *errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size = gsh->gh_size;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size = gsh->gh_size;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned i = 0;
 
     ecount = size/sizeof(dw_elf64_rel);
     size2 = ecount * sizeof(dw_elf64_rel);
@@ -937,8 +937,8 @@ dwarf_load_elf_dynstr(elf_filedata ep, int *errcode)
 {
     struct generic_shdr *strpsh = 0;
     int res = 0;
-    LONGESTUTYPE strsectindex  =0;
-    LONGESTUTYPE strsectlength = 0;
+    Dwarf_Unsigned strsectindex  =0;
+    Dwarf_Unsigned strsectlength = 0;
 
         if (!ep->f_dynsym_sect_strings_sect_index) {
             return DW_DLV_NO_ENTRY;
@@ -977,8 +977,8 @@ dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
 {
     struct generic_shdr *strpsh = 0;
     int res = 0;
-    LONGESTUTYPE strsectindex  =0;
-    LONGESTUTYPE strsectlength = 0;
+    Dwarf_Unsigned strsectindex  =0;
+    Dwarf_Unsigned strsectlength = 0;
 
     if (!ep->f_symtab_sect_strings_sect_index) {
         return DW_DLV_NO_ENTRY;
@@ -1016,7 +1016,7 @@ dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
 
 int
 dwarf_get_elf_symstr_string(elf_filedata ep,
-    int is_symtab,LONGESTUTYPE index,
+    int is_symtab,Dwarf_Unsigned index,
     char **str_out,
     int*errcode)
 {
@@ -1038,12 +1038,12 @@ dwarf_get_elf_symstr_string(elf_filedata ep,
 
 
 static int
-elf_load_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection,
+elf_load_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection,
     int *errcode)
 {
     int i = 0;
     struct generic_shdr *psh = 0;
-    LONGESTUTYPE secoffset = 0;
+    Dwarf_Unsigned secoffset = 0;
 
     ep->f_elf_shstrings_length = 0;
     if (stringsection >= ep->f_ehdr->ge_shnum) {
@@ -1084,11 +1084,11 @@ elf_load_sectstrings(elf_filedata ep,LONGESTUTYPE stringsection,
 
 static int
 elf_load_progheaders32(elf_filedata ep,
-    LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE count,
+    Dwarf_Unsigned offset,Dwarf_Unsigned entsize,Dwarf_Unsigned count,
     int *errcode)
 {
     struct generic_phdr *gphdr =0;
-    LONGESTUTYPE generic_count = 0;
+    Dwarf_Unsigned generic_count = 0;
     int res = 0;
 
     if(count == 0) {
@@ -1103,7 +1103,7 @@ elf_load_progheaders32(elf_filedata ep,
         P("ERROR: Elf Program header too small? "
             LONGESTUFMT  " vs "
             LONGESTUFMT "\n",
-            entsize,(LONGESTUTYPE)sizeof(dw_elf32_phdr));
+            entsize,(Dwarf_Unsigned)sizeof(dw_elf32_phdr));
         *errcode = RO_ERR_TOOSMALL;
         return RO_ERROR;
     }
@@ -1138,11 +1138,11 @@ elf_load_progheaders32(elf_filedata ep,
 
 static int
 elf_load_progheaders64(elf_filedata ep,
-    LONGESTUTYPE offset,LONGESTUTYPE entsize,LONGESTUTYPE count,
+    Dwarf_Unsigned offset,Dwarf_Unsigned entsize,Dwarf_Unsigned count,
     int *errcode)
 {
     struct generic_phdr *gphdr =0;
-    LONGESTUTYPE generic_count = 0;
+    Dwarf_Unsigned generic_count = 0;
     int res = 0;
 
     if(count == 0) {
@@ -1157,7 +1157,7 @@ elf_load_progheaders64(elf_filedata ep,
         P("ERROR: Elf Program header too small? "
             LONGESTUFMT  " vs "
             LONGESTUFMT "\n",
-            entsize,(LONGESTUTYPE)sizeof(dw_elf64_phdr));
+            entsize,(Dwarf_Unsigned)sizeof(dw_elf64_phdr));
         *errcode = RO_ERR_TOOSMALL;
         return RO_ERROR;
     }
@@ -1193,10 +1193,10 @@ elf_load_progheaders64(elf_filedata ep,
 
 static int
 elf_load_sectheaders32(elf_filedata ep,
-    LONGESTUTYPE offset,LONGESTUTYPE entsize,
-    LONGESTUTYPE count,int *errcode)
+    Dwarf_Unsigned offset,Dwarf_Unsigned entsize,
+    Dwarf_Unsigned count,int *errcode)
 {
-    LONGESTUTYPE generic_count = 0;
+    Dwarf_Unsigned generic_count = 0;
     int res = 0;
 
 
@@ -1240,10 +1240,10 @@ elf_load_sectheaders32(elf_filedata ep,
 
 static int
 elf_load_sectheaders64(elf_filedata ep,
-    LONGESTUTYPE offset,LONGESTUTYPE entsize,
-    LONGESTUTYPE count,int*errcode)
+    Dwarf_Unsigned offset,Dwarf_Unsigned entsize,
+    Dwarf_Unsigned count,int*errcode)
 {
-    LONGESTUTYPE generic_count = 0;
+    Dwarf_Unsigned generic_count = 0;
     int res = 0;
 
 
@@ -1288,18 +1288,18 @@ elf_load_sectheaders64(elf_filedata ep,
 
 static int
 dwarf_elf_load_rela_32(elf_filedata ep,
-    LONGESTUTYPE secnum,
+    Dwarf_Unsigned secnum,
     struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out, int *errcode)
+    Dwarf_Unsigned *count_out, int *errcode)
 {
-    LONGESTUTYPE count = 0;
-    LONGESTUTYPE size = 0;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE sizeg = 0;
-    LONGESTUTYPE offset = 0;
+    Dwarf_Unsigned count = 0;
+    Dwarf_Unsigned size = 0;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned sizeg = 0;
+    Dwarf_Unsigned offset = 0;
     int res = 0;
     dw_elf32_rela *relp = 0;
-    LONGESTUTYPE object_reclen = sizeof(dw_elf32_rela);
+    Dwarf_Unsigned object_reclen = sizeof(dw_elf32_rela);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1386,18 +1386,18 @@ dwarf_elf_load_rela_32(elf_filedata ep,
 
 static int
 dwarf_elf_load_rel_32(elf_filedata ep,
-    LONGESTUTYPE secnum,
+    Dwarf_Unsigned secnum,
     struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out,int *errcode)
+    Dwarf_Unsigned *count_out,int *errcode)
 {
-    LONGESTUTYPE count = 0;
-    LONGESTUTYPE size = 0;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE sizeg = 0;
-    LONGESTUTYPE offset = 0;
+    Dwarf_Unsigned count = 0;
+    Dwarf_Unsigned size = 0;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned sizeg = 0;
+    Dwarf_Unsigned offset = 0;
     int res = 0;
     dw_elf32_rel* relp = 0;
-    LONGESTUTYPE object_reclen = sizeof(dw_elf32_rel);
+    Dwarf_Unsigned object_reclen = sizeof(dw_elf32_rel);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1481,18 +1481,18 @@ dwarf_elf_load_rel_32(elf_filedata ep,
 
 static int
 dwarf_elf_load_rel_64(elf_filedata ep,
-    LONGESTUTYPE secnum,
+    Dwarf_Unsigned secnum,
     struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out,int *errcode)
+    Dwarf_Unsigned *count_out,int *errcode)
 {
-    LONGESTUTYPE count = 0;
-    LONGESTUTYPE size = 0;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE sizeg = 0;
-    LONGESTUTYPE offset = 0;
+    Dwarf_Unsigned count = 0;
+    Dwarf_Unsigned size = 0;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned sizeg = 0;
+    Dwarf_Unsigned offset = 0;
     int res = 0;
     dw_elf64_rel* relp = 0;
-    LONGESTUTYPE object_reclen = sizeof(dw_elf64_rel);
+    Dwarf_Unsigned object_reclen = sizeof(dw_elf64_rel);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1580,18 +1580,18 @@ dwarf_elf_load_rel_64(elf_filedata ep,
 
 
 static int
-dwarf_elf_load_rela_64(elf_filedata ep,LONGESTUTYPE secnum,
+dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
     struct generic_shdr * gsh,struct generic_rela ** grel_out,
-    LONGESTUTYPE *count_out,int *errcode)
+    Dwarf_Unsigned *count_out,int *errcode)
 {
-    LONGESTUTYPE count = 0;
-    LONGESTUTYPE size = 0;
-    LONGESTUTYPE size2 = 0;
-    LONGESTUTYPE sizeg = 0;
-    LONGESTUTYPE offset = 0;
+    Dwarf_Unsigned count = 0;
+    Dwarf_Unsigned size = 0;
+    Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned sizeg = 0;
+    Dwarf_Unsigned offset = 0;
     int res = 0;
     dw_elf64_rela *relp = 0;
-    LONGESTUTYPE object_reclen = sizeof(dw_elf64_rela);
+    Dwarf_Unsigned object_reclen = sizeof(dw_elf64_rela);
     struct generic_rela *grel = 0;
 
     offset = gsh->gh_offset;
@@ -1681,13 +1681,13 @@ dwarf_elf_load_rela_64(elf_filedata ep,LONGESTUTYPE secnum,
 
 int
 dwarf_load_elf_rela(elf_filedata ep,
-    LONGESTUTYPE secnum, int *errcode)
+    Dwarf_Unsigned secnum, int *errcode)
 {
     struct generic_shdr *gshdr = 0;
-    LONGESTUTYPE generic_count = 0;
+    Dwarf_Unsigned generic_count = 0;
     unsigned offsetsize = 0;
     struct generic_rela *grp = 0;
-    LONGESTUTYPE count_read = 0;
+    Dwarf_Unsigned count_read = 0;
     int res = 0;
 
     if (!ep) {
@@ -1726,13 +1726,13 @@ dwarf_load_elf_rela(elf_filedata ep,
 }
 int
 dwarf_load_elf_rel(elf_filedata ep,
-    LONGESTUTYPE secnum, int *errcode)
+    Dwarf_Unsigned secnum, int *errcode)
 {
     struct generic_shdr *gshdr = 0;
-    LONGESTUTYPE generic_count = 0;
+    Dwarf_Unsigned generic_count = 0;
     unsigned offsetsize = 0;
     struct generic_rela *grp = 0;
-    LONGESTUTYPE count_read = 0;
+    Dwarf_Unsigned count_read = 0;
     int res = 0;
 
     if (!ep) {
@@ -1775,8 +1775,8 @@ static int
 elf_load_sect_namestring(elf_filedata ep, int *errcode)
 {
     struct generic_shdr *gshdr = 0;
-    LONGESTUTYPE generic_count = 0;
-    LONGESTUTYPE i = 1;
+    Dwarf_Unsigned generic_count = 0;
+    Dwarf_Unsigned i = 1;
 
     gshdr = ep->f_shdr;
     generic_count = ep->f_loc_shdr.g_count;
@@ -1853,17 +1853,17 @@ elf_load_elf_header64(elf_filedata ep,int *errcode)
 static int
 generic_dyn_from_dyn32(elf_filedata ep,
     struct generic_dynentry **gbuffer_io,
-    LONGESTUTYPE *bufcount_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE size,
-    LONGESTUTYPE ecount, int *errcode)
+    Dwarf_Unsigned *bufcount_out,
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned size,
+    Dwarf_Unsigned ecount, int *errcode)
 {
     dw_elf32_dyn *ebuf = 0;
     dw_elf32_dyn *orig_ebuf = 0;
     struct generic_dynentry * gbuffer = 0;
     struct generic_dynentry * orig_gbuffer = 0;
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE trueoff = 0;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned trueoff = 0;
     int res = 0;
 
 
@@ -1919,17 +1919,17 @@ generic_dyn_from_dyn32(elf_filedata ep,
 static int
 generic_dyn_from_dyn64(elf_filedata ep,
     struct generic_dynentry **gbuffer_io,
-    LONGESTUTYPE *bufcount_out,
-    LONGESTUTYPE offset,
-    LONGESTUTYPE size,
-    LONGESTUTYPE ecount, int *errcode)
+    Dwarf_Unsigned *bufcount_out,
+    Dwarf_Unsigned offset,
+    Dwarf_Unsigned size,
+    Dwarf_Unsigned ecount, int *errcode)
 {
     dw_elf64_dyn *ebuf = 0;
     dw_elf64_dyn *orig_ebuf = 0;
     struct generic_dynentry * gbuffer = 0;
     struct generic_dynentry * orig_gbuffer = 0;
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE trueoff = 0;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned trueoff = 0;
     int res = 0;
 
 
@@ -1985,12 +1985,12 @@ generic_dyn_from_dyn64(elf_filedata ep,
 
 static int
 elf_load_dynamic32(elf_filedata ep,
-    LONGESTUTYPE offset,LONGESTUTYPE size, int*errcode)
+    Dwarf_Unsigned offset,Dwarf_Unsigned size, int*errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size2 = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size2 = 0;
     struct generic_dynentry *gbuffer;
-    LONGESTUTYPE bufcount = 0;
+    Dwarf_Unsigned bufcount = 0;
     int res = 0;
 
     if ((offset > ep->f_filesize)||
@@ -2003,7 +2003,7 @@ elf_load_dynamic32(elf_filedata ep,
         return DW_DLV_ERROR;
     }
 
-    ecount = size/(LONGESTUTYPE)sizeof(dw_elf32_dyn);
+    ecount = size/(Dwarf_Unsigned)sizeof(dw_elf32_dyn);
     size2 = ecount * sizeof(dw_elf32_dyn);
     if(size != size2) {
         P("Bogus size of dynamic. "
@@ -2033,12 +2033,12 @@ elf_load_dynamic32(elf_filedata ep,
 
 static int
 elf_load_dynamic64(elf_filedata ep,
-    LONGESTUTYPE offset,LONGESTUTYPE size,int *errcode)
+    Dwarf_Unsigned offset,Dwarf_Unsigned size,int *errcode)
 {
-    LONGESTUTYPE ecount = 0;
-    LONGESTUTYPE size2 = 0;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size2 = 0;
     struct generic_dynentry *gbuffer;
-    LONGESTUTYPE bufcount = 0;
+    Dwarf_Unsigned bufcount = 0;
     int res = 0;
 
     if ((offset > ep->f_filesize)||
@@ -2051,7 +2051,7 @@ elf_load_dynamic64(elf_filedata ep,
         return DW_DLV_ERROR;
     }
 
-    ecount = size/(LONGESTUTYPE)sizeof(dw_elf64_dyn);
+    ecount = size/(Dwarf_Unsigned)sizeof(dw_elf64_dyn);
     size2 = ecount * sizeof(dw_elf64_dyn);
     if(size != size2) {
         P("Bogus size of dynamic. "
@@ -2150,11 +2150,11 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
     if (offsetsize == 32) {
         res = elf_load_elf_header32(ep,errcode);
     } else if (offsetsize == 64) {
-        if (sizeof(LONGESTUTYPE) < 8) {
+        if (sizeof(Dwarf_Unsigned) < 8) {
             P("Cannot read Elf64 from %s as the longest available "
                 " integer is just %u bytes\n",
                 sanitized(filename,buffer1,BUFFERSIZE),
-                (unsigned)sizeof(LONGESTUTYPE));
+                (unsigned)sizeof(Dwarf_Unsigned));
             *errcode =  RO_ERR_INTEGERTOOSMALL;
             return DW_DLV_ERROR;
         }
@@ -2172,8 +2172,8 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
 
 static int
 validate_links(elf_filedata ep,
-    LONGESTUTYPE knownsect,
-    LONGESTUTYPE string_sect,
+    Dwarf_Unsigned knownsect,
+    Dwarf_Unsigned string_sect,
     int *errcode)
 {
     struct generic_shdr* pshk = 0;
@@ -2215,7 +2215,7 @@ string_endswith(const char *n,const char *q)
     a group section, but really one should have both
     or neither! */
 static int
-elf_sht_groupsec(LONGESTUTYPE type, const char *sname)
+elf_sht_groupsec(Dwarf_Unsigned type, const char *sname)
 {
     /*  ARM compilers name SHT group "__ARM_grp<long name here>"
         not .group */
@@ -2226,7 +2226,7 @@ elf_sht_groupsec(LONGESTUTYPE type, const char *sname)
 }
 
 int
-elf_flagmatches(LONGESTUTYPE flagsword,LONGESTUTYPE flag)
+elf_flagmatches(Dwarf_Unsigned flagsword,Dwarf_Unsigned flag)
 {
     if ((flagsword&flag) == flag) {
         return TRUE;
@@ -2240,18 +2240,18 @@ read_gs_section_group(elf_filedata ep,
     struct generic_shdr* psh,
     int *errcode)
 {
-    LONGESTUTYPE i = 0;
+    Dwarf_Unsigned i = 0;
     int res = 0;
 
     if (!psh->gh_sht_group_array) {
-        LONGESTUTYPE seclen = psh->gh_size;
+        Dwarf_Unsigned seclen = psh->gh_size;
         char *data = 0;
         char *dp = 0;
-        LONGESTUTYPE* grouparray = 0;
+        Dwarf_Unsigned* grouparray = 0;
         char dblock[4];
-        LONGESTUTYPE va = 0;
-        LONGESTUTYPE vb = 0;
-        LONGESTUTYPE count = 0;
+        Dwarf_Unsigned va = 0;
+        Dwarf_Unsigned vb = 0;
+        Dwarf_Unsigned count = 0;
         int foundone = 0;
 
         if (seclen < DWARF_32BIT_SIZE) {
@@ -2292,10 +2292,10 @@ read_gs_section_group(elf_filedata ep,
             free(data);
             return res;
         }
-        grouparray = malloc(count * sizeof(LONGESTUTYPE));
+        grouparray = malloc(count * sizeof(Dwarf_Unsigned));
         if (!grouparray) {
             P("Group array count malloc  " LONGESTUFMT
-                " bytes fails.\n",count*sizeof(LONGESTUTYPE));
+                " bytes fails.\n",count*sizeof(Dwarf_Unsigned));
             free(data);
             *errcode = RO_ERR_MALLOC;
             return DW_DLV_ERROR;
@@ -2314,8 +2314,8 @@ read_gs_section_group(elf_filedata ep,
         grouparray[0] = 1;
         dp = dp + DWARF_32BIT_SIZE;
         for( i = 1; i < count; ++i,dp += DWARF_32BIT_SIZE) {
-            LONGESTUTYPE gseca = 0;
-            LONGESTUTYPE gsecb = 0;
+            Dwarf_Unsigned gseca = 0;
+            Dwarf_Unsigned gsecb = 0;
             struct generic_shdr* targpsh = 0;
 
             memcpy(dblock,dp,DWARF_32BIT_SIZE);
@@ -2332,7 +2332,7 @@ read_gs_section_group(elf_filedata ep,
                 /*  Might be confused endianness by
                     the compiler generating the SHT_GROUP.
                     This is pretty horrible. */
-                LONGESTUTYPE valr = 0;
+                Dwarf_Unsigned valr = 0;
 
                 if (gsecb > ep->f_loc_shdr.g_count) {
                     *errcode = RO_ERR_GROUP_ERROR;
@@ -2395,8 +2395,8 @@ elf_setup_all_section_groups(elf_filedata ep,
 {
     struct generic_shdr* psh = 0;
     struct generic_shdr* dwarfpsh = 0;
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE count = 0;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned count = 0;
     int res = 0;
 
     count = ep->f_loc_shdr.g_count;
@@ -2470,8 +2470,8 @@ elf_find_sym_sections(elf_filedata ep,
     int *errcode)
 {
     struct generic_shdr* psh = 0;
-    LONGESTUTYPE i = 0;
-    LONGESTUTYPE count = 0;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned count = 0;
     int res = 0;
 
     count = ep->f_loc_shdr.g_count;
@@ -2619,8 +2619,8 @@ dwarf_load_elf_section_is_dwarf(const char *sname)
 /*  Used in object checkers. */
 void
 dwarf_insert_in_use_entry(elf_filedata ep,
-    const char *description,LONGESTUTYPE offset,
-    LONGESTUTYPE length,LONGESTUTYPE align)
+    const char *description,Dwarf_Unsigned offset,
+    Dwarf_Unsigned length,Dwarf_Unsigned align)
 {
     struct in_use_s *e = 0;
 
