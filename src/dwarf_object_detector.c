@@ -1,4 +1,4 @@
-/* Copyright (c) 2018-2018, David Anderson
+/* Copyright (c) 2018-2019, David Anderson
 All rights reserved.
 
 Redistribution and use in source and binary forms, with
@@ -618,7 +618,6 @@ dwarf_object_detector_path(const char  *path,
     char *cp = 0;
     size_t plen = strlen(path);
     size_t dsprefixlen = sizeof(DSYM_SUFFIX);
-    struct stat statbuf;
     int fd = -1;
     int res = 0;
     int have_outpath = outpath && outpath_len;
@@ -630,10 +629,6 @@ dwarf_object_detector_path(const char  *path,
 #define S_ISDIR(mode) (((mode) & S_IFMT) == S_IFDIR)
 #endif
 
-    res = stat(path,&statbuf);
-    if(res) {
-        return DW_DLV_NO_ENTRY;
-    }
     if (have_outpath) {
         if ((2*plen + dsprefixlen +2) >= outpath_len) {
             *errcode =  RO_ERR_PATH_SIZE;

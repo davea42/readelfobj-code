@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2018, David Anderson
+/* Copyright (c) 2013-2019, David Anderson
 All rights reserved.
 
 Redistribution and use in source and binary forms, with
@@ -67,6 +67,14 @@ extern int printfilenames;
 #define DW_GROUPNUMBER_DWO  2
 #endif
 
+#ifndef SHF_GROUP
+#define SHF_GROUP  (1 << 9)
+#endif /* SHF_GROUP */
+
+#ifndef STN_UNDEF
+#define STN_UNDEF  0
+#endif /* STN_UNDEF */
+
 #ifndef SHT_HASH
 #define SHT_HASH 5
 #endif
@@ -88,6 +96,9 @@ extern int printfilenames;
 #ifndef SHT_DYNSYM
 #define SHT_DYNSYM 11
 #endif
+#ifndef SHT_GROUP
+#define SHT_GROUP  17
+#endif /* SHT_GROUP */
 
 #ifndef PT_NULL
 #define PT_NULL 0
