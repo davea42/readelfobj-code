@@ -54,7 +54,6 @@ extern "C" {
 #define LONGESTSFMT  "%lld"
 #define LONGESTUTYPE unsigned long long
 #define LONGESTSTYPE long long
-#define uint64_t  unsigned long long
 #else
 #define LONGESTXFMT  "0x%lx"
 #define LONGESTXFMT8 "0x%08lx"
@@ -64,7 +63,6 @@ extern "C" {
 #define LONGESTSFMT  "%ld"
 #define LONGESTUTYPE unsigned long
 #define LONGESTSTYPE long
-#define uint64_t  unsigned long
 #endif
 
 #ifndef O_BINARY
