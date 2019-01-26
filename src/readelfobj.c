@@ -70,6 +70,12 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define TRUE 1
 #define FALSE 0
 
+#ifdef HAVE_UNUSED_ATTRIBUTE
+#define  UNUSEDARG __attribute__ ((unused))
+#else
+#define  UNUSEDARG
+#endif
+
 #ifndef IS_ELF
 #define IS_ELF(e) (e.e_ident[0] == 0x7f && \
     e.e_ident[1]== 'E' && \
@@ -452,7 +458,6 @@ do_one_file(const char *s)
         }
     }
     if(print_reloc_sections) {
-        unsigned reloc_count = 0;
         Dwarf_Unsigned i = 0;
         struct generic_shdr *psh = ep->f_shdr;
 
@@ -822,7 +827,7 @@ get_elf_reloc_name(
     Dwarf_Unsigned machine,
     Dwarf_Unsigned type,
     const char **typename_out,
-    int *errcode)
+    UNUSEDARG int *errcode)
 {
     const char *tname = 0;
 
@@ -879,8 +884,6 @@ elf_print_relocation_content(
 
     P(" [i]   offset   info        type symbol %s\n",isrela?"    addend":"");
     for(i = 0; i < count; ++i,grela++) {
-        char *localstr = 0;
-        unsigned long symnum = grela->gr_sym;
         int errcode = 0;
         char *symname = "";
         const char *typename = "";
@@ -1487,7 +1490,6 @@ elf_print_dynamic(elf_filedata ep)
 static
 void elf_print_sg_groups(elf_filedata ep)
 {
-    unsigned reloc_count = 0;
     Dwarf_Unsigned i = 0;
     struct generic_shdr *psh = ep->f_shdr;
 
