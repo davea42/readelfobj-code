@@ -1,4 +1,5 @@
 2010-01-26: David Anderson
+     * dwarf_load_elf_headers.c: Removed unused locals.
      * readelfobj.c: Removed unused locals and now use
        UNUSEDARG in one place to eliminate a compiler warning.
      * dwarf_object_read_common.h,dwarf_object_read_common.c:

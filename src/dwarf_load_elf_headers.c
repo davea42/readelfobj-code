@@ -840,7 +840,6 @@ generic_rel_from_rela64(elf_filedata ep,
     Dwarf_Unsigned ecount = 0;
     Dwarf_Unsigned size = gsh->gh_size;
     Dwarf_Unsigned size2 = 0;
-    Dwarf_Unsigned sizeg = 0;
     Dwarf_Unsigned i = 0;
 
     ecount = size/sizeof(dw_elf64_rela);
@@ -2225,7 +2224,7 @@ elf_sht_groupsec(Dwarf_Unsigned type, const char *sname)
     return FALSE;
 }
 
-int
+static int
 elf_flagmatches(Dwarf_Unsigned flagsword,Dwarf_Unsigned flag)
 {
     if ((flagsword&flag) == flag) {
@@ -2250,7 +2249,6 @@ read_gs_section_group(elf_filedata ep,
         Dwarf_Unsigned* grouparray = 0;
         char dblock[4];
         Dwarf_Unsigned va = 0;
-        Dwarf_Unsigned vb = 0;
         Dwarf_Unsigned count = 0;
         int foundone = 0;
 
@@ -2332,7 +2330,6 @@ read_gs_section_group(elf_filedata ep,
                 /*  Might be confused endianness by
                     the compiler generating the SHT_GROUP.
                     This is pretty horrible. */
-                Dwarf_Unsigned valr = 0;
 
                 if (gsecb > ep->f_loc_shdr.g_count) {
                     *errcode = RO_ERR_GROUP_ERROR;
@@ -2394,7 +2391,6 @@ elf_setup_all_section_groups(elf_filedata ep,
     int *errcode)
 {
     struct generic_shdr* psh = 0;
-    struct generic_shdr* dwarfpsh = 0;
     Dwarf_Unsigned i = 0;
     Dwarf_Unsigned count = 0;
     int res = 0;
