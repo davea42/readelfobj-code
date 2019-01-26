@@ -41,19 +41,20 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 
 int
-dwarf_object_read_random(int fd,char *buf,long loc,
+dwarf_object_read_random(int fd,char *buf,off_t loc,
     size_t size,int *errc)
 {
-    int scode = 0;
-    size_t rcode = 0;
+    off_t scode = 0;
+    ssize_t rcode = 0;
 
     scode = lseek(fd,loc,SEEK_SET);
-    if (scode < 0) {
+    if (scode == (off_t)-1) {
         *errc = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
     rcode = read(fd,buf,size);
-    if (rcode != size) {
+    if (rcode == -1 ||
+        (size_t)rcode != size) {
         *errc = RO_ERR_READ;
         return DW_DLV_ERROR;
     }

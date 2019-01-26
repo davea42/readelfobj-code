@@ -37,7 +37,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-int dwarf_object_read_random(int fd,char *buf,long loc,
+int dwarf_object_read_random(int fd,char *buf,off_t loc,
     size_t size,int *errc);
 
 void * dwarf_ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len);

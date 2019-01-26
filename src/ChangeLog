@@ -1,3 +1,8 @@
+2010-01-26: David Anderson
+     * dwarf_object_read_common.h,dwarf_object_read_common.c:
+       Parts of dwarf_object_read_random() were not
+       correctly typed nor were read errors correctly checked for.
+       A 2.2GB object file is now properly handled.
 2010-01-14: David Anderson
      * dwarf_reading.h: Delete definition of uint64_t as
        that definition is never used.
