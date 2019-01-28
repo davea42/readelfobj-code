@@ -30,8 +30,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <stdio.h>
-#include <sys/types.h> /* fstat */
-#include <sys/stat.h> /* fstat */
 #include <string.h> /* memcpy, strcpy */
 #include "dwarf_reading.h"
 #include "dwarf_object_detector.h"

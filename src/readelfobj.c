@@ -53,6 +53,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
 #include <unistd.h>
+#include <errno.h>
 #include "dwarf_reading.h"
 #include "dwarf_object_detector.h"
 #include "dwarf_object_read_common.h"
@@ -140,6 +141,8 @@ main(int argc,char **argv)
         printf("%s\n",Usage);
         exit(1);
     } else {
+        int myerr = 0;
+
         argv++;
         for(i =1; i<argc; i++,argv++) {
             if((strcmp(argv[0],"--help") == 0) ||
@@ -193,9 +196,16 @@ main(int argc,char **argv)
             if (printfilenames) {
                 P("File: %s\n",sanitized(filename,buffer1,BUFFERSIZE));
             }
+            errno = 0;
             fin = fopen(filename,"r");
             if(fin == NULL) {
-                P("No such file as %s\n",argv[0]);
+                myerr = errno;
+                if(myerr) {
+                    P("Cannot open %s. Errno %d %s\n",argv[0],
+                        myerr,strerror(myerr));
+                } else {
+                    P("Cannot open %s\n",argv[0]);
+                }
                 continue;
             }
             ++filecount;
