@@ -1,19 +1,36 @@
                            README 
-Last update: December 18, 2018
+Last update: January 29, 2019
 
-readelfobj is a program that reads elf object files
-and prints the header information.
-It also checks for certain errors including
-wasted space in the object files.
+The distribution consists entirely of C
+source files (along with scripts
+to configure and build executables).
 
-It does not depend on any object-file
-specific Elf, Mach-o or Windows libraries or headers.
+readelfobj is a program that reads elf object files and
+prints the header information.  It also checks for certain
+errors including wasted space in the object files.  It also
+dumps Elf relocation sections, Elf symtab sections, and the
+dynamic section.
 
-It also dumps Elf relocation sections and Elf symtab
-sections and dynamic.
+readobjpe is a program that reads PE object executables or
+dlls and prints header information.
 
-To dump DWARF section contents one should use 
-dwarfdump or GNU readelf.
+readobjmacho is a program that reads MacOS dSYM files and
+prints header information.
+
+object_detector is a program that reads a minimal set of
+object header files (for any of the supported object types)
+and prints basic information (file type, offset size, 
+and endianness) about each file.
+
+The code does not depend on any Elf, Mach-o, or Windows
+libraries or headers, it just depends on a basic
+POSIX/unix/Linux set of headers plus libc (or equivalent).
+
+The test directory contains numerous examples of
+using the programs.
+
+To dump DWARF section contents one should use dwarfdump or
+GNU readelf.
 
 In All Environments:
   Since git repositories do not record timestamps
@@ -21,13 +38,14 @@ In All Environments:
   device (USB etc)) a 'configure' or 'make' may fail
   to work entirely correctly.
   From the readelfobj directory do
-    sh scripts/fixdate.sh
+    sh scripts/FIX-CONFIGURE-TIMES
   to restore a sensible set of file timestamps
   for 'configure' and 'make' to work.
-  The scripts/fixdate.sh script is always safe to run.
+  The scripts/FIX-CONFIGURE-TIMES script is always safe to run.
 
-To update configure, update configure.ac and/or
-one or more Makefile.am and do, in the top level
-directory:
+To update configure, update configure.ac and/or one or more
+Makefile.am and do, in the top level directory:
   autoreconf -vif
-   
+You will need several GNU autotools installed for this
+autoreconf to work.
+
