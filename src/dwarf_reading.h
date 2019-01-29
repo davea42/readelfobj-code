@@ -131,13 +131,9 @@ extern "C" {
 #define P printf
 #define F fflush(stdout)
 
-
 #define RRMOA(f,buf,loc,siz,errc) dwarf_object_read_random(f, \
     (char *)buf,loc,siz,errc);
 
-#define RR(buf,loc,siz)  ((fseek(fin,(long)loc,0)<0) ? RO_ERR_SEEK : \
-    ((fread(buf,(long)siz,1,fin)!=1)?RO_ERR_READ:RO_OK))
-#define RNMO(f,buf,siz)  ((fread(buf,siz,1,f) != 1) ? RO_ERR_READ  : RO_OK)
 #ifdef WORDS_BIGENDIAN
 #define SIGN_EXTEND(dest, length)           \
     do {                                    \

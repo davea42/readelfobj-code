@@ -1,3 +1,5 @@
+2010-01-29: David Anderson
+     * dwarf_reading.h: Delete unused macros RR and RRMO.
 2010-01-28: David Anderson
      * readelfobj.c: If fopen() fails and errno is set
        report the errno in the failure message.
