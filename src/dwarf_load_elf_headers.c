@@ -2018,6 +2018,7 @@ elf_load_dynamic32(elf_filedata ep,
     }
     if(!bufcount) {
         /* impossible? */
+        free(gbuffer);
         *errcode = RO_ERR_UNEXPECTEDZERO;
         return RO_ERROR;
     }
@@ -2066,6 +2067,7 @@ elf_load_dynamic64(elf_filedata ep,
     }
     if(!bufcount) {
         /* impossible? */
+        free(gbuffer);
         *errcode = RO_ERR_UNEXPECTEDZERO;
         return RO_ERROR;
     }

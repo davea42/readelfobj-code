@@ -1,3 +1,6 @@
+2010-01-30: David Anderson
+     * dwarf_load_elf_headers.c: In case of error now avoids
+       a memory leak.
 2010-01-29: David Anderson
      * dwarf_object_read_common.c: Remove a trailing space character.
      * dwarf_reading.h: Delete unused macros RR and RRMO.
