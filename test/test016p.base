@@ -5,7 +5,7 @@ File: libexamine-0.dll  Object type letter: P version: 80
  offsetsize     : 32
  pointersize    : 32
  ftype          : 0
- byteorder      : 2
+ endianness     : 2
  nthdroffset    : 0x00000084
  Opt-hdr-offset : 0x00000098
  Opt-hdr-size   : 0x000000e0

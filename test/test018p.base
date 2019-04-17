@@ -5,7 +5,7 @@ File: kask-dwarfdump_64.exe  Object type letter: P version: 80
  offsetsize     : 64
  pointersize    : 64
  ftype          : 0
- byteorder      : 2
+ endianness     : 2
  nthdroffset    : 0x00000084
  Opt-hdr-offset : 0x00000098
  Opt-hdr-size   : 0x000000f0
