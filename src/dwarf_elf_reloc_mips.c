@@ -13,7 +13,7 @@ dwarf_get_elf_relocname_mips(unsigned long val)
     case R_MIPS_26 : return "R_MIPS_26";
     case R_MIPS_HI16 : return "R_MIPS_HI16";
     case R_MIPS_LO16 : return "R_MIPS_LO16";
-    case R_MIPS_GPREL : return "R_MIPS_GPREL";
+    case R_MIPS_GPREL16 : return "R_MIPS_GPREL16";
     case R_MIPS_LITERAL : return "R_MIPS_LITERAL";
     case R_MIPS_GOT : return "R_MIPS_GOT";
     case R_MIPS_PC16 : return "R_MIPS_PC16";

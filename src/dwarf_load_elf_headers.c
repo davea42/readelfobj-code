@@ -56,6 +56,22 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define  UNUSEDARG
 #endif
 
+#if 0
+static void
+dump_bytes(char * msg,Dwarf_Small * start, long len)
+{
+    Dwarf_Small *end = start + len;
+    Dwarf_Small *cur = start;
+
+    printf("%s len %ld ",msg,len);
+    for (; cur < end; cur++) {
+        printf("%02x ", *cur);
+    }
+    printf("\n");
+}
+#endif
+
+
 static char buffer6[BUFFERSIZE];
 static char buffer3[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
@@ -216,6 +232,7 @@ generic_ehdr_from_32(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
     ep->f_ehdr = ehdr;
+    ep->f_machine = ehdr->ge_machine;
     ep->f_loc_ehdr.g_name = "Elf File Header";
     ep->f_loc_ehdr.g_offset = 0;
     ep->f_loc_ehdr.g_count = 1;
@@ -248,6 +265,7 @@ generic_ehdr_from_64(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
     ep->f_ehdr = ehdr;
+    ep->f_machine = ehdr->ge_machine;
     ep->f_loc_ehdr.g_name = "Elf File Header";
     ep->f_loc_ehdr.g_offset = 0;
     ep->f_loc_ehdr.g_count = 1;
@@ -825,11 +843,21 @@ generic_rel_from_rela32(elf_filedata ep,
         ASNAR(ep->f_copy_word,grel->gr_addend,relp->r_addend);
         SIGN_EXTEND(grel->gr_addend,sizeof(relp->r_addend));
         grel->gr_isrela = TRUE;
-        grel->gr_sym  = grel->gr_info>>8; /* ELF32_R_SYM */
-        grel->gr_type = grel->gr_info  & 0xff; /* ELF32_R_TYPE */
+        grel->gr_sym  = grel->gr_info >> 8; /* ELF32_R_SYM */
+        grel->gr_type = grel->gr_info & 0xff; /* ELF32_R_TYPE */
     }
     return DW_DLV_OK;
 }
+#if 0
+/*  EM_MIPS where the file is ELF 64.
+ ELF64_MIPS_R_SSYM(i) (((i) >> 24) & 0xff)
+ ELF64_MIPS_R_TYPE3(i) (((i) >> 16) & 0xff)
+ ELF64_MIPS_R_TYPE2(i) (((i) >> 8) & 0xff)
+ ELF64_MIPS_R_TYPE(i) ((i) & 0xff)
+ EM_SPARCV9 is also special 64bit reloc type
+*/
+#endif
+
 
 static int
 generic_rel_from_rela64(elf_filedata ep,
@@ -841,6 +869,7 @@ generic_rel_from_rela64(elf_filedata ep,
     Dwarf_Unsigned size = gsh->gh_size;
     Dwarf_Unsigned size2 = 0;
     Dwarf_Unsigned i = 0;
+    int objlittleendian = (ep->f_endian == DW_ENDIAN_LITTLE);
 
     ecount = size/sizeof(dw_elf64_rela);
     size2 = ecount * sizeof(dw_elf64_rela);
@@ -857,9 +886,27 @@ generic_rel_from_rela64(elf_filedata ep,
         ASNAR(ep->f_copy_word,grel->gr_info,relp->r_info);
         ASNAR(ep->f_copy_word,grel->gr_addend,relp->r_addend);
         SIGN_EXTEND(grel->gr_addend,sizeof(relp->r_addend));
-        grel->gr_sym  = grel->gr_info >>32; /* ELF64_R_SYM */
-        grel->gr_isrela = TRUE;
-        grel->gr_type = grel->gr_info  & 0xffffffff; /* ELF64_R_TYPE */
+        if (ep->f_machine == EM_MIPS && objlittleendian ) {
+            char realsym[4];
+
+            memcpy(realsym,&relp->r_info,sizeof(realsym));
+            ASNAR(ep->f_copy_word,grel->gr_sym,realsym);
+            grel->gr_isrela = TRUE;
+            grel->gr_type  = relp->r_info[7];
+            grel->gr_type2 = relp->r_info[6];
+            grel->gr_type3 = relp->r_info[5];
+        } else if (ep->f_machine == EM_SPARCV9) {
+            /*  Always Big Endian?  */
+            char realsym[4];
+
+            memcpy(realsym,&relp->r_info,sizeof(realsym));
+            ASNAR(ep->f_copy_word,grel->gr_sym,realsym);
+            grel->gr_type  = relp->r_info[7];
+        } else {
+            grel->gr_sym  = grel->gr_info >>32; /* ELF64_R_SYM */
+            grel->gr_isrela = TRUE;
+            grel->gr_type = grel->gr_info  & 0xffffffff; /* ELF64_R_TYPE */
+        }
     }
     return DW_DLV_OK;
 }
@@ -890,9 +937,9 @@ generic_rel_from_rel32(elf_filedata ep,
         ASNAR(ep->f_copy_word,grel->gr_offset,relp->r_offset);
         ASNAR(ep->f_copy_word,grel->gr_info,relp->r_info);
         grel->gr_addend  = 0; /* Unused for plain .rel */
-        grel->gr_sym  = grel->gr_info >>8; /* ELF32_R_SYM */
+        grel->gr_sym  = grel->gr_info >> 8; /* ELF32_R_SYM */
         grel->gr_isrela = FALSE;
-        grel->gr_type = grel->gr_info  & 0xff; /* ELF32_R_TYPE */
+        grel->gr_type = grel->gr_info & 0xff; /* ELF32_R_TYPE */
     }
     return DW_DLV_OK;
 }
@@ -907,6 +954,7 @@ generic_rel_from_rel64(elf_filedata ep,
     Dwarf_Unsigned size = gsh->gh_size;
     Dwarf_Unsigned size2 = 0;
     Dwarf_Unsigned i = 0;
+    int objlittleendian = (ep->f_endian == DW_ENDIAN_LITTLE);
 
     ecount = size/sizeof(dw_elf64_rel);
     size2 = ecount * sizeof(dw_elf64_rel);
@@ -923,8 +971,19 @@ generic_rel_from_rel64(elf_filedata ep,
         ASNAR(ep->f_copy_word,grel->gr_offset,relp->r_offset);
         ASNAR(ep->f_copy_word,grel->gr_info,relp->r_info);
         grel->gr_addend  = 0; /* Unused for plain .rel */
-        grel->gr_sym  = grel->gr_info >>8; /* ELF64_R_SYM */
-        grel->gr_type = grel->gr_info  & 0xff; /* ELF64_R_TYPE */
+
+        if (ep->f_machine == EM_MIPS && objlittleendian ) {
+            char realsym[4];
+
+            memcpy(realsym,&relp->r_info,sizeof(realsym));
+            ASNAR(ep->f_copy_word,grel->gr_sym,realsym);
+            grel->gr_type  = relp->r_info[7];
+            grel->gr_type2 = relp->r_info[6];
+            grel->gr_type3 = relp->r_info[5];
+        } else {
+            grel->gr_sym  = grel->gr_info >>32; /* ELF64_R_SYM */
+            grel->gr_type = grel->gr_info & 0xffffffff; /* ELF64_R_TYPE */
+        }
         grel->gr_isrela = FALSE;
     }
     return RO_OK;
@@ -1016,7 +1075,7 @@ dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
 int
 dwarf_get_elf_symstr_string(elf_filedata ep,
     int is_symtab,Dwarf_Unsigned index,
-    char **str_out,
+    const char **str_out,
     int*errcode)
 {
     if (is_symtab) {

@@ -19,6 +19,8 @@ dwarf_elf_reloc_mips.c	\
 dwarf_elf_reloc_mips.h	 \
 dwarf_elf_reloc_ppc.c    \
 dwarf_elf_reloc_ppc.h    \
+dwarf_elf_reloc_sparc.c	\
+dwarf_elf_reloc_sparc.h	 \
 dwarf_elf_reloc_arm.c    \
 dwarf_elf_reloc_arm.h    \
 dwarf_elf_reloc_aarch64.c \

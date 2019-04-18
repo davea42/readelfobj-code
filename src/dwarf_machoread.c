@@ -128,7 +128,7 @@ dwarf_construct_macho_access(int fd,
     mfp->mo_offsetsize = offsetsize;
     mfp->mo_path = strdup(path);
     mfp->mo_filesize = filesize;
-    mfp->mo_byteorder = endian;
+    mfp->mo_endian = endian;
     mfp->mo_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;

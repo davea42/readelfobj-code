@@ -107,7 +107,7 @@ pe_headers_display(dwarf_pe_object_access_internals_t *pe)
     printf(" offsetsize     : %d\n",pe->pe_offsetsize);
     printf(" pointersize    : %d\n",pe->pe_pointersize);
     printf(" ftype          : %d\n",pe->pe_ftype);
-    printf(" byteorder      : %d\n",(int)pe->pe_byteorder);
+    printf(" endianness     : %d\n",(int)pe->pe_endian);
     printf(" nthdroffset    : " LONGESTXFMT8 "\n",
         pe->pe_nt_header_offset);
     printf(" Opt-hdr-offset : " LONGESTXFMT8 "\n",
@@ -181,18 +181,18 @@ do_one_file(const char *name)
 #ifdef WORDS_BIGENDIAN
     if (endian == DW_ENDIAN_LITTLE ) {
         pep->pe_copy_word = ro_memcpy_swap_bytes;
-        pep->pe_byteorder = DW_ENDIAN_LITTLE;
+        pep->pe_endian = DW_ENDIAN_LITTLE;
     } else {
         pep->pe_copy_word = memcpy;
-        pep->pe_byteorder = DW_ENDIAN_BIG;
+        pep->pe_endian = DW_ENDIAN_BIG;
     }
 #else  /* LITTLE ENDIAN */
     if (endian == DW_ENDIAN_LITTLE) {
         pep->pe_copy_word = memcpy;
-        pep->pe_byteorder = DW_ENDIAN_LITTLE;
+        pep->pe_endian = DW_ENDIAN_LITTLE;
     } else {
         pep->pe_copy_word = dwarf_ro_memcpy_swap_bytes;
-        pep->pe_byteorder = DW_ENDIAN_BIG;
+        pep->pe_endian = DW_ENDIAN_BIG;
     }
 #endif /* LITTLE- BIG-ENDIAN */
     pep->pe_filesize = filesize;

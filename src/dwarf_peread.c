@@ -143,7 +143,7 @@ pe_get_byte_order (void *obj)
 {
     dwarf_pe_object_access_internals_t *pep =
         (dwarf_pe_object_access_internals_t*)(obj);
-    return pep->pe_byteorder;
+    return pep->pe_endian;
 }
 
 
@@ -481,7 +481,7 @@ dwarf_load_pe_sections(
         *errcode = DW_DLE_FILE_WRONG_TYPE;
         return DW_DLV_ERROR;
     }
-    if (locendian != pep->pe_byteorder) {
+    if (locendian != pep->pe_endian) {
         /*  Really this is a coding botch somewhere here,
             not an object corruption. */
         *errcode = DW_DLE_FILE_WRONG_TYPE;
@@ -726,7 +726,7 @@ dwarf_construct_pe_access(int fd,
     mfp->pe_pointersize = offsetsize;
     mfp->pe_path = strdup(path);
     mfp->pe_filesize = filesize;
-    mfp->pe_byteorder = endian;
+    mfp->pe_endian = endian;
     mfp->pe_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;
@@ -776,18 +776,18 @@ _dwarf_pe_object_access_internals_init(
 #ifdef WORDS_BIGENDIAN
     if (endian == DW_ENDIAN_LITTLE ) {
         intfc->pe_copy_word = _dwarf_memcpy_swap_bytes;
-        intfc->pe_byteorder = DW_ENDIAN_LITTLE;
+        intfc->pe_endian = DW_ENDIAN_LITTLE;
     } else {
         intfc->pe_copy_word = memcpy;
-        intfc->pe_byteorder = DW_ENDIAN_BIG;
+        intfc->pe_endian = DW_ENDIAN_BIG;
     }
 #else  /* LITTLE ENDIAN */
     if (endian == DW_ENDIAN_LITTLE ) {
         intfc->pe_copy_word = memcpy;
-        intfc->pe_byteorder = DW_ENDIAN_LITTLE;
+        intfc->pe_endian = DW_ENDIAN_LITTLE;
     } else {
         intfc->pe_copy_word = _dwarf_memcpy_swap_bytes;
-        intfc->pe_byteorder = DW_ENDIAN_BIG;
+        intfc->pe_endian = DW_ENDIAN_BIG;
     }
 #endif /* LITTLE- BIG-ENDIAN */
     res = dwarf_load_pe_sections(intfc,errcode);

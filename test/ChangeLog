@@ -1,2 +1,5 @@
+2019-04-18   David Anderson
+    * test020.*: A test with MIPS64 object (special relocation content). 
+    * test021.*: A test with SPARCV9 object (special relocation content).
 2019-01-01   David Anderson
     * A new year. 

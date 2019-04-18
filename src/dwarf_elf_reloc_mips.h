@@ -22,9 +22,9 @@ const char * dwarf_get_elf_relocname_mips(unsigned long);
 #ifndef R_MIPS_LO16
 #define R_MIPS_LO16          6
 #endif /* R_MIPS_LO16 */
-#ifndef R_MIPS_GPREL
-#define R_MIPS_GPREL         7
-#endif /* R_MIPS_GPREL */
+#ifndef R_MIPS_GPREL16
+#define R_MIPS_GPREL16        7
+#endif /* R_MIPS_GPREL16 */
 #ifndef R_MIPS_LITERAL
 #define R_MIPS_LITERAL       8
 #endif /* R_MIPS_LITERAL */

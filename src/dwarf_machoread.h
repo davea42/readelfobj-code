@@ -110,7 +110,7 @@ struct macho_filedata_s {
     Dwarf_Small      mo_offsetsize; /* 32 or 64 section data */
     Dwarf_Small      mo_pointersize;
     int              mo_ftype;
-    unsigned         mo_byteorder;
+    unsigned         mo_endian;
     /*Dwarf_Small      mo_machine; */
     void *(*mo_copy_word) (void *, const void *, size_t);
 

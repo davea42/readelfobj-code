@@ -40,7 +40,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     It is expected code including this will have included
     an official <elf.h> (for various definitions needed)
-    before including this.
+    before including this. But that is not strictly necessary
+    given other headers.
 
     The structs were all officially defined so files
     could be mapped in. Fields are arranged so

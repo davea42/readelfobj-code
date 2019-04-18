@@ -1,3 +1,8 @@
+2010-04-18: David Anderson
+    * configure.ac: Rev now 20190418
+    * scripts/build_all_relocs.sh: Now does sparc too
+    * scripts/raw_elf_definesdwarf_reloc_sparc.h: New. Added these
+      defines for interoperability.
 2010-01-29: David Anderson
     * README: Corrected some out of date remarks and 
       expanded the content.

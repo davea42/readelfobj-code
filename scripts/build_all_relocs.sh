@@ -10,6 +10,7 @@
 
 ./build_access.py raw_elf_definesdwarf_reloc_x86_64.h x86_64 dwarf_elf_reloc
 ./build_access.py raw_elf_definesdwarf_reloc_aarch64.h aarch64 dwarf_elf_reloc
+./build_access.py raw_elf_definesdwarf_reloc_sparc.h sparc dwarf_elf_reloc
 
 cc -c dwarf_elf_reloc_386.c 
 cc -c dwarf_elf_reloc_arm.c

@@ -60,12 +60,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "readelfobj.h"
 #include "sanitized.h"
 #include "readelfobj_version.h"
+#include "dwarf_elf_reloc_aarch64.h"
+#include "dwarf_elf_reloc_arm.h"
 #include "dwarf_elf_reloc_386.h"
 #include "dwarf_elf_reloc_mips.h"
 #include "dwarf_elf_reloc_ppc.h"
-#include "dwarf_elf_reloc_arm.h"
-#include "dwarf_elf_reloc_aarch64.h"
 #include "dwarf_elf_reloc_ppc64.h"
+#include "dwarf_elf_reloc_sparc.h"
 #include "dwarf_elf_reloc_x86_64.h"
 
 #define TRUE 1
@@ -740,7 +741,7 @@ elf_print_symbols(elf_filedata ep,
     for(i = 0; i < ecount; ++i,++gsym) {
         int errcode = 0;
         int res;
-        char *localstr = 0;
+        const char *localstr = 0;
         struct generic_shdr *shp = 0;
         const char *targetsecname = "";
 
@@ -815,7 +816,7 @@ elf_print_symbols(elf_filedata ep,
 static int
 get_elf_symtab_symbol_name( elf_filedata ep,
     unsigned long symnum,
-    char **localstr_out,
+    const char **localstr_out,
     int *errcode)
 {
     int is_symtab = TRUE;
@@ -826,6 +827,15 @@ get_elf_symtab_symbol_name( elf_filedata ep,
         return DW_DLV_NO_ENTRY;
     }
     gsym = ep->f_symtab + symnum;
+    if (gsym->gs_type == STT_SECTION) { 
+        Dwarf_Unsigned secnum = gsym->gs_shndx;
+        struct generic_shdr *shdr = 0;
+        if (secnum < ep->f_ehdr->ge_shnum) {
+            shdr = ep->f_shdr + secnum;
+            *localstr_out = shdr->gh_namestring;
+            return DW_DLV_OK;
+        }
+    }
     res = dwarf_get_elf_symstr_string(ep,
         is_symtab,gsym->gs_name,
         localstr_out,errcode);
@@ -865,6 +875,11 @@ get_elf_reloc_name(
     case EM_MIPS_X:
         tname= dwarf_get_elf_relocname_mips(type);
         break;
+    case EM_SPARCV9:
+    case EM_SPARC:
+    case EM_SPARC32PLUS:
+        tname= dwarf_get_elf_relocname_sparc(type);
+        break;
     default:
         tname = "(name uncertain)";
         break;
@@ -881,6 +896,8 @@ elf_print_relocation_content(
     struct generic_rela *grela, Dwarf_Unsigned count)
 {
     Dwarf_Unsigned i = 0;
+    int is64bit = (ep->f_offsetsize == 64); 
+    int ismips = (ep->f_machine == EM_MIPS);
 
     P("\n");
     P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT
@@ -895,7 +912,7 @@ elf_print_relocation_content(
     P(" [i]   offset   info        type symbol %s\n",isrela?"    addend":"");
     for(i = 0; i < count; ++i,grela++) {
         int errcode = 0;
-        char *symname = "";
+        const char *symname = "";
         const char *typename = "";
 
         if (grela->gr_sym != STN_UNDEF) {
@@ -925,17 +942,36 @@ elf_print_relocation_content(
             LONGESTUFMT,
             typename,
             grela->gr_type);
-
         P(" "
             LONGESTUFMT " %s",
             grela->gr_sym,
-            symname?sanitized(symname,buffer1,BUFFERSIZE):"");
+            symname?sanitized(symname,buffer1,BUFFERSIZE):"<noname>");
         if (isrela) {
-            P(" "
-                LONGESTSFMT,
-                grela->gr_addend);
+            if (grela->gr_addend < 0) {
+                P(" "
+                    LONGESTSFMT,
+                    grela->gr_addend);
+            } else {
+                P(" +"
+                    LONGESTSFMT,
+                    grela->gr_addend);
+            }
         }
         P("\n");
+        if (ismips && is64bit) {
+            const char *typenx =0;
+            if (grela->gr_type2) {
+                get_elf_reloc_name(ep->f_ehdr->ge_machine,
+                    grela->gr_type2,&typenx,&errcode);
+                P("         Type2: %u %s\n",grela->gr_type2,typenx);
+            }
+            typenx = 0;
+            if (grela->gr_type3) {
+                get_elf_reloc_name(ep->f_ehdr->ge_machine,
+                    grela->gr_type3,&typenx,&errcode);
+                P("         Type3: %u %s\n",grela->gr_type3,typenx);
+            }
+        }
     }
     return;
 }
@@ -1393,7 +1429,7 @@ elf_print_dynamic(elf_filedata ep)
     printf(" Tag          Name             Value\n");
     for(i = 0; i < bufcount; ++i,++gbuffer) {
         const char *name = 0;
-        char *targname = "";
+        const char *targname = "";
 
         name = dwarf_get_elf_dynamic_table_name(gbuffer->gd_tag,
             buffer6,BUFFERSIZE);

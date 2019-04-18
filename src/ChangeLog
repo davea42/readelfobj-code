@@ -1,3 +1,26 @@
+2010-04-17: David Anderson
+     * Makefile.am: Added dwarf_elf_reloc_sparc.{h,c}
+     * dw_elfstructs.h: Updated comment.
+     * dwarf_elf_reloc_mips.c,dwarf_elf_reloc_mips.h: R_MIPS_GPREL
+       now R_MIPS_GPREL16.
+     * dwarf_load_elf_headers.c: Get the e_machine field copied
+       into f_machine field.  For little-endian MIPS64
+       do special processing as the relocation structure is special.
+       Relocation records for EM_SPARCV9 are special and are handled now.
+     * dwarf_machoread.c,dwarf_machoread.h,
+       readobjmacho.c: Rename mo_byteorder 
+       to mo_endian for naming consistency.
+     * dwarf_peread.c,dwarf_epread.h,readobjpe.c: Rename pe_byteorder 
+       to pe_endian for naming consistency.
+     * readelfobj.c: Alter types to const char* to avoid warnings.
+       Include dwarf_elf_reloc_sparc.h.
+       For Sparc get the relocation type names.
+       If STT_SECTION symbol type use the section name, there is
+       no symbol name. Print the extra little-endian MIPS64
+       type2 and type3 fields.
+     * readelfobj.h:  Add the defines for the standard STT_*
+       Elf symbol types. Add f_machine field. Ensure certain
+       char * arguments are now const char * to match readelfobj.c
 2010-01-30: David Anderson
      * dwarf_load_elf_headers.c: In case of error now avoids
        a memory leak.

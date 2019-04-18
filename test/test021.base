@@ -1,1 +1,150 @@
-junk
+Elf object file sparc64-64-tls.o
+ Elf Header ident bytes:  7f454c46 02020100 00000000 00000000
+  File class    = 0x2 (ELFCLASS64
+  Data encoding = 0x2 (ELFDATA2MSB)
+  file version  = 0x1 (EV_CURRENT)
+  OS ABI        = 0x0 (ELFOSABI_NONE)
+  ABI version   = 0x0
+  e_type     : 0x1 (ET_REL Relocatable file)
+  e_machine  : 0x2b (EM_SPARCV9)
+  e_version  : 0x1
+  e_entry    : 0x00000000
+  e_phoff    : 0x00000000
+  e_shoff    : 0x000001a0
+  e_flags    : 0x2
+  e_ehsize   : 0x40
+  e_phentsize: 0x0
+  e_phnum    : 0x0
+  e_shentsize: 0x40
+  e_shnum    : 0xf
+  Section strings are in section 12
+
+Program header count: 0
+{
+}
+String section data at 0x11b (283) length 0x81 (129)
+
+Section count: 15
+ [i] offset      size        name         (flags)(type)(link,info,align)
+{
+[ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
+[ 1] 0x00000040 0x00000000 .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
+[ 2] 0x00000040 0x00000000 .data          (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+[ 3] 0x00000040 0x00000000 .bss           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
+[ 4] 0x00000040 0x00000004 .tbss          (SHF_WRITE SHF_ALLOC SHF_TLS)(SHT_NOBITS)(0,0x0,0x4)
+[ 5] 0x00000040 0x0000004a .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 6] 0x000006a8 0x000000c0 .rela.debug_info (0)(SHT_RELA)(13,0x5,0x8)
+[ 7] 0x0000008a 0x00000030 .debug_abbrev  (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 8] 0x000000ba 0x00000026 .debug_line    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 9] 0x000000e0 0x0000001e .debug_str     (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+[10] 0x000000fe 0x0000001d .comment       (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+[11] 0x0000011b 0x00000000 .note.GNU-stack (0)(SHT_PROGBITS)(0,0x0,0x1)
+[12] 0x0000011b 0x00000081 .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
+[13] 0x00000560 0x00000138 .symtab        (0)(SHT_SYMTAB)(14,0xc,0x8)
+[14] 0x00000698 0x00000009 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
+Summary: 190 bytes for 4 debug sections
+}
+Section Groups: No section groups or .dwo present. No .dynamic section in  sparc64-64-tls.o
+
+Symbols from .symtab: 13 at offset 0x560
+{
+[Index] Value    Size    Type              Bind       Other          Shndx   Name
+[  0]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x0 (0)
+  type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
+  st_name  (0) 
+[  1]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x4 (4)
+  type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
+  st_name  (1) tls.c
+[  2]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
+  st_name  (0) 
+[  3]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .data
+  st_name  (0) 
+[  4]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .bss
+  st_name  (0) 
+[  5]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .tbss
+  st_name  (0) 
+[  6]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .debug_info
+  st_name  (0) 
+[  7]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 7 .debug_abbrev
+  st_name  (0) 
+[  8]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .debug_line
+  st_name  (0) 
+[  9]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 9 .debug_str
+  st_name  (0) 
+[ 10]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 .note.GNU-stack
+  st_name  (0) 
+[ 11]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 .comment
+  st_name  (0) 
+[ 12]  st_value 0x0 (0)
+  st_size  0x4 (4), st_info 0x16 (22)
+  type 0x6 (6) (STT_TLS), bind 0x1 (1) (STB_GLOBAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .tbss
+  st_name  (7) a
+}
+Relocation Sections
+{
+
+Section 0: .rela.debug_info reloccount: 8 links-sec: 5 symtabsec: 13
+ [i]   offset   info        type symbol     addend
+[0]  0x00000006 0x700000017 R_SPARC_UA32   23 7 .debug_abbrev +0
+[1]  0x0000000c 0x900000017 R_SPARC_UA32   23 9 .debug_str +12
+[2]  0x00000011 0x900000017 R_SPARC_UA32   23 9 .debug_str +24
+[3]  0x00000015 0x900000017 R_SPARC_UA32   23 9 .debug_str +0
+[4]  0x00000019 0x200000036 R_SPARC_UA64   54 2 .text +0
+[5]  0x00000021 0x200000036 R_SPARC_UA64   54 2 .text +0
+[6]  0x00000029 0x800000017 R_SPARC_UA32   23 8 .debug_line +0
+[7]  0x00000039 0xc0000004d R_SPARC_TLS_DTPOFF64 77 12 a +0
+}
+Listing Used Areas
+[]        offset       length  finaloffset    name
+[  0] 0x00000000 0x00000040 0x00000040 Elf64_Ehdr
+[  1] 0x00000040 0x00000000 0x00000040 Shdr target
+[  2] 0x00000040 0x00000000 0x00000040 Shdr target
+[  3] 0x00000040 0x0000004a 0x0000008a Shdr target
+[  4] 0x0000008a 0x00000030 0x000000ba Shdr target
+[  5] 0x000000ba 0x00000026 0x000000e0 Shdr target
+[  6] 0x000000e0 0x0000001e 0x000000fe Shdr target
+[  7] 0x000000fe 0x0000001d 0x0000011b Shdr target
+[  8] 0x0000011b 0x00000000 0x0000011b Shdr target
+[  9] 0x0000011b 0x00000081 0x0000019c Shdr target
+[ 10] 0x000001a0 0x000003c0 0x00000560 Elf64_Shdr block
+Warning: A gap of 4 forced by alignment 8 from 0x0000019c to 0x000001a0
+[ 11] 0x00000560 0x00000138 0x00000698 Shdr target
+[ 12] 0x00000698 0x00000009 0x000006a1 Shdr target
+[ 13] 0x000006a8 0x000000c0 0x00000768 Shdr target
+Warning: A gap of 7 forced by alignment 8 from 0x000006a1 to 0x000006a8
+Warning : 2 instances of unused alignment space exist and total 11 bytes of alignment.

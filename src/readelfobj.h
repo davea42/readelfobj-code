@@ -60,6 +60,13 @@ extern int printfilenames;
 #define SHT_RELA 4
 #endif
 
+/* Symbol Types, Elf standard. */
+#define STT_NOTYPE  0
+#define STT_OBJECT  1
+#define STT_FUNC    2
+#define STT_SECTION 3
+#define STT_FILE    4
+
 #ifndef DW_GROUPNUMBER_BASE
 #define DW_GROUPNUMBER_BASE 1
 #endif
@@ -949,6 +956,8 @@ struct generic_rela {
     Dwarf_Unsigned gr_sym; /* From info */
     Dwarf_Unsigned gr_type; /* From info */
     Dwarf_Signed   gr_addend;
+    unsigned char  gr_type2; /* MIPS64 */
+    unsigned char  gr_type3; /* MIPS64 */
 };
 
 /*  The following are generic to simplify handling
@@ -1075,6 +1084,7 @@ struct elf_filedata_s {
     char         f_ident[8];
     int          f_fd;
     int          f_printf_on_error;
+    int          f_machine; /* from f_ident(EI_MACHINE) */
     char *       f_path; /* non-null if known. Must be freed */
 
     /* If TRUE close f_fd on destruct. */
@@ -1178,7 +1188,7 @@ int dwarf_load_elf_rel(elf_filedata ep,
 int dwarf_get_elf_symstr_string(elf_filedata ep,
     int is_symtab,
     Dwarf_Unsigned index,
-    char **strptr,
+    const char **strptr,
     int *errcode);
 
 /*  The following for an elf checker/dumper. */
