@@ -42,6 +42,10 @@ CLEANFILES = \
   junk.test018p.out \
   junk.test019 \
   junk.test019.out \
+  junk.test020 \
+  junk.test020.out \
+  junk.test021 \
+  junk.test021.out \
   object_detector \
   readobjmacho \
   readobjpe \
