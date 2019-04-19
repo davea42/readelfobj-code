@@ -1207,7 +1207,7 @@ elf_load_progheaders32(elf_filedata ep,
         return res;
     }
     if (count != generic_count) {
-        P("Something badly wrong reading program headers");
+        P("ERROR: Something badly wrong reading program headers");
         *errcode = RO_ERR_PHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1261,7 +1261,7 @@ elf_load_progheaders64(elf_filedata ep,
         return res;
     }
     if (count != generic_count) {
-        P("Something badly wrong reading program headers");
+        P("ERROR: Something badly wrong reading program headers");
         *errcode = RO_ERR_PHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1297,7 +1297,7 @@ elf_load_sectheaders32(elf_filedata ep,
         (entsize > 200)||
         (count > ep->f_filesize) ||
         ((count *entsize +offset) > ep->f_filesize)) {
-            P("Something badly wrong with section header "
+            P("ERROR: Something badly wrong with section header "
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
@@ -1311,7 +1311,7 @@ elf_load_sectheaders32(elf_filedata ep,
         return res;
     }
     if (generic_count != count) {
-        P("Something wrong reading section headers\n");
+        P("ERROR: Something wrong reading section headers\n");
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1344,7 +1344,7 @@ elf_load_sectheaders64(elf_filedata ep,
         (entsize > 200)||
         (count > ep->f_filesize) ||
         ((count *entsize +offset) > ep->f_filesize)) {
-            P("Something badly wrong with section header "
+            P("ERROR: Something badly wrong with section header "
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
@@ -1358,7 +1358,7 @@ elf_load_sectheaders64(elf_filedata ep,
         return res;
     }
     if (generic_count != count) {
-        P("Something wrong reading section headers\n");
+        P("ERROR: Something wrong reading section headers\n");
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -2081,7 +2081,7 @@ elf_load_dynamic32(elf_filedata ep,
 
     if ((offset > ep->f_filesize)||
         (size > ep->f_filesize) ) {
-        P("Something badly wrong with dynamic section "
+        P("ERROR: Something badly wrong with dynamic section "
             " filesize " LONGESTUFMT
             " section content size " LONGESTUFMT
             "\n", ep->f_filesize,size);
@@ -2130,7 +2130,7 @@ elf_load_dynamic64(elf_filedata ep,
 
     if ((offset > ep->f_filesize)||
         (size > ep->f_filesize) ) {
-        P("Something badly wrong with dynamic section "
+        P("ERROR: Something badly wrong with dynamic section "
             " filesize " LONGESTUFMT
             " section content size " LONGESTUFMT
             "\n", ep->f_filesize,size);
