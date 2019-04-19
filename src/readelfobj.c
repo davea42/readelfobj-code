@@ -366,13 +366,13 @@ do_one_file(const char *s)
 
     res = dwarf_load_elf_header(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        P("Error: unable to load elf header. errcode %d\n",errcode);
+        P("ERROR: unable to load elf header. errcode %d\n",errcode);
         dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
     if (res == DW_DLV_NO_ENTRY) {
         dwarf_destruct_elf_access(ep,&errcode);
-        P("Error: unable to find elf header.\n");
+        P("ERROR: unable to find elf header.\n");
         return;
     }
 
@@ -386,13 +386,13 @@ do_one_file(const char *s)
 
     res = dwarf_load_elf_symstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        P("Error: unable to load symstr. errcode %d\n",errcode);
+        P("ERROR: unable to load symbol table strings. errcode %d\n",errcode);
         dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
     res = dwarf_load_elf_dynstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        P("Error: unable to load dynstr. errcode %d\n",errcode);
+        P("ERROR: unable to load dynamic section strings. errcode %d\n",errcode);
         dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
@@ -406,7 +406,7 @@ do_one_file(const char *s)
     }
     res = dwarf_load_elf_dynamic(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        P("Error: Unable to load dynamic section");
+        P("ERROR: Unable to load dynamic section");
     } else if (res == DW_DLV_OK) {
         if (print_dynamic_sections) {
             elf_print_dynamic(ep);
@@ -419,12 +419,12 @@ do_one_file(const char *s)
     }
     res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
     if( res == DW_DLV_ERROR) {
-        P("Error: Unable to load .dynsym section. Errcode %d\n",
+        P("ERROR: Unable to load .dynsym section. Errcode %d\n",
             errcode);
     }
     res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
     if( res == DW_DLV_ERROR) {
-        P("Error: Unable to load .symtab section. Errcode %d\n",
+        P("ERROR: Unable to load .symtab section. Errcode %d\n",
             errcode);
     }
     if(print_symtab_sections ) {

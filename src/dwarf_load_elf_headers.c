@@ -91,6 +91,25 @@ static char buffer1[BUFFERSIZE];
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
 
+static void
+check_size(const char *name,Dwarf_Unsigned offset, size_t size,
+    Dwarf_Unsigned filesize)
+{
+    Dwarf_Unsigned finaloff = offset + size;
+    if (finaloff > filesize) {
+        P("ERROR: An attempted read at offset "
+            LONGESTUFMT " (" LONGESTXFMT ")\n",
+            offset,offset);
+        P("       of size "
+            LONGESTSFMT " (" LONGESTXFMT ")\n", 
+            size,(Dwarf_Unsigned)size);
+            
+        P("       exceeds the file size of "
+            LONGESTUFMT " (" LONGESTXFMT ").\n",
+            filesize,filesize);
+    }
+}
+
 static int
 is_empty_section(Dwarf_Unsigned type)
 {
@@ -693,6 +712,7 @@ dwarf_generic_elf_load_symbols64(elf_filedata ep,
     if(res!= RO_OK) {
         free(psym);
         free(gsym);
+        check_size("symbol section",offset,size,ep->f_filesize);
         P("ERROR: Could not read whole symbol section of %s "
             "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
             sanitized(filename,buffer3,BUFFERSIZE),
@@ -1020,6 +1040,8 @@ dwarf_load_elf_dynstr(elf_filedata ep, int *errcode)
             strpsh->gh_offset,
             strsectlength,errcode);
         if(res != RO_OK) {
+            check_size("dynsym section strings",strpsh->gh_offset,
+                strsectlength,ep->f_filesize);
             P("ERROR: Could not read dynsym section strings at "
                 LONGESTXFMT " (" LONGESTUFMT  ")\n",
                 strpsh->gh_offset,strpsh->gh_offset);
@@ -1060,6 +1082,8 @@ dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
         strpsh->gh_offset,
         strsectlength,errcode);
     if(res != RO_OK) {
+        check_size("symtab section strings",strpsh->gh_offset,
+            strsectlength,ep->f_filesize);
         P("ERROR: Could not read symtab section strings at "
             LONGESTXFMT " (" LONGESTUFMT  ")\n",
             strpsh->gh_offset,strpsh->gh_offset);
@@ -1407,6 +1431,7 @@ dwarf_elf_load_rela_32(elf_filedata ep,
     res = RRMOA(ep->f_fd,relp,offset,size,errcode);
     if(res != RO_OK) {
         free(relp);
+        check_size("relocation section",offset,size,ep->f_filesize);
         P("ERROR: Could not read whole reloc section "
             LONGESTUFMT " of %s "
             "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
@@ -1503,6 +1528,7 @@ dwarf_elf_load_rel_32(elf_filedata ep,
     res = RRMOA(ep->f_fd,relp,offset,size,errcode);
     if(res != RO_OK) {
         free(relp);
+        check_size("relocation section",offset,size,ep->f_filesize);
         P("could not read whole reloc section "
             LONGESTUFMT " of %s "
             "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
@@ -1602,6 +1628,7 @@ dwarf_elf_load_rel_64(elf_filedata ep,
     res = RRMOA(ep->f_fd,relp,offset,size,errcode);
     if(res != RO_OK) {
         free(relp);
+        check_size("relocation section",offset,size,ep->f_filesize);
         P("could not read whole reloc section "
             LONGESTUFMT " of %s "
             "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
@@ -1702,6 +1729,7 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
     res = RRMOA(ep->f_fd,relp,offset,size,errcode);
     if(res != RO_OK) {
         free(relp);
+        check_size("relocation section",offset,size,ep->f_filesize);
         P("ERROR: Could not read whole reloc section "
             LONGESTUFMT " of %s "
             "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",

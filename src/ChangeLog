@@ -1,3 +1,9 @@
+2010-04-19: David Anderson
+     * dwarf_elf_naming.c,readelfobj.c: Error lines spelled
+       more consistently.
+     * dwarf_load_elf_headers.c: Error lines spelled more consistently
+       and a more detailed explanation given if offset+length
+       exceeds file size.
 2010-04-17: David Anderson
      * Makefile.am: Added dwarf_elf_reloc_sparc.{h,c}
      * dw_elfstructs.h: Updated comment.

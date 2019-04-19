@@ -74,7 +74,7 @@ standard_bitmap_table_name(struct em_values *em,
     unsigned remaining = buflen - 30;
 
     if (buflen < 60) {
-        return "(Error:  buffer len too short).";
+        return "(ERROR:  buffer len too short).";
     }
     buffer[next++] = '(';
     buffer[next] = 0;
@@ -120,7 +120,7 @@ standard_table_name(struct em_values *em,
     unsigned remaining = buflen - 30;
 
     if (buflen < 60) {
-        return "(Error:  buffer len too short).";
+        return "(ERROR:  buffer len too short).";
     }
     buffer[next++] = '(';
     buffer[next] = 0;
