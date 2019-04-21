@@ -188,7 +188,9 @@ pe_get_section_info (void *obj,
         return_section->addr = pep->pe_OptionalHeader.ImageBase + 
             sp->VirtualAddress;
         return_section->type = 0;
-        return_section->size = sp->SizeOfRawData;
+        /*  SizeOfRawData is rounded or truncated,
+            so use VirtualSize instead. */
+        return_section->size = sp->VirtualSize;
         return_section->name = sp->name;
         return_section->link = 0;
         return_section->info = 0;
@@ -210,7 +212,7 @@ load_optional_header32(dwarf_pe_object_access_internals_t *pep,
     pep->pe_optional_header_size = sizeof(IMAGE_OPTIONAL_HEADER32);
     res =  dwarf_object_read_random(pep->pe_fd,
         (char *)&hdr,
-        offset, sizeof(IMAGE_OPTIONAL_HEADER32), errcode);
+        offset, sizeof(IMAGE_OPTIONAL_HEADER32),  pep->pe_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -241,7 +243,7 @@ load_optional_header64(dwarf_pe_object_access_internals_t *pep,
 
     res =  dwarf_object_read_random(pep->pe_fd,
         (char *)&hdr,
-        offset, sizeof(IMAGE_OPTIONAL_HEADER64), errcode);
+        offset, sizeof(IMAGE_OPTIONAL_HEADER64), pep->pe_filesize, errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -275,15 +277,26 @@ pe_load_section (void *obj, unsigned section_index,
     if (0 < section_index &&
         section_index < pep->pe_section_count) {
         int res = 0;
-
         struct dwarf_pe_generic_image_section_header *sp =
             pep->pe_sectionptr + section_index;
+        Dwarf_Unsigned read_length = 0;
+
         if(sp->loaded_data) {
             *return_data = sp->loaded_data;
             return DW_DLV_OK;
         }
-        if (!sp->SizeOfRawData) {
+        if (!sp->VirtualSize) {
             return DW_DLV_NO_ENTRY;
+        }
+        read_length = sp->SizeOfRawData;
+        if(sp->VirtualSize < read_length) {
+            /* Don't read padding that wasn't allocated in memory */
+            read_length = sp->VirtualSize;
+        }
+        if ((read_length + sp->PointerToRawData) >
+            pep->pe_filesize) {
+            *error = DW_DLE_FILE_TOO_SMALL;
+            return DW_DLV_ERROR;
         }
         sp->loaded_data = malloc(sp->SizeOfRawData);
         if(!sp->loaded_data) {
@@ -291,11 +304,18 @@ pe_load_section (void *obj, unsigned section_index,
             return DW_DLV_ERROR;
         }
         res = dwarf_object_read_random(pep->pe_fd,sp->loaded_data,
-            sp->PointerToRawData, sp->SizeOfRawData, error);
+            sp->PointerToRawData, read_length, 
+            pep->pe_filesize, error);
         if (res != DW_DLV_OK) {
             free(sp->loaded_data);
             sp->loaded_data = 0;
             return res;
+        }
+        if(sp->VirtualSize > read_length) {
+            /* Zero space that was allocated but
+               truncated from the file */
+            memset(sp->loaded_data + read_length, 0,
+                (sp->VirtualSize - read_length));
         }
         *return_data = sp->loaded_data;
         return DW_DLV_OK;
@@ -391,7 +411,7 @@ dwarf_pe_load_dwarf_section_headers(
 
         res =  dwarf_object_read_random(pep->pe_fd,
             (char *)&filesect,cur_offset,
-            sizeof(filesect),errcode);
+            sizeof(filesect),pep->pe_filesize,errcode);
         if (res != DW_DLV_OK) {
             return res;
         }
@@ -454,7 +474,7 @@ dwarf_load_pe_sections(
         return DW_DLV_ERROR;
     }
     res = dwarf_object_read_random(pep->pe_fd,(char *)&dhinmem,
-        0, sizeof(dhinmem), errcode);
+        0, sizeof(dhinmem),pep->pe_filesize, errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -500,7 +520,7 @@ dwarf_load_pe_sections(
     }
 
     res =  dwarf_object_read_random(pep->pe_fd,(char *)&nt_sig_array[0],
-        nt_address, sizeof(nt_sig_array),errcode);
+        nt_address, sizeof(nt_sig_array),pep->pe_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -521,7 +541,8 @@ dwarf_load_pe_sections(
         return DW_DLV_ERROR;
     }
     res = dwarf_object_read_random(pep->pe_fd,(char *)&ifh,
-        pep->pe_nt_header_offset, sizeof(ifh), errcode);
+        pep->pe_nt_header_offset, sizeof(ifh), 
+        pep->pe_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -586,7 +607,7 @@ dwarf_load_pe_sections(
         memset(size_field,0,sizeof(size_field));
         res =  dwarf_object_read_random(pep->pe_fd,
             size_field, pep->pe_string_table_offset,
-            sizeof(size_field), errcode);
+            sizeof(size_field), pep->pe_filesize, errcode);
         if (res != DW_DLV_OK) {
             return res;
         }
@@ -604,7 +625,7 @@ dwarf_load_pe_sections(
         }
         res = dwarf_object_read_random(pep->pe_fd,
             pep->pe_string_table, pep->pe_string_table_offset,
-            pep->pe_string_table_size,errcode);
+            pep->pe_string_table_size, pep->pe_filesize,errcode);
         if (res != DW_DLV_OK) {
             return res;
         }

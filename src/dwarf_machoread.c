@@ -176,7 +176,8 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
     struct mach_header mh32;
     int res = 0;
 
-    res = RRMOA(mfp->mo_fd,&mh32,0,sizeof(mh32),errcode);
+    res = RRMOA(mfp->mo_fd,&mh32,0,sizeof(mh32),
+        mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -201,7 +202,8 @@ load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
     struct mach_header_64 mh64;
     int res = 0;
 
-    res = RRMOA(mfp->mo_fd,&mh64,0,sizeof(mh64),errcode);
+    res = RRMOA(mfp->mo_fd,&mh64,0,sizeof(mh64),
+        mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -256,7 +258,8 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_LOADSEGOFFSETBAD;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(mfp->mo_fd,&sc,mmp->offset_this_command,sizeof(sc),errcode);
+    res = RRMOA(mfp->mo_fd,&sc,mmp->offset_this_command,sizeof(sc),
+        mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -305,7 +308,8 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(mfp->mo_fd,&sc,mmp->offset_this_command,sizeof(sc),errcode);
+    res = RRMOA(mfp->mo_fd,&sc,mmp->offset_this_command,sizeof(sc),
+        mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -406,7 +410,8 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         struct section mosec;
         int res = 0;
 
-        res = RRMOA(mfp->mo_fd,&mosec,curoff,sizeof(mosec),errcode);
+        res = RRMOA(mfp->mo_fd,&mosec,curoff,sizeof(mosec),
+            mfp->mo_filesize,errcode);
         if (res != DW_DLV_OK) {
             return res;
         }
@@ -466,7 +471,8 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         int res = 0;
         struct section_64 mosec;
 
-        res = RRMOA(mfp->mo_fd,&mosec,curoff,sizeof(mosec),errcode);
+        res = RRMOA(mfp->mo_fd,&mosec,curoff,sizeof(mosec),
+            mfp->mo_filesize,errcode);
         if (res != DW_DLV_OK) {
             return res;
         }
@@ -564,7 +570,8 @@ dwarf_load_macho_commands(struct macho_filedata_s *mfp,int *errcode)
     }
     mcp = mfp->mo_commands;
     for ( ; cmdi < mfp->mo_header.ncmds; ++cmdi,++mcp ) {
-        res = RRMOA(mfp->mo_fd,&mc,curoff,sizeof(mc),errcode);
+        res = RRMOA(mfp->mo_fd,&mc,curoff,sizeof(mc),
+            mfp->mo_filesize,errcode);
         if (res != RO_OK) {
             return res;
         }

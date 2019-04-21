@@ -97,7 +97,14 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RO_ERR_RELCOUNTMISMATCH   24
 #define RO_ERR_NULL_ELF_POINTER   25
 #define RO_ERR_NOT_A_KNOWN_TYPE   26
-
+#define RO_ERR_SIZE_SMALL         27
+#define RO_ERR_FILE_WRONG_TYPE    28
+#define RO_ERR_ELF_STRING_SECT    29
+#define RO_ERR_GROUP_ERROR        30
+#define RO_SEEK_OFF_END           31
+#define RO_READ_OFF_END           32
+#define RO_SEEK_ERROR             33
+#define RO_READ_ERROR             34
 
 #ifndef EI_NIDENT
 #define EI_NIDENT 16
@@ -245,19 +252,34 @@ memcpy_swap_bytes(void *s1, const void *s2, size_t len)
 }
 
 static int
-object_read_random(int fd,char *buf,long loc,
-    size_t size,int *errc)
+object_read_random(int fd,char *buf,off_t loc,
+    size_t size,off_t filesize,int *errc)
 {
-    int scode = 0;
-    size_t rcode = 0;
+    off_t scode = 0;
+    ssize_t rcode = 0;
+    off_t endpoint = 0;
 
+    if (loc >= filesize) {
+        /*  Seek can seek off the end. Lets not allow that.
+            The object is corrupt. */
+        *errc = RO_SEEK_OFF_END;
+        return DW_DLV_ERROR;
+    }
+    endpoint = loc+size;
+    if (endpoint > filesize) {
+        /*  Let us -not- try to read past end of object.
+            The object is corrupt. */
+        *errc = RO_READ_OFF_END;
+        return DW_DLV_ERROR;
+    }
     scode = lseek(fd,loc,SEEK_SET);
-    if (scode < 0) {
+    if (scode == (off_t)-1) {
         *errc = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
     rcode = read(fd,buf,size);
-    if (rcode != size) {
+    if (rcode == -1 ||
+        (size_t)rcode != size) {
         *errc = RO_ERR_READ;
         return DW_DLV_ERROR;
     }
@@ -418,7 +440,7 @@ is_pe_object(int fd,
         return DW_DLV_ERROR;
     }
     res = object_read_random(fd,(char *)&dhinmem,
-        0,sizeof(dhinmem),errcode);
+        0,sizeof(dhinmem),filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -464,7 +486,7 @@ is_pe_object(int fd,
         return DW_DLV_ERROR;
     }
     res =  object_read_random(fd,(char *)&nt_sig_array[0],
-        nt_address, sizeof(nt_sig_array),errcode);
+        nt_address, sizeof(nt_sig_array),filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -479,6 +501,7 @@ is_pe_object(int fd,
     res = object_read_random(fd,(char *)&ifh,
         nt_address + SIZEOFT32,
         sizeof(struct pe_image_file_header),
+        filesize,
         errcode);
     if (res != DW_DLV_OK) {
         return res;

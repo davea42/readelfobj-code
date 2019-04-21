@@ -1,4 +1,22 @@
 2010-04-21: David Anderson
+     * dwarf_load_elf_headers.c,dwarf_machoread.c: Adding 
+       filesize to read-random calls.
+     * dwarf_object_detector.c: Adding new error codes and
+       updating object_read_random() with filesize argument
+       and changing calls to match.
+     * dwarf_object_read_common.c: Updating dwarf_object_read_random()
+       with filesize argument. 
+     * dwarf_object_read_common.h: Updating dwarf_object_read_random()
+       with filesize argument. 
+     * dwarf_peread.c: Adding filesize argument to 
+       dwarf_object_read_random() calls. Updating pe_load_section()
+       to properly account for how Windows uses SizeOfRawData
+       and VirtualSize.
+     * dwarf_reading.h: Added RO_SEEK_OFF_END etc error codes
+       for the updated dwarf_object_read_random() function.
+       Updated RRMOA macro with a file size argument.
+     * readelfobj.c: Add filesize argument to RRMOA uses.
+2010-04-21: David Anderson
      * dwarf_peread.c: Tiny change showing how, in pe, to
        get virtual address. Unused here.
      * readobjpe.c: Print ImageBase now. Used for calculation

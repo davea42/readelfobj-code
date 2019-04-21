@@ -330,7 +330,7 @@ generic_phdr_from_phdr32(elf_filedata ep,
 
     orig_pph = pph;
     orig_gphdr = gphdr;
-    res = RRMOA(ep->f_fd,pph,offset,count*entsize,errcode);
+    res = RRMOA(ep->f_fd,pph,offset,count*entsize,ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("Read  " LONGESTUFMT
             " bytes program headers failed\n",count*entsize);
@@ -401,7 +401,7 @@ generic_phdr_from_phdr64(elf_filedata ep,
 
     orig_pph = pph;
     orig_gphdr = gphdr;
-    res = RRMOA(ep->f_fd,pph,offset,count*entsize,errcode);
+    res = RRMOA(ep->f_fd,pph,offset,count*entsize,ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("Read  " LONGESTUFMT
             " bytes program headers failed\n",count*entsize);
@@ -473,7 +473,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
 
     orig_psh = psh;
     orig_gshdr = gshdr;
-    res = RRMOA(ep->f_fd,psh,offset,count*entsize,errcode);
+    res = RRMOA(ep->f_fd,psh,offset,count*entsize,ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("Read  " LONGESTUFMT
             " bytes section headers failed\n",count*entsize);
@@ -545,7 +545,7 @@ generic_shdr_from_shdr64(elf_filedata ep,
 
     orig_psh = psh;
     orig_gshdr = gshdr;
-    res = RRMOA(ep->f_fd,psh,offset,count*entsize,errcode);
+    res = RRMOA(ep->f_fd,psh,offset,count*entsize,ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("Read  " LONGESTUFMT
             " bytes section headers failed\n",count*entsize);
@@ -629,7 +629,7 @@ dwarf_generic_elf_load_symbols32(elf_filedata  ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,psym,offset,size,errcode);
+    res = RRMOA(ep->f_fd,psym,offset,size,ep->f_filesize,errcode);
     if(res!= RO_OK) {
         free(psym);
         free(gsym);
@@ -708,7 +708,7 @@ dwarf_generic_elf_load_symbols64(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,psym,offset,size,errcode);
+    res = RRMOA(ep->f_fd,psym,offset,size,ep->f_filesize,errcode);
     if(res!= RO_OK) {
         free(psym);
         free(gsym);
@@ -1038,7 +1038,7 @@ dwarf_load_elf_dynstr(elf_filedata ep, int *errcode)
         }
         res = RRMOA(ep->f_fd,ep->f_dynsym_sect_strings,
             strpsh->gh_offset,
-            strsectlength,errcode);
+            strsectlength,ep->f_filesize,errcode);
         if(res != RO_OK) {
             check_size("dynsym section strings",strpsh->gh_offset,
                 strsectlength,ep->f_filesize);
@@ -1080,7 +1080,7 @@ dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
     }
     res = RRMOA(ep->f_fd,ep->f_symtab_sect_strings,
         strpsh->gh_offset,
-        strsectlength,errcode);
+        strsectlength,ep->f_filesize,errcode);
     if(res != RO_OK) {
         check_size("symtab section strings",strpsh->gh_offset,
             strsectlength,ep->f_filesize);
@@ -1154,7 +1154,7 @@ elf_load_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection,
     }
     ep->f_elf_shstrings_length = psh->gh_size;
     i = RRMOA(ep->f_fd,ep->f_elf_shstrings_data,secoffset,
-        psh->gh_size,errcode);
+        psh->gh_size,ep->f_filesize,errcode);
     if(i != RO_OK) {
         P("Read  " LONGESTUFMT" bytes of shstrings section string "
             "data failed\n",ep->f_elf_shstrings_length);
@@ -1428,7 +1428,7 @@ dwarf_elf_load_rela_32(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,relp,offset,size,errcode);
+    res = RRMOA(ep->f_fd,relp,offset,size,ep->f_filesize,errcode);
     if(res != RO_OK) {
         free(relp);
         check_size("relocation section",offset,size,ep->f_filesize);
@@ -1525,7 +1525,7 @@ dwarf_elf_load_rel_32(elf_filedata ep,
             offset,size);
         return RO_ERR_MALLOC;
     }
-    res = RRMOA(ep->f_fd,relp,offset,size,errcode);
+    res = RRMOA(ep->f_fd,relp,offset,size,ep->f_filesize,errcode);
     if(res != RO_OK) {
         free(relp);
         check_size("relocation section",offset,size,ep->f_filesize);
@@ -1625,7 +1625,7 @@ dwarf_elf_load_rel_64(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,relp,offset,size,errcode);
+    res = RRMOA(ep->f_fd,relp,offset,size,ep->f_filesize,errcode);
     if(res != RO_OK) {
         free(relp);
         check_size("relocation section",offset,size,ep->f_filesize);
@@ -1726,7 +1726,7 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,relp,offset,size,errcode);
+    res = RRMOA(ep->f_fd,relp,offset,size,ep->f_filesize,errcode);
     if(res != RO_OK) {
         free(relp);
         check_size("relocation section",offset,size,ep->f_filesize);
@@ -1892,7 +1892,7 @@ elf_load_elf_header32(elf_filedata ep,int *errcode)
     dw_elf32_ehdr ehdr32;
     struct generic_ehdr *ehdr = 0;
 
-    res = RRMOA(ep->f_fd,&ehdr32,0,sizeof(ehdr32),errcode);
+    res = RRMOA(ep->f_fd,&ehdr32,0,sizeof(ehdr32),ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("ERROR: could not read whole ELF file header of %s\n",
             sanitized(filename,buffer1,BUFFERSIZE));
@@ -1917,7 +1917,7 @@ elf_load_elf_header64(elf_filedata ep,int *errcode)
     dw_elf64_ehdr ehdr64;
     struct generic_ehdr *ehdr = 0;
 
-    res = RRMOA(ep->f_fd,&ehdr64,0,sizeof(ehdr64),errcode);
+    res = RRMOA(ep->f_fd,&ehdr64,0,sizeof(ehdr64),ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("ERROR: could not read whole ELF file header of %s\n",
             sanitized(filename,buffer1,BUFFERSIZE));
@@ -1973,7 +1973,7 @@ generic_dyn_from_dyn32(elf_filedata ep,
     }
     orig_gbuffer = gbuffer;
     trueoff = offset;
-    res = RRMOA(ep->f_fd,ebuf,offset,size,errcode);
+    res = RRMOA(ep->f_fd,ebuf,offset,size,ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("could not read whole dynamic section of %s "
         "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
@@ -2039,7 +2039,7 @@ generic_dyn_from_dyn64(elf_filedata ep,
     }
     orig_gbuffer = gbuffer;
     trueoff = offset;
-    res = RRMOA(ep->f_fd,ebuf,offset,size,errcode);
+    res = RRMOA(ep->f_fd,ebuf,offset,size,ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("could not read whole dynamic section of %s "
         "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
@@ -2372,7 +2372,7 @@ read_gs_section_group(elf_filedata ep,
             free(data);
             return DW_DLV_ERROR;
         }
-        res = RRMOA(ep->f_fd,data,psh->gh_offset,seclen,errcode);
+        res = RRMOA(ep->f_fd,data,psh->gh_offset,seclen,ep->f_filesize,errcode);
         if(res != RO_OK) {
             P("Read  " LONGESTUFMT
                 " bytes of .group section failed\n",seclen);

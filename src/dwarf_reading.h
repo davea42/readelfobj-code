@@ -127,12 +127,16 @@ extern "C" {
 #define RO_ERR_FILE_WRONG_TYPE    28
 #define RO_ERR_ELF_STRING_SECT    29
 #define RO_ERR_GROUP_ERROR        30
+#define RO_SEEK_OFF_END           31
+#define RO_READ_OFF_END           32
+#define RO_SEEK_ERROR             33
+#define RO_READ_ERROR             34
 
 #define P printf
 #define F fflush(stdout)
 
-#define RRMOA(f,buf,loc,siz,errc) dwarf_object_read_random(f, \
-    (char *)buf,loc,siz,errc);
+#define RRMOA(f,buf,loc,siz,fsiz,errc) dwarf_object_read_random(f, \
+    (char *)buf,loc,siz,fsiz,errc);
 
 #ifdef WORDS_BIGENDIAN
 #define SIGN_EXTEND(dest, length)           \

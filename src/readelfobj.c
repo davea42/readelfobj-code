@@ -590,7 +590,8 @@ elf_load_print_interp(elf_filedata ep,
         P("ERROR: malloc failed reading interpreter data\n");
         return;
     }
-    res = RRMOA(ep->f_fd,buf,offset,size,&errcode);
+    res = RRMOA(ep->f_fd,buf,offset,size,
+        ep->f_filesize,&errcode);
     if(res != RO_OK) {
         P("ERROR: Read interp string failed\n");
         return;
@@ -1112,7 +1113,8 @@ is_wasted_space_zero(elf_filedata ep,
         if (remaining < checklen) {
             checklen = remaining;
         }
-        res = RRMOA(ep->f_fd,allocspace,offset,checklen,&errcode);
+        res = RRMOA(ep->f_fd,allocspace,offset,checklen,
+            ep->f_filesize,&errcode);
         if (res != RO_OK) {
             free(allocspace);
             P("ERROR: could not read wasted space at offset "
