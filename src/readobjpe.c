@@ -146,6 +146,8 @@ pe_headers_display(dwarf_pe_object_access_internals_t *pe)
         ofh->SectionAlignment);
     printf("  SizeOfHeadrs  : " LONGESTXFMT8 "\n",
         ofh->SizeOfHeaders);
+    printf("  ImageBase     : " LONGESTXFMT8 "\n",
+        ofh->ImageBase);
 }
 
 static void

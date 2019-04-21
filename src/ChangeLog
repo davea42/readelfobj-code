@@ -1,3 +1,8 @@
+2010-04-21: David Anderson
+     * dwarf_peread.c: Tiny change showing how, in pe, to
+       get virtual address. Unused here.
+     * readobjpe.c: Print ImageBase now. Used for calculation
+       of virtual address of a section.
 2010-04-19: David Anderson
      * dwarf_elf_naming.c,readelfobj.c: Error lines spelled
        more consistently.
