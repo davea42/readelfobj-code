@@ -1,4 +1,9 @@
-2010-04-24: David Anderson
+2019-04-24: David Anderson
+     * dwarf_peread.c: Improved an strncopy
+       to make it clearer and avoid a compiler warning.
+       Also, the year was wrong on nearly all the 
+       date lines in this ChangeLog: so 2010 -> 2019.
+2019-04-24: David Anderson
      * Makefile.am: Added errormessages.c three places.
      * dwarf_elf_naming.c: Added PT_PAX_FLAGS.
      * dwarf_load_elf_headers.c: Improved some error/warning
@@ -24,7 +29,7 @@
      * readelfobj.h: Add PT_ defines we failed to
        pick up earlier.
      * readobjpe.c: Improved reports of errors.
-2010-04-21: David Anderson
+2019-04-21: David Anderson
      * dwarf_load_elf_headers.c,dwarf_machoread.c: Adding 
        filesize to read-random calls.
      * dwarf_object_detector.c: Adding new error codes and
@@ -42,18 +47,18 @@
        for the updated dwarf_object_read_random() function.
        Updated RRMOA macro with a file size argument.
      * readelfobj.c: Add filesize argument to RRMOA uses.
-2010-04-21: David Anderson
+2019-04-21: David Anderson
      * dwarf_peread.c: Tiny change showing how, in pe, to
        get virtual address. Unused here.
      * readobjpe.c: Print ImageBase now. Used for calculation
        of virtual address of a section.
-2010-04-19: David Anderson
+2019-04-19: David Anderson
      * dwarf_elf_naming.c,readelfobj.c: Error lines spelled
        more consistently.
      * dwarf_load_elf_headers.c: Error lines spelled more consistently
        and a more detailed explanation given if offset+length
        exceeds file size.
-2010-04-17: David Anderson
+2019-04-17: David Anderson
      * Makefile.am: Added dwarf_elf_reloc_sparc.{h,c}
      * dw_elfstructs.h: Updated comment.
      * dwarf_elf_reloc_mips.c,dwarf_elf_reloc_mips.h: R_MIPS_GPREL
@@ -76,20 +81,20 @@
      * readelfobj.h:  Add the defines for the standard STT_*
        Elf symbol types. Add f_machine field. Ensure certain
        char * arguments are now const char * to match readelfobj.c
-2010-01-30: David Anderson
+2019-01-30: David Anderson
      * dwarf_load_elf_headers.c: In case of error now avoids
        a memory leak.
-2010-01-29: David Anderson
+2019-01-29: David Anderson
      * dwarf_object_read_common.c: Remove a trailing space character.
      * dwarf_reading.h: Delete unused macros RR and RRMO.
-2010-01-28: David Anderson
+2019-01-28: David Anderson
      * readelfobj.c: If fopen() fails and errno is set
        report the errno in the failure message.
-2010-01-27: David Anderson
+2019-01-27: David Anderson
      * dwarf_object_read_common.c(dwarf_object_read_random):
        Documented that off_t and ssize_t (though not in
        C90) are in early POSIX (ISO/IEC 9954-1:1990).
-2010-01-26: David Anderson
+2019-01-26: David Anderson
      * dwarf_load_elf_headers.c: Removed unused locals.
      * readelfobj.c: Removed unused locals and now use
        UNUSEDARG in one place to eliminate a compiler warning.
@@ -97,10 +102,10 @@
        Parts of dwarf_object_read_random() were not
        correctly typed nor were read errors correctly checked for.
        A 2.2GB object file is now properly handled.
-2010-01-14: David Anderson
+2019-01-14: David Anderson
      * dwarf_reading.h: Delete definition of uint64_t as
        that definition is never used.
-2010-01-06: David Anderson
+2019-01-06: David Anderson
      * dwarf_object_detector.c: Remove useless call to stat().
      * readelfobj.c: Added 3 ifdef-defines so elf.h
        need not be present.
