@@ -336,13 +336,26 @@ do_one_file(const char *s)
     mfp->mo_offsetsize = offsetsize;
     res = dwarf_load_macho_header(mfp,&errcode);
     if (res != DW_DLV_OK) {
-        P("Warning: %s macho-header not loaded giving up. Error %d",
-            tru_path_buffer,errcode);
+        P("Warning: %s macho-header not loaded giving up."
+            "Error %d (%s)\n",
+            tru_path_buffer,errcode,dwarf_get_errname(errcode));
         dwarf_destruct_macho_access(mfp);
         return;
     }
     print_macho_header(mfp);
     res = dwarf_load_macho_commands(mfp,&errcode);
+    if (res == DW_DLV_ERROR) {
+        P("ERROR: load Macho data failed."
+            "Error %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+        dwarf_destruct_macho_access(mfp);
+        exit(1);
+    }
+    if (res == DW_DLV_NO_ENTRY) {
+        P("Impossible error attempting to read Mach-O object\n");
+        dwarf_destruct_macho_access(mfp);
+        exit(1);
+    }
     print_macho_commands(mfp);
     print_macho_segments(mfp);
     print_macho_dwarf_sections(mfp);

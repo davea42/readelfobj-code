@@ -1800,7 +1800,6 @@ dwarf_load_elf_rela(elf_filedata ep,
     Dwarf_Unsigned secnum, int *errcode)
 {
     struct generic_shdr *gshdr = 0;
-    Dwarf_Unsigned generic_count = 0;
     unsigned offsetsize = 0;
     struct generic_rela *grp = 0;
     Dwarf_Unsigned count_read = 0;
@@ -1811,7 +1810,6 @@ dwarf_load_elf_rela(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     offsetsize = ep->f_offsetsize;
-    generic_count = ep->f_loc_shdr.g_count;
     gshdr = ep->f_shdr +secnum;
     if (is_empty_section(gshdr->gh_type)) {
         return DW_DLV_NO_ENTRY;
@@ -1838,7 +1836,6 @@ dwarf_load_elf_rel(elf_filedata ep,
     Dwarf_Unsigned secnum, int *errcode)
 {
     struct generic_shdr *gshdr = 0;
-    Dwarf_Unsigned generic_count = 0;
     unsigned offsetsize = 0;
     struct generic_rela *grp = 0;
     Dwarf_Unsigned count_read = 0;
@@ -1849,18 +1846,6 @@ dwarf_load_elf_rel(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     offsetsize = ep->f_offsetsize;
-    generic_count = ep->f_loc_shdr.g_count;
-#if 0
-    if (secnum >= generic_count) {
-        P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
-            ": " LONGESTUFMT
-            " not divisible by "
-            LONGESTUFMT " RO_ERR_RELCOUNTMISMATCH\n",
-            secnum, size,object_reclen);
-        *errcode = RO_ERR_RELCOUNTMISMATCH;
-        return DW_DLV_ERROR;
-    }
-#endif
     gshdr = ep->f_shdr +secnum;
     if (is_empty_section(gshdr->gh_type)) {
         return DW_DLV_NO_ENTRY;
