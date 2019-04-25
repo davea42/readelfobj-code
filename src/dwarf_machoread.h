@@ -37,8 +37,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-int cur_read_loc(FILE *fin, long* fileoffset);
-
 #define Dwarf_Unsigned LONGESTUTYPE
 #define Dwarf_Small    unsigned char
 

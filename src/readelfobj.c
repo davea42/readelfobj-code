@@ -310,93 +310,22 @@ check_dynamic_section(elf_filedata ep)
     return DW_DLV_OK;
 }
 
-
-char namebuffer[BUFFERSIZE*4];
 static void
-do_one_file(const char *s)
+print_minimum(elf_filedata ep)
 {
-    int res = 0;
-    unsigned ftype = 0;
-    unsigned endian = 0;
-    unsigned offsetsize = 0;
-    size_t filesize = 0;
+    elf_print_elf_header(ep);
+    elf_print_progheaders(ep);
+    elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
+    elf_print_sectheaders(ep);
+}
+
+static void
+print_requested(elf_filedata ep)
+{
     int errcode = 0;
-    elf_filedata ep = 0;
-
-    res = dwarf_object_detector_path(s,
-        namebuffer,BUFFERSIZE*4, &ftype,
-        &endian, &offsetsize, &filesize,
-        &errcode);
-    if (res != DW_DLV_OK) {
-        printf("Not valid Elf: %s\n",s);
-        return;
-    }
-    if (ftype != DW_FTYPE_ELF) {
-        printf("Not Elf: %s\n",s);
-        return;
-    }
-
-    res = dwarf_construct_elf_access_path(namebuffer, &ep,&errcode);
-    if (res == DW_DLV_NO_ENTRY) {
-        P("Unable to find %s. Something odd here. \n",namebuffer);
-        return;
-    } else if (res == DW_DLV_ERROR) {
-        P("Unable to open %s. Err code %d\n",namebuffer,errcode);
-        return;
-    }
-
-#ifdef WORDS_BIGENDIAN
-    if (endian == DW_ENDIAN_LITTLE) {
-        ep->f_copy_word = dwarf_ro_memcpy_swap_bytes;
-    } else {
-        ep->f_copy_word = memcpy;
-    }
-#else  /* LITTLE ENDIAN */
-    if (endian == DW_ENDIAN_LITTLE) {
-        ep->f_copy_word = memcpy;
-    } else {
-        ep->f_copy_word = dwarf_ro_memcpy_swap_bytes;
-    }
-#endif /* LITTLE- BIG-ENDIAN */
-    ep->f_filesize = filesize;
-    ep->f_offsetsize = offsetsize;
-
-    /* If there are no .group sections this will remain at 3. */
-    ep->f_sg_next_group_number = 3;
-
-    res = dwarf_load_elf_header(ep,&errcode);
-    if (res == DW_DLV_ERROR) {
-        P("ERROR: unable to load elf header. errcode %d\n",errcode);
-        dwarf_destruct_elf_access(ep,&errcode);
-        return;
-    }
-    if (res == DW_DLV_NO_ENTRY) {
-        dwarf_destruct_elf_access(ep,&errcode);
-        P("ERROR: unable to find elf header.\n");
-        return;
-    }
 
     if (!only_wasted_summary) {
         elf_print_elf_header(ep);
-    }
-
-    res = dwarf_load_elf_sectheaders(ep,&errcode);
-
-    res = dwarf_load_elf_progheaders(ep,&errcode);
-
-    res = dwarf_load_elf_symstr(ep,&errcode);
-    if (res == DW_DLV_ERROR) {
-        P("ERROR: unable to load symbol table strings. errcode %d\n",errcode);
-        dwarf_destruct_elf_access(ep,&errcode);
-        return;
-    }
-    res = dwarf_load_elf_dynstr(ep,&errcode);
-    if (res == DW_DLV_ERROR) {
-        P("ERROR: unable to load dynamic section strings. errcode %d\n",errcode);
-        dwarf_destruct_elf_access(ep,&errcode);
-        return;
-    }
-    if (!only_wasted_summary) {
         elf_print_progheaders(ep);
         elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
         elf_print_sectheaders(ep);
@@ -404,28 +333,8 @@ do_one_file(const char *s)
     if (print_groups) {
         elf_print_sg_groups(ep);
     }
-    res = dwarf_load_elf_dynamic(ep,&errcode);
-    if (res == DW_DLV_ERROR) {
-        P("ERROR: Unable to load dynamic section");
-    } else if (res == DW_DLV_OK) {
-        if (print_dynamic_sections) {
-            elf_print_dynamic(ep);
-        }
-    } else {
-        if (print_dynamic_sections) {
-            P("No .dynamic section in  %s\n",
-                sanitized(filename,buffer1,BUFFERSIZE));
-        }
-    }
-    res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
-    if( res == DW_DLV_ERROR) {
-        P("ERROR: Unable to load .dynsym section. Errcode %d\n",
-            errcode);
-    }
-    res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
-    if( res == DW_DLV_ERROR) {
-        P("ERROR: Unable to load .symtab section. Errcode %d\n",
-            errcode);
+    if (print_dynamic_sections) {
+        elf_print_dynamic(ep);
     }
     if(print_symtab_sections ) {
         if (ep->f_symtab_sect_index) {
@@ -466,35 +375,6 @@ do_one_file(const char *s)
             !ep->f_symtab_sect_index) {
             P("No .symtab or .dynsym section in %s.\n",
                 sanitized(filename,buffer1,BUFFERSIZE));
-        }
-    }
-    if(print_reloc_sections) {
-        Dwarf_Unsigned i = 0;
-        struct generic_shdr *psh = ep->f_shdr;
-
-        for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
-            const char *namestr = psh->gh_namestring;
-            if(!strncmp(namestr,".rel.",5)) {
-                res = dwarf_load_elf_rel(ep,i,&errcode);
-                if(res == DW_DLV_ERROR) {
-                    P("ERROR reading .rel section "
-                        LONGESTUFMT " Error code %d file:%s \n",
-                        i,errcode,
-                        sanitized(filename,buffer1,BUFFERSIZE));
-                    dwarf_destruct_elf_access(ep,&errcode);
-                    return;
-                }
-            } else if (!strncmp(namestr,".rela.",6)) {
-                res = dwarf_load_elf_rela(ep,i,&errcode);
-                if(res == DW_DLV_ERROR) {
-                    P("ERROR reading .rela section "
-                        LONGESTUFMT " Error code %d file:%s \n",
-                        i,errcode,
-                        sanitized(filename,buffer1,BUFFERSIZE));
-                    dwarf_destruct_elf_access(ep,&errcode);
-                    return;
-                }
-            }
         }
     }
     if(print_reloc_sections) {
@@ -541,6 +421,175 @@ do_one_file(const char *s)
     }
     check_dynamic_section(ep);
     report_wasted_space(ep);
+}
+
+
+char namebuffer[BUFFERSIZE*4];
+static void
+do_one_file(const char *s)
+{
+    int res = 0;
+    unsigned ftype = 0;
+    unsigned endian = 0;
+    unsigned offsetsize = 0;
+    size_t filesize = 0;
+    int errcode = 0;
+    elf_filedata ep = 0;
+
+    res = dwarf_object_detector_path(s,
+        namebuffer,BUFFERSIZE*4, &ftype,
+        &endian, &offsetsize, &filesize,
+        &errcode);
+    if (res != DW_DLV_OK) {
+        printf("Not valid Elf: %s\n",s);
+        return;
+    }
+    if (ftype != DW_FTYPE_ELF) {
+        printf("Not Elf: %s\n",s);
+        return;
+    }
+
+    res = dwarf_construct_elf_access_path(namebuffer, &ep,&errcode);
+    if (res == DW_DLV_NO_ENTRY) {
+        P("Unable to find %s. Something odd here. \n",namebuffer);
+        return;
+    } else if (res == DW_DLV_ERROR) {
+        P("Unable to open %s. Err code %d (%s)\n",namebuffer,
+            errcode,dwarf_get_errname(errcode));
+        return;
+    }
+
+#ifdef WORDS_BIGENDIAN
+    if (endian == DW_ENDIAN_LITTLE) {
+        ep->f_copy_word = dwarf_ro_memcpy_swap_bytes;
+    } else {
+        ep->f_copy_word = memcpy;
+    }
+#else  /* LITTLE ENDIAN */
+    if (endian == DW_ENDIAN_LITTLE) {
+        ep->f_copy_word = memcpy;
+    } else {
+        ep->f_copy_word = dwarf_ro_memcpy_swap_bytes;
+    }
+#endif /* LITTLE- BIG-ENDIAN */
+    ep->f_filesize = filesize;
+    ep->f_offsetsize = offsetsize;
+
+    /* If there are no .group sections this will remain at 3. */
+    ep->f_sg_next_group_number = 3;
+
+    res = dwarf_load_elf_header(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: unable to load elf header. errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+        dwarf_destruct_elf_access(ep,&errcode);
+        return;
+    }
+    if (res == DW_DLV_NO_ENTRY) {
+        print_minimum(ep);
+        P("ERROR: unable to find elf header.\n");
+        dwarf_destruct_elf_access(ep,&errcode);
+        return;
+    }
+
+
+    res = dwarf_load_elf_sectheaders(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: unable to load section headers, errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+        dwarf_destruct_elf_access(ep,&errcode);
+        return;
+    }
+
+    res = dwarf_load_elf_progheaders(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: unable to load program headers. errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+        dwarf_destruct_elf_access(ep,&errcode);
+        return;
+    }
+
+    res = dwarf_load_elf_symstr(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: unable to load symbol table strings."
+            " errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+        dwarf_destruct_elf_access(ep,&errcode);
+        return;
+    }
+    res = dwarf_load_elf_dynstr(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: unable to load dynamic section strings."
+            " errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+        dwarf_destruct_elf_access(ep,&errcode);
+        return;
+    }
+    if (print_groups) {
+        elf_print_sg_groups(ep);
+    }
+    res = dwarf_load_elf_dynamic(ep,&errcode);
+    if (res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: Unable to load dynamic section,"
+            " errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+        return;
+    }
+    res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
+    if( res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: Unable to load .dynsym section."
+            " errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+    }
+    res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
+    if( res == DW_DLV_ERROR) {
+        print_minimum(ep);
+        P("ERROR: Unable to load .symtab section."
+            " errcode %d (%s)\n",
+            errcode,dwarf_get_errname(errcode));
+    }
+    {
+        Dwarf_Unsigned i = 0;
+        struct generic_shdr *psh = ep->f_shdr;
+
+        for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+            const char *namestr = psh->gh_namestring;
+            if(!strncmp(namestr,".rel.",5)) {
+                res = dwarf_load_elf_rel(ep,i,&errcode);
+                if(res == DW_DLV_ERROR) {
+                    print_minimum(ep);
+                    P("ERROR reading .rel section "
+                        LONGESTUFMT " Error code %d (%s) file:%s \n",
+                        i,errcode,dwarf_get_errname(errcode),
+                        sanitized(filename,buffer1,BUFFERSIZE));
+                    P("ERROR attempting to continue\n");
+                    dwarf_destruct_elf_access(ep,&errcode);
+                    return;
+                }
+            } else if (!strncmp(namestr,".rela.",6)) {
+                res = dwarf_load_elf_rela(ep,i,&errcode);
+                if(res == DW_DLV_ERROR) {
+                    print_minimum(ep);
+                    P("ERROR reading .rela section "
+                        LONGESTUFMT " %s Error code %d (%s) file:%s \n",
+                        i,
+                        sanitized(namestr,buffer2,BUFFERSIZE),
+                        errcode,dwarf_get_errname(errcode),
+                        sanitized(filename,buffer1,BUFFERSIZE));
+                    dwarf_destruct_elf_access(ep,&errcode);
+                    return;
+                }
+            }
+        }
+    }
+    print_requested(ep);
     dwarf_destruct_elf_access(ep,&errcode);
 }
 static void
@@ -612,6 +661,10 @@ elf_print_progheaders(elf_filedata ep)
     /*  In case of error reading headers count might now be zero */
     P("\n");
     P("Program header count: " LONGESTUFMT "\n",count);
+    if (!count) {
+        P("\n");
+        return;
+    }
     P("{\n");
     for( i = 0; i < count; ++i,  gphdr++) {
         P("Program header " LONGESTUFMT ,i);
@@ -667,6 +720,10 @@ elf_print_sectheaders(elf_filedata ep)
     generic_count = ep->f_loc_shdr.g_count;
     P("\n");
     P("Section count: " LONGESTUFMT "\n",generic_count);
+    if (!generic_count) {
+        P("\n");
+        return;
+    }
     P(" [i] offset      size        name         (flags)(type)(link,info,align)\n");
     P("{\n");
     for(i = 0; i < generic_count; i++, ++gshdr) {
@@ -701,6 +758,11 @@ elf_print_sectheaders(elf_filedata ep)
             P("," LONGESTXFMT ")" ,gshdr->gh_addralign);
         }
         P("\n");
+        if (gshdr->gh_relcount && !ep->f_symtab_sect_index) {
+            P("Warning: Section " LONGESTUFMT " %s is a relocation section"
+                " but there is no .symtab. Possibly invalid relocations.\n",
+                i,namestr);
+        }
     }
     P("Summary: " LONGESTUFMT " bytes for "
         LONGESTUFMT " debug sections\n",
@@ -828,7 +890,7 @@ get_elf_symtab_symbol_name( elf_filedata ep,
         return DW_DLV_NO_ENTRY;
     }
     gsym = ep->f_symtab + symnum;
-    if (gsym->gs_type == STT_SECTION) { 
+    if (gsym->gs_type == STT_SECTION) {
         Dwarf_Unsigned secnum = gsym->gs_shndx;
         struct generic_shdr *shdr = 0;
         if (secnum < ep->f_ehdr->ge_shnum) {
@@ -897,7 +959,7 @@ elf_print_relocation_content(
     struct generic_rela *grela, Dwarf_Unsigned count)
 {
     Dwarf_Unsigned i = 0;
-    int is64bit = (ep->f_offsetsize == 64); 
+    int is64bit = (ep->f_offsetsize == 64);
     int ismips = (ep->f_machine == EM_MIPS);
 
     P("\n");
@@ -1068,20 +1130,6 @@ elf_print_elf_header(elf_filedata ep)
     }
 }
 
-int
-cur_read_loc(FILE *fin_arg, long * fileoffset)
-{
-    long loc = 0;
-
-    loc = ftell(fin_arg);
-    if (loc < 0) {
-        /* ERROR */
-        return RO_ERROR;
-    }
-    *fileoffset = loc;
-    return RO_OK;
-}
-
 #define MAXWBLOCK 100000
 
 static int
@@ -1102,7 +1150,8 @@ is_wasted_space_zero(elf_filedata ep,
     }
     allocspace = (char *)malloc(alloclen);
     if(!allocspace) {
-        P("Unable to malloc " LONGESTUFMT "bytes for zero checking.\n",
+        P("Unable to malloc " LONGESTUFMT
+            "bytes for zero checking.\n",
             alloclen);
         return RO_ERROR;
     }
@@ -1115,11 +1164,11 @@ is_wasted_space_zero(elf_filedata ep,
         }
         res = RRMOA(ep->f_fd,allocspace,offset,checklen,
             ep->f_filesize,&errcode);
-        if (res != RO_OK) {
+        if (res == RO_ERROR) {
             free(allocspace);
             P("ERROR: could not read wasted space at offset "
-                LONGESTXFMT " properly\n",
-                offset);
+                LONGESTXFMT " properly. errcode %d (%s)\n",
+                offset,errcode,dwarf_get_errname(errcode));
             return res;
         }
         for (i = 0; i < checklen; ++i) {

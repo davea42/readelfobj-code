@@ -131,6 +131,18 @@ extern int printfilenames;
 #ifndef PT_LOPROC
 #define PT_LOPROC 0x70000000
 #endif
+#ifndef PT_GNU_EH_FRAME
+#define PT_GNU_EH_FRAME 0x6474e550
+#endif  /* PT_GNU_EH_FRAME */
+#ifndef PT_GNU_STACK
+#define PT_GNU_STACK    0x6474e551
+#endif /* PT_GNU_STACK */
+#ifndef PT_GNU_RELRO
+#define PT_GNU_RELRO    0x6474e552
+#endif /* PT_GNU_RELRO */
+#ifndef PT_PAX_FLAGS
+#define PT_PAX_FLAGS 0x65041580
+#endif  /* PT_PAX_FLAGS  */
 #ifndef PT_HIPROC
 #define PT_HIPROC 0x7fffffff
 #endif
@@ -1226,10 +1238,6 @@ const char * dwarf_get_elf_section_header_flag_names(
     Dwarf_Unsigned value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_st_type_name(
     Dwarf_Unsigned value, char *buffer, unsigned buflen);
-
-
-
-int cur_read_loc(FILE *fin, long* fileoffset);
 
 #ifndef EI_NIDENT
 #define EI_NIDENT 16

@@ -30,6 +30,7 @@ dwarf_elf_reloc_ppc64.h	 \
 dwarf_elf_reloc_x86_64.c \
 dwarf_elf_reloc_x86_64.h \
 dwarf_load_elf_headers.c \
+errormessages.c \
 readelfobj_version.h \
 readelfobj.c \
 dwarf_reading.h \
@@ -53,6 +54,7 @@ dwarf_object_detector.h \
 dwarf_machoread.h \
 dwarf_machoread.c \
 dwarf_macho_loader.h \
+errormessages.c \
 sanitized.c
 readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
 readobjmacho_CPPFLAGS = \
@@ -68,6 +70,7 @@ dwarf_object_detector.h \
 dwarf_peread.h \
 dwarf_peread.c \
 dwarf_pe_descr.h \
+errormessages.c \
 sanitized.c
 readobjpe_CFLAGS = $(RO_CFLAGS_WARN)
 readobjpe_CPPFLAGS = \
@@ -77,6 +80,7 @@ readobjpe_CPPFLAGS = \
 
 object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.c \
+   errormessages.c \
    dwarf_object_detector.h
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
 

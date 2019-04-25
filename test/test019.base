@@ -1,3 +1,20 @@
+Section Group arrays
+ section  name      groupsections
+[1]  .group               7
+[2]  .group               9
+
+Section Group by dwarf section
+  section          groupnumber  sectionnumber
+  .debug_types         3          7
+  .debug_types         4          9
+  .debug_info          1          11
+  .debug_abbrev        1          13
+  .debug_aranges       1          14
+  .debug_line          1          16
+  .debug_str           1          18
+  .eh_frame            1          21
+  SHT_GROUP count  : 2
+  SHF_GROUP count  : 2
 Elf object file comdatex.example.o
  Elf Header ident bytes:  7f454c46 01010100 00000000 00000000
   File class    = 0x1 (ELFCLASS32)
@@ -20,8 +37,7 @@ Elf object file comdatex.example.o
   Section strings are in section 23
 
 Program header count: 0
-{
-}
+
 String section data at 0x37c (892) length 0xbb (187)
 
 Section count: 26
@@ -72,7 +88,7 @@ Section Group by dwarf section
   .eh_frame            1          21
   SHT_GROUP count  : 2
   SHF_GROUP count  : 2
-No .dynamic section in  comdatex.example.o
+No .dynamic section exists in comdatex.example.o
 
 Symbols from .symtab: 24 at offset 0x848
 {

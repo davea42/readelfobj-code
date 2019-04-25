@@ -111,7 +111,8 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_object_detector_OBJECTS =  \
 	object_detector-object_detector_main.$(OBJEXT) \
-	object_detector-dwarf_object_detector.$(OBJEXT)
+	object_detector-dwarf_object_detector.$(OBJEXT) \
+	object_detector-errormessages.$(OBJEXT)
 object_detector_OBJECTS = $(am_object_detector_OBJECTS)
 object_detector_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -134,6 +135,7 @@ am_readelfobj_OBJECTS = readelfobj-dwarf_object_detector.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_ppc64.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_x86_64.$(OBJEXT) \
 	readelfobj-dwarf_load_elf_headers.$(OBJEXT) \
+	readelfobj-errormessages.$(OBJEXT) \
 	readelfobj-readelfobj.$(OBJEXT) readelfobj-sanitized.$(OBJEXT)
 readelfobj_OBJECTS = $(am_readelfobj_OBJECTS)
 readelfobj_LDADD = $(LDADD)
@@ -144,6 +146,7 @@ am_readobjmacho_OBJECTS = readobjmacho-readobjmacho.$(OBJEXT) \
 	readobjmacho-dwarf_object_read_common.$(OBJEXT) \
 	readobjmacho-dwarf_object_detector.$(OBJEXT) \
 	readobjmacho-dwarf_machoread.$(OBJEXT) \
+	readobjmacho-errormessages.$(OBJEXT) \
 	readobjmacho-sanitized.$(OBJEXT)
 readobjmacho_OBJECTS = $(am_readobjmacho_OBJECTS)
 readobjmacho_LDADD = $(LDADD)
@@ -153,7 +156,9 @@ readobjmacho_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 am_readobjpe_OBJECTS = readobjpe-readobjpe.$(OBJEXT) \
 	readobjpe-dwarf_object_read_common.$(OBJEXT) \
 	readobjpe-dwarf_object_detector.$(OBJEXT) \
-	readobjpe-dwarf_peread.$(OBJEXT) readobjpe-sanitized.$(OBJEXT)
+	readobjpe-dwarf_peread.$(OBJEXT) \
+	readobjpe-errormessages.$(OBJEXT) \
+	readobjpe-sanitized.$(OBJEXT)
 readobjpe_OBJECTS = $(am_readobjpe_OBJECTS)
 readobjpe_LDADD = $(LDADD)
 readobjpe_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -399,6 +404,7 @@ dwarf_elf_reloc_ppc64.h	 \
 dwarf_elf_reloc_x86_64.c \
 dwarf_elf_reloc_x86_64.h \
 dwarf_load_elf_headers.c \
+errormessages.c \
 readelfobj_version.h \
 readelfobj.c \
 dwarf_reading.h \
@@ -421,6 +427,7 @@ dwarf_object_detector.h \
 dwarf_machoread.h \
 dwarf_machoread.c \
 dwarf_macho_loader.h \
+errormessages.c \
 sanitized.c
 
 readobjmacho_CFLAGS = $(RO_CFLAGS_WARN)
@@ -437,6 +444,7 @@ dwarf_object_detector.h \
 dwarf_peread.h \
 dwarf_peread.c \
 dwarf_pe_descr.h \
+errormessages.c \
 sanitized.c
 
 readobjpe_CFLAGS = $(RO_CFLAGS_WARN)
@@ -445,6 +453,7 @@ readobjpe_CPPFLAGS = \
 
 object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.c \
+   errormessages.c \
    dwarf_object_detector.h
 
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
@@ -562,6 +571,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-dwarf_object_detector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-object_detector_main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_naming.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_386.Po@am__quote@
@@ -575,16 +585,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_load_elf_headers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_read_common.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_machoread.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-dwarf_object_read_common.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-readobjmacho.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjmacho-sanitized.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-dwarf_object_read_common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-dwarf_peread.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-readobjpe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-sanitized.Po@am__quote@
 
@@ -639,6 +652,20 @@ object_detector-dwarf_object_detector.obj: dwarf_object_detector.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_detector.c' object='object_detector-dwarf_object_detector.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -c -o object_detector-dwarf_object_detector.obj `if test -f 'dwarf_object_detector.c'; then $(CYGPATH_W) 'dwarf_object_detector.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_detector.c'; fi`
+
+object_detector-errormessages.o: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -MT object_detector-errormessages.o -MD -MP -MF $(DEPDIR)/object_detector-errormessages.Tpo -c -o object_detector-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/object_detector-errormessages.Tpo $(DEPDIR)/object_detector-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='object_detector-errormessages.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -c -o object_detector-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+
+object_detector-errormessages.obj: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -MT object_detector-errormessages.obj -MD -MP -MF $(DEPDIR)/object_detector-errormessages.Tpo -c -o object_detector-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/object_detector-errormessages.Tpo $(DEPDIR)/object_detector-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='object_detector-errormessages.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -c -o object_detector-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
 
 readelfobj-dwarf_object_detector.o: dwarf_object_detector.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_object_detector.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_object_detector.Tpo -c -o readelfobj-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
@@ -808,6 +835,20 @@ readelfobj-dwarf_load_elf_headers.obj: dwarf_load_elf_headers.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_load_elf_headers.obj `if test -f 'dwarf_load_elf_headers.c'; then $(CYGPATH_W) 'dwarf_load_elf_headers.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_load_elf_headers.c'; fi`
 
+readelfobj-errormessages.o: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-errormessages.o -MD -MP -MF $(DEPDIR)/readelfobj-errormessages.Tpo -c -o readelfobj-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-errormessages.Tpo $(DEPDIR)/readelfobj-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='readelfobj-errormessages.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+
+readelfobj-errormessages.obj: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-errormessages.obj -MD -MP -MF $(DEPDIR)/readelfobj-errormessages.Tpo -c -o readelfobj-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-errormessages.Tpo $(DEPDIR)/readelfobj-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='readelfobj-errormessages.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
+
 readelfobj-readelfobj.o: readelfobj.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-readelfobj.o -MD -MP -MF $(DEPDIR)/readelfobj-readelfobj.Tpo -c -o readelfobj-readelfobj.o `test -f 'readelfobj.c' || echo '$(srcdir)/'`readelfobj.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-readelfobj.Tpo $(DEPDIR)/readelfobj-readelfobj.Po
@@ -892,6 +933,20 @@ readobjmacho-dwarf_machoread.obj: dwarf_machoread.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-dwarf_machoread.obj `if test -f 'dwarf_machoread.c'; then $(CYGPATH_W) 'dwarf_machoread.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_machoread.c'; fi`
 
+readobjmacho-errormessages.o: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-errormessages.o -MD -MP -MF $(DEPDIR)/readobjmacho-errormessages.Tpo -c -o readobjmacho-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-errormessages.Tpo $(DEPDIR)/readobjmacho-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='readobjmacho-errormessages.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+
+readobjmacho-errormessages.obj: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-errormessages.obj -MD -MP -MF $(DEPDIR)/readobjmacho-errormessages.Tpo -c -o readobjmacho-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-errormessages.Tpo $(DEPDIR)/readobjmacho-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='readobjmacho-errormessages.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -c -o readobjmacho-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
+
 readobjmacho-sanitized.o: sanitized.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjmacho_CPPFLAGS) $(CPPFLAGS) $(readobjmacho_CFLAGS) $(CFLAGS) -MT readobjmacho-sanitized.o -MD -MP -MF $(DEPDIR)/readobjmacho-sanitized.Tpo -c -o readobjmacho-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjmacho-sanitized.Tpo $(DEPDIR)/readobjmacho-sanitized.Po
@@ -961,6 +1016,20 @@ readobjpe-dwarf_peread.obj: dwarf_peread.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_peread.c' object='readobjpe-dwarf_peread.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-dwarf_peread.obj `if test -f 'dwarf_peread.c'; then $(CYGPATH_W) 'dwarf_peread.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_peread.c'; fi`
+
+readobjpe-errormessages.o: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-errormessages.o -MD -MP -MF $(DEPDIR)/readobjpe-errormessages.Tpo -c -o readobjpe-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-errormessages.Tpo $(DEPDIR)/readobjpe-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='readobjpe-errormessages.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-errormessages.o `test -f 'errormessages.c' || echo '$(srcdir)/'`errormessages.c
+
+readobjpe-errormessages.obj: errormessages.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-errormessages.obj -MD -MP -MF $(DEPDIR)/readobjpe-errormessages.Tpo -c -o readobjpe-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readobjpe-errormessages.Tpo $(DEPDIR)/readobjpe-errormessages.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='readobjpe-errormessages.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
 
 readobjpe-sanitized.o: sanitized.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -MT readobjpe-sanitized.o -MD -MP -MF $(DEPDIR)/readobjpe-sanitized.Tpo -c -o readobjpe-sanitized.o `test -f 'sanitized.c' || echo '$(srcdir)/'`sanitized.c

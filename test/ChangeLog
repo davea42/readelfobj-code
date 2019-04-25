@@ -1,3 +1,6 @@
+2019-04-24   David Anderson
+    * test003.base,test017.base, test019.base,test020.base,
+      test021.base : to match latest elf reader.
 2019-04-18   David Anderson
     * test020.*: A test with MIPS64 object (special relocation content). 
     * test021.*: A test with SPARCV9 object (special relocation content).

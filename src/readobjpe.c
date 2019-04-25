@@ -176,8 +176,9 @@ do_one_file(const char *name)
     res = dwarf_construct_pe_access_path(name,
         &pep,&errcode);
     if (res != RO_OK) {
-        P("Warning: Unable to open %s for detailed reading. Err %d\n",
-            name,errcode);
+        P("Warning: Unable to open %s for detailed reading."
+            " errcode %d (%s)\n",
+            name,errcode,dwarf_get_errname(errcode));
         return;
     }
 #ifdef WORDS_BIGENDIAN
@@ -202,8 +203,9 @@ do_one_file(const char *name)
 
     res = dwarf_load_pe_sections(pep,&errcode);
     if (res != DW_DLV_OK) {
-        P("Warning: %s pe-header not loaded giving up. Error %d",
-            name,errcode);
+        P("Warning: %s pe-header not loaded giving up."
+            " errcode %d (%s)\n",
+            name,errcode,dwarf_get_errname(errcode));
         dwarf_destruct_pe_access(pep);
         return;
     }

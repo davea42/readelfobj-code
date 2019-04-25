@@ -348,17 +348,3 @@ do_one_file(const char *s)
     print_macho_dwarf_sections(mfp);
     dwarf_destruct_macho_access(mfp);
 }
-
-int
-cur_read_loc(FILE *fin_arg, long * fileoffset)
-{
-    long loc = 0;
-
-    loc = ftell(fin_arg);
-    if (loc < 0) {
-        /* ERROR */
-        return RO_ERROR;
-    }
-    *fileoffset = loc;
-    return RO_OK;
-}

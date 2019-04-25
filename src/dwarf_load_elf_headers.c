@@ -101,9 +101,8 @@ check_size(const char *name,Dwarf_Unsigned offset, size_t size,
             LONGESTUFMT " (" LONGESTXFMT ")\n",
             offset,offset);
         P("       of size "
-            LONGESTSFMT " (" LONGESTXFMT ")\n", 
+            LONGESTSFMT " (" LONGESTXFMT ")\n",
             size,(Dwarf_Unsigned)size);
-            
         P("       exceeds the file size of "
             LONGESTUFMT " (" LONGESTXFMT ").\n",
             filesize,filesize);
@@ -869,12 +868,12 @@ generic_rel_from_rela32(elf_filedata ep,
     return DW_DLV_OK;
 }
 #if 0
-/*  EM_MIPS where the file is ELF 64.
- ELF64_MIPS_R_SSYM(i) (((i) >> 24) & 0xff)
- ELF64_MIPS_R_TYPE3(i) (((i) >> 16) & 0xff)
- ELF64_MIPS_R_TYPE2(i) (((i) >> 8) & 0xff)
- ELF64_MIPS_R_TYPE(i) ((i) & 0xff)
- EM_SPARCV9 is also special 64bit reloc type
+/*  EM_MIPS where the file is littleendian ELF 64.
+    ELF64_MIPS_R_SSYM(i) (((i) >> 24) & 0xff)
+    ELF64_MIPS_R_TYPE3(i) (((i) >> 16) & 0xff)
+    ELF64_MIPS_R_TYPE2(i) (((i) >> 8) & 0xff)
+    ELF64_MIPS_R_TYPE(i) ((i) & 0xff)
+    EM_SPARCV9 is also special 64bit reloc type
 */
 #endif
 
@@ -981,7 +980,7 @@ generic_rel_from_rel64(elf_filedata ep,
     if(size != size2) {
         P("ERROR: Bogus size of relocations section "
             LONGESTUFMT ". "
-            " not divisible by %lu\n",
+            " not divisible by %lu RO_ERR_RELCOUNTMISMATCH\n",
             size,(unsigned long)sizeof(dw_elf64_rel));
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
@@ -1193,7 +1192,8 @@ elf_load_progheaders32(elf_filedata ep,
         (entsize > 200)||
         (count > ep->f_filesize) ||
         (((count *entsize) +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with program header "
+            P("ERROR: Something badly wrong with elf header"
+                " references to program headers"
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
@@ -1207,7 +1207,11 @@ elf_load_progheaders32(elf_filedata ep,
         return res;
     }
     if (count != generic_count) {
-        P("ERROR: Something badly wrong reading program headers");
+        P("ERROR: Something badly wrong reading program headers"
+            " Header count expected " LONGESTUFMT
+            " while actual count " LONGESTUFMT
+            " RO_ERR_PHDRCOUNTMISMATCH\n",
+            count,generic_count);
         *errcode = RO_ERR_PHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1247,7 +1251,8 @@ elf_load_progheaders64(elf_filedata ep,
         (entsize > 200)||
         (count > ep->f_filesize) ||
         (((count *entsize) +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with program header "
+            P("ERROR: Something badly wrong with elf header"
+                " references to program headers"
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
@@ -1261,7 +1266,11 @@ elf_load_progheaders64(elf_filedata ep,
         return res;
     }
     if (count != generic_count) {
-        P("ERROR: Something badly wrong reading program headers");
+        P("ERROR: Something badly wrong reading program headers"
+            " Header count expected " LONGESTUFMT
+            " while actual count " LONGESTUFMT
+            " RO_ERR_PHDRCOUNTMISMATCH\n",
+            count,generic_count);
         *errcode = RO_ERR_PHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1297,7 +1306,8 @@ elf_load_sectheaders32(elf_filedata ep,
         (entsize > 200)||
         (count > ep->f_filesize) ||
         ((count *entsize +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with section header "
+            P("ERROR: Something badly wrong with elf header"
+                " references to section headers "
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
@@ -1311,7 +1321,11 @@ elf_load_sectheaders32(elf_filedata ep,
         return res;
     }
     if (generic_count != count) {
-        P("ERROR: Something wrong reading section headers\n");
+        P("ERROR: Something badly wrong reading section headers"
+            " Header count expected " LONGESTUFMT
+            " while actual count " LONGESTUFMT
+            " RO_ERR_SHDRCOUNTMISMATCH\n",
+            count,generic_count);
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1344,7 +1358,8 @@ elf_load_sectheaders64(elf_filedata ep,
         (entsize > 200)||
         (count > ep->f_filesize) ||
         ((count *entsize +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with section header "
+            P("ERROR: Something badly wrong with elf header"
+                " references to section headers "
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
@@ -1358,7 +1373,11 @@ elf_load_sectheaders64(elf_filedata ep,
         return res;
     }
     if (generic_count != count) {
-        P("ERROR: Something wrong reading section headers\n");
+        P("ERROR: Something badly wrong reading section headers"
+            " Header count expected " LONGESTUFMT
+            " while actual count " LONGESTUFMT
+            " RO_ERR_SHDRCOUNTMISMATCH\n",
+            count,generic_count);
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
@@ -1397,13 +1416,15 @@ dwarf_elf_load_rela_32(elf_filedata ep,
     if ((offset > ep->f_filesize)||
         (size > ep->f_filesize) ||
         ((size +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with relocation section %s "
+            P("ERROR: Something badly wrong with"
+                " relocation section %s "
                 " filesize " LONGESTUFMT
                 " offset " LONGESTUFMT
                 " size " LONGESTUFMT
                 "\n",
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
+            *errcode = RO_ERR_FILEOFFSETBAD;
             return RO_ERROR;
     }
 
@@ -1415,6 +1436,7 @@ dwarf_elf_load_rela_32(elf_filedata ep,
             " not divisible by "
             LONGESTUFMT "\n",
             secnum, size,object_reclen);
+        *errcode = RO_ERR_RELSECTIONSIZE;
         return RO_ERROR;
     }
     relp = (dw_elf32_rela *)malloc(size);
@@ -1449,11 +1471,12 @@ dwarf_elf_load_rela_32(elf_filedata ep,
             secnum,
             sanitized(filename,buffer1,BUFFERSIZE),
             sizeg);
-        return RO_ERR_MALLOC;
+        *errcode = RO_ERR_MALLOC;
+        return RO_ERROR;
     }
     res = generic_rel_from_rela32(ep,gsh,relp,grel,errcode);
     free(relp);
-    if (res != DW_DLV_OK) {
+    if (res == DW_DLV_OK) {
         gsh->gh_relcount = count;
         gsh->gh_rels = grel;
         *count_out = count;
@@ -1463,7 +1486,7 @@ dwarf_elf_load_rela_32(elf_filedata ep,
     /* Some sort of issue */
     count_out = 0;
     free(grel);
-    return RO_ERROR;
+    return res;
 }
 
 
@@ -1495,11 +1518,13 @@ dwarf_elf_load_rel_32(elf_filedata ep,
     if ((offset > ep->f_filesize)||
         (size > ep->f_filesize) ||
         ((size +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with relocation section %s "
+            P("ERROR: Something badly wrong with relocation section "
+                LONGESTUFMT " %s "
                 " filesize " LONGESTUFMT
                 " offset " LONGESTUFMT
                 " size " LONGESTUFMT
                 "\n",
+                secnum,
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
             return RO_ERROR;
@@ -1592,11 +1617,13 @@ dwarf_elf_load_rel_64(elf_filedata ep,
     if ((offset > ep->f_filesize)||
         (size > ep->f_filesize) ||
         ((size +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with relocation section %s "
+            P("ERROR: Something badly wrong with relocation section "
+                LONGESTUFMT " %s "
                 " filesize " LONGESTUFMT
                 " offset " LONGESTUFMT
                 " size " LONGESTUFMT
                 "\n",
+                secnum,
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
             *errcode = RO_ERR_FILEOFFSETBAD;
@@ -1609,7 +1636,7 @@ dwarf_elf_load_rel_64(elf_filedata ep,
         P("Bogus size of relocations. Section " LONGESTUFMT
             ": " LONGESTUFMT
             " not divisible by "
-            LONGESTUFMT "\n",
+            LONGESTUFMT " RO_ERR_RELCOUNTMISMATCH\n",
             secnum, size,object_reclen);
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
@@ -1693,11 +1720,14 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
     if ((offset > ep->f_filesize)||
         (size > ep->f_filesize) ||
         ((size +offset) > ep->f_filesize)) {
-            P("ERROR: Something badly wrong with relocation section %s "
+            P("ERROR: Something badly wrong with"
+                " relocation section "
+                LONGESTUFMT " %s "
                 " filesize " LONGESTUFMT
                 " offset " LONGESTUFMT
                 " size " LONGESTUFMT
                 "\n",
+                secnum,
                 sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
             *errcode = RO_ERR_FILEOFFSETBAD;
@@ -1709,7 +1739,7 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
         P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
             ": " LONGESTUFMT
             " not divisible by "
-            LONGESTUFMT "\n",
+            LONGESTUFMT " RO_ERR_RELCOUNTMISMATCH\n",
             secnum, size,object_reclen);
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
@@ -1762,7 +1792,7 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
     /* Some sort of error */
     count_out = 0;
     free (grel);
-    return RO_ERROR;
+    return res;
 }
 
 int
@@ -1782,10 +1812,6 @@ dwarf_load_elf_rela(elf_filedata ep,
     }
     offsetsize = ep->f_offsetsize;
     generic_count = ep->f_loc_shdr.g_count;
-    if (secnum >= generic_count) {
-        *errcode = RO_ERR_SHDRCOUNTMISMATCH;
-        return DW_DLV_ERROR;
-    }
     gshdr = ep->f_shdr +secnum;
     if (is_empty_section(gshdr->gh_type)) {
         return DW_DLV_NO_ENTRY;
@@ -1798,12 +1824,9 @@ dwarf_load_elf_rela(elf_filedata ep,
             secnum,gshdr,&grp,&count_read,errcode);
     } else {
         *errcode = RO_ERR_BADOFFSETSIZE;
-        return DW_DLV_ERROR;
+        return RO_ERROR;
     }
-    if (res == DW_DLV_ERROR) {
-        return res;
-    }
-    if (res == DW_DLV_NO_ENTRY) {
+    if (res != RO_OK) {
         return res;
     }
     gshdr->gh_rels = grp;
@@ -1827,10 +1850,17 @@ dwarf_load_elf_rel(elf_filedata ep,
     }
     offsetsize = ep->f_offsetsize;
     generic_count = ep->f_loc_shdr.g_count;
+#if 0
     if (secnum >= generic_count) {
-        *errcode = RO_ERR_SHDRCOUNTMISMATCH;
+        P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
+            ": " LONGESTUFMT
+            " not divisible by "
+            LONGESTUFMT " RO_ERR_RELCOUNTMISMATCH\n",
+            secnum, size,object_reclen);
+        *errcode = RO_ERR_RELCOUNTMISMATCH;
         return DW_DLV_ERROR;
     }
+#endif
     gshdr = ep->f_shdr +secnum;
     if (is_empty_section(gshdr->gh_type)) {
         return DW_DLV_NO_ENTRY;
@@ -1854,6 +1884,142 @@ dwarf_load_elf_rel(elf_filedata ep,
     gshdr->gh_rels = grp;
     gshdr->gh_relcount = count_read;
     return DW_DLV_OK;
+}
+
+static void
+elf_check_phdr_sizes(elf_filedata ep)
+{
+    struct generic_phdr *gphdr = 0;
+    Dwarf_Unsigned generic_count = 0;
+    Dwarf_Unsigned i = 1;
+    Dwarf_Unsigned filesize = ep->f_filesize;
+
+    gphdr = ep->f_phdr;
+    generic_count = ep->f_loc_phdr.g_count;
+    for(i = 0; i < generic_count; i++, ++gphdr) {
+        Dwarf_Unsigned offset = 0;
+        Dwarf_Unsigned size = 0;
+        const char *type = "";
+
+        switch(gphdr->gp_type) {
+        case PT_NULL:
+            type = "PT_NULL";
+            break;
+        case PT_SHLIB:
+            type = "PT_SHLIB";
+            break;
+        case PT_LOAD:
+            type = "PT_LOAD";
+            size   = gphdr->gp_filesz;
+            offset = gphdr->gp_offset;
+            break;
+        case PT_DYNAMIC:
+            type = "PT_DYNAMIC";
+            size   = gphdr->gp_filesz;
+            offset = gphdr->gp_offset;
+            break;
+        case PT_NOTE:
+            type = "PT_NOTE";
+            size   = gphdr->gp_filesz;
+            offset = gphdr->gp_offset;
+            break;
+        case PT_INTERP:
+            type = "PT_INTERP";
+            size   = gphdr->gp_filesz;
+            offset = gphdr->gp_offset;
+            break;
+        case PT_PHDR:
+            type = "PT_PHDR";
+            size   = gphdr->gp_filesz;
+            offset = gphdr->gp_offset;
+            break;
+        case PT_GNU_EH_FRAME:
+            type = "PT_GNU_EH_FRAME";
+            /*  Location of exception handling information
+                as defined by .eh_frame_hdr section. */
+            size   = gphdr->gp_filesz;
+            offset = gphdr->gp_offset;
+            break;
+        case PT_GNU_STACK:
+            /*  Indicates, by its existence, that
+                an executable stack is not needed. */
+            type = "PT_GNU_STACK";
+            break;
+        case PT_GNU_RELRO:
+            /*  The location and size of a segment
+                that may be made read-only after
+                relocations have been processed. */
+            type = "PT_GNU_RELRO";
+            size   = gphdr->gp_filesz;
+            offset = gphdr->gp_offset;
+            break;
+        case PT_PAX_FLAGS:
+            /*  This is likely going to go away in favor
+                of XATTR_PAX according to gentoo documentation.
+                As of glibc-2.16 this progam header will
+                not be used any longer.(?)
+                Apparently extended file attributes will
+                be used instead (XATTR_PAX) */
+            type = "PT_PAX_FLAGS";
+            break;
+        default:
+            type = "<PT_unknown>";
+            break;
+        }
+        if (size >= filesize ||
+            offset >= filesize ||
+            (size+offset) > filesize) {
+            P("ERROR: ProgramHeader size error. "
+                " headernumber " LONGESTUFMT " (%s)"
+                " offset " LONGESTUFMT
+                ", size " LONGESTUFMT
+                ", endpoint " LONGESTUFMT
+                ", filesize " LONGESTUFMT "\n",
+                i, type,offset, size,
+                offset+size, filesize);
+        }
+        if (gphdr->gp_filesz > gphdr->gp_memsz) {
+            P("Warning: ProgramHeader p_filesz > p_memsz "
+                " headernumber " LONGESTUFMT " (%s)"
+                " p_filesz " LONGESTUFMT
+                ", p_memsz " LONGESTUFMT "\n",
+                i,type, gphdr->gp_filesz, gphdr->gp_memsz);
+        }
+    }
+}
+
+static void
+elf_check_sect_sizes(elf_filedata ep)
+{
+    struct generic_shdr *gshdr = 0;
+    Dwarf_Unsigned generic_count = 0;
+    Dwarf_Unsigned i = 1;
+    Dwarf_Unsigned filesize = ep->f_filesize;
+
+    gshdr = ep->f_shdr;
+    generic_count = ep->f_loc_shdr.g_count;
+    for(i = 0; i < generic_count; i++, ++gshdr) {
+        if (is_empty_section(gshdr->gh_type)) {
+            continue;
+        }
+        if (gshdr->gh_offset >= filesize ||
+            gshdr->gh_size >= filesize ||
+            (gshdr->gh_size+ gshdr->gh_offset) > filesize) {
+            P("ERROR: Section size error. "
+                " section " LONGESTUFMT " %s "
+                " offset " LONGESTUFMT
+                ", size " LONGESTUFMT
+                ", endpoint " LONGESTUFMT
+                ", filesize " LONGESTUFMT "\n",
+                i,
+                sanitized(gshdr->gh_namestring,
+                    buffer1,BUFFERSIZE),
+                gshdr->gh_offset,
+                gshdr->gh_size,
+                gshdr->gh_size + gshdr->gh_offset,
+                filesize);
+        }
+    }
 }
 
 
@@ -2258,24 +2424,54 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
     return res;
 }
 
+/*  We assume that  the sect numbers are valid,
+    if non-zero: we set them!  */
 static int
-validate_links(elf_filedata ep,
+validate_links(const char * area,
+    elf_filedata ep,
     Dwarf_Unsigned knownsect,
     Dwarf_Unsigned string_sect,
     int *errcode)
 {
     struct generic_shdr* pshk = 0;
+    struct generic_shdr* pshs = 0;
 
+    if (string_sect) {
+        pshs = ep->f_shdr + string_sect;
+    }
     if (!knownsect) {
+        if (string_sect) {
+            P("Warning: Links %s: Have string sect " LONGESTUFMT
+                " %s but the apppropriate symbol table"
+                " section missing. \n",
+                area,string_sect,
+                sanitized(pshs->gh_namestring,
+                    buffer1,BUFFERSIZE));
+        }
         return DW_DLV_OK;
     }
+    pshk = ep->f_shdr + knownsect;
     if (!string_sect) {
+        P("Warning: Links %s: Have (sec " LONGESTUFMT
+            " %s) but no string section found. \n",
+            area,knownsect,
+            sanitized(pshk->gh_namestring,
+                buffer1,BUFFERSIZE));
         *errcode = RO_ERR_ELF_STRING_SECT;
         return DW_DLV_ERROR;
     }
-    pshk = ep->f_shdr + knownsect;
     if (string_sect != pshk->gh_link) {
-        *errcode = RO_ERR_ELF_STRING_SECT;
+        P("Warning: Links  %s: (" LONGESTUFMT
+            " %s) expected to have link "
+            LONGESTUFMT "(%s) but has link "
+            LONGESTUFMT " instead \n",
+            area,
+            knownsect,
+            sanitized(pshk->gh_namestring, buffer3,BUFFERSIZE),
+            string_sect,
+            sanitized(pshs->gh_namestring, buffer3,BUFFERSIZE),
+            pshk->gh_link);
+        *errcode =  RO_ERR_ELF_STRING_LINK_ERROR;
         return DW_DLV_ERROR;
     }
     return DW_DLV_OK;
@@ -2564,7 +2760,9 @@ elf_find_sym_sections(elf_filedata ep,
     for (i = 0; i < count; ++psh,++i) {
         const char *name = psh->gh_namestring;
         if (is_empty_section(psh->gh_type)) {
-            /*  No data here. */
+            /*  No data here.  With a corrupted object
+                the name could be important, like .symtab,
+                but with no content we ignore the empty. */
             continue;
         }
         if (!strcmp(name,".dynsym")) {
@@ -2585,17 +2783,17 @@ elf_find_sym_sections(elf_filedata ep,
         }
     }
 
-    res = validate_links(ep,ep->f_dynsym_sect_index,
+    res = validate_links(".dynsym",ep,ep->f_dynsym_sect_index,
         ep->f_dynsym_sect_strings_sect_index,errcode);
     if (res!= DW_DLV_OK) {
         return res;
     }
-    res = validate_links(ep,ep->f_symtab_sect_index,
+    res = validate_links(".symtab",ep,ep->f_symtab_sect_index,
         ep->f_symtab_sect_strings_sect_index,errcode);
     if (res!= DW_DLV_OK) {
         return res;
     }
-    res = validate_links(ep,ep->f_dynamic_sect_index,
+    res = validate_links(".dynamic",ep,ep->f_dynamic_sect_index,
         ep->f_dynsym_sect_strings_sect_index,errcode);
     if (res!= DW_DLV_OK) {
         return res;
@@ -2629,6 +2827,7 @@ dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
     if (res != DW_DLV_OK) {
         return res;
     }
+    elf_check_sect_sizes(ep);
     res  = elf_find_sym_sections(ep,errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -2657,6 +2856,7 @@ dwarf_load_elf_progheaders(elf_filedata ep,int*errcode)
         *errcode = RO_ERR_BADOFFSETSIZE;
         return DW_DLV_ERROR;
     }
+    elf_check_phdr_sizes(ep);
     return res;
 }
 

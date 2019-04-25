@@ -130,7 +130,11 @@ extern "C" {
 #define RO_SEEK_OFF_END           31
 #define RO_READ_OFF_END           32
 #define RO_SEEK_ERROR             33
+
+const char *dwarf_get_errname(int i);
+
 #define RO_READ_ERROR             34
+#define RO_ERR_ELF_STRING_LINK_ERROR    35
 
 #define P printf
 #define F fflush(stdout)

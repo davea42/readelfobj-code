@@ -1,3 +1,5 @@
+2010-04-24: David Anderson
+    * configure.ac: Version 20190422
 2010-04-18: David Anderson
     * configure.ac: Rev now 20190418
     * scripts/build_all_relocs.sh: Now does sparc too

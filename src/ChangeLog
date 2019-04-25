@@ -1,3 +1,29 @@
+2010-04-24: David Anderson
+     * Makefile.am: Added errormessages.c three places.
+     * dwarf_elf_naming.c: Added PT_PAX_FLAGS.
+     * dwarf_load_elf_headers.c: Improved some error/warning
+       messages and added new correctness checks of
+       the elf section headers and program headers.
+       Corrected mistakes in validate_links().
+       Fixed indent issues.
+     * dwarf_machoread.h: Deleted meaningless local
+       declaration of cur_read_loc(), a function that
+       does not exist.
+     * dwarf_object_read_common.c: Added error mesages
+       for each of the error cases.
+     * dwarf_peread.c:  Added error mesages
+       for each of the error cases.
+     * dwarfmessages.c: Make error reporting from
+       here much easier to understand, having
+       text for the error numbers.
+     * dwarf_reading.h: declaration of dwarf_get_errname()
+       to turn local error numbers into a name.
+     * readelfobj.c: Revamp so we read the relevant sections
+       first, then print. That improves the correctness checking.
+       In case of errors we print a basic header set.
+     * readelfobj.h: Add PT_ defines we failed to
+       pick up earlier.
+     * readobjpe.c: Improved reports of errors.
 2010-04-21: David Anderson
      * dwarf_load_elf_headers.c,dwarf_machoread.c: Adding 
        filesize to read-random calls.

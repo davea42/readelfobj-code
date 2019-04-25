@@ -120,11 +120,17 @@ pe_section_name_get(dwarf_pe_object_access_internals_t *pep,
         temp_array[7] = 0;
         v = atoi(temp_array);
         if (v < 0) {
+            P("ERROR: PE section name integer negative! "
+                "%s DW_DLE_STRING_OFFSET_BAD\n",
+                temp_array);
             *errcode = DW_DLE_STRING_OFFSET_BAD;
             return DW_DLV_ERROR;
         }
         u = v;
         if (u > pep->pe_string_table_size) {
+            P("ERROR: PE section name integer larger than table! "
+                "%s vs " LONGESTUFMT " DW_DLE_STRING_OFFSET_BAD\n",
+                temp_array,pep->pe_string_table_size);
             *errcode = DW_DLE_STRING_OFFSET_BAD;
             return DW_DLV_ERROR;
         }
@@ -185,7 +191,7 @@ pe_get_section_info (void *obj,
     if (section_index < pep->pe_section_count) {
         struct dwarf_pe_generic_image_section_header *sp = 0;
         sp = pep->pe_sectionptr + section_index;
-        return_section->addr = pep->pe_OptionalHeader.ImageBase + 
+        return_section->addr = pep->pe_OptionalHeader.ImageBase +
             sp->VirtualAddress;
         return_section->type = 0;
         /*  SizeOfRawData is rounded or truncated,
@@ -304,7 +310,7 @@ pe_load_section (void *obj, unsigned section_index,
             return DW_DLV_ERROR;
         }
         res = dwarf_object_read_random(pep->pe_fd,sp->loaded_data,
-            sp->PointerToRawData, read_length, 
+            sp->PointerToRawData, read_length,
             pep->pe_filesize, error);
         if (res != DW_DLV_OK) {
             free(sp->loaded_data);
@@ -312,8 +318,8 @@ pe_load_section (void *obj, unsigned section_index,
             return res;
         }
         if(sp->VirtualSize > read_length) {
-            /* Zero space that was allocated but
-               truncated from the file */
+            /*  Zero space that was allocated but
+                truncated from the file */
             memset(sp->loaded_data + read_length, 0,
                 (sp->VirtualSize - read_length));
         }
@@ -541,7 +547,7 @@ dwarf_load_pe_sections(
         return DW_DLV_ERROR;
     }
     res = dwarf_object_read_random(pep->pe_fd,(char *)&ifh,
-        pep->pe_nt_header_offset, sizeof(ifh), 
+        pep->pe_nt_header_offset, sizeof(ifh),
         pep->pe_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;

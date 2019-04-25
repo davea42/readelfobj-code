@@ -96,6 +96,6 @@ Section count: 39
 [38] 0x000230b0 0x00001730 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
 Summary: 141129 bytes for 9 debug sections
 }
-No .dynamic section in  libkrb5support.so.0.1.debug
+No .dynamic section exists in libkrb5support.so.0.1.debug
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
 Warning : 1 instances of unused alignment space exist and total 1 bytes of alignment.

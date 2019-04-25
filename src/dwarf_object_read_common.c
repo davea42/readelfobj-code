@@ -55,6 +55,10 @@ dwarf_object_read_random(int fd,char *buf,off_t loc,
     if (loc >= filesize) {
         /*  Seek can seek off the end. Lets not allow that.
             The object is corrupt. */
+        P("ERROR Attempted seek to %lu"
+            " past file size %lu RO_SEEK_OFF_END\n",
+            (unsigned long)loc,
+            (unsigned long)filesize);
         *errc = RO_SEEK_OFF_END;
         return DW_DLV_ERROR;
     }
@@ -62,17 +66,28 @@ dwarf_object_read_random(int fd,char *buf,off_t loc,
     if (endpoint > filesize) {
         /*  Let us -not- try to read past end of object.
             The object is corrupt. */
+        P("ERROR Attempted READ of %lu bytes at %lu (sum: %lu)"
+            " exceeds file size of %lu RO_READ_OFF_END\n",
+            (unsigned long)size,(unsigned long)loc,
+            (unsigned long)endpoint,
+            (unsigned long)filesize);
         *errc = RO_READ_OFF_END;
         return DW_DLV_ERROR;
     }
     scode = lseek(fd,loc,SEEK_SET);
     if (scode == (off_t)-1) {
+        P("ERROR Attempted SEEK to %lu "
+            " failed. RO_ERR_SEEK \n",
+            (unsigned long)loc);
         *errc = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
     rcode = read(fd,buf,size);
     if (rcode == -1 ||
         (size_t)rcode != size) {
+        P("ERROR Attempted READ at  %lu of %lu bytes "
+            " failed. RO_ERR_READ \n",
+            (unsigned long)loc,(unsigned long)size);
         *errc = RO_ERR_READ;
         return DW_DLV_ERROR;
     }
