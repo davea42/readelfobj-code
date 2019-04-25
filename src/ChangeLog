@@ -1,3 +1,7 @@
+2019-04-25: David Anderson
+     * dwarf_peread.c, dwarf_pe_descr.h: Added a trailing
+       _dw to all Windows struct names to assure there
+       is no name conflict with Windows possible.
 2019-04-24: David Anderson
      * dwarf_peread.c: Improved an strncopy
        to make it clearer and avoid a compiler warning.
