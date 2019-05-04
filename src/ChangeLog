@@ -1,3 +1,6 @@
+2019-05-04: David Anderson
+     * dwarf_load_elf_headers.c: Added an additional check
+       for corrupted elf section strings.
 2019-04-25: David Anderson
      * dwarf_peread.c, dwarf_pe_descr.h: Added a trailing
        _dw to all Windows struct names to assure there

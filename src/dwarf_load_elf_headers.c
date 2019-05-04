@@ -2007,6 +2007,38 @@ elf_check_sect_sizes(elf_filedata ep)
     }
 }
 
+static int
+validate_section_name_string(Dwarf_Unsigned section_length,
+  Dwarf_Unsigned section_number,
+  Dwarf_Unsigned string_loc_index,
+  const char * strings_start,
+  int  * errcode)
+{
+    const char *endpoint = strings_start + section_length;
+    const char *cur = 0;
+
+    if (section_length <= string_loc_index) {
+        P("ERROR: Section " LONGESTUFMT
+            ": section name offset "
+            LONGESTUFMT " in section strings is too large.",
+            section_number,string_loc_index);
+        *errcode = RO_ERR_STRINGOFFSETBIG;
+        return DW_DLV_ERROR;
+    }
+    cur = string_loc_index+strings_start;
+    for(  ; cur < endpoint;++cur) {
+        if (!*cur) {
+            return DW_DLV_OK;
+        }
+    }
+    P("ERROR: Section " LONGESTUFMT
+        ": section name offset "
+        LONGESTUFMT " in section strings"
+        " is not terminated properly.",
+        section_number,string_loc_index);
+    *errcode = RO_ERR_STRINGOFFSETBIG;
+    return DW_DLV_ERROR;
+}
 
 static int
 elf_load_sect_namestring(elf_filedata ep, int *errcode)
@@ -2014,23 +2046,24 @@ elf_load_sect_namestring(elf_filedata ep, int *errcode)
     struct generic_shdr *gshdr = 0;
     Dwarf_Unsigned generic_count = 0;
     Dwarf_Unsigned i = 1;
+    const char *stringsecbase = 0;
 
+    stringsecbase = ep->f_elf_shstrings_data;
     gshdr = ep->f_shdr;
     generic_count = ep->f_loc_shdr.g_count;
     for(i = 0; i < generic_count; i++, ++gshdr) {
-        const char *namestr = "Invalid sh_name value";
+        const char *namestr =
+            "<Invalid sh_name value. Corrupt Elf.>";
+        int res = 0;
 
-        if (ep->f_elf_shstrings_length <= gshdr->gh_name) {
-            P("ERROR: Section " LONGESTUFMT
-                ": section name offset "
-                LONGESTUFMT " in section strings is too large.",
-                i,gshdr->gh_name);
-            *errcode = RO_ERR_STRINGOFFSETBIG;
-            return DW_DLV_ERROR;
-        } else {
-            namestr = gshdr->gh_name + ep->f_elf_shstrings_data;
+        res = validate_section_name_string(ep->f_elf_shstrings_length,
+            i, gshdr->gh_name, stringsecbase,
+            errcode);
+        if (res != DW_DLV_OK) {
+            gshdr->gh_namestring = namestr;
+            return res;
         }
-        gshdr->gh_namestring = namestr;
+        gshdr->gh_namestring = stringsecbase + gshdr->gh_name;
     }
     return DW_DLV_OK;
 }
