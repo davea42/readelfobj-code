@@ -1,3 +1,9 @@
+2019-05-13: David Anderson
+     * dwarf_load_elf_headers.c(check_size): A useful
+       string passed to a checking function was not used to inform
+       of the object-file region involved: now it is used.
+     * readobjmacho.c,readobjpe.c: In the WORDS_BIGENDIAN
+       case a function name was incorrectly spelled: fixed.
 2019-05-04: David Anderson
      * dwarf_load_elf_headers.c: Added an additional check
        for corrupted elf section strings.

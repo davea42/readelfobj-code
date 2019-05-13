@@ -92,14 +92,16 @@ static char buffer1[BUFFERSIZE];
 #endif /* end LITTLE- BIG-ENDIAN */
 
 static void
-check_size(const char *name,Dwarf_Unsigned offset, size_t size,
+check_size(const char *name,
+    Dwarf_Unsigned offset, 
+    size_t size,
     Dwarf_Unsigned filesize)
 {
     Dwarf_Unsigned finaloff = offset + size;
     if (finaloff > filesize) {
         P("ERROR: An attempted read at offset "
-            LONGESTUFMT " (" LONGESTXFMT ")\n",
-            offset,offset);
+            LONGESTUFMT " (" LONGESTXFMT ") %s\n",
+            offset,offset,name);
         P("       of size "
             LONGESTSFMT " (" LONGESTXFMT ")\n",
             size,(Dwarf_Unsigned)size);

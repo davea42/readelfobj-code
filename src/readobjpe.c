@@ -183,7 +183,7 @@ do_one_file(const char *name)
     }
 #ifdef WORDS_BIGENDIAN
     if (endian == DW_ENDIAN_LITTLE ) {
-        pep->pe_copy_word = ro_memcpy_swap_bytes;
+        pep->pe_copy_word = dwarf_ro_memcpy_swap_bytes;
         pep->pe_endian = DW_ENDIAN_LITTLE;
     } else {
         pep->pe_copy_word = memcpy;

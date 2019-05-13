@@ -316,7 +316,7 @@ do_one_file(const char *s)
     }
 #ifdef WORDS_BIGENDIAN
     if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_OPPOSITE ) {
-        mfp->mo_copy_word = ro_memcpy_swap_bytes;
+        mfp->mo_copy_word = dwarf_ro_memcpy_swap_bytes;
         mfp->mo_endian = DW_ENDIAN_LITTLE;
     } else {
         mfp->mo_copy_word = memcpy;
