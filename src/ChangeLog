@@ -1,3 +1,5 @@
+2019-05-14: David Anderson
+     * dwarf_pe_descr.h: Remove C++ // comments.
 2019-05-13: David Anderson
      * dwarf_load_elf_headers.c(check_size): A useful
        string passed to a checking function was not used to inform

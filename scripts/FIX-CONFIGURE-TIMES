@@ -30,25 +30,25 @@ t() {
   touch $1
   sleep 1
 }
-
-t ltmain.sh
-t aclocal.m4
+t AUTHORS
+t src/NEWS
+t COPYING
+t m4/readobj_compiler.m4
+t NEWS
 t Makefile.am
+t README
 t src/Makefile.am
 t test/Makefile.am
 t configure.ac
+t ltmain.sh
 t m4/libtool.m4
 t m4/ltoptions.m4
 t m4/ltsugar.m4
 t m4/ltversion.m4
 t m4/lt~obsolete.m4
-t autom4te.cache/output.3
-t autom4te.cache/traces.3
+t aclocal.m4
 t configure
-t autom4te.cache/output.1
-t autom4te.cache/traces.1
 t config.h.in
-t autom4te.cache/requests
 t compile
 t config.guess
 t config.sub
@@ -56,7 +56,7 @@ t install-sh
 t missing
 t INSTALL
 t Makefile.in
+t depcomp
 t src/Makefile.in
 t test/Makefile.in
-
-
+exit 0
