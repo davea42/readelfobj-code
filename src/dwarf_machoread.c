@@ -183,6 +183,8 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
     }
     /* Do not adjust endianness of magic, leave as-is. */
     ASNAR(memcpy,mfp->mo_header.magic,mh32.magic);
+    /* We will print the swapped one. */
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.swappedmagic,mh32.magic);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.cputype,mh32.cputype);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.cpusubtype,mh32.cpusubtype);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.filetype,mh32.filetype);
@@ -209,6 +211,8 @@ load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
     }
     /* Do not adjust endianness of magic, leave as-is. */
     ASNAR(memcpy,mfp->mo_header.magic,mh64.magic);
+    /* We will print the swapped one. */
+    ASNAR(mfp->mo_copy_word,mfp->mo_header.swappedmagic,mh64.magic);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.cputype,mh64.cputype);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.cpusubtype,mh64.cpusubtype);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.filetype,mh64.filetype);

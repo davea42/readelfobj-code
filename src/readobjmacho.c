@@ -256,7 +256,7 @@ print_macho_commands(struct macho_filedata_s *mfp)
 static void
 print_macho_header(struct macho_filedata_s *mfp)
 {
-    P("Mach-o Magic:  " LONGESTXFMT "\n",mfp->mo_header.magic);
+    P("Mach-o Magic:  " LONGESTXFMT "\n",mfp->mo_header.swappedmagic);
     P("  cputype           : " LONGESTXFMT
         " cpusubtype: " LONGESTXFMT "\n",
         mfp->mo_header.cputype,

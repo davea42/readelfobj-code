@@ -42,6 +42,7 @@ extern "C" {
 
 struct generic_macho_header {
     Dwarf_Unsigned   magic;
+    Dwarf_Unsigned   swappedmagic;
     Dwarf_Unsigned   cputype;
     Dwarf_Unsigned   cpusubtype;
     Dwarf_Unsigned   filetype;
