@@ -1,3 +1,8 @@
+2019-05-27: David Anderson
+     * dwarf_elf_naming.c: Had a // C++ comment. Deleted.
+     * object_detector_main.c: Was failing to return a value
+       from main. Now returns non-zero if any objects
+       have real errors.
 2019-05-14: David Anderson
      * dwarf_machoread.c: Now we remember both the original
        magic byte content and as-swapped.

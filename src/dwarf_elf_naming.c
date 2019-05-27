@@ -554,7 +554,6 @@ static struct em_values pt_vals[] = {
     {"PT_MIPS_OPTIONS", 0x70000002},  /* Options segment. */
     {"PT_MIPS_ABIFLAGS",0x70000003}, /* Abiflags segment. */
 
-  // WebAssembly program header types.
     {"PT_WEBASSEMBLY_FUNCTIONS",PT_LOPROC + 0}, /* Function definitions. */
     {0,0}
 };

@@ -76,6 +76,7 @@ int main(int argc, char **argv)
     int ct = 1;
     int errcode = 0;
     int zero_outpath = 0;
+    int errct = 0;
 
     for( ;ct < argc ; ct++) {
         char *path = argv[ct];
@@ -115,9 +116,11 @@ int main(int argc, char **argv)
                 printf("%s FAIL: error opening file. "
                     "Errcode %d.\n",path, errcode);
             }
+            ++errct;
         } else {
             /* DW_DLV_NO_ENTRY */
             printf("%s FAIL: no such file present/readable\n",path);
         }
     }
+    return errct;
 }
