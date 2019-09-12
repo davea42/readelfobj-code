@@ -1,3 +1,6 @@
+2019-09-12: David Anderson
+     * gbuf.h,gbuf.c,testgbuf.c: New, providing
+       an extensible string buffer.
 2019-05-27: David Anderson
      * dwarf_elf_naming.c: Had a // C++ comment. Deleted.
      * object_detector_main.c: Was failing to return a value

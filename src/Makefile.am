@@ -7,6 +7,8 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 bin_PROGRAMS = readelfobj readobjmacho readobjpe object_detector
 
+TESTS = $(check_PROGRAMS)
+
 readelfobj_SOURCES =    \
 dwarf_object_detector.h  \
 dwarf_object_detector.c   \
@@ -83,6 +85,14 @@ object_detector_SOURCES = object_detector_main.c \
    errormessages.c \
    dwarf_object_detector.h
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
+
+check_PROGRAMS = testgbuf
+
+testgbuf_SOURCES = testgbuf.c \
+   gbuf.h gbuf.c
+testgbuf_CFLAGS = $(RO_CFLAGS_WARN)
+testgbuf_CPPFLAGS = \
+-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 man_MANS = readelfobj.1
 
