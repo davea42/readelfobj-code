@@ -57,7 +57,7 @@ struct gbuf_s {
     returns TRUE if the action taken, or FALSE if unable. 
     any data present remains present.  */
 int gbuf_constructor(struct gbuf_s *g);
-int gbuf_constructor_static(struct gbuf_s *g,unsigned long len);
+int gbuf_constructor_fixed(struct gbuf_s *g,unsigned long len);
 void gbuf_destructor(struct gbuf_s *g);
 int gbuf_append(struct gbuf_s *g,char *data);
 

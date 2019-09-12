@@ -47,6 +47,7 @@ avail is available bytes following the data.
 };
 */
 
+#include <stdio.h> /* for malloc */
 #include <stdlib.h> /* for malloc */
 #include <string.h> /* for strlen */
 #include "gbuf.h"
@@ -54,7 +55,7 @@ avail is available bytes following the data.
 #define TRUE 1
 #endif /* TRUE */
 #ifndef FALSE
-#define FALSE 1
+#define FALSE 0
 #endif /* FALSE */
 
 static unsigned long minimumnewlen = 30;
@@ -84,11 +85,12 @@ gbuf_resize_to(struct gbuf_s *g,unsigned long newlen)
     if (!b) {
         return FALSE;
     }
-    if (g->gb_size > 0) {
+    if (lastpos > 0) {
         memcpy(b,g->gb_data,lastpos);
-        if (g->gb_malloc) {
-            free(g->gb_data);
-        }
+    }
+    if (g->gb_malloc) {
+        free(g->gb_data);
+        g->gb_data = 0;
     }
     g->gb_data = b;
     g->gb_data[lastpos] = 0;
@@ -99,7 +101,7 @@ gbuf_resize_to(struct gbuf_s *g,unsigned long newlen)
 }
 
 int 
-gbuf_constructor_static(struct gbuf_s *g,unsigned long len)
+gbuf_constructor_fixed(struct gbuf_s *g,unsigned long len)
 {
     char *b = 0;
     int r = 0;
@@ -112,11 +114,6 @@ gbuf_constructor_static(struct gbuf_s *g,unsigned long len)
     if (!r) {
         return FALSE;
     }
-    g->gb_data    = b;
-    g->gb_data[0] = 0;
-    g->gb_size    = len;
-    g->gb_avail   = len;
-    g->gb_malloc  = TRUE;
     return TRUE;
 }
 void 
@@ -124,6 +121,7 @@ gbuf_destructor(struct gbuf_s *g)
 {
     if (g->gb_malloc) {
         free(g->gb_data);
+        g->gb_data = 0;
     }
     gbuf_constructor(g);
 }
@@ -158,6 +156,6 @@ gbuf_get_data(struct gbuf_s *g)
 unsigned long
 gbuf_get_data_len(struct gbuf_s *g)
 {
-    return g->gb_size;
+    return g->gb_size - g->gb_avail;
 }
 
