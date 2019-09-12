@@ -44,13 +44,24 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 static int errcount;
 
 static void
-check_string(const char *msg,char *exp,char *str,int line)
+check_string(const char *msg,char *exp,
+    char *actual,int line)
 {
-    if(!strcmp(exp,str)) {
+    if(!strcmp(exp,actual)) {
         return;
     }
     printf("FAIL %s expected \"%s\" got \"%s\" test line %d\n",
-        msg,exp,str,line);
+        msg,exp,actual,line);
+}
+static void
+check_value(const char *msg,unsigned long exp,
+    unsigned long actual,int line)
+{
+    if(exp == actual) {
+        return;
+    }
+    printf("FAIL %s expected %lu got %lu test line %d\n",
+        msg,exp,actual,line);
 }
 
 static int
@@ -59,11 +70,40 @@ test1(int tnum)
     struct gbuf_s g;
     char *d = 0;
     const char *expstr = "";
+    int res = 0;
+    unsigned long biglen = 0;
+    char *bigstr = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+                   "ccccccbbbbbyyyybbbbbbbbbbbbccc";
 
     gbuf_constructor(&g);
     
     d = gbuf_get_data(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
+
+    res = gbuf_append(&g,"abc");
+    check_value("expected TRUE  ",TRUE,res,__LINE__);
+    d = gbuf_get_data(&g);
+    check_string("expected abc ",(char *)"abc",d,__LINE__);
+
+    res = gbuf_append(&g,"xy");
+    check_value("expected TRUE  ",TRUE,res,__LINE__);
+    d = gbuf_get_data(&g);
+    check_string("expected abcxy ",(char *)"abcxy",d,__LINE__);
+
+    gbuf_destructor(&g);
+
+    gbuf_constructor(&g);
+    res = gbuf_append(&g,bigstr);
+    check_value("expected TRUE  ",TRUE,res,__LINE__);
+    d = gbuf_get_data(&g);
+    check_string("expected bigstring ",bigstr,d,__LINE__);
+    biglen = gbuf_get_data_len(&g);
+    check_value("expected 120  ",strlen(bigstr),biglen,__LINE__);
+    gbuf_destructor(&g);
     
 }
 
