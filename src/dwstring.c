@@ -124,25 +124,37 @@ dwstring_destructor(struct dwstring_s *g)
     dwstring_constructor(g);
 }
 
+/*  For the case where one wants just the first 'len'
+    characters of 'str'. NUL terminator provided
+    for you in s_data.
+*/
 int 
-dwstring_append(struct dwstring_s *g,char *str)
+dwstring_append_length(struct dwstring_s *g,char *str,
+    unsigned long slen)
 {
-    unsigned long dlen = strlen(str);
     unsigned long lastpos = g->s_size - g->s_avail;
     int r = 0;
 
-    if (dlen >= g->s_avail) {
+    if (slen >= g->s_avail) {
         unsigned long newlen = 0;
 
-        newlen = g->s_size + dlen+1;
+        newlen = g->s_size + slen+2;
         r = dwstring_resize_to(g,newlen);
         if (!r) {
             return FALSE;
         }
     }
-    strcpy(g->s_data + lastpos,str);
-    g->s_avail -= dlen;
+    memcpy(g->s_data + lastpos,str,slen);
+    g->s_avail -= slen;
+    g->s_data[g->s_size - g->s_avail] = 0;
     return TRUE;
+}
+
+int 
+dwstring_append(struct dwstring_s *g,char *str)
+{
+    unsigned long dlen = strlen(str);
+    return dwstring_append_length(g,str,dlen);
 }
 
 char * 

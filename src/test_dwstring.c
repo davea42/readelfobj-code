@@ -62,6 +62,7 @@ check_value(const char *msg,unsigned long exp,
     }
     printf("FAIL %s expected %lu got %lu test line %d\n",
         msg,exp,actual,line);
+    ++errcount;
 }
 
 static int
@@ -103,6 +104,11 @@ test1(int tnum)
     check_string("expected bigstring ",bigstr,d,__LINE__);
     biglen = dwstring_strlen(&g);
     check_value("expected 120  ",strlen(bigstr),biglen,__LINE__);
+
+    dwstring_append_length(&g,"xxyyzz",3);
+
+    biglen = dwstring_strlen(&g);
+    check_value("expected 123  ",strlen(bigstr)+3,biglen,__LINE__);
     dwstring_destructor(&g);
     
 }
@@ -150,9 +156,46 @@ test2(int tnum)
 
 }
 
+static int
+test3(int tnum)
+{
+    struct dwstring_s g;
+    char *d = 0;
+    const char *expstr = "";
+    int res = 0;
+    unsigned long biglen = 0;
+    char *bigstr = "a012345";
+    char *targetbigstr = "a012345xy";
+
+    dwstring_constructor_fixed(&g,10);
+
+    d = dwstring_string(&g);
+    check_string("expected empty string",(char *)expstr,d,__LINE__);
+
+    res = dwstring_append(&g,bigstr);
+    check_value("expected TRUE  ",TRUE,res,__LINE__);
+    d = dwstring_string(&g);
+    check_string("expected a012345 ",(char *)bigstr,d,__LINE__);
+
+    res = dwstring_append_length(&g,"xyzzz",2);
+    check_value("expected TRUE  ",TRUE,res,__LINE__);
+
+    check_value("expected 9  ", 9,(unsigned)dwstring_strlen(&g),
+        __LINE__);
+
+    d = dwstring_string(&g);
+    check_string("expected a012345xy ",
+        (char *)targetbigstr,d,__LINE__);
+}
+
 
 int main()
 {
     test1(1);
     test2(2);
+    test3(3);
+    if (errcount) {
+        exit(1);
+    }
+    exit(0);
 }
