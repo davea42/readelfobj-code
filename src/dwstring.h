@@ -34,22 +34,31 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+
 struct dwstring_s {
-   char         *s_data;
+   char *        s_data;
    unsigned long s_size;
    unsigned long s_avail;
-   unsigned char s_malloc; /* a flag */
+   unsigned char s_malloc;
 };
 
+typedef struct dwstring_s dwstring; 
+
 int dwstring_constructor(struct dwstring_s *g);
-int dwstring_constructor_fixed(struct dwstring_s *g,unsigned long len);
+int dwstring_constructor_fixed(struct dwstring_s *g,
+    unsigned long len);
+int dwstring_constructor_static(struct dwstring_s *g,
+    char * space,
+    unsigned long len);
 void dwstring_destructor(struct dwstring_s *g);
+
 int dwstring_append(struct dwstring_s *g,char *str);
 
 /*  When one wants the first 'len' caracters of str
-    appended. NUL termination is automatic dwstrings */
+    appended. NUL termination is provided by dwstrings. */
 int dwstring_append_length(struct dwstring_s *g,
     char *str,unsigned long len);
+
 char * dwstring_string(struct dwstring_s *g);
 unsigned long dwstring_strlen(struct dwstring_s *g);
 

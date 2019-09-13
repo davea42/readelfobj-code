@@ -186,7 +186,49 @@ test3(int tnum)
     d = dwstring_string(&g);
     check_string("expected a012345xy ",
         (char *)targetbigstr,d,__LINE__);
+    dwstring_destructor(&g);
 }
+
+static int
+test4(int tnum)
+{
+    struct dwstring_s g;
+    char *d = 0;
+    const char *expstr = "";
+    int res = 0;
+    unsigned long biglen = 0;
+    char *mystr = "a01234";
+    char *targetmystr = "a01234xyz";
+    char fixedarea[7];
+
+    dwstring_constructor_static(&g,fixedarea,sizeof(fixedarea));
+
+    d = dwstring_string(&g);
+    check_string("expected empty string",(char *)expstr,d,__LINE__);
+    res = dwstring_append(&g,mystr);
+    check_value("expected TRUE  ",TRUE,res,__LINE__);
+    d = dwstring_string(&g);
+    check_string("expected a01234 ",(char *)mystr,d,__LINE__);
+
+    if (d != fixedarea) {
+        printf(" FAIL  reallocated but should not line %d ",
+            __LINE__);
+        ++errcount;
+    }
+    res = dwstring_append(&g,"xyz");
+    d = dwstring_string(&g);
+    check_string("expected a01234xyz ",(char *)targetmystr,
+        d,__LINE__);
+    check_value("expected 9",9,dwstring_strlen(&g),__LINE__);
+
+    if (d == fixedarea) {
+        printf(" FAIL  not reallocated but should  be! line %d ",
+            __LINE__);
+        ++errcount;
+    }
+    dwstring_destructor(&g);
+}
+
 
 
 int main()
@@ -194,6 +236,7 @@ int main()
     test1(1);
     test2(2);
     test3(3);
+    test4(3);
     if (errcount) {
         exit(1);
     }

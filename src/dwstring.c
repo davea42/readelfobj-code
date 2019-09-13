@@ -36,14 +36,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     data always has a NUL byte following
     the data area used) most useful for C strings.
 */
-/*
-struct dwstring_s {
-   char *        s_data;
-   unsigned long s_size;
-   unsigned long s_avail;
-   unsigned char s_malloc;
-};
-*/
+
 
 #include <stdio.h> /* for malloc */
 #include <stdlib.h> /* for malloc */
@@ -57,6 +50,15 @@ struct dwstring_s {
 #endif /* FALSE */
 
 static unsigned long minimumnewlen = 30;
+/*
+struct dwstring_s {
+   char *        s_data;
+   unsigned long s_size;
+   unsigned long s_avail;
+   unsigned char s_malloc;
+};
+*/
+
 int 
 dwstring_constructor(struct dwstring_s *g)
 {
@@ -66,7 +68,6 @@ dwstring_constructor(struct dwstring_s *g)
     g->s_malloc = FALSE;
     return TRUE;
 }
-
 
 static int
 dwstring_resize_to(struct dwstring_s *g,unsigned long newlen)
@@ -114,6 +115,21 @@ dwstring_constructor_fixed(struct dwstring_s *g,unsigned long len)
     }
     return TRUE;
 }
+
+int 
+dwstring_constructor_static(struct dwstring_s *g,
+    char * space,
+    unsigned long len)
+{
+    dwstring_constructor(g);
+    g->s_data = space;
+    g->s_data[0] = 0;
+    g->s_size = len;
+    g->s_avail = len;
+    g->s_malloc = FALSE;
+    return TRUE;
+}
+
 void 
 dwstring_destructor(struct dwstring_s *g)
 {
