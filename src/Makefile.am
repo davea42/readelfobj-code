@@ -86,12 +86,12 @@ object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.h
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
 
-check_PROGRAMS = testgbuf
+check_PROGRAMS = test_dwstring
 
-testgbuf_SOURCES = testgbuf.c \
-   gbuf.h gbuf.c
-testgbuf_CFLAGS = $(RO_CFLAGS_WARN)
-testgbuf_CPPFLAGS = \
+test_dwstring_SOURCES = test_dwstring.c \
+   dwstring.h dwstring.c
+test_dwstring_CFLAGS = $(RO_CFLAGS_WARN)
+test_dwstring_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 man_MANS = readelfobj.1

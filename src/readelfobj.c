@@ -93,6 +93,7 @@ static void elf_print_elf_header(elf_filedata ep);
 static void elf_print_progheaders(elf_filedata ep);
 static void elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned);
 static void elf_print_sectheaders(elf_filedata ep);
+static void elf_print_gnu_debuglink(elf_filedata ep);
 static void elf_print_sg_groups(elf_filedata ep);
 static void elf_print_relocation_details(elf_filedata ep,int isrela,
     struct generic_shdr * gsh);
@@ -317,6 +318,7 @@ print_minimum(elf_filedata ep)
     elf_print_progheaders(ep);
     elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
     elf_print_sectheaders(ep);
+    elf_print_gnu_debuglink(ep);
 }
 
 static void
@@ -329,6 +331,7 @@ print_requested(elf_filedata ep)
         elf_print_progheaders(ep);
         elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
         elf_print_sectheaders(ep);
+        elf_print_gnu_debuglink(ep);
     }
     if (print_groups) {
         elf_print_sg_groups(ep);
@@ -1640,4 +1643,10 @@ void elf_print_sg_groups(elf_filedata ep)
         P("  .dwo group count : " LONGESTUFMT "\n",
             ep->f_dwo_group_section_count);
     }
+}
+
+static void 
+elf_print_gnu_debuglink(elf_filedata ep)
+{
+    printf("FIXME, not implemented line %d\n",__LINE__);
 }

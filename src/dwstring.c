@@ -37,7 +37,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     the data area used) most useful for C strings.
 */
 /*
-struct dwstr_s {
+struct dwstring_s {
    char *        s_data;
    unsigned long s_size;
    unsigned long s_avail;
@@ -48,7 +48,7 @@ struct dwstr_s {
 #include <stdio.h> /* for malloc */
 #include <stdlib.h> /* for malloc */
 #include <string.h> /* for strlen */
-#include "dw_str.h"
+#include "dwstring.h"
 #ifndef TRUE
 #define TRUE 1
 #endif /* TRUE */
@@ -58,7 +58,7 @@ struct dwstr_s {
 
 static unsigned long minimumnewlen = 30;
 int 
-dwstr_constructor(struct dwstr_s *g)
+dwstring_constructor(struct dwstring_s *g)
 {
     g->s_data = "";
     g->s_size = 0;
@@ -69,7 +69,7 @@ dwstr_constructor(struct dwstr_s *g)
 
 
 static int
-dwstr_resize_to(struct dwstr_s *g,unsigned long newlen)
+dwstring_resize_to(struct dwstring_s *g,unsigned long newlen)
 {
     char *b = 0;
     unsigned long lastpos = 
@@ -99,33 +99,33 @@ dwstr_resize_to(struct dwstr_s *g,unsigned long newlen)
 }
 
 int 
-dwstr_constructor_fixed(struct dwstr_s *g,unsigned long len)
+dwstring_constructor_fixed(struct dwstring_s *g,unsigned long len)
 {
     char *b = 0;
     int r = 0;
 
-    gbuf_constructor(g);
+    dwstring_constructor(g);
     if (len == 0) {
         return TRUE;
     }
-    r = gbuf_resize_to(g,len);
+    r = dwstring_resize_to(g,len);
     if (!r) {
         return FALSE;
     }
     return TRUE;
 }
 void 
-dwstr_destructor(struct dwstr_s *g)
+dwstring_destructor(struct dwstring_s *g)
 {
     if (g->s_malloc) {
         free(g->s_data);
         g->s_data = 0;
     }
-    gbuf_constructor(g);
+    dwstring_constructor(g);
 }
 
 int 
-dwstr_append(struct dwstr_s *g,char *str)
+dwstring_append(struct dwstring_s *g,char *str)
 {
     unsigned long dlen = strlen(str);
     unsigned long lastpos = g->s_size - g->s_avail;
@@ -135,7 +135,7 @@ dwstr_append(struct dwstr_s *g,char *str)
         unsigned long newlen = 0;
 
         newlen = g->s_size + dlen+1;
-        r = gbuf_resize_to(g,newlen);
+        r = dwstring_resize_to(g,newlen);
         if (!r) {
             return FALSE;
         }
@@ -146,13 +146,13 @@ dwstr_append(struct dwstr_s *g,char *str)
 }
 
 char * 
-dwstr_get_data(struct dwstr_s *g)
+dwstring_string(struct dwstring_s *g)
 {
     return g->s_data;
 }
 
 unsigned long
-dwstr_get_data_len(struct dwstr_s *g)
+dwstring_strlen(struct dwstring_s *g)
 {
     return g->s_size - g->s_avail;
 }

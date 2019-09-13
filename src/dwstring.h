@@ -30,21 +30,26 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*  A lightly generalized string buffer.
-    
+/*  A lightly generalized string buffer for libdwarf.
+
 */
 
-struct dwstr_s {
+struct dwstring_s {
    char         *s_data;
    unsigned long s_size;
    unsigned long s_avail;
    unsigned char s_malloc; /* a flag */
 };
 
-int dwstr_constructor(struct dwstr_s *g);
-int dwstr_constructor_fixed(struct dwstr_s *g,unsigned long len);
-void dwstr_destructor(struct dwstr_s *g);
-int dwstr_append(struct dwstr_s,char *str);
-char * dwstr_get_str(struct dwstr_s *g);
-unsigned long dwstr_get_strlen(struct dwstr_s *g);
+int dwstring_constructor(struct dwstring_s *g);
+int dwstring_constructor_fixed(struct dwstring_s *g,unsigned long len);
+void dwstring_destructor(struct dwstring_s *g);
+int dwstring_append(struct dwstring_s *g,char *str);
+
+/*  When one wants the first 'len' caracters of str
+    appended. NUL termination is automatic dwstrings */
+int dwstring_append_length(struct dwstring_s *g,
+    char *str,unsigned long len);
+char * dwstring_string(struct dwstring_s *g);
+unsigned long dwstring_strlen(struct dwstring_s *g);
 

@@ -93,7 +93,7 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = readelfobj$(EXEEXT) readobjmacho$(EXEEXT) \
 	readobjpe$(EXEEXT) object_detector$(EXEEXT)
-check_PROGRAMS = testgbuf$(EXEEXT)
+check_PROGRAMS = test_dwstring$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -165,12 +165,12 @@ readobjpe_LDADD = $(LDADD)
 readobjpe_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readobjpe_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-am_testgbuf_OBJECTS = testgbuf-testgbuf.$(OBJEXT) \
-	testgbuf-gbuf.$(OBJEXT)
-testgbuf_OBJECTS = $(am_testgbuf_OBJECTS)
-testgbuf_LDADD = $(LDADD)
-testgbuf_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(testgbuf_CFLAGS) \
+am_test_dwstring_OBJECTS = test_dwstring-test_dwstring.$(OBJEXT) \
+	test_dwstring-dwstring.$(OBJEXT)
+test_dwstring_OBJECTS = $(am_test_dwstring_OBJECTS)
+test_dwstring_LDADD = $(LDADD)
+test_dwstring_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_dwstring_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -208,10 +208,10 @@ am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(object_detector_SOURCES) $(readelfobj_SOURCES) \
 	$(readobjmacho_SOURCES) $(readobjpe_SOURCES) \
-	$(testgbuf_SOURCES)
+	$(test_dwstring_SOURCES)
 DIST_SOURCES = $(object_detector_SOURCES) $(readelfobj_SOURCES) \
 	$(readobjmacho_SOURCES) $(readobjpe_SOURCES) \
-	$(testgbuf_SOURCES)
+	$(test_dwstring_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -645,11 +645,11 @@ object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.h
 
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
-testgbuf_SOURCES = testgbuf.c \
-   gbuf.h gbuf.c
+test_dwstring_SOURCES = test_dwstring.c \
+   dwstring.h dwstring.c
 
-testgbuf_CFLAGS = $(RO_CFLAGS_WARN)
-testgbuf_CPPFLAGS = \
+test_dwstring_CFLAGS = $(RO_CFLAGS_WARN)
+test_dwstring_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 man_MANS = readelfobj.1
@@ -768,9 +768,9 @@ readobjpe$(EXEEXT): $(readobjpe_OBJECTS) $(readobjpe_DEPENDENCIES) $(EXTRA_reado
 	@rm -f readobjpe$(EXEEXT)
 	$(AM_V_CCLD)$(readobjpe_LINK) $(readobjpe_OBJECTS) $(readobjpe_LDADD) $(LIBS)
 
-testgbuf$(EXEEXT): $(testgbuf_OBJECTS) $(testgbuf_DEPENDENCIES) $(EXTRA_testgbuf_DEPENDENCIES) 
-	@rm -f testgbuf$(EXEEXT)
-	$(AM_V_CCLD)$(testgbuf_LINK) $(testgbuf_OBJECTS) $(testgbuf_LDADD) $(LIBS)
+test_dwstring$(EXEEXT): $(test_dwstring_OBJECTS) $(test_dwstring_DEPENDENCIES) $(EXTRA_test_dwstring_DEPENDENCIES) 
+	@rm -f test_dwstring$(EXEEXT)
+	$(AM_V_CCLD)$(test_dwstring_LINK) $(test_dwstring_OBJECTS) $(test_dwstring_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -808,8 +808,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-readobjpe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-sanitized.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testgbuf-gbuf.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testgbuf-testgbuf.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dwstring-dwstring.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dwstring-test_dwstring.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -1255,33 +1255,33 @@ readobjpe-sanitized.obj: sanitized.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readobjpe_CPPFLAGS) $(CPPFLAGS) $(readobjpe_CFLAGS) $(CFLAGS) -c -o readobjpe-sanitized.obj `if test -f 'sanitized.c'; then $(CYGPATH_W) 'sanitized.c'; else $(CYGPATH_W) '$(srcdir)/sanitized.c'; fi`
 
-testgbuf-testgbuf.o: testgbuf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -MT testgbuf-testgbuf.o -MD -MP -MF $(DEPDIR)/testgbuf-testgbuf.Tpo -c -o testgbuf-testgbuf.o `test -f 'testgbuf.c' || echo '$(srcdir)/'`testgbuf.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testgbuf-testgbuf.Tpo $(DEPDIR)/testgbuf-testgbuf.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='testgbuf.c' object='testgbuf-testgbuf.o' libtool=no @AMDEPBACKSLASH@
+test_dwstring-test_dwstring.o: test_dwstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-test_dwstring.o -MD -MP -MF $(DEPDIR)/test_dwstring-test_dwstring.Tpo -c -o test_dwstring-test_dwstring.o `test -f 'test_dwstring.c' || echo '$(srcdir)/'`test_dwstring.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-test_dwstring.Tpo $(DEPDIR)/test_dwstring-test_dwstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_dwstring.c' object='test_dwstring-test_dwstring.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -c -o testgbuf-testgbuf.o `test -f 'testgbuf.c' || echo '$(srcdir)/'`testgbuf.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-test_dwstring.o `test -f 'test_dwstring.c' || echo '$(srcdir)/'`test_dwstring.c
 
-testgbuf-testgbuf.obj: testgbuf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -MT testgbuf-testgbuf.obj -MD -MP -MF $(DEPDIR)/testgbuf-testgbuf.Tpo -c -o testgbuf-testgbuf.obj `if test -f 'testgbuf.c'; then $(CYGPATH_W) 'testgbuf.c'; else $(CYGPATH_W) '$(srcdir)/testgbuf.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testgbuf-testgbuf.Tpo $(DEPDIR)/testgbuf-testgbuf.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='testgbuf.c' object='testgbuf-testgbuf.obj' libtool=no @AMDEPBACKSLASH@
+test_dwstring-test_dwstring.obj: test_dwstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-test_dwstring.obj -MD -MP -MF $(DEPDIR)/test_dwstring-test_dwstring.Tpo -c -o test_dwstring-test_dwstring.obj `if test -f 'test_dwstring.c'; then $(CYGPATH_W) 'test_dwstring.c'; else $(CYGPATH_W) '$(srcdir)/test_dwstring.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-test_dwstring.Tpo $(DEPDIR)/test_dwstring-test_dwstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_dwstring.c' object='test_dwstring-test_dwstring.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -c -o testgbuf-testgbuf.obj `if test -f 'testgbuf.c'; then $(CYGPATH_W) 'testgbuf.c'; else $(CYGPATH_W) '$(srcdir)/testgbuf.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-test_dwstring.obj `if test -f 'test_dwstring.c'; then $(CYGPATH_W) 'test_dwstring.c'; else $(CYGPATH_W) '$(srcdir)/test_dwstring.c'; fi`
 
-testgbuf-gbuf.o: gbuf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -MT testgbuf-gbuf.o -MD -MP -MF $(DEPDIR)/testgbuf-gbuf.Tpo -c -o testgbuf-gbuf.o `test -f 'gbuf.c' || echo '$(srcdir)/'`gbuf.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testgbuf-gbuf.Tpo $(DEPDIR)/testgbuf-gbuf.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gbuf.c' object='testgbuf-gbuf.o' libtool=no @AMDEPBACKSLASH@
+test_dwstring-dwstring.o: dwstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-dwstring.o -MD -MP -MF $(DEPDIR)/test_dwstring-dwstring.Tpo -c -o test_dwstring-dwstring.o `test -f 'dwstring.c' || echo '$(srcdir)/'`dwstring.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-dwstring.Tpo $(DEPDIR)/test_dwstring-dwstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwstring.c' object='test_dwstring-dwstring.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -c -o testgbuf-gbuf.o `test -f 'gbuf.c' || echo '$(srcdir)/'`gbuf.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-dwstring.o `test -f 'dwstring.c' || echo '$(srcdir)/'`dwstring.c
 
-testgbuf-gbuf.obj: gbuf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -MT testgbuf-gbuf.obj -MD -MP -MF $(DEPDIR)/testgbuf-gbuf.Tpo -c -o testgbuf-gbuf.obj `if test -f 'gbuf.c'; then $(CYGPATH_W) 'gbuf.c'; else $(CYGPATH_W) '$(srcdir)/gbuf.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testgbuf-gbuf.Tpo $(DEPDIR)/testgbuf-gbuf.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gbuf.c' object='testgbuf-gbuf.obj' libtool=no @AMDEPBACKSLASH@
+test_dwstring-dwstring.obj: dwstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-dwstring.obj -MD -MP -MF $(DEPDIR)/test_dwstring-dwstring.Tpo -c -o test_dwstring-dwstring.obj `if test -f 'dwstring.c'; then $(CYGPATH_W) 'dwstring.c'; else $(CYGPATH_W) '$(srcdir)/dwstring.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-dwstring.Tpo $(DEPDIR)/test_dwstring-dwstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwstring.c' object='test_dwstring-dwstring.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(testgbuf_CPPFLAGS) $(CPPFLAGS) $(testgbuf_CFLAGS) $(CFLAGS) -c -o testgbuf-gbuf.obj `if test -f 'gbuf.c'; then $(CYGPATH_W) 'gbuf.c'; else $(CYGPATH_W) '$(srcdir)/gbuf.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-dwstring.obj `if test -f 'dwstring.c'; then $(CYGPATH_W) 'dwstring.c'; else $(CYGPATH_W) '$(srcdir)/dwstring.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1525,9 +1525,9 @@ recheck: all $(check_PROGRAMS)
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-testgbuf.log: testgbuf$(EXEEXT)
-	@p='testgbuf$(EXEEXT)'; \
-	b='testgbuf'; \
+test_dwstring.log: test_dwstring$(EXEEXT)
+	@p='test_dwstring$(EXEEXT)'; \
+	b='test_dwstring'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

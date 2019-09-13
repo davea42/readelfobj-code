@@ -33,7 +33,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>  /* for printf */
 #include <stdlib.h>
 #include <string.h>
-#include "dw_str.h"
+#include "dwstring.h"
 #ifndef TRUE
 #define TRUE 1
 #endif /* TRUE */
@@ -81,17 +81,17 @@ test1(int tnum)
 
     dwstring_constructor(&g);
     
-    d = dwstring_get_data(&g);
+    d = dwstring_string(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
 
     res = dwstring_append(&g,"abc");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_get_data(&g);
+    d = dwstring_string(&g);
     check_string("expected abc ",(char *)"abc",d,__LINE__);
 
     res = dwstring_append(&g,"xy");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_get_data(&g);
+    d = dwstring_string(&g);
     check_string("expected abcxy ",(char *)"abcxy",d,__LINE__);
 
     dwstring_destructor(&g);
@@ -99,9 +99,9 @@ test1(int tnum)
     dwstring_constructor(&g);
     res = dwstring_append(&g,bigstr);
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_get_data(&g);
+    d = dwstring_string(&g);
     check_string("expected bigstring ",bigstr,d,__LINE__);
-    biglen = dwstring_get_data_len(&g);
+    biglen = dwstring_strlen(&g);
     check_value("expected 120  ",strlen(bigstr),biglen,__LINE__);
     dwstring_destructor(&g);
     
@@ -124,17 +124,17 @@ test2(int tnum)
 
     dwstring_constructor_fixed(&g,10);
 
-    d = dwstring_get_data(&g);
+    d = dwstring_strlen(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
 
     res = dwstring_append(&g,"abc");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_get_data(&g);
+    d = dwstring_string(&g);
     check_string("expected abc ",(char *)"abc",d,__LINE__);
 
     res = dwstring_append(&g,"xy");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_get_data(&g);
+    d = dwstring_string(&g);
     check_string("expected abcxy ",(char *)"abcxy",d,__LINE__);
 
     dwstring_destructor(&g);
@@ -142,9 +142,9 @@ test2(int tnum)
     dwstring_constructor_fixed(&g,3);
     res = dwstring_append(&g,bigstr);
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_get_data(&g);
+    d = dwstring_string(&g);
     check_string("expected bigstring ",bigstr,d,__LINE__);
-    biglen = dwstring_get_data_len(&g);
+    biglen = dwstring_strlen(&g);
     check_value("expected 120  ",strlen(bigstr),biglen,__LINE__);
     dwstring_destructor(&g);
 
