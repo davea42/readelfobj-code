@@ -124,7 +124,7 @@ test2(int tnum)
 
     dwstring_constructor_fixed(&g,10);
 
-    d = dwstring_strlen(&g);
+    d = dwstring_string(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
 
     res = dwstring_append(&g,"abc");
