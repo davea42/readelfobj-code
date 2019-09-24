@@ -1,3 +1,18 @@
+2019-09-24: David Anderson
+     * dwarf_debuglink.h: New enables more test cases
+       of the functions in dwarf_debuglink.c
+     * src/dwstring.c -> src/dwarfstring.c
+     * src/dwstring.h -> src/dwarfstring.h
+     * dwarf_debuglink.c: Major revision to use
+       dwarfstring.c functions, simplifying the code
+       a lot.
+     * Makefile.am: New sources and test cases.
+     * Makefile.in: Regenerated
+     * dwarf_peread.h: Removed one #define
+     * dwarf_reading.h: Added error defines (one
+       conflicted with dwarf_peread.h)
+     * test_dwstring.c: Test code.
+     * test_linkedtopath.c: New test code.
 2019-09-22: David Anderson
      * dwarf_load_elf_headers.c: Fix issue with 
        the size of a printf variable vs its % format.

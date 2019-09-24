@@ -93,7 +93,7 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = readelfobj$(EXEEXT) readobjmacho$(EXEEXT) \
 	readobjpe$(EXEEXT) object_detector$(EXEEXT)
-check_PROGRAMS = test_dwstring$(EXEEXT)
+check_PROGRAMS = test_dwstring$(EXEEXT) test_linkedtopath$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -125,6 +125,7 @@ object_detector_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(object_detector_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
 am_readelfobj_OBJECTS = readelfobj-dwarf_debuglink.$(OBJEXT) \
+	readelfobj-dwarfstring.$(OBJEXT) \
 	readelfobj-dwarf_object_detector.$(OBJEXT) \
 	readelfobj-dwarf_object_read_common.$(OBJEXT) \
 	readelfobj-dwarf_elf_naming.$(OBJEXT) \
@@ -167,12 +168,16 @@ readobjpe_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(readobjpe_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am_test_dwstring_OBJECTS = test_dwstring-test_dwstring.$(OBJEXT) \
-	test_dwstring-dwstring.$(OBJEXT)
+	test_dwstring-dwarfstring.$(OBJEXT)
 test_dwstring_OBJECTS = $(am_test_dwstring_OBJECTS)
 test_dwstring_LDADD = $(LDADD)
 test_dwstring_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_dwstring_CFLAGS) \
 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+am_test_linkedtopath_OBJECTS = test_linkedtopath.$(OBJEXT) \
+	dwarfstring.$(OBJEXT) dwarf_debuglink.$(OBJEXT)
+test_linkedtopath_OBJECTS = $(am_test_linkedtopath_OBJECTS)
+test_linkedtopath_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -209,10 +214,10 @@ am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(object_detector_SOURCES) $(readelfobj_SOURCES) \
 	$(readobjmacho_SOURCES) $(readobjpe_SOURCES) \
-	$(test_dwstring_SOURCES)
+	$(test_dwstring_SOURCES) $(test_linkedtopath_SOURCES)
 DIST_SOURCES = $(object_detector_SOURCES) $(readelfobj_SOURCES) \
 	$(readobjmacho_SOURCES) $(readobjpe_SOURCES) \
-	$(test_dwstring_SOURCES)
+	$(test_dwstring_SOURCES) $(test_linkedtopath_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -571,7 +576,10 @@ MAINTAINERCLEANFILES = Makefile.in
 AUTOMAKE_OPTIONS = subdir-objects
 TESTS = $(check_PROGRAMS)
 readelfobj_SOURCES = \
-dwarf_debuglink.c       \
+dwarf_debuglink.c     \
+dwarf_debuglink.h     \
+dwarfstring.c         \
+dwarfstring.h         \
 dwarf_object_detector.h  \
 dwarf_object_detector.c   \
 dwarf_object_read_common.c \
@@ -648,10 +656,17 @@ object_detector_SOURCES = object_detector_main.c \
 
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
 test_dwstring_SOURCES = test_dwstring.c \
-   dwstring.h dwstring.c
+   dwarfstring.h dwarfstring.c 
 
 test_dwstring_CFLAGS = $(RO_CFLAGS_WARN)
 test_dwstring_CPPFLAGS = \
+-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
+
+test_linkedtopath_SOURCES = test_linkedtopath.c \
+   dwarfstring.h dwarfstring.c \
+   dwarf_debuglink.h dwarf_debuglink.c
+
+test_linkedtopath = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 man_MANS = readelfobj.1
@@ -774,12 +789,18 @@ test_dwstring$(EXEEXT): $(test_dwstring_OBJECTS) $(test_dwstring_DEPENDENCIES) $
 	@rm -f test_dwstring$(EXEEXT)
 	$(AM_V_CCLD)$(test_dwstring_LINK) $(test_dwstring_OBJECTS) $(test_dwstring_LDADD) $(LIBS)
 
+test_linkedtopath$(EXEEXT): $(test_linkedtopath_OBJECTS) $(test_linkedtopath_DEPENDENCIES) $(EXTRA_test_linkedtopath_DEPENDENCIES) 
+	@rm -f test_linkedtopath$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_linkedtopath_OBJECTS) $(test_linkedtopath_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwarf_debuglink.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwarfstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-object_detector_main.Po@am__quote@
@@ -796,6 +817,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_load_elf_headers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_object_read_common.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarfstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-readelfobj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-sanitized.Po@am__quote@
@@ -811,8 +833,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-readobjpe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readobjpe-sanitized.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dwstring-dwstring.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dwstring-dwarfstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dwstring-test_dwstring.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_linkedtopath.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -893,6 +916,20 @@ readelfobj-dwarf_debuglink.obj: dwarf_debuglink.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_debuglink.c' object='readelfobj-dwarf_debuglink.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_debuglink.obj `if test -f 'dwarf_debuglink.c'; then $(CYGPATH_W) 'dwarf_debuglink.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_debuglink.c'; fi`
+
+readelfobj-dwarfstring.o: dwarfstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarfstring.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarfstring.Tpo -c -o readelfobj-dwarfstring.o `test -f 'dwarfstring.c' || echo '$(srcdir)/'`dwarfstring.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarfstring.Tpo $(DEPDIR)/readelfobj-dwarfstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarfstring.c' object='readelfobj-dwarfstring.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarfstring.o `test -f 'dwarfstring.c' || echo '$(srcdir)/'`dwarfstring.c
+
+readelfobj-dwarfstring.obj: dwarfstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarfstring.obj -MD -MP -MF $(DEPDIR)/readelfobj-dwarfstring.Tpo -c -o readelfobj-dwarfstring.obj `if test -f 'dwarfstring.c'; then $(CYGPATH_W) 'dwarfstring.c'; else $(CYGPATH_W) '$(srcdir)/dwarfstring.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarfstring.Tpo $(DEPDIR)/readelfobj-dwarfstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarfstring.c' object='readelfobj-dwarfstring.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarfstring.obj `if test -f 'dwarfstring.c'; then $(CYGPATH_W) 'dwarfstring.c'; else $(CYGPATH_W) '$(srcdir)/dwarfstring.c'; fi`
 
 readelfobj-dwarf_object_detector.o: dwarf_object_detector.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_object_detector.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_object_detector.Tpo -c -o readelfobj-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
@@ -1286,19 +1323,19 @@ test_dwstring-test_dwstring.obj: test_dwstring.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-test_dwstring.obj `if test -f 'test_dwstring.c'; then $(CYGPATH_W) 'test_dwstring.c'; else $(CYGPATH_W) '$(srcdir)/test_dwstring.c'; fi`
 
-test_dwstring-dwstring.o: dwstring.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-dwstring.o -MD -MP -MF $(DEPDIR)/test_dwstring-dwstring.Tpo -c -o test_dwstring-dwstring.o `test -f 'dwstring.c' || echo '$(srcdir)/'`dwstring.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-dwstring.Tpo $(DEPDIR)/test_dwstring-dwstring.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwstring.c' object='test_dwstring-dwstring.o' libtool=no @AMDEPBACKSLASH@
+test_dwstring-dwarfstring.o: dwarfstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-dwarfstring.o -MD -MP -MF $(DEPDIR)/test_dwstring-dwarfstring.Tpo -c -o test_dwstring-dwarfstring.o `test -f 'dwarfstring.c' || echo '$(srcdir)/'`dwarfstring.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-dwarfstring.Tpo $(DEPDIR)/test_dwstring-dwarfstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarfstring.c' object='test_dwstring-dwarfstring.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-dwstring.o `test -f 'dwstring.c' || echo '$(srcdir)/'`dwstring.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-dwarfstring.o `test -f 'dwarfstring.c' || echo '$(srcdir)/'`dwarfstring.c
 
-test_dwstring-dwstring.obj: dwstring.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-dwstring.obj -MD -MP -MF $(DEPDIR)/test_dwstring-dwstring.Tpo -c -o test_dwstring-dwstring.obj `if test -f 'dwstring.c'; then $(CYGPATH_W) 'dwstring.c'; else $(CYGPATH_W) '$(srcdir)/dwstring.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-dwstring.Tpo $(DEPDIR)/test_dwstring-dwstring.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwstring.c' object='test_dwstring-dwstring.obj' libtool=no @AMDEPBACKSLASH@
+test_dwstring-dwarfstring.obj: dwarfstring.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -MT test_dwstring-dwarfstring.obj -MD -MP -MF $(DEPDIR)/test_dwstring-dwarfstring.Tpo -c -o test_dwstring-dwarfstring.obj `if test -f 'dwarfstring.c'; then $(CYGPATH_W) 'dwarfstring.c'; else $(CYGPATH_W) '$(srcdir)/dwarfstring.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_dwstring-dwarfstring.Tpo $(DEPDIR)/test_dwstring-dwarfstring.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarfstring.c' object='test_dwstring-dwarfstring.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-dwstring.obj `if test -f 'dwstring.c'; then $(CYGPATH_W) 'dwstring.c'; else $(CYGPATH_W) '$(srcdir)/dwstring.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_dwstring_CPPFLAGS) $(CPPFLAGS) $(test_dwstring_CFLAGS) $(CFLAGS) -c -o test_dwstring-dwarfstring.obj `if test -f 'dwarfstring.c'; then $(CYGPATH_W) 'dwarfstring.c'; else $(CYGPATH_W) '$(srcdir)/dwarfstring.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1545,6 +1582,13 @@ recheck: all $(check_PROGRAMS)
 test_dwstring.log: test_dwstring$(EXEEXT)
 	@p='test_dwstring$(EXEEXT)'; \
 	b='test_dwstring'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test_linkedtopath.log: test_linkedtopath$(EXEEXT)
+	@p='test_linkedtopath$(EXEEXT)'; \
+	b='test_linkedtopath'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

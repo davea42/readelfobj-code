@@ -33,7 +33,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>  /* for printf */
 #include <stdlib.h>
 #include <string.h>
-#include "dwstring.h"
+#include "dwarfstring.h"
 #ifndef TRUE
 #define TRUE 1
 #endif /* TRUE */
@@ -68,7 +68,7 @@ check_value(const char *msg,unsigned long exp,
 static void
 test1(int tnum)
 {
-    struct dwstring_s g;
+    struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
@@ -80,43 +80,43 @@ test1(int tnum)
                    "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
                    "ccccccbbbbbyyyybbbbbbbbbbbbccc";
 
-    dwstring_constructor(&g);
+    dwarfstring_constructor(&g);
     
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
 
-    res = dwstring_append(&g,"abc");
+    res = dwarfstring_append(&g,"abc");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected abc ",(char *)"abc",d,__LINE__);
 
-    res = dwstring_append(&g,"xy");
+    res = dwarfstring_append(&g,"xy");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected abcxy ",(char *)"abcxy",d,__LINE__);
 
-    dwstring_destructor(&g);
+    dwarfstring_destructor(&g);
 
-    dwstring_constructor(&g);
-    res = dwstring_append(&g,bigstr);
+    dwarfstring_constructor(&g);
+    res = dwarfstring_append(&g,bigstr);
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected bigstring ",bigstr,d,__LINE__);
-    biglen = dwstring_strlen(&g);
+    biglen = dwarfstring_strlen(&g);
     check_value("expected 120  ",strlen(bigstr),biglen,__LINE__);
 
-    dwstring_append_length(&g,"xxyyzz",3);
+    dwarfstring_append_length(&g,"xxyyzz",3);
 
-    biglen = dwstring_strlen(&g);
+    biglen = dwarfstring_strlen(&g);
     check_value("expected 123  ",strlen(bigstr)+3,biglen,__LINE__);
-    dwstring_destructor(&g);
+    dwarfstring_destructor(&g);
     
 }
 
 static void
 test2(int tnum)
 {
-    struct dwstring_s g;
+    struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
@@ -128,38 +128,38 @@ test2(int tnum)
                    "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
                    "ccccccbbbbbyyyybbbbbbbbbbbbccc";
 
-    dwstring_constructor_fixed(&g,10);
+    dwarfstring_constructor_fixed(&g,10);
 
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
 
-    res = dwstring_append(&g,"abc");
+    res = dwarfstring_append(&g,"abc");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected abc ",(char *)"abc",d,__LINE__);
 
-    res = dwstring_append(&g,"xy");
+    res = dwarfstring_append(&g,"xy");
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected abcxy ",(char *)"abcxy",d,__LINE__);
 
-    dwstring_destructor(&g);
+    dwarfstring_destructor(&g);
 
-    dwstring_constructor_fixed(&g,3);
-    res = dwstring_append(&g,bigstr);
+    dwarfstring_constructor_fixed(&g,3);
+    res = dwarfstring_append(&g,bigstr);
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected bigstring ",bigstr,d,__LINE__);
-    biglen = dwstring_strlen(&g);
+    biglen = dwarfstring_strlen(&g);
     check_value("expected 120  ",strlen(bigstr),biglen,__LINE__);
-    dwstring_destructor(&g);
+    dwarfstring_destructor(&g);
 
 }
 
 static void
 test3(int tnum)
 {
-    struct dwstring_s g;
+    struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
@@ -167,32 +167,32 @@ test3(int tnum)
     char *bigstr = "a012345";
     char *targetbigstr = "a012345xy";
 
-    dwstring_constructor_fixed(&g,10);
+    dwarfstring_constructor_fixed(&g,10);
 
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
 
-    res = dwstring_append(&g,bigstr);
+    res = dwarfstring_append(&g,bigstr);
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected a012345 ",(char *)bigstr,d,__LINE__);
 
-    res = dwstring_append_length(&g,"xyzzz",2);
+    res = dwarfstring_append_length(&g,"xyzzz",2);
     check_value("expected TRUE  ",TRUE,res,__LINE__);
 
-    check_value("expected 9  ", 9,(unsigned)dwstring_strlen(&g),
+    check_value("expected 9  ", 9,(unsigned)dwarfstring_strlen(&g),
         __LINE__);
 
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected a012345xy ",
         (char *)targetbigstr,d,__LINE__);
-    dwstring_destructor(&g);
+    dwarfstring_destructor(&g);
 }
 
 static void
 test4(int tnum)
 {
-    struct dwstring_s g;
+    struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
@@ -201,13 +201,13 @@ test4(int tnum)
     char *targetmystr = "a01234xyz";
     char fixedarea[7];
 
-    dwstring_constructor_static(&g,fixedarea,sizeof(fixedarea));
+    dwarfstring_constructor_static(&g,fixedarea,sizeof(fixedarea));
 
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
-    res = dwstring_append(&g,mystr);
+    res = dwarfstring_append(&g,mystr);
     check_value("expected TRUE  ",TRUE,res,__LINE__);
-    d = dwstring_string(&g);
+    d = dwarfstring_string(&g);
     check_string("expected a01234 ",(char *)mystr,d,__LINE__);
 
     if (d != fixedarea) {
@@ -215,18 +215,18 @@ test4(int tnum)
             __LINE__);
         ++errcount;
     }
-    res = dwstring_append(&g,"xyz");
-    d = dwstring_string(&g);
+    res = dwarfstring_append(&g,"xyz");
+    d = dwarfstring_string(&g);
     check_string("expected a01234xyz ",(char *)targetmystr,
         d,__LINE__);
-    check_value("expected 9",9,dwstring_strlen(&g),__LINE__);
+    check_value("expected 9",9,dwarfstring_strlen(&g),__LINE__);
 
     if (d == fixedarea) {
         printf(" FAIL  not reallocated but should  be! line %d ",
             __LINE__);
         ++errcount;
     }
-    dwstring_destructor(&g);
+    dwarfstring_destructor(&g);
 }
 
 

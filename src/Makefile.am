@@ -9,8 +9,11 @@ bin_PROGRAMS = readelfobj readobjmacho readobjpe object_detector
 
 TESTS = $(check_PROGRAMS)
 
-readelfobj_SOURCES =   \
-dwarf_debuglink.c       \
+readelfobj_SOURCES = \
+dwarf_debuglink.c     \
+dwarf_debuglink.h     \
+dwarfstring.c         \
+dwarfstring.h         \
 dwarf_object_detector.h  \
 dwarf_object_detector.c   \
 dwarf_object_read_common.c \
@@ -87,12 +90,19 @@ object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.h
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 
 
-check_PROGRAMS = test_dwstring
+check_PROGRAMS = test_dwstring test_linkedtopath
 
 test_dwstring_SOURCES = test_dwstring.c \
-   dwstring.h dwstring.c
+   dwarfstring.h dwarfstring.c 
 test_dwstring_CFLAGS = $(RO_CFLAGS_WARN)
 test_dwstring_CPPFLAGS = \
+-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
+
+test_linkedtopath_SOURCES = test_linkedtopath.c \
+   dwarfstring.h dwarfstring.c \
+   dwarf_debuglink.h dwarf_debuglink.c
+test_linkedtopath = $(RO_CFLAGS_WARN)
+test_linkedtopath = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 man_MANS = readelfobj.1

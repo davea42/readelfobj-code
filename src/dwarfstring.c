@@ -41,7 +41,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h> /* for malloc */
 #include <stdlib.h> /* for malloc */
 #include <string.h> /* for strlen */
-#include "dwstring.h"
+#include "dwarfstring.h"
 #ifndef TRUE
 #define TRUE 1
 #endif /* TRUE */
@@ -51,7 +51,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 static unsigned long minimumnewlen = 30;
 /*
-struct dwstring_s {
+struct dwarfstring_s {
    char *        s_data;
    unsigned long s_size;
    unsigned long s_avail;
@@ -60,7 +60,7 @@ struct dwstring_s {
 */
 
 int 
-dwstring_constructor(struct dwstring_s *g)
+dwarfstring_constructor(struct dwarfstring_s *g)
 {
     g->s_data = "";
     g->s_size = 0;
@@ -70,7 +70,7 @@ dwstring_constructor(struct dwstring_s *g)
 }
 
 static int
-dwstring_resize_to(struct dwstring_s *g,unsigned long newlen)
+dwarfstring_resize_to(struct dwarfstring_s *g,unsigned long newlen)
 {
     char *b = 0;
     unsigned long lastpos = 
@@ -100,16 +100,27 @@ dwstring_resize_to(struct dwstring_s *g,unsigned long newlen)
 }
 
 int 
-dwstring_constructor_fixed(struct dwstring_s *g,unsigned long len)
+dwarfstring_reset(struct dwarfstring_s *g)
 {
-    char *b = 0;
-    int r = 0;
+    if (!g->s_size) {
+        /* In initial condition, nothing to do. */
+        return TRUE;
+    }
+    g->s_avail = g->s_size;
+    g->s_data[0] = 0;
+    return TRUE;
+}
 
-    dwstring_constructor(g);
+int 
+dwarfstring_constructor_fixed(struct dwarfstring_s *g,unsigned long len)
+{
+    int r = FALSE;
+
+    dwarfstring_constructor(g);
     if (len == 0) {
         return TRUE;
     }
-    r = dwstring_resize_to(g,len);
+    r = dwarfstring_resize_to(g,len);
     if (!r) {
         return FALSE;
     }
@@ -117,11 +128,11 @@ dwstring_constructor_fixed(struct dwstring_s *g,unsigned long len)
 }
 
 int 
-dwstring_constructor_static(struct dwstring_s *g,
+dwarfstring_constructor_static(struct dwarfstring_s *g,
     char * space,
     unsigned long len)
 {
-    dwstring_constructor(g);
+    dwarfstring_constructor(g);
     g->s_data = space;
     g->s_data[0] = 0;
     g->s_size = len;
@@ -131,13 +142,13 @@ dwstring_constructor_static(struct dwstring_s *g,
 }
 
 void 
-dwstring_destructor(struct dwstring_s *g)
+dwarfstring_destructor(struct dwarfstring_s *g)
 {
     if (g->s_malloc) {
         free(g->s_data);
         g->s_data = 0;
     }
-    dwstring_constructor(g);
+    dwarfstring_constructor(g);
 }
 
 /*  For the case where one wants just the first 'len'
@@ -145,17 +156,20 @@ dwstring_destructor(struct dwstring_s *g)
     for you in s_data.
 */
 int 
-dwstring_append_length(struct dwstring_s *g,char *str,
+dwarfstring_append_length(struct dwarfstring_s *g,char *str,
     unsigned long slen)
 {
     unsigned long lastpos = g->s_size - g->s_avail;
     int r = 0;
 
+    if (!str  || slen ==0) {
+        return TRUE;
+    }
     if (slen >= g->s_avail) {
         unsigned long newlen = 0;
 
         newlen = g->s_size + slen+2;
-        r = dwstring_resize_to(g,newlen);
+        r = dwarfstring_resize_to(g,newlen);
         if (!r) {
             return FALSE;
         }
@@ -167,20 +181,25 @@ dwstring_append_length(struct dwstring_s *g,char *str,
 }
 
 int 
-dwstring_append(struct dwstring_s *g,char *str)
+dwarfstring_append(struct dwarfstring_s *g,char *str)
 {
-    unsigned long dlen = strlen(str);
-    return dwstring_append_length(g,str,dlen);
+    unsigned long dlen = 0;
+
+    if(!str) {
+        return TRUE;
+    }
+    dlen = strlen(str);
+    return dwarfstring_append_length(g,str,dlen);
 }
 
 char * 
-dwstring_string(struct dwstring_s *g)
+dwarfstring_string(struct dwarfstring_s *g)
 {
     return g->s_data;
 }
 
 unsigned long
-dwstring_strlen(struct dwstring_s *g)
+dwarfstring_strlen(struct dwarfstring_s *g)
 {
     return g->s_size - g->s_avail;
 }

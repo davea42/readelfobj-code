@@ -134,6 +134,13 @@ extern "C" {
 #define RO_ERR_ELF_STRING_LINK_ERROR    35
 #define RO_ERR_SECTION_SIZE       36
 #define RO_ERR_INVALID_STRING     37
+#define DW_DLE_STRING_NOT_TERMINATED      38
+#define DW_DLE_FORM_STRING_BAD_STRING     39
+#define DW_DLE_CORRUPT_GNU_DEBUGLINK      40
+#define DW_DLE_CORRUPT_NOTE_GNU_DEBUGID   41
+#define DW_DLE_CORRUPT_GNU_DEBUGID_STRING 42
+#define DW_DLE_CORRUPT_GNU_DEBUGID_SIZE   43
+#define DW_DLE_ALLOC_FAIL                 44
 
 const char *dwarf_get_errname(int i);
 #define P printf

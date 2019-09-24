@@ -1,3 +1,7 @@
+2010-09-24: David Anderson
+    * configure.ac: Added new sourcfiles and
+      new test cases related to .note.gnu.debug-id
+      and .gnu_debug link section reading.
 2010-04-24: David Anderson
     * configure.ac: Version 20190422
 2010-04-18: David Anderson

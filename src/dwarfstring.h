@@ -35,30 +35,32 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-struct dwstring_s {
+struct dwarfstring_s {
    char *        s_data;
    unsigned long s_size;
    unsigned long s_avail;
    unsigned char s_malloc;
 };
 
-typedef struct dwstring_s dwstring; 
+typedef struct dwarfstring_s dwarfstring; 
 
-int dwstring_constructor(struct dwstring_s *g);
-int dwstring_constructor_fixed(struct dwstring_s *g,
+int dwarfstring_constructor(struct dwarfstring_s *g);
+int dwarfstring_constructor_fixed(struct dwarfstring_s *g,
     unsigned long len);
-int dwstring_constructor_static(struct dwstring_s *g,
+int dwarfstring_constructor_static(struct dwarfstring_s *g,
     char * space,
     unsigned long len);
-void dwstring_destructor(struct dwstring_s *g);
+void dwarfstring_destructor(struct dwarfstring_s *g);
+int dwarfstring_reset(struct dwarfstring_s *g);
 
-int dwstring_append(struct dwstring_s *g,char *str);
 
-/*  When one wants the first 'len' caracters of str
-    appended. NUL termination is provided by dwstrings. */
-int dwstring_append_length(struct dwstring_s *g,
+int dwarfstring_append(struct dwarfstring_s *g,char *str);
+
+/*  When one wants the first 'len' characters of str
+    appended. NUL termination is provided by dwarfstrings. */
+int dwarfstring_append_length(struct dwarfstring_s *g,
     char *str,unsigned long len);
 
-char * dwstring_string(struct dwstring_s *g);
-unsigned long dwstring_strlen(struct dwstring_s *g);
+char * dwarfstring_string(struct dwarfstring_s *g);
+unsigned long dwarfstring_strlen(struct dwarfstring_s *g);
 
