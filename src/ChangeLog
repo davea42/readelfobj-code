@@ -1,3 +1,10 @@
+2019-09-22: David Anderson
+     * dwarf_load_elf_headers.c: Fix issue with 
+       the size of a printf variable vs its % format.
+     * readelfobj.c: Delete a bogus printf which 
+       made tests fail.
+     * test_dwstring.c: Make the functions return void
+       to avoid warnings.
 2019-09-12: David Anderson
      * gbuf.h,gbuf.c,testgbuf.c: New, providing
        an extensible string buffer.

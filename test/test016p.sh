@@ -4,7 +4,7 @@ base=$n.base
 o=libexamine-0.dll
 #echo "START test $n "
 ./readobjpe  $o  >junk.$n
-dos2unix -q junk.$n
+dos2unix  junk.$n 2>/dev/null
 diff $n.base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then

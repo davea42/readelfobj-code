@@ -104,7 +104,7 @@ check_size(const char *name,
             offset,offset,name);
         P("       of size "
             LONGESTSFMT " (" LONGESTXFMT ")\n",
-            size,(Dwarf_Unsigned)size);
+            (Dwarf_Unsigned)size,(Dwarf_Unsigned)size);
         P("       exceeds the file size of "
             LONGESTUFMT " (" LONGESTXFMT ").\n",
             filesize,filesize);

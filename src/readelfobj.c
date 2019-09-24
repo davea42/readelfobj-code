@@ -1648,5 +1648,5 @@ void elf_print_sg_groups(elf_filedata ep)
 static void 
 elf_print_gnu_debuglink(elf_filedata ep)
 {
-    printf("FIXME, not implemented line %d\n",__LINE__);
+   /* FIXME!  */
 }

@@ -1,3 +1,7 @@
+2019-09-22   David Anderson
+    * test*.base: Nearly all the tests use dos2unix
+      and the -q option is not always available.
+      So dropped -q and use 2>/dev/null instead.
 2019-04-24   David Anderson
     * test003.base,test017.base, test019.base,test020.base,
       test021.base : to match latest elf reader.

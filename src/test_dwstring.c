@@ -65,7 +65,7 @@ check_value(const char *msg,unsigned long exp,
     ++errcount;
 }
 
-static int
+static void
 test1(int tnum)
 {
     struct dwstring_s g;
@@ -113,7 +113,7 @@ test1(int tnum)
     
 }
 
-static int
+static void
 test2(int tnum)
 {
     struct dwstring_s g;
@@ -156,7 +156,7 @@ test2(int tnum)
 
 }
 
-static int
+static void
 test3(int tnum)
 {
     struct dwstring_s g;
@@ -189,7 +189,7 @@ test3(int tnum)
     dwstring_destructor(&g);
 }
 
-static int
+static void
 test4(int tnum)
 {
     struct dwstring_s g;
