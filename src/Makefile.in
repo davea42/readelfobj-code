@@ -124,7 +124,8 @@ object_detector_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
 	$(object_detector_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-am_readelfobj_OBJECTS = readelfobj-dwarf_object_detector.$(OBJEXT) \
+am_readelfobj_OBJECTS = readelfobj-dwarf_debuglink.$(OBJEXT) \
+	readelfobj-dwarf_object_detector.$(OBJEXT) \
 	readelfobj-dwarf_object_read_common.$(OBJEXT) \
 	readelfobj-dwarf_elf_naming.$(OBJEXT) \
 	readelfobj-dwarf_elf_reloc_386.$(OBJEXT) \
@@ -570,10 +571,11 @@ MAINTAINERCLEANFILES = Makefile.in
 AUTOMAKE_OPTIONS = subdir-objects
 TESTS = $(check_PROGRAMS)
 readelfobj_SOURCES = \
+dwarf_debuglink.c       \
 dwarf_object_detector.h  \
 dwarf_object_detector.c   \
 dwarf_object_read_common.c \
-dwarf_object_read_common.h \
+dwarf_object_read_common.h  \
 dwarf_elf_naming.c   \
 dwarf_elf_reloc_386.c \
 dwarf_elf_reloc_386.h  \
@@ -581,7 +583,7 @@ dwarf_elf_reloc_mips.c	\
 dwarf_elf_reloc_mips.h	 \
 dwarf_elf_reloc_ppc.c    \
 dwarf_elf_reloc_ppc.h    \
-dwarf_elf_reloc_sparc.c	\
+dwarf_elf_reloc_sparc.c	 \
 dwarf_elf_reloc_sparc.h	 \
 dwarf_elf_reloc_arm.c    \
 dwarf_elf_reloc_arm.h    \
@@ -781,6 +783,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-dwarf_object_detector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-errormessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/object_detector-object_detector_main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_debuglink.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_naming.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_386.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readelfobj-dwarf_elf_reloc_aarch64.Po@am__quote@
@@ -876,6 +879,20 @@ object_detector-errormessages.obj: errormessages.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='errormessages.c' object='object_detector-errormessages.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(object_detector_CFLAGS) $(CFLAGS) -c -o object_detector-errormessages.obj `if test -f 'errormessages.c'; then $(CYGPATH_W) 'errormessages.c'; else $(CYGPATH_W) '$(srcdir)/errormessages.c'; fi`
+
+readelfobj-dwarf_debuglink.o: dwarf_debuglink.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_debuglink.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_debuglink.Tpo -c -o readelfobj-dwarf_debuglink.o `test -f 'dwarf_debuglink.c' || echo '$(srcdir)/'`dwarf_debuglink.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_debuglink.Tpo $(DEPDIR)/readelfobj-dwarf_debuglink.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_debuglink.c' object='readelfobj-dwarf_debuglink.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_debuglink.o `test -f 'dwarf_debuglink.c' || echo '$(srcdir)/'`dwarf_debuglink.c
+
+readelfobj-dwarf_debuglink.obj: dwarf_debuglink.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_debuglink.obj -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_debuglink.Tpo -c -o readelfobj-dwarf_debuglink.obj `if test -f 'dwarf_debuglink.c'; then $(CYGPATH_W) 'dwarf_debuglink.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_debuglink.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/readelfobj-dwarf_debuglink.Tpo $(DEPDIR)/readelfobj-dwarf_debuglink.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_debuglink.c' object='readelfobj-dwarf_debuglink.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -c -o readelfobj-dwarf_debuglink.obj `if test -f 'dwarf_debuglink.c'; then $(CYGPATH_W) 'dwarf_debuglink.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_debuglink.c'; fi`
 
 readelfobj-dwarf_object_detector.o: dwarf_object_detector.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(readelfobj_CPPFLAGS) $(CPPFLAGS) $(readelfobj_CFLAGS) $(CFLAGS) -MT readelfobj-dwarf_object_detector.o -MD -MP -MF $(DEPDIR)/readelfobj-dwarf_object_detector.Tpo -c -o readelfobj-dwarf_object_detector.o `test -f 'dwarf_object_detector.c' || echo '$(srcdir)/'`dwarf_object_detector.c
