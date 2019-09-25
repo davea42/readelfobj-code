@@ -114,3 +114,5 @@ ChangeLog2018 \
 NEWS \
 README 
 
+CLEANFILES = \
+junk.ltp
