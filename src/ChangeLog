@@ -1,4 +1,21 @@
 2019-09-25: David Anderson
+     * Makefile.am: Adding tests.
+     * Makefile.in: Regenerated.
+     * baseline.ltp: New file with baseline results
+       to verify the debuglink search works.
+     * dwarf_debuglink.c: Corrected bugs and changed
+       the printf data to print lengths, not pointers.
+       Fixed indent/trailing whitespace.
+     * dwarf_debuglink.h: New, to make the functions
+       needed elsewhere visible.
+     * dwarf_load_elf_headers.c,dwarfstring.c,dwarfstring.h,
+       readelfobj.c:
+       Fixed trailing whitespace.
+     * test_dwstring.c: Fixed indents and compiler
+       warnings.
+     * test_linkedtopath.c: Fixed indents and trailing
+       whitespace. Added new tests.
+2019-09-25: David Anderson
      * dwarf_debuglink.c: Corrected bug in pathjoinl().
      * test_linkedtopath.c: Now fully tests pathjoinl().
 2019-09-24: David Anderson

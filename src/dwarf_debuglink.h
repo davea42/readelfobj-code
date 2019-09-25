@@ -32,21 +32,31 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 
 
 /* These make it easy to do some simple tests. */
-int
-_dwarf_check_string_valid(
+int _dwarf_check_string_valid(
     void *areaptr,
     void *strptr,
     void *areaendptr,
     int suggested_error,
     int *errcode);
 
-int
-_dwarf_pathjoinl(dwarfstring *target,dwarfstring * input);
+int _dwarf_pathjoinl(dwarfstring *target,dwarfstring * input);
 
 
-void
-_dwarf_construct_linkedto_path(char *pathname,
+void _dwarf_construct_linkedto_path(char *pathname,
    char * input_link_string, /* incoming link string */
    dwarfstring * debuglink_out);
+int dwarf_gnu_debuglink(elf_filedata ep,
+    char ** name_returned,  /* static storage, do not free */
+    char ** crc_returned,   /* 32bit crc , do not free */
+    char **  debuglink_path_returned, /* caller must free
+        returned pointer */
+    unsigned *debuglink_path_size_returned,/* Size of the
+        debuglink path.  zero returned if no path known/found. */
+    int*   errcode);
 
-
+int dwarf_gnu_buildid(elf_filedata ep,
+    Dwarf_Unsigned * type_returned,
+    const char     **owner_name_returned,
+    Dwarf_Unsigned * build_id_length_returned,
+    const unsigned char  **build_id_returned,
+    int*   errcode);

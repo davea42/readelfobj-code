@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 bin_PROGRAMS = readelfobj readobjmacho readobjpe object_detector
 
-TESTS = $(check_PROGRAMS)
+TESTS = $(check_PROGRAMS) $(check_TESTS)
 
 readelfobj_SOURCES = \
 dwarf_debuglink.c     \
@@ -82,8 +82,6 @@ readobjpe_CFLAGS = $(RO_CFLAGS_WARN)
 readobjpe_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
-
-
 object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.c \
    errormessages.c \
@@ -101,9 +99,11 @@ test_dwstring_CPPFLAGS = \
 test_linkedtopath_SOURCES = test_linkedtopath.c \
    dwarfstring.h dwarfstring.c \
    dwarf_debuglink.h dwarf_debuglink.c
-test_linkedtopath = $(RO_CFLAGS_WARN)
-test_linkedtopath = \
+test_linkedtopath_CFLAGS = $(RO_CFLAGS_WARN) -DTESTING
+test_linkedtopath_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
+
+check_TESTS = testdebuglink.sh
 
 man_MANS = readelfobj.1
 

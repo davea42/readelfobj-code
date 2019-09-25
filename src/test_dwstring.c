@@ -66,22 +66,23 @@ check_value(const char *msg,unsigned long exp,
 }
 
 static void
-test1(int tnum)
+test1(void)
 {
     struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
     unsigned long biglen = 0;
-    char *bigstr = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
-                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
-                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
-                   "ccccccbbbbbyyyybbbbbbbbbbbbccc";
+    char *bigstr =
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+        "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+        "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+        "ccccccbbbbbyyyybbbbbbbbbbbbccc";
 
     dwarfstring_constructor(&g);
-    
+
     d = dwarfstring_string(&g);
     check_string("expected empty string",(char *)expstr,d,__LINE__);
 
@@ -110,23 +111,23 @@ test1(int tnum)
     biglen = dwarfstring_strlen(&g);
     check_value("expected 123  ",strlen(bigstr)+3,biglen,__LINE__);
     dwarfstring_destructor(&g);
-    
 }
 
 static void
-test2(int tnum)
+test2(void)
 {
     struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
     unsigned long biglen = 0;
-    char *bigstr = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
-                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
-                   "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
-                   "ccccccbbbbbyyyybbbbbbbbbbbbccc";
+    char *bigstr =
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+        "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+        "ccccccbbbbbbbbbbbbbbbbbbbbbccc"
+        "ccccccbbbbbyyyybbbbbbbbbbbbccc";
 
     dwarfstring_constructor_fixed(&g,10);
 
@@ -157,13 +158,12 @@ test2(int tnum)
 }
 
 static void
-test3(int tnum)
+test3(void)
 {
     struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
-    unsigned long biglen = 0;
     char *bigstr = "a012345";
     char *targetbigstr = "a012345xy";
 
@@ -190,13 +190,12 @@ test3(int tnum)
 }
 
 static void
-test4(int tnum)
+test4(void)
 {
     struct dwarfstring_s g;
     char *d = 0;
     const char *expstr = "";
     int res = 0;
-    unsigned long biglen = 0;
     char *mystr = "a01234";
     char *targetmystr = "a01234xyz";
     char fixedarea[7];
@@ -233,10 +232,10 @@ test4(int tnum)
 
 int main()
 {
-    test1(1);
-    test2(2);
-    test3(3);
-    test4(3);
+    test1();
+    test2();
+    test3();
+    test4();
     if (errcount) {
         exit(1);
     }

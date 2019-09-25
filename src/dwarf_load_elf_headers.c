@@ -93,7 +93,7 @@ static char buffer1[BUFFERSIZE];
 
 static void
 check_size(const char *name,
-    Dwarf_Unsigned offset, 
+    Dwarf_Unsigned offset,
     size_t size,
     Dwarf_Unsigned filesize)
 {

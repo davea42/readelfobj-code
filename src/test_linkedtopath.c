@@ -59,77 +59,77 @@ static int errcount = 0;
 
 static void
 check_svalid(int expret,int gotret,int experr,int goterr,int line,
-    char *filename)
+    char *filename_in)
 {
 
-   if (expret != gotret) {
-       errcount++;
-       printf("ERROR expected return %d, got %d line %d %s\n",
-           expret,gotret,line,filename);
-   }
-   if (experr != goterr) {
-       errcount++;
-       printf("ERROR expected errcode %d, got %d line %d %s\n",
-           experr,goterr,line,filename);
-   }
+    if (expret != gotret) {
+        errcount++;
+        printf("ERROR expected return %d, got %d line %d %s\n",
+            expret,gotret,line,filename_in);
+    }
+    if (experr != goterr) {
+        errcount++;
+        printf("ERROR expected errcode %d, got %d line %d %s\n",
+            experr,goterr,line,filename_in);
+    }
 }
 
 static void
-test1(void) 
+test1(void)
 {
-      char testbuffer[1000];
-      char *area = testbuffer;
-      char * str = testbuffer;
-      const char *msg = "This is a simple string for testing.";
-      int res = 0;
-      char *end = testbuffer +100;
-      testbuffer[0] = 0;
-      int errcode = 0;
+    char testbuffer[1000];
+    char *area = testbuffer;
+    char * str = testbuffer;
+    const char *msg = "This is a simple string for testing.";
+    int res = 0;
+    char *end = testbuffer +100;
+    int errcode = 0;
 
 
-      strcpy(testbuffer,msg);
-      /* The error value is arbitrary, not realistic. */
-      res = _dwarf_check_string_valid(area,str,
-         end,DW_DLE_CORRUPT_GNU_DEBUGID_STRING,
-         &errcode);
-      check_svalid(DW_DLV_OK,res,
-          0,errcode,
-          __LINE__,__FILE__);
+    testbuffer[0] = 0;
+    strcpy(testbuffer,msg);
+    /* The error value is arbitrary, not realistic. */
+    res = _dwarf_check_string_valid(area,str,
+        end,DW_DLE_CORRUPT_GNU_DEBUGID_STRING,
+        &errcode);
+    check_svalid(DW_DLV_OK,res,
+        0,errcode,
+        __LINE__,__FILE__);
 
-      end = testbuffer +10;
-      res = _dwarf_check_string_valid(area,str,
-         end,DW_DLE_STRING_NOT_TERMINATED,
-         &errcode);
-      check_svalid(DW_DLV_ERROR, res, 
-         DW_DLE_STRING_NOT_TERMINATED, errcode,
-         __LINE__,__FILE__);
+    end = testbuffer +10;
+    res = _dwarf_check_string_valid(area,str,
+        end,DW_DLE_STRING_NOT_TERMINATED,
+        &errcode);
+    check_svalid(DW_DLV_ERROR, res,
+        DW_DLE_STRING_NOT_TERMINATED, errcode,
+        __LINE__,__FILE__);
 
-      end = testbuffer +10;
-      area = end +2;
-      res = _dwarf_check_string_valid(area,str,
-         end,DW_DLE_CORRUPT_GNU_DEBUGID_STRING,
-         &errcode);
-      check_svalid(DW_DLV_ERROR,res,
-         DW_DLE_CORRUPT_GNU_DEBUGID_STRING, errcode,
-         __LINE__,__FILE__);
+    end = testbuffer +10;
+    area = end +2;
+    res = _dwarf_check_string_valid(area,str,
+        end,DW_DLE_CORRUPT_GNU_DEBUGID_STRING,
+        &errcode);
+    check_svalid(DW_DLV_ERROR,res,
+        DW_DLE_CORRUPT_GNU_DEBUGID_STRING, errcode,
+        __LINE__,__FILE__);
 
 }
 
 static void
 checkjoin(int expret,int gotret,char*expstr,char*gotstr,
     int line,
-    const char *filename)
+    const char *filename_in)
 {
-   if (expret != gotret) {
-       errcount++;
-       printf("ERROR expected return %d, got %d line %d %s\n",
-           expret,gotret,line,filename);
-   }
-   if (strcmp(expstr,gotstr)) {
-       errcount++;
-       printf("ERROR expected string \"%s\", got \"%s\" line %d %s\n",
-           expstr,gotstr,line,filename);
-   }
+    if (expret != gotret) {
+        errcount++;
+        printf("ERROR expected return %d, got %d line %d %s\n",
+            expret,gotret,line,filename_in);
+    }
+    if (strcmp(expstr,gotstr)) {
+        errcount++;
+        printf("ERROR expected string \"%s\", got \"%s\" line %d %s\n",
+            expstr,gotstr,line,filename_in);
+    }
 }
 
 
@@ -140,84 +140,101 @@ _dwarf_pathjoinl(dwarfstring *target,dwarfstring * input);
 static void
 test2(void)
 {
-     dwarfstring targ;
-     dwarfstring inp;
-     int res = 0;
+    dwarfstring targ;
+    dwarfstring inp;
+    int res = 0;
 
-     dwarfstring_constructor(&targ);
-     dwarfstring_constructor(&inp);
+    dwarfstring_constructor(&targ);
+    dwarfstring_constructor(&inp);
 
-     dwarfstring_append(&targ,"/a/b");
-     dwarfstring_append(&inp,"foo");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"/a/b/foo",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
-    
-     dwarfstring_reset(&targ);
-     dwarfstring_append(&targ,"gef");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"gef/foo",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_append(&targ,"/a/b");
+    dwarfstring_append(&inp,"foo");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"/a/b/foo",
+        dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
-     dwarfstring_reset(&targ);
-     dwarfstring_reset(&inp);
-     dwarfstring_append(&targ,"gef/");
-     dwarfstring_append(&inp,"/jkl/");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"gef/jkl/",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_reset(&targ);
+    dwarfstring_append(&targ,"gef");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"gef/foo",
+        dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
-     dwarfstring_reset(&targ);
-     dwarfstring_reset(&inp);
-     dwarfstring_append(&targ,"gef/");
-     dwarfstring_append(&inp,"jkl/");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"gef/jkl/",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_reset(&targ);
+    dwarfstring_reset(&inp);
+    dwarfstring_append(&targ,"gef/");
+    dwarfstring_append(&inp,"/jkl/");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"gef/jkl/",
+        dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
-     dwarfstring_reset(&targ);
-     dwarfstring_reset(&inp);
-     dwarfstring_append(&targ,"gef");
-     dwarfstring_append(&inp,"jkl/");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"gef/jkl/",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_reset(&targ);
+    dwarfstring_reset(&inp);
+    dwarfstring_append(&targ,"gef/");
+    dwarfstring_append(&inp,"jkl/");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"gef/jkl/",
+        dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
-     dwarfstring_reset(&targ);
-     dwarfstring_reset(&inp);
-     dwarfstring_append(&inp,"/jkl/");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"/jkl/",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_reset(&targ);
+    dwarfstring_reset(&inp);
+    dwarfstring_append(&targ,"gef");
+    dwarfstring_append(&inp,"jkl/");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"gef/jkl/",
+        dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
-     dwarfstring_reset(&targ);
-     dwarfstring_reset(&inp);
-     dwarfstring_append(&inp,"jkl/");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"jkl/",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_reset(&targ);
+    dwarfstring_reset(&inp);
+    dwarfstring_append(&inp,"/jkl/");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"/jkl/",dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
-     dwarfstring_reset(&targ);
-     dwarfstring_reset(&inp);
-     dwarfstring_append(&targ,"jkl");
-     dwarfstring_append(&inp,"pqr/");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"jkl/pqr/",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_reset(&targ);
+    dwarfstring_reset(&inp);
+    dwarfstring_append(&inp,"jkl/");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"jkl/",dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
-     dwarfstring_reset(&targ);
-     dwarfstring_reset(&inp);
-     dwarfstring_append(&targ,"/");
-     dwarfstring_append(&inp,"/");
-     res = _dwarf_pathjoinl(&targ,&inp);
-     checkjoin(DW_DLV_OK,res,"/",dwarfstring_string(&targ),
-          __LINE__,__FILE__);
+    dwarfstring_reset(&targ);
+    dwarfstring_reset(&inp);
+    dwarfstring_append(&targ,"jkl");
+    dwarfstring_append(&inp,"pqr/");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"jkl/pqr/",dwarfstring_string(&targ),
+        __LINE__,__FILE__);
+
+    dwarfstring_reset(&targ);
+    dwarfstring_reset(&inp);
+    dwarfstring_append(&targ,"/");
+    dwarfstring_append(&inp,"/");
+    res = _dwarf_pathjoinl(&targ,&inp);
+    checkjoin(DW_DLV_OK,res,"/",dwarfstring_string(&targ),
+        __LINE__,__FILE__);
 
 
-     dwarfstring_destructor(&targ);
-     dwarfstring_destructor(&inp);
+    dwarfstring_destructor(&targ);
+    dwarfstring_destructor(&inp);
 }
 
+
+static void
+checklinkedto(char *expstr,char *gotstr,int line, char *filename_in)
+{
+    if (strcmp(expstr,gotstr)) {
+        errcount++;
+        printf("ERROR checklinkedto expected string "
+            "\"%s\", got \"%s\" line %d %s\n",
+            expstr,gotstr,line,filename_in);
+    }
+
+}
 
 #if 0
 void
@@ -226,16 +243,46 @@ _dwarf_construct_linkedto_path(char *pathname,
    dwarfstring * debuglink_out);
 #endif
 
+/*  Since we don't find the files here this
+    is not a good test. However, the program
+    is used by rundebuglink.sh */
+static void
+test3(void)
+{
+    char * p = "a/b";
+    char * l = "de";
+    dwarfstring result;
+
+    dwarfstring_constructor(&result);
+    _dwarf_construct_linkedto_path(p,l,&result);
+    checklinkedto("",dwarfstring_string(&result),
+        __LINE__,__FILE__);
+
+    dwarfstring_reset(&result);
+    p = "ge";
+    l = "h/i";
+    _dwarf_construct_linkedto_path(p,l,&result);
+    checklinkedto("",dwarfstring_string(&result),
+        __LINE__,__FILE__);
+
+    dwarfstring_reset(&result);
+    p = "/somewherespecial/a/b/ge";
+    l = "h/i";
+    _dwarf_construct_linkedto_path(p,l,&result);
+    checklinkedto("",dwarfstring_string(&result),
+        __LINE__,__FILE__);
+}
+
 
 
 int main()
 {
 
     test1();
-
     test2();
+    test3();
 
-    if (errcount) { 
+    if (errcount) {
         return 1;
     }
     return 0;

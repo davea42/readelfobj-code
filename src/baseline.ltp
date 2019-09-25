@@ -1,0 +1,14 @@
+Error string not terminated error:  not ended after 10 bytes (past end of available bytes)
+Error  string start  pointer error: loc 12 bytes before available area 
+originalfullpath is /testing/base/dir/a/b
+path created /testing/base/dir/a/de
+path created /testing/base/dir/a/.debug/de
+path created /usr/lib/debug/testing/base/dir/a/de
+originalfullpath is /testing/base/dir/ge
+path created /testing/base/dir/h/i
+path created /testing/base/dir/.debug/h/i
+path created /usr/lib/debug/testing/base/dir/h/i
+originalfullpath is /somewherespecial/a/b/ge
+path created /somewherespecial/a/b/h/i
+path created /somewherespecial/a/b/.debug/h/i
+path created /usr/lib/debug/somewherespecial/a/b/h/i
