@@ -205,6 +205,15 @@ test2(void)
      checkjoin(DW_DLV_OK,res,"jkl/pqr/",dwarfstring_string(&targ),
           __LINE__,__FILE__);
 
+     dwarfstring_reset(&targ);
+     dwarfstring_reset(&inp);
+     dwarfstring_append(&targ,"/");
+     dwarfstring_append(&inp,"/");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"/",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+
      dwarfstring_destructor(&targ);
      dwarfstring_destructor(&inp);
 }
