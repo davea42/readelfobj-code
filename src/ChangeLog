@@ -1,3 +1,6 @@
+2019-09-25: David Anderson
+     * dwarf_debuglink.c: Corrected bug in pathjoinl().
+     * test_linkedtopath.c: Now fully tests pathjoinl().
 2019-09-24: David Anderson
      * dwarf_debuglink.h: New enables more test cases
        of the functions in dwarf_debuglink.c

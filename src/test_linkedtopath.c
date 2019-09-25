@@ -115,12 +115,116 @@ test1(void)
 
 }
 
+static void
+checkjoin(int expret,int gotret,char*expstr,char*gotstr,
+    int line,
+    const char *filename)
+{
+   if (expret != gotret) {
+       errcount++;
+       printf("ERROR expected return %d, got %d line %d %s\n",
+           expret,gotret,line,filename);
+   }
+   if (strcmp(expstr,gotstr)) {
+       errcount++;
+       printf("ERROR expected string \"%s\", got \"%s\" line %d %s\n",
+           expstr,gotstr,line,filename);
+   }
+}
+
+
+#if 0
+int
+_dwarf_pathjoinl(dwarfstring *target,dwarfstring * input);
+#endif
+static void
+test2(void)
+{
+     dwarfstring targ;
+     dwarfstring inp;
+     int res = 0;
+
+     dwarfstring_constructor(&targ);
+     dwarfstring_constructor(&inp);
+
+     dwarfstring_append(&targ,"/a/b");
+     dwarfstring_append(&inp,"foo");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"/a/b/foo",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+    
+     dwarfstring_reset(&targ);
+     dwarfstring_append(&targ,"gef");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"gef/foo",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+     dwarfstring_reset(&targ);
+     dwarfstring_reset(&inp);
+     dwarfstring_append(&targ,"gef/");
+     dwarfstring_append(&inp,"/jkl/");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"gef/jkl/",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+     dwarfstring_reset(&targ);
+     dwarfstring_reset(&inp);
+     dwarfstring_append(&targ,"gef/");
+     dwarfstring_append(&inp,"jkl/");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"gef/jkl/",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+     dwarfstring_reset(&targ);
+     dwarfstring_reset(&inp);
+     dwarfstring_append(&targ,"gef");
+     dwarfstring_append(&inp,"jkl/");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"gef/jkl/",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+     dwarfstring_reset(&targ);
+     dwarfstring_reset(&inp);
+     dwarfstring_append(&inp,"/jkl/");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"/jkl/",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+     dwarfstring_reset(&targ);
+     dwarfstring_reset(&inp);
+     dwarfstring_append(&inp,"jkl/");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"jkl/",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+     dwarfstring_reset(&targ);
+     dwarfstring_reset(&inp);
+     dwarfstring_append(&targ,"jkl");
+     dwarfstring_append(&inp,"pqr/");
+     res = _dwarf_pathjoinl(&targ,&inp);
+     checkjoin(DW_DLV_OK,res,"jkl/pqr/",dwarfstring_string(&targ),
+          __LINE__,__FILE__);
+
+     dwarfstring_destructor(&targ);
+     dwarfstring_destructor(&inp);
+}
+
+
+#if 0
+void
+_dwarf_construct_linkedto_path(char *pathname,
+   char * input_link_string, /* incoming link string */
+   dwarfstring * debuglink_out);
+#endif
+
 
 
 int main()
 {
 
     test1();
+
+    test2();
 
     if (errcount) { 
         return 1;

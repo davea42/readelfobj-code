@@ -109,7 +109,7 @@ _dwarf_check_string_valid(
     Dwarf_Small *end = areaendptr;
 
     if (p < start) {
-        P("Error  string start  pointer error: loc"
+        P("Error  string start  pointer error: loc "
             LONGESTXFMT " Section pointer" LONGESTUFMT "\n",
             (Dwarf_Unsigned)p,
             (Dwarf_Unsigned)start);
@@ -117,7 +117,7 @@ _dwarf_check_string_valid(
         return DW_DLV_ERROR;
     }
     if (p >= end) {
-        P("Error  string end  pointer error: loc"
+        P("Error  string end  pointer error: loc "
             LONGESTXFMT " Section pointer" LONGESTUFMT "\n",
             (Dwarf_Unsigned)p,
             (Dwarf_Unsigned)end);
@@ -130,7 +130,7 @@ _dwarf_check_string_valid(
         }
         ++p;
     }
-    P("Error string not terminated error: loc"
+    P("Error string not terminated error: loc "
          LONGESTXFMT " Section pointer" LONGESTUFMT "\n",
          (Dwarf_Unsigned)strptr,
          (Dwarf_Unsigned)end);
@@ -191,12 +191,8 @@ _dwarf_pathjoinl(dwarfstring *target,dwarfstring * input)
     size_t targlen = 0;
 
     if (!dwarfstring_strlen(target)) {
-        if (*inputs != joinchar) {
-            dwarfstring_append(target,joinstr);
-            dwarfstring_append(target,dwarfstring_string(input));
-        } else {
-            dwarfstring_append(target,dwarfstring_string(input));
-        }
+        dwarfstring_append(target,dwarfstring_string(input));
+        return DW_DLV_OK;
     }
     targlen = dwarfstring_strlen(target);
     targ = dwarfstring_string(target);
