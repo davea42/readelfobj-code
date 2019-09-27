@@ -98,7 +98,8 @@ test_dwstring_CPPFLAGS = \
 
 test_linkedtopath_SOURCES = test_linkedtopath.c \
    dwarfstring.h dwarfstring.c \
-   dwarf_debuglink.h dwarf_debuglink.c
+   dwarf_debuglink.h dwarf_debuglink.c \
+   dwarf_object_read_common.c 
 test_linkedtopath_CFLAGS = $(RO_CFLAGS_WARN) -DTESTING
 test_linkedtopath_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src

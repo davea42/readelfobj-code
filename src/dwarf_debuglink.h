@@ -41,17 +41,30 @@ int _dwarf_check_string_valid(
 
 int _dwarf_pathjoinl(dwarfstring *target,dwarfstring * input);
 
+int _dwarf_construct_linkedto_path(
+   char         **global_prefixes_in,
+   unsigned       length_global_prefixes_in,
+   char          *pathname_in,
+   char          *link_string_in, /* from debug link */
+   unsigned char  *crc_in, /* from debug_link, 4 bytes */
+   unsigned       builid_length, /* from gnu buildid */
+   unsigned char *builid, /* from gnu buildid */
+   char        ***paths_out,
+   unsigned      *paths_out_length,
+   int *errcode);
 
-void _dwarf_construct_linkedto_path(char *pathname,
-   char * input_link_string, /* incoming link string */
-   dwarfstring * debuglink_out);
-int dwarf_gnu_debuglink(elf_filedata ep,
+/*  Reads the gnu buildid and debuglink sections, if they
+    exist. If neither, returns DW_DLV_NO_ENTRY */
+int
+dwarf_gnu_debuglink(elf_filedata ep,
     char ** name_returned,  /* static storage, do not free */
-    char ** crc_returned,   /* 32bit crc , do not free */
-    char **  debuglink_path_returned, /* caller must free
-        returned pointer */
-    unsigned *debuglink_path_size_returned,/* Size of the
-        debuglink path.  zero returned if no path known/found. */
+    unsigned char ** crc_returned,   /* 32bit crc , do not free */
+    Dwarf_Unsigned *buildidtype,
+    char **buildid_owner,
+    Dwarf_Unsigned  *buildid_length,
+    unsigned char **buildid,
+    char ***  debuglink_paths_returned,
+    unsigned *debuglink_paths_count,
     int*   errcode);
 
 int dwarf_gnu_buildid(elf_filedata ep,
@@ -60,3 +73,7 @@ int dwarf_gnu_buildid(elf_filedata ep,
     Dwarf_Unsigned * build_id_length_returned,
     const unsigned char  **build_id_returned,
     int*   errcode);
+
+int dwarf_add_debuglink_global_path(elf_filedata ep,
+    const char * pathname,
+    int * errcode);

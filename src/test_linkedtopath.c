@@ -225,52 +225,137 @@ test2(void)
 
 
 static void
-checklinkedto(char *expstr,char *gotstr,int line, char *filename_in)
+checklinkedto(int expret,int gotret,
+    int expcount,int gotcount,int line, char *filename_in)
 {
-    if (strcmp(expstr,gotstr)) {
+    if (expret != gotret) {
         errcount++;
-        printf("ERROR checklinkedto expected string "
-            "\"%s\", got \"%s\" line %d %s\n",
-            expstr,gotstr,line,filename_in);
+        printf("ERROR expected return %d, got %d line %d %s\n",
+            expret,gotret,line,filename_in);
     }
+    if (expcount != gotcount) {
+        errcount++;
+        printf("ERROR expected return %d, got %d line %d %s\n",
+            expcount,gotcount,line,filename_in);
+    }
+}
 
+static void
+printpaths(unsigned count,char **array)
+{
+    unsigned i = 0;
+   
+    printf("    Paths:\n");
+    for(i = 0 ; i < count ; ++i) {
+        char *s = array[i];
+
+        printf("    [%2d] \"%s\"\n",i,s);
+    }
+    printf("\n");
 }
 
 #if 0
-void
-_dwarf_construct_linkedto_path(char *pathname,
-   char * input_link_string, /* incoming link string */
-   dwarfstring * debuglink_out);
+int _dwarf_construct_linkedto_path(
+   char         **global_prefixes_in,
+   unsigned       length_global_prefixes_in,
+   char          *pathname_in,
+   char          *link_string_in, /* from debug link */
+   unsigned char  *crc_in, /* from debug_link, 4 bytes */
+   unsigned       builid_length, /* from gnu buildid */
+   unsigned char *builid, /* from gnu buildid */
+   char        ***paths_out,
+   unsigned      *paths_out_length,
+   int *errcode);
 #endif
 
+static unsigned char buildid[20] = {
+    0x11,0x22,0x33, 0x44,
+    0x21,0x22,0x23, 0x44,
+    0xa1,0xa2,0xa3, 0xa4,
+    0xb1,0xb2,0xb3, 0xb4,
+    0xc1,0xc2,0xc3, 0xc4 };
 /*  Since we don't find the files here this
     is not a good test. However, the program
     is used by rundebuglink.sh */
 static void
 test3(void)
 {
-    char * p = "a/b";
-    char * l = "de";
+    char * executablepath = "a/b";
+    char * linkstring = "de";
     dwarfstring result;
+    char ** global_prefix = 0;
+    unsigned global_prefix_count = 2;
+    unsigned global_prefix_len = 0;
+    unsigned char crc[4];
+    unsigned buildid_length = 20;
+    char **paths_returned = 0;
+    unsigned paths_returned_count = 0;
+    int errcode = 0;
+    int res = 0;
+
+    crc[0] = 0x12;
+    crc[1] = 0x34;
+    crc[2] = 0x56;
+    crc[3] = 0xab;
+    global_prefix_len =  (global_prefix_count+1)
+        * sizeof(void *);
+    global_prefix = (char **)malloc(global_prefix_len);
+    global_prefix[0] = "/usr/lib/debug";
+    global_prefix[1] = "/fake/lib/debug";
+
 
     dwarfstring_constructor(&result);
-    _dwarf_construct_linkedto_path(p,l,&result);
-    checklinkedto("",dwarfstring_string(&result),
+    res =_dwarf_construct_linkedto_path(global_prefix,
+        global_prefix_count,
+        executablepath,linkstring,
+        crc,
+        buildid_length,buildid,
+        &paths_returned,&paths_returned_count,
+        &errcode);
+    checklinkedto(DW_DLV_OK,res,6,paths_returned_count,
         __LINE__,__FILE__);
+    printpaths(paths_returned_count,paths_returned);
+    free(paths_returned);
+    paths_returned = 0;
+    paths_returned_count = 0;
+    errcode = 0;
 
     dwarfstring_reset(&result);
-    p = "ge";
-    l = "h/i";
-    _dwarf_construct_linkedto_path(p,l,&result);
-    checklinkedto("",dwarfstring_string(&result),
+    executablepath = "ge";
+    linkstring = "h/i";
+    res =_dwarf_construct_linkedto_path(global_prefix,
+        global_prefix_count,
+        executablepath,linkstring,
+        crc,
+        buildid_length,buildid,
+        &paths_returned,&paths_returned_count,
+        &errcode);
+    checklinkedto(DW_DLV_OK,res,6,paths_returned_count,
         __LINE__,__FILE__);
+    printpaths(paths_returned_count,paths_returned);
+    free(paths_returned);
+    paths_returned = 0;
+    paths_returned_count = 0;
+    errcode = 0;
 
     dwarfstring_reset(&result);
-    p = "/somewherespecial/a/b/ge";
-    l = "h/i";
-    _dwarf_construct_linkedto_path(p,l,&result);
-    checklinkedto("",dwarfstring_string(&result),
+    executablepath = "/somewherespecial/a/b/ge";
+    linkstring = "h/i";
+    res =_dwarf_construct_linkedto_path(global_prefix,
+        global_prefix_count,
+        executablepath,linkstring,
+        crc,
+        buildid_length,buildid,
+        &paths_returned,&paths_returned_count,
+        &errcode);
+    checklinkedto(DW_DLV_OK,res,6,paths_returned_count,
         __LINE__,__FILE__);
+    printpaths(paths_returned_count,paths_returned);
+    free(paths_returned);
+    free(global_prefix);
+    paths_returned = 0;
+    paths_returned_count = 0;
+    errcode = 0;
 }
 
 

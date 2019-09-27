@@ -1,14 +1,29 @@
 Error string not terminated error:  not ended after 10 bytes (past end of available bytes)
 Error  string start  pointer error: loc 12 bytes before available area 
 originalfullpath is /testing/base/dir/a/b
-path created /testing/base/dir/a/de
-path created /testing/base/dir/a/.debug/de
-path created /usr/lib/debug/testing/base/dir/a/de
+    Paths:
+    [ 0] "/usr/lib/debug/11/22334421222344a1a2a3a4b1b2b3b4c1c2c3c4.debug"
+    [ 1] "/fake/lib/debug/11/22334421222344a1a2a3a4b1b2b3b4c1c2c3c4.debug"
+    [ 2] "/testing/base/dir/a/de"
+    [ 3] "/testing/base/dir/a/.debug/de"
+    [ 4] "/usr/lib/debug/testing/base/dir/a/de"
+    [ 5] "/fake/lib/debug/testing/base/dir/a/de"
+
 originalfullpath is /testing/base/dir/ge
-path created /testing/base/dir/h/i
-path created /testing/base/dir/.debug/h/i
-path created /usr/lib/debug/testing/base/dir/h/i
+    Paths:
+    [ 0] "/usr/lib/debug/11/22334421222344a1a2a3a4b1b2b3b4c1c2c3c4.debug"
+    [ 1] "/fake/lib/debug/11/22334421222344a1a2a3a4b1b2b3b4c1c2c3c4.debug"
+    [ 2] "/testing/base/dir/h/i"
+    [ 3] "/testing/base/dir/.debug/h/i"
+    [ 4] "/usr/lib/debug/testing/base/dir/h/i"
+    [ 5] "/fake/lib/debug/testing/base/dir/h/i"
+
 originalfullpath is /somewherespecial/a/b/ge
-path created /somewherespecial/a/b/h/i
-path created /somewherespecial/a/b/.debug/h/i
-path created /usr/lib/debug/somewherespecial/a/b/h/i
+    Paths:
+    [ 0] "/usr/lib/debug/11/22334421222344a1a2a3a4b1b2b3b4c1c2c3c4.debug"
+    [ 1] "/fake/lib/debug/11/22334421222344a1a2a3a4b1b2b3b4c1c2c3c4.debug"
+    [ 2] "/somewherespecial/a/b/h/i"
+    [ 3] "/somewherespecial/a/b/.debug/h/i"
+    [ 4] "/usr/lib/debug/somewherespecial/a/b/h/i"
+    [ 5] "/fake/lib/debug/somewherespecial/a/b/h/i"
+

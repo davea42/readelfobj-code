@@ -177,7 +177,8 @@ test_dwstring_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 am_test_linkedtopath_OBJECTS =  \
 	test_linkedtopath-test_linkedtopath.$(OBJEXT) \
 	test_linkedtopath-dwarfstring.$(OBJEXT) \
-	test_linkedtopath-dwarf_debuglink.$(OBJEXT)
+	test_linkedtopath-dwarf_debuglink.$(OBJEXT) \
+	test_linkedtopath-dwarf_object_read_common.$(OBJEXT)
 test_linkedtopath_OBJECTS = $(am_test_linkedtopath_OBJECTS)
 test_linkedtopath_LDADD = $(LDADD)
 test_linkedtopath_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
@@ -670,7 +671,8 @@ test_dwstring_CPPFLAGS = \
 
 test_linkedtopath_SOURCES = test_linkedtopath.c \
    dwarfstring.h dwarfstring.c \
-   dwarf_debuglink.h dwarf_debuglink.c
+   dwarf_debuglink.h dwarf_debuglink.c \
+   dwarf_object_read_common.c 
 
 test_linkedtopath_CFLAGS = $(RO_CFLAGS_WARN) -DTESTING
 test_linkedtopath_CPPFLAGS = \
@@ -845,6 +847,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dwstring-dwarfstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_dwstring-test_dwstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_linkedtopath-dwarf_debuglink.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_linkedtopath-dwarf_object_read_common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_linkedtopath-dwarfstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_linkedtopath-test_linkedtopath.Po@am__quote@
 
@@ -1389,6 +1392,20 @@ test_linkedtopath-dwarf_debuglink.obj: dwarf_debuglink.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_debuglink.c' object='test_linkedtopath-dwarf_debuglink.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_linkedtopath_CPPFLAGS) $(CPPFLAGS) $(test_linkedtopath_CFLAGS) $(CFLAGS) -c -o test_linkedtopath-dwarf_debuglink.obj `if test -f 'dwarf_debuglink.c'; then $(CYGPATH_W) 'dwarf_debuglink.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_debuglink.c'; fi`
+
+test_linkedtopath-dwarf_object_read_common.o: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_linkedtopath_CPPFLAGS) $(CPPFLAGS) $(test_linkedtopath_CFLAGS) $(CFLAGS) -MT test_linkedtopath-dwarf_object_read_common.o -MD -MP -MF $(DEPDIR)/test_linkedtopath-dwarf_object_read_common.Tpo -c -o test_linkedtopath-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_linkedtopath-dwarf_object_read_common.Tpo $(DEPDIR)/test_linkedtopath-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='test_linkedtopath-dwarf_object_read_common.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_linkedtopath_CPPFLAGS) $(CPPFLAGS) $(test_linkedtopath_CFLAGS) $(CFLAGS) -c -o test_linkedtopath-dwarf_object_read_common.o `test -f 'dwarf_object_read_common.c' || echo '$(srcdir)/'`dwarf_object_read_common.c
+
+test_linkedtopath-dwarf_object_read_common.obj: dwarf_object_read_common.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_linkedtopath_CPPFLAGS) $(CPPFLAGS) $(test_linkedtopath_CFLAGS) $(CFLAGS) -MT test_linkedtopath-dwarf_object_read_common.obj -MD -MP -MF $(DEPDIR)/test_linkedtopath-dwarf_object_read_common.Tpo -c -o test_linkedtopath-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_linkedtopath-dwarf_object_read_common.Tpo $(DEPDIR)/test_linkedtopath-dwarf_object_read_common.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dwarf_object_read_common.c' object='test_linkedtopath-dwarf_object_read_common.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_linkedtopath_CPPFLAGS) $(CPPFLAGS) $(test_linkedtopath_CFLAGS) $(CFLAGS) -c -o test_linkedtopath-dwarf_object_read_common.obj `if test -f 'dwarf_object_read_common.c'; then $(CYGPATH_W) 'dwarf_object_read_common.c'; else $(CYGPATH_W) '$(srcdir)/dwarf_object_read_common.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

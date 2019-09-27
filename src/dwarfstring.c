@@ -147,6 +147,7 @@ dwarfstring_destructor(struct dwarfstring_s *g)
     if (g->s_malloc) {
         free(g->s_data);
         g->s_data = 0;
+        g->s_malloc = FALSE;
     }
     dwarfstring_constructor(g);
 }

@@ -1098,6 +1098,8 @@ struct elf_filedata_s {
     int          f_printf_on_error;
     int          f_machine; /* from f_ident(EI_MACHINE) */
     char *       f_path; /* non-null if known. Must be freed */
+    unsigned     f_gnu_global_path_count;
+    char       **f_gnu_global_paths;
 
     /* If TRUE close f_fd on destruct. */
     int          f_destruct_close_fd;

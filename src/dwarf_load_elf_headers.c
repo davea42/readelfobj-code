@@ -180,6 +180,13 @@ dwarf_construct_elf_access(int fd,
     mfp->f_path = strdup(path);
     mfp->f_destruct_close_fd = FALSE;
     *mp = mfp;
+    mfp->f_gnu_global_path_count = 1;
+    mfp->f_gnu_global_paths = (char **)malloc(sizeof(void *));
+    if (!mfp->f_gnu_global_paths) {
+        *errcode = RO_ERR_MALLOC;
+        return DW_DLV_ERROR;
+    }
+    mfp->f_gnu_global_paths[0] = strdup("/usr/lib/debug");
     return DW_DLV_OK;
 }
 
@@ -194,6 +201,13 @@ dwarf_destruct_elf_access(elf_filedata ep,
     Dwarf_Unsigned shcount = 0;
     Dwarf_Unsigned i = 0;
 
+    for (i = 0; i < ep->f_gnu_global_path_count;++i) {
+        char *d = ep->f_gnu_global_paths[i];
+        free(d);
+    }
+    free(ep->f_gnu_global_paths);
+    ep->f_gnu_global_paths = 0;
+    ep->f_gnu_global_path_count = 0;
     free(ep->f_ehdr);
     shp = ep->f_shdr;
     shcount = ep->f_loc_shdr.g_count;

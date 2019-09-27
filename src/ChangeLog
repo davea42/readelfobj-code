@@ -1,3 +1,21 @@
+2019-09-26: David Anderson
+     * Makefile.am: Adding dwarf_object_read_common.c 
+       to the test build.
+     * Makefile.in: Regenerated.
+     * baseline.lpt: Updated with the more complete test results.
+     * dwarf_debuglink.c,dwarf_debuglink.h: Completed 
+       creation of full
+       functionality involving creating the paths.
+       defined by the gnu_debuglink etc.
+     * dwarf_load_elf_headers.c: Created the default
+       global pathname prefix for gnu_debuglink
+     * dwarfstring.c: Added g->s_malloc = FALSE in one
+       place for safety.
+     * readelfobj.h: Added f_gnu_global_path_count
+       and f_gnu_global_paths.
+     * test_linkedtopath.c: Now creates all the paths
+       the GNU documentation calls for and prints
+       the result to make a fuller test.
 2019-09-25: David Anderson
      * Makefile.am: Adding tests.
      * Makefile.in: Regenerated.
