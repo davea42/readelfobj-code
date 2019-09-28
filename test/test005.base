@@ -96,6 +96,14 @@ Section count: 39
 [38] 0x000230b0 0x00001730 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
 Summary: 141129 bytes for 9 debug sections
 }
+GNU .gnu_debuglink and .note.gnu.buildid
+{
+  Section .note.gnu.build-id    type: 3  owner: "GNU"
+    buildid bytes: 20
+    buildid (hex): c9002947babdd180e3c2aa32284a6c0fee7dc3a7
+  Paths list count:  1
+  [0] /usr/lib/debug/c9/002947babdd180e3c2aa32284a6c0fee7dc3a7.debug
+}
 
 Symbols from .symtab: 342 at offset 0x210a0
 {

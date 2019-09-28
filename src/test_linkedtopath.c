@@ -244,7 +244,7 @@ static void
 printpaths(unsigned count,char **array)
 {
     unsigned i = 0;
-   
+
     printf("    Paths:\n");
     for(i = 0 ; i < count ; ++i) {
         char *s = array[i];

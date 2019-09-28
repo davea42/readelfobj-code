@@ -1,3 +1,8 @@
+2019-09-26   David Anderson
+    * test003.base,test004.base,test005.base,test006.base,test017.base:
+      New baselines reflecting the reporting on .gnu_debuglink
+      and .note.gnu.build-id (only the latter appears in
+      the currect testcases).
 2019-09-22   David Anderson
     * test*.base: Nearly all the tests use dos2unix
       and the -q option is not always available.

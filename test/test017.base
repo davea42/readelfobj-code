@@ -93,6 +93,14 @@ Section count: 36
 [35] 0x0020f041 0x00000157 .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
 Summary: 1707201 bytes for 8 debug sections
 }
+GNU .gnu_debuglink and .note.gnu.buildid
+{
+  Section .note.gnu.build-id    type: 3  owner: "GNU"
+    buildid bytes: 20
+    buildid (hex): f2a4b27cd88039e197dc34ad3eacbd1f75199065
+  Paths list count:  1
+  [0] /usr/lib/debug/f2/a4b27cd88039e197dc34ad3eacbd1f75199065.debug
+}
 Section Groups: No section groups or .dwo present. 
 Section .dynamic (20): Entries:31 Offset:0x00066d58
  Tag          Name             Value

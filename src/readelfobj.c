@@ -68,6 +68,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_elf_reloc_ppc64.h"
 #include "dwarf_elf_reloc_sparc.h"
 #include "dwarf_elf_reloc_x86_64.h"
+#include "dwarfstring.h"
+#include "dwarf_debuglink.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -1645,8 +1647,83 @@ void elf_print_sg_groups(elf_filedata ep)
     }
 }
 
+
 static void
-elf_print_gnu_debuglink(UNUSEDARG elf_filedata ep)
+byte_string_to_hex(dwarfstring *bi,
+    unsigned char *buildid,
+    unsigned buildid_length)
 {
-   /* FIXME!  */
+    unsigned i = 0;
+    char buf[10];
+    for( ; i < buildid_length;++i){
+        sprintf(buf,"%02x",buildid[i]);
+        dwarfstring_append(bi,buf);
+    }
+}
+
+static void
+elf_print_gnu_debuglink(elf_filedata ep)
+{
+    char          *debuglinkname = 0;
+    unsigned char *crc = 0;
+    Dwarf_Unsigned buildidtype = 0;
+    char          *buildidowner = 0;
+    Dwarf_Unsigned buildid_length = 0;
+    unsigned char *buildid = 0;
+    char         **debuglink_paths = 0;
+    unsigned       debuglink_path_count = 0;
+    int res = 0;
+    int errcode = 0;
+    unsigned i = 0;
+
+    res = dwarf_gnu_debuglink(ep,
+        &debuglinkname,&crc,
+        &buildidtype,&buildidowner,
+        &buildid_length, &buildid,
+        &debuglink_paths, &debuglink_path_count,
+        &errcode);
+    if (res == DW_DLV_NO_ENTRY) {
+        return;
+    }
+    if (res == DW_DLV_ERROR) {
+        printf("ERROR: dwarf_gnu_debuglink failed. Errcode %d"
+            " reading %s\n",errcode,ep->f_path);
+        return;
+    }
+    printf("GNU .gnu_debuglink and .note.gnu.buildid\n");
+    printf("{\n");
+    if (crc) {
+        unsigned char *cp = crc;
+
+        printf("  Section .gnu_debuglink\n");
+        printf("    link:   \"%s\"\n",sanitized(debuglinkname,
+            buffer6,sizeof(buffer6)));
+        printf("    crc :    0x");
+        for (i = 0; i < 4; ++i) {
+            printf("%02x ",cp[i]);
+        }
+        printf("\n");
+    }
+    if (buildidowner) {
+        dwarfstring bi;
+        char id[41];
+
+        dwarfstring_constructor_static(&bi,id,sizeof(id));
+        byte_string_to_hex(&bi,buildid,buildid_length);
+        printf("  Section .note.gnu.build-id");
+        printf("    type: " LONGESTUFMT "  owner: \"%s\"\n",
+            buildidtype,sanitized(buildidowner,
+                buffer6,sizeof(buffer6)));
+        printf("    buildid bytes: " LONGESTUFMT "\n",
+            buildid_length);
+        printf("    buildid (hex): %s\n",dwarfstring_string(&bi));
+        dwarfstring_destructor(&bi);
+    }
+    printf("  Paths list count:  %u\n",debuglink_path_count);
+    for(i = 0; i <debuglink_path_count; ++i) {
+        printf("  [%u] %s\n",i,sanitized(debuglink_paths[i],
+                buffer6,sizeof(buffer6)));
+    }
+    printf("}\n");
+    free(debuglink_paths);
 }

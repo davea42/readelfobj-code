@@ -275,7 +275,7 @@ dwarfstring_list_constructor(struct dwarfstring_list_s *l)
 static int
 dwarfstring_list_add_new(struct dwarfstring_list_s * base_entry,
     struct dwarfstring_list_s *prev,
-    dwarfstring * input, 
+    dwarfstring * input,
     struct dwarfstring_list_s ** new_out,
     int *errcode)
 {
@@ -295,7 +295,7 @@ dwarfstring_list_add_new(struct dwarfstring_list_s * base_entry,
         dwarfstring_string(input));
     if (prev) {
         prev->dl_next = next;
-    } 
+    }
     *new_out = next;
     return DW_DLV_OK;
 }
@@ -386,12 +386,10 @@ int _dwarf_construct_linkedto_path(
     struct dwarfstring_list_s *last_entry = 0;
     unsigned global_prefix_number = 0;
 
-    
     dwarfstring_list_constructor(&base_dwlist);
     construct_js(&joind);
-
     build_buildid_filename(&joind.js_buildid_filename,
-            buildid_length, buildid);
+        buildid_length, buildid);
     dirnamelen = mydirlen(depath);
     if (dirnamelen) {
         dwarfstring_append_length(&joind.js_dirname,
@@ -452,7 +450,7 @@ int _dwarf_construct_linkedto_path(
         (global_prefix_number < length_global_prefixes_in);
         ++global_prefix_number) {
         char * prefix = 0;
-            
+
         prefix = global_prefixes_in[global_prefix_number];
         dwarfstring_reset(&joind.js_buildid);
         dwarfstring_append(&joind.js_buildid,prefix);
@@ -479,92 +477,26 @@ int _dwarf_construct_linkedto_path(
             last_entry = now_last;
         }
     }
-    /* js_cwd is a leading / directory name. */
-    {
-        dwarfstring_reset(&joind.js_tmp);
-        dwarfstring_append(&joind.js_tmp,
-            dwarfstring_string(&joind.js_cwd));
-        /* If we add basename do we find what we look for? */
-        res = _dwarf_pathjoinl(&joind.js_tmp,&joind.js_basename);
-        if (!strcmp(dwarfstring_string(&joind.js_originalfullpath),
-            dwarfstring_string(&joind.js_tmp))) {
-#ifdef TESTING
-            printf("duplicated output string %s\n",
-                dwarfstring_string(&joind.js_tmp));
-#endif /* TESTING */
-            /* duplicated name. spurious match. */
-        } else if (res == DW_DLV_OK) {
-            struct dwarfstring_list_s *now_last = 0;
-            res = dwarfstring_list_add_new(
-                &base_dwlist,
-                last_entry,&joind.js_tmp,
-                &now_last,errcode);
-            if(res != DW_DLV_OK) {
-                dwarfstring_list_destructor(&base_dwlist);
-                destruct_js(&joind);
-                return res;
-            }
-            last_entry = now_last;
-        }
-    }
-    {
-
-        dwarfstring_reset(&joind.js_tmp2);
-        dwarfstring_reset(&joind.js_tmpdeb);
-
-        dwarfstring_append(&joind.js_tmp2,
-            dwarfstring_string(&joind.js_cwd));
-        dwarfstring_append(&joind.js_tmpdeb,".debug");
-        res = _dwarf_pathjoinl(&joind.js_tmp2,&joind.js_tmpdeb);
-        if (res == DW_DLV_OK) {
-            res = _dwarf_pathjoinl(&joind.js_tmp2,&joind.js_basename);
-            /*  this the second search path after global directories
-                search for nn/nnnnn....debug.   */
+    if (link_string_in) {
+        /* js_cwd is a leading / directory name. */
+        {
+            dwarfstring_reset(&joind.js_tmp);
+            dwarfstring_append(&joind.js_tmp,
+                dwarfstring_string(&joind.js_cwd));
+            /* If we add basename do we find what we look for? */
+            res = _dwarf_pathjoinl(&joind.js_tmp,&joind.js_basename);
             if (!strcmp(dwarfstring_string(&joind.js_originalfullpath),
-                dwarfstring_string(&joind.js_tmp2))) {
-#ifdef TESTING
-            printf("duplicated output string %s\n",
-                dwarfstring_string(&joind.js_tmp2));
-#endif /* TESTING */
-                /* duplicated name. spurious match. */
-            } else if(res == DW_DLV_OK) {
-                struct dwarfstring_list_s *now_last = 0;
-                res = dwarfstring_list_add_new(
-                    &base_dwlist,
-                    last_entry,&joind.js_tmp2,
-                    &now_last,errcode);
-                if(res != DW_DLV_OK) {
-                    dwarfstring_list_destructor(&base_dwlist);
-                    destruct_js(&joind);
-                    return res;
-                }
-                last_entry = now_last;
-            }
-        }
-    }
-    /*  Not found above, now look in the global locations. */
-    for (global_prefix_number = 0;
-        global_prefix_number < length_global_prefixes_in;
-        ++global_prefix_number) {
-        char * prefix = global_prefixes_in[global_prefix_number];
-
-        dwarfstring_reset(&joind.js_tmp3);
-        dwarfstring_append(&joind.js_tmp3, prefix);
-        res = _dwarf_pathjoinl(&joind.js_tmp3, &joind.js_cwd);
-        if (res == DW_DLV_OK) {
-            res = _dwarf_pathjoinl(&joind.js_tmp3,&joind.js_basename);
-            if (!strcmp(dwarfstring_string(&joind.js_originalfullpath),
-                dwarfstring_string(&joind.js_tmp3))) {
-                /* duplicated name. spurious match. */
+                dwarfstring_string(&joind.js_tmp))) {
 #ifdef TESTING
                 printf("duplicated output string %s\n",
-                    dwarfstring_string(&joind.js_tmp3));
+                    dwarfstring_string(&joind.js_tmp));
 #endif /* TESTING */
+                /* duplicated name. spurious match. */
             } else if (res == DW_DLV_OK) {
                 struct dwarfstring_list_s *now_last = 0;
                 res = dwarfstring_list_add_new(
                     &base_dwlist,
-                    last_entry,&joind.js_tmp3,
+                    last_entry,&joind.js_tmp,
                     &now_last,errcode);
                 if(res != DW_DLV_OK) {
                     dwarfstring_list_destructor(&base_dwlist);
@@ -572,6 +504,79 @@ int _dwarf_construct_linkedto_path(
                     return res;
                 }
                 last_entry = now_last;
+            }
+        }
+        {
+    
+            dwarfstring_reset(&joind.js_tmp2);
+            dwarfstring_reset(&joind.js_tmpdeb);
+    
+            dwarfstring_append(&joind.js_tmp2,
+                dwarfstring_string(&joind.js_cwd));
+            dwarfstring_append(&joind.js_tmpdeb,".debug");
+            res = _dwarf_pathjoinl(&joind.js_tmp2,&joind.js_tmpdeb);
+            if (res == DW_DLV_OK) {
+                res = _dwarf_pathjoinl(&joind.js_tmp2,
+                    &joind.js_basename);
+                /*  this the second search path 
+                    after global directories
+                    search for nn/nnnnn....debug.   */
+                if (!strcmp(dwarfstring_string(
+                    &joind.js_originalfullpath),
+                    dwarfstring_string(&joind.js_tmp2))) {
+#ifdef TESTING
+                printf("duplicated output string %s\n",
+                    dwarfstring_string(&joind.js_tmp2));
+#endif /* TESTING */
+                    /* duplicated name. spurious match. */
+                } else if(res == DW_DLV_OK) {
+                    struct dwarfstring_list_s *now_last = 0;
+                    res = dwarfstring_list_add_new(
+                        &base_dwlist,
+                        last_entry,&joind.js_tmp2,
+                        &now_last,errcode);
+                    if(res != DW_DLV_OK) {
+                        dwarfstring_list_destructor(&base_dwlist);
+                        destruct_js(&joind);
+                        return res;
+                    }
+                    last_entry = now_last;
+                }
+            }
+        }
+        /*  Not found above, now look in the global locations. */
+        for (global_prefix_number = 0;
+            global_prefix_number < length_global_prefixes_in;
+            ++global_prefix_number) {
+            char * prefix = global_prefixes_in[global_prefix_number];
+    
+            dwarfstring_reset(&joind.js_tmp3);
+            dwarfstring_append(&joind.js_tmp3, prefix);
+            res = _dwarf_pathjoinl(&joind.js_tmp3, &joind.js_cwd);
+            if (res == DW_DLV_OK) {
+                res = _dwarf_pathjoinl(&joind.js_tmp3,
+                    &joind.js_basename);
+                if (!strcmp(dwarfstring_string(
+                    &joind.js_originalfullpath),
+                    dwarfstring_string(&joind.js_tmp3))) {
+                    /* duplicated name. spurious match. */
+#ifdef TESTING
+                    printf("duplicated output string %s\n",
+                        dwarfstring_string(&joind.js_tmp3));
+#endif /* TESTING */
+                } else if (res == DW_DLV_OK) {
+                    struct dwarfstring_list_s *now_last = 0;
+                    res = dwarfstring_list_add_new(
+                        &base_dwlist,
+                        last_entry,&joind.js_tmp3,
+                        &now_last,errcode);
+                    if(res != DW_DLV_OK) {
+                        dwarfstring_list_destructor(&base_dwlist);
+                        destruct_js(&joind);
+                        return res;
+                    }
+                    last_entry = now_last;
+                }
             }
         }
     }
@@ -645,6 +650,7 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
     unsigned char *crcptr = 0;
     int res = DW_DLV_ERROR;
     Dwarf_Unsigned secsize = 0;
+    Dwarf_Unsigned secoffset = 0;
 
     secsize = linkshdr->gh_size;
     if (!linkshdr->gh_content) {
@@ -661,6 +667,17 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
         linkshdr->gh_content = secdata;
     }
     ptr = linkshdr->gh_content;
+    secoffset = linkshdr->gh_offset;
+    res = RRMOA(ep->f_fd,ptr,secoffset,secsize,ep->f_filesize,errcode);
+    if(res != DW_DLV_OK) {
+        P("Read  " LONGESTUFMT
+            " bytes .gnu_deibuglink section failed\n",
+            secsize);
+        P("Read  offset " LONGESTXFMT " length "
+            LONGESTXFMT " off+len " LONGESTXFMT "\n",
+            secoffset,secsize,secoffset + secsize);
+        return res;
+    }
     endptr = ptr + secsize;
 
     res = _dwarf_check_string_valid(ptr,
@@ -717,7 +734,7 @@ dwarf_gnu_debuglink(elf_filedata ep,
     for (i = 0;i < seccount; ++i,shdr++) {
         if (!strcmp(".gnu_debuglink",shdr->gh_namestring)) {
             linkshdr = shdr;
-        } else  if (strcmp(".note.gnu.build-id",shdr->gh_namestring)) {
+        } else  if (!strcmp(".note.gnu.build-id",shdr->gh_namestring)) {
             buildidshdr = shdr;
         }
         if (linkshdr && buildidshdr) {
@@ -795,12 +812,11 @@ extract_buildid(elf_filedata ep,
     Dwarf_Unsigned type = 0;
     Dwarf_Unsigned finalsize;
     Dwarf_Unsigned secsize = 0;
-    Dwarf_Unsigned secoffset =0;
+    Dwarf_Unsigned secoffset = 0;
 
     secsize = buildidshdr->gh_size;
     if (!buildidshdr->gh_content) {
         char *secdata = 0;
-
         secdata = (char *)malloc(secsize);
         if (!secdata) {
             P("Error  malloc fail:  size "
@@ -812,13 +828,8 @@ extract_buildid(elf_filedata ep,
         buildidshdr->gh_content = secdata;
     }
     ptr = buildidshdr->gh_content;
-    endptr = ptr + secsize;
-    /*  We gh_content till all is closed
-        as we return pointers into it
-        if all goes well. */
     secoffset = buildidshdr->gh_offset;
-    res = RRMOA(ep->f_fd,buildidshdr,secoffset,
-        secsize,ep->f_filesize,errcode);
+    res = RRMOA(ep->f_fd,ptr,secoffset,secsize,ep->f_filesize,errcode);
     if(res != DW_DLV_OK) {
         P("Read  " LONGESTUFMT
             " bytes .note.gnu.build-id section failed\n",
@@ -836,13 +847,14 @@ extract_buildid(elf_filedata ep,
         *errcode =  DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
         return DW_DLV_ERROR;
     }
-
+    endptr = ptr + secsize;
+    /*  We hold gh_content till all is closed
+        as we return pointers into it
+        if all goes well. */
     bu = (struct buildid_s *)ptr;
-
     ASNAR(ep->f_copy_word,namesize, bu->bu_ownernamesize);
-    ASNAR(ep->f_copy_word,descrsize, bu->bu_buildidsize);
-    ASNAR(ep->f_copy_word,type, bu->bu_type);
-
+    ASNAR(ep->f_copy_word,descrsize,bu->bu_buildidsize);
+    ASNAR(ep->f_copy_word,type,     bu->bu_type);
     if (descrsize != 20) {
         P("ERROR section .note.gnu.build-id description "
             "size small: "
