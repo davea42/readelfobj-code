@@ -1,3 +1,6 @@
+2010-09-28: David Anderson
+    * Makefile.am: Making 'make dist' work.
+    * Makefile.in: Regenerated
 2010-09-24: David Anderson
     * configure.ac: Added new sourcfiles and
       new test cases related to .note.gnu.debug-id

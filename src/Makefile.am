@@ -110,7 +110,9 @@ man_MANS = readelfobj.1
 
 EXTRA_DIST = \
 $(man_MANS) \
+$(check_TESTS) \
 COPYING \
+baseline.ltp \
 ChangeLog \
 ChangeLog2018 \
 NEWS \

@@ -98,11 +98,18 @@ test015p.base \
 test016p.base \
 test017.base \
 test018p.base \
+dd-irix-n32 \
+libkrb5support.so.0.1.debug \
 mach-o-object32 \
 mach-o-object32.dSYM \
 mach-o-object64	\
 mach-o-object64.dSYM \
+kask2/dwarfdump_G4  \
+kask2/dwarfdump_G4.dSYM\
 libexamine-0.dll \
 kask-dwarfdump_64.exe \
-libkrb5support.so.0.1.debug 
-
+libdwarf.so.1.0.0 \
+sparc64-64-tls.o \
+libc.so.6 \
+stream.o \
+testarch.a 

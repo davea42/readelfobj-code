@@ -1,3 +1,6 @@
+2019-09-28   David Anderson
+    * Makefile.am: Making 'make dist' work.
+    * Makefile.in: Regenerated.
 2019-09-26   David Anderson
     * test003.base,test004.base,test005.base,test006.base,test017.base:
       New baselines reflecting the reporting on .gnu_debuglink

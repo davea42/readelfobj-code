@@ -457,7 +457,7 @@ TEST_LOG_DRIVER = $(SHELL) $(top_srcdir)/test-driver
 TEST_LOG_COMPILE = $(TEST_LOG_COMPILER) $(AM_TEST_LOG_FLAGS) \
 	$(TEST_LOG_FLAGS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
-	$(top_srcdir)/test-driver ChangeLog NEWS
+	$(top_srcdir)/test-driver COPYING ChangeLog NEWS README
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -682,7 +682,9 @@ check_TESTS = testdebuglink.sh
 man_MANS = readelfobj.1
 EXTRA_DIST = \
 $(man_MANS) \
+$(check_TESTS) \
 COPYING \
+baseline.ltp \
 ChangeLog \
 ChangeLog2018 \
 NEWS \

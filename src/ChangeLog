@@ -1,3 +1,6 @@
+2019-09-28: David Anderson
+     * Makefile.am: Making 'make dist' work.
+     * Makefile.in: Regenerated.
 2019-09-27: David Anderson
      * dwarf_debuglink.c: Fix indents, remove blank lines.
        Ensure that we only deveop output that is warranted.
