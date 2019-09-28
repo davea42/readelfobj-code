@@ -1,0 +1,12 @@
+David Anderson. September 2019.
+
+The source files process various object formats without
+reference to host system libraries other than libc.
+
+It's intended that the resulting executables
+will run in the host enviroment against any
+suitable object file. The intent is to get
+an overview of the various section contents
+without, by default, looking into the sections.
+
+

@@ -109,6 +109,7 @@ check_TESTS = testdebuglink.sh
 man_MANS = readelfobj.1
 
 EXTRA_DIST = \
+$(man_MANS) \
 COPYING \
 ChangeLog \
 ChangeLog2018 \
@@ -116,4 +117,5 @@ NEWS \
 README 
 
 CLEANFILES = \
+junk \
 junk.ltp
