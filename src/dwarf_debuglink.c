@@ -507,10 +507,9 @@ int _dwarf_construct_linkedto_path(
             }
         }
         {
-    
             dwarfstring_reset(&joind.js_tmp2);
             dwarfstring_reset(&joind.js_tmpdeb);
-    
+
             dwarfstring_append(&joind.js_tmp2,
                 dwarfstring_string(&joind.js_cwd));
             dwarfstring_append(&joind.js_tmpdeb,".debug");
@@ -518,7 +517,7 @@ int _dwarf_construct_linkedto_path(
             if (res == DW_DLV_OK) {
                 res = _dwarf_pathjoinl(&joind.js_tmp2,
                     &joind.js_basename);
-                /*  this the second search path 
+                /*  this the second search path
                     after global directories
                     search for nn/nnnnn....debug.   */
                 if (!strcmp(dwarfstring_string(
@@ -549,7 +548,7 @@ int _dwarf_construct_linkedto_path(
             global_prefix_number < length_global_prefixes_in;
             ++global_prefix_number) {
             char * prefix = global_prefixes_in[global_prefix_number];
-    
+
             dwarfstring_reset(&joind.js_tmp3);
             dwarfstring_append(&joind.js_tmp3, prefix);
             res = _dwarf_pathjoinl(&joind.js_tmp3, &joind.js_cwd);

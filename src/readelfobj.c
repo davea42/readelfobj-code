@@ -1722,7 +1722,7 @@ elf_print_gnu_debuglink(elf_filedata ep)
     printf("  Paths list count:  %u\n",debuglink_path_count);
     for(i = 0; i <debuglink_path_count; ++i) {
         printf("  [%u] %s\n",i,sanitized(debuglink_paths[i],
-                buffer6,sizeof(buffer6)));
+            buffer6,sizeof(buffer6)));
     }
     printf("}\n");
     free(debuglink_paths);

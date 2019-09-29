@@ -1,4 +1,7 @@
 2019-09-28: David Anderson
+     * dwarf_debuglink.c,readelfobj.c: Fixed a few instances
+       of trailing whitespace.
+2019-09-28: David Anderson
      * Makefile.am: Making 'make dist' work.
      * Makefile.in: Regenerated.
 2019-09-27: David Anderson
