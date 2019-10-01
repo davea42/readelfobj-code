@@ -11,6 +11,7 @@ fi
 srcdir=$top_srcdir/src
 
 ./test_linkedtopath >junk.ltp
+dos2unix junk.ltp
 diff $srcdir/baseline.ltp junk.ltp
 if [ $? -ne 0 ] 
 then

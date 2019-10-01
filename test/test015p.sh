@@ -14,11 +14,14 @@ o=$srcdir/libexamine-0.dll
 ./object_detector  $o  >junk.$n.tmp
 diff $base junk.$n.tmp > junk.$n.out
 
-rm -f junkz
-echo sx $srcdir xyyyx | sed s/\ //g >junkz
+rm -f junkz 
+echo sx $srcdir xyyyxg | sed s/\ //g >junkz
 y=`cat junkz`
-sed $y < junk.$n.tmp >junk.$n
-rm -f junkz
+# This next for windows under Mingw: c: becomes /c
+sed 'sxc:/x/c/xg' < junk.$n.tmp >junk.$n.tmp2
+# Now the following will strip away the sourcdir part
+sed $y < junk.$n.tmp2 >junk.$n
+rm -f junkz 
 
 dos2unix  junk.$n 2>/dev/null
 if [ $? -ne 0 ]

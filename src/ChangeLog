@@ -1,4 +1,9 @@
 2019-09-30: David Anderson
+     * testdebuglink.sh: This needed a dos2unix to be
+       portable to Windows mingw.
+     * dwarf_debuglink.c: A printf was missing a
+       cast -- required to work well everywhere.
+2019-09-30: David Anderson
      * Makefile.am: adding AM_TESTS_ENVIRONMENT for out-of-tree
        make check.
      * dwarf_object_detector.c: Brought list of errors

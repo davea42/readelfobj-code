@@ -151,7 +151,8 @@ _dwarf_check_string_valid(
     }
     diff =  p - start;
     P("Error string not terminated error:  not ended after "
-        LONGESTSFMT " bytes (past end of available bytes)\n",diff);
+        LONGESTSFMT " bytes (past end of available bytes)\n",
+        (Dwarf_Signed)diff);
     *errcode = DW_DLE_STRING_NOT_TERMINATED;
     return DW_DLV_ERROR;
 }

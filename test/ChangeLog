@@ -1,6 +1,9 @@
 2019-09-30   David Anderson
     * test*.sh: All now deal with doing a 'make check' out-of-tree.
       and added test022 and test023.
+      make check is also working under windows ( I use
+      configure --enable-nonstandardprintf, you may or may not
+      need to use the --enable-nonstandardprintf)
 2019-09-28   David Anderson
     * Makefile.am: Making 'make dist' work.
     * Makefile.in: Regenerated.
