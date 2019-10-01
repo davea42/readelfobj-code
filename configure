@@ -768,6 +768,7 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 enable_wall
+enable_nonstandardprintf
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1420,6 +1421,9 @@ Optional Features:
                           speeds up one-time build
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --enable-wall           enable -Wall and other options [default=no]
+  --enable-nonstandardprintf
+                          Use a special printf format for 64bit (default is
+                          NO)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -13757,6 +13761,28 @@ $as_echo_n "checking whether \"unused\" attribute is available... " >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${have_unused}" >&5
 $as_echo "${have_unused}" >&6; }
 
+# Check whether --enable-nonstandardprintf was given.
+if test "${enable_nonstandardprintf+set}" = set; then :
+  enableval=$enable_nonstandardprintf;
+$as_echo "#define HAVE_NONSTANDARD_PRINTF_64_FORMAT 1" >>confdefs.h
+
+           enable_nonstandardprintf="yes"
+
+else
+  enable_nonstandardprintf="no"
+fi
+
+if  test "x$enable_nonstandardprintf" = "xyes" ; then :
+
+       cxx_compiler_flags="$cxx_compiler_flags -Wno-pedantic-ms-format"
+
+       c_compiler_flags="$c_compiler_flags -Wno-pedantic-ms-format"
+
+
+fi
+
+
+
 
 
 ac_config_files="$ac_config_files Makefile src/Makefile test/Makefile"
@@ -16069,6 +16095,7 @@ echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  sizeof unsigned long.: ${ac_cv_sizeof_unsigned_long}"
 echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
+echo "  Nonstandardprintf....: ${enable_nonstandardprintf}"
 echo
 echo "  readelfobj...........: always"
 echo

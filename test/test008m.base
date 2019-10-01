@@ -1,3 +1,3 @@
-mach-o-object32 (mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32), type 2 file type mach-o, endian 2 little-endian, offsetsize 32, filesize 59481
-mach-o-object64 (mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64), type 2 file type mach-o, endian 2 little-endian, offsetsize 64, filesize 63470
-libkrb5support.so.0.1.debug (libkrb5support.so.0.1.debug), type 1 file type elf, endian 2 little-endian, offsetsize 64, filesize 151968
+yyy/mach-o-object32 (/home/davea/dwarf/readelfobj/test/mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32), type 2 file type mach-o, endian 2 little-endian, offsetsize 32, filesize 59481
+yyy/mach-o-object64 (/home/davea/dwarf/readelfobj/test/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64), type 2 file type mach-o, endian 2 little-endian, offsetsize 64, filesize 63470
+yyy/libkrb5support.so.0.1.debug (/home/davea/dwarf/readelfobj/test/libkrb5support.so.0.1.debug), type 1 file type elf, endian 2 little-endian, offsetsize 64, filesize 151968

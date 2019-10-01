@@ -39,7 +39,7 @@ const char *ro_errname[] = {
 "DW_DLV_ERROR",
 "RO_ERR_SEEK",
 "RO_ERR_READ",/*              3 */
-"RO_ERR_MALLOC",/*            4 */
+"RO_ERR_MALLOC(4) malloc failed",/*            4 */
 "RO_ERR_OTHER",/*             5 */
 "RO_ERR_BADOFFSETSIZE",/*     6 */
 "RO_ERR_LOADSEGOFFSETBAD",/*  7 */
@@ -50,24 +50,39 @@ const char *ro_errname[] = {
 "RO_ERR_ELF_CLASS",/*        12 */
 "RO_ERR_ELF_ENDIAN",/*       13 */
 "RO_ERR_OPEN_FAIL",/*        14 */
-"RO_ERR_PATH_SIZE",/*        15 */
-"RO_ERR_INTEGERTOOSMALL",/*  16 */
-"RO_ERR_SYMBOLSECTIONSIZE",/*   17 */
-"RO_ERR_RELSECTIONSIZE",/*      18 */
-"RO_ERR_STRINGOFFSETBIG",/*     19 */
+"RO_ERR_PATH_SIZE(15)",/*        15 */
+"RO_ERR_INTEGERTOOSMALL(16)",/*  16 */
+"RO_ERR_SYMBOLSECTIONSIZE(17)",/*   17 */
+"RO_ERR_RELSECTIONSIZE(18)",/*      18 */
+"RO_ERR_STRINGOFFSETBIG(19)",/*     19 */
 "RO_ERR_DYNAMICSECTIONSIZE",/*  20 */
 "RO_ERR_UNEXPECTEDZERO",/*      21 */
 "RO_ERR_PHDRCOUNTMISMATCH",/*   22 */
 "RO_ERR_SHDRCOUNTMISMATCH",/*   23 */
 "RO_ERR_RELCOUNTMISMATCH",/*    24 */
 "RO_ERR_NULL_ELF_POINTER",/*    25 */
-"RO_ERR_NOT_A_KNOWN_TYPE",/*    26 */
-"RO_ERR_SIZE_SMALL",/*          27 */
+"RO_ERR_NOT_A_KNOWN_TYPE(26)",/*    26 */
+"RO_ERR_SIZE_SMALL(27) a pe file is too small to be an object file.",/*          27 */
 "RO_ERR_FILE_WRONG_TYPE",/*     28 */
 "RO_ERR_ELF_STRING_SECT",/*     29 */
 "RO_ERR_GROUP_ERROR",/*         30 */
-"RO_SEEK_OFF_END",/*            31 */
-"RO_READ_OFF_END",/*            32 */
+"RO_SEEK_OFF_END(31)",/*            31 */
+"RO_READ_OFF_END(32)",/*            32 */
+"RO_SEEK_ERROR",    /*         33 */
+"RO_READ_ERROR",     /*        34 */
+"RO_ERR_ELF_STRING_LINK_ERROR", /*   35 */
+"RO_ERR_SECTION_SIZE",     /*  36 */
+"RO_ERR_INVALID_STRING",   /*  37 */
+"DW_DLE_STRING_NOT_TERMINATED",   /*   38 */
+"DW_DLE_FORM_STRING_BAD_STRING",  /*   39 */
+"DW_DLE_CORRUPT_GNU_DEBUGLINK",   /*   40 */
+"DW_DLE_CORRUPT_NOTE_GNU_DEBUGID",/*   41 */
+"DW_DLE_CORRUPT_GNU_DEBUGID_STRING",/* 42 */
+"DW_DLE_CORRUPT_GNU_DEBUGID_SIZE",/*   43 */
+"DW_DLE_ALLOC_FAIL(44) malloc failed",             /*    44 */
+"DW_DLE_ERROR_NO_DOS_HEADER(45) so we do not accept the file as pe",    /*    45 */
+"DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE(46) so we do not accept the file as pe",/* 46 */
+0
 };
 
 

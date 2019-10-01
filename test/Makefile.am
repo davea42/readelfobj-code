@@ -46,6 +46,8 @@ CLEANFILES = \
   junk.test020.out \
   junk.test021 \
   junk.test021.out \
+  junk.test023.out \
+  junk.test023.out \
   object_detector \
   readobjmacho \
   readobjpe \
@@ -53,8 +55,8 @@ CLEANFILES = \
 
 
 check:
-	sh PICKUP
-	sh runtests.sh
+TESTS = ./PICKUP ./runtests.sh
+AM_TESTS_ENVIRONMENT = DWTOPSRCDIR='$(top_srcdir)'; export DWTOPSRCDIR;
 
 EXTRA_DIST = \
 README  \
@@ -81,6 +83,11 @@ test015p.sh \
 test016p.sh \
 test017.sh \
 test018p.sh \
+test019.sh \
+test020.sh \
+test021.sh \
+test022.sh \
+test023.sh \
 test001.base \
 test003.base  \
 test004.base  \
@@ -98,6 +105,11 @@ test015p.base \
 test016p.base \
 test017.base \
 test018p.base \
+test019.base \
+test020.base \
+test021.base \
+test022.base \
+test023.base \
 dd-irix-n32 \
 libkrb5support.so.0.1.debug \
 mach-o-object32 \
@@ -109,7 +121,10 @@ kask2/dwarfdump_G4.dSYM\
 libexamine-0.dll \
 kask-dwarfdump_64.exe \
 libdwarf.so.1.0.0 \
-sparc64-64-tls.o \
-libc.so.6 \
-stream.o \
-testarch.a 
+sparc64-64-tls.o  \
+libc.so.6   \
+stream.o    \
+testarch.a  \
+comdatex.example.o \
+frame1-frame1.o  
+

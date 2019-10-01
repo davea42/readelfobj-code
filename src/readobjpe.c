@@ -51,7 +51,7 @@ static char buffer1[BUFFERSIZE];
 #define TRUE 1
 #define FALSE 0
 
-char *Usage = "Usage: readobjmacho <options> file ...\n"
+char *Usage = "Usage: readobjpe <options> file ...\n"
     "Options:\n"
     "--help     print this message\n"
     "--version  print version string\n";
@@ -165,7 +165,7 @@ do_one_file(const char *name)
         &ftype,&endian,&offsetsize,&filesize,&errcode);
     if (res != DW_DLV_OK) {
         printf("ERROR: Unable to read \"%s\", ignoring file. "
-            "Errcode %d\n", name,errcode);
+            "Errcode %s\n", name,dwarf_get_errname(errcode));
         return;
     }
     printf("Reading: %s\n",name);

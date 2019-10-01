@@ -1,3 +1,9 @@
+2010-09-30: David Anderson
+    * Makefile.am: Trivial changes for cleaning junk.
+    * Makefile.in: Regenerated
+    * configure.ac: Added --enable-nonstandardprintf.
+      and  HAVE_NONSTANDARD_PRINTF_64_FORMAT
+    * configure: Regenerated.
 2010-09-28: David Anderson
     * Makefile.am: Making 'make dist' work.
     * Makefile.in: Regenerated

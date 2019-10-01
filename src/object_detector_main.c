@@ -109,13 +109,8 @@ int main(int argc, char **argv)
                 offsetsize,
                 (unsigned long)filesize);
         } else if (res == DW_DLV_ERROR) {
-            if (errcode == RO_ERR_NOT_A_KNOWN_TYPE) {
-                printf("%s FAIL: file type not a valid object-file "
-                    "Errcode %d.\n",path, errcode);
-            } else {
-                printf("%s FAIL: error opening file. "
-                    "Errcode %d.\n",path, errcode);
-            }
+            printf("%s FAIL: error opening file. "
+                "Errcode %s.\n",path, dwarf_get_errname(errcode)); 
             ++errct;
         } else {
             /* DW_DLV_NO_ENTRY */

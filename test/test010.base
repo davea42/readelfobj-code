@@ -1,3 +1,3 @@
-dd-irix-n32 (dd-irix-n32), type 1 file type elf, endian 1 big-endian, offsetsize 32, filesize 952604
-libc.so.6 (libc.so.6), type 1 file type elf, endian 2 little-endian, offsetsize 32, filesize 1589908
-libkrb5support.so.0.1.debug (libkrb5support.so.0.1.debug), type 1 file type elf, endian 2 little-endian, offsetsize 64, filesize 151968
+yyy/dd-irix-n32 (/home/davea/dwarf/readelfobj/test/dd-irix-n32), type 1 file type elf, endian 1 big-endian, offsetsize 32, filesize 952604
+libc.so.6 FAIL: no such file present/readable
+yyy/libkrb5support.so.0.1.debug (/home/davea/dwarf/readelfobj/test/libkrb5support.so.0.1.debug), type 1 file type elf, endian 2 little-endian, offsetsize 64, filesize 151968

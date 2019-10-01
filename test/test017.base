@@ -1,4 +1,4 @@
-Section Groups: No section groups or .dwo present. Elf object file libdwarf.so.1.0.0
+Section Groups: No section groups or .dwo present. Elf object file yyy/libdwarf.so.1.0.0
  Elf Header ident bytes:  7f454c46 02010100 00000000 00000000
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x1 (ELFDATA2LSB)

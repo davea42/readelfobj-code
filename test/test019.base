@@ -15,7 +15,7 @@ Section Group by dwarf section
   .eh_frame            1          21
   SHT_GROUP count  : 2
   SHF_GROUP count  : 2
-Elf object file comdatex.example.o
+Elf object file yyy/comdatex.example.o
  Elf Header ident bytes:  7f454c46 01010100 00000000 00000000
   File class    = 0x1 (ELFCLASS32)
   Data encoding = 0x1 (ELFDATA2LSB)
@@ -88,7 +88,7 @@ Section Group by dwarf section
   .eh_frame            1          21
   SHT_GROUP count  : 2
   SHF_GROUP count  : 2
-No .dynamic section exists in comdatex.example.o
+No .dynamic section exists in yyy/comdatex.example.o
 
 Symbols from .symtab: 24 at offset 0x848
 {

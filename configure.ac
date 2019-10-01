@@ -144,6 +144,24 @@ int goo() {
 AC_MSG_CHECKING([whether "unused" attribute is available])
 AC_MSG_RESULT([${have_unused}])
 
+AC_ARG_ENABLE(nonstandardprintf,AS_HELP_STRING([--enable-nonstandardprintf],
+        [Use a special printf format for 64bit (default is NO)]),
+        [ AC_DEFINE([HAVE_NONSTANDARD_PRINTF_64_FORMAT],[1],
+           [Define 1 if need nonstandard printf format for 64bit] )
+           [enable_nonstandardprintf="yes"]
+        ],
+        [enable_nonstandardprintf="no"])
+AS_IF(
+    [ test "x$enable_nonstandardprintf" = "xyes" ],
+    [
+       cxx_compiler_flags="$cxx_compiler_flags -Wno-pedantic-ms-format"
+
+       c_compiler_flags="$c_compiler_flags -Wno-pedantic-ms-format"
+    ]
+    )
+
+
+
 
 
 AC_CONFIG_FILES([
@@ -168,6 +186,7 @@ echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  sizeof unsigned long.: ${ac_cv_sizeof_unsigned_long}"
 echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
+echo "  Nonstandardprintf....: ${enable_nonstandardprintf}"
 echo
 echo "  readelfobj...........: always"
 echo

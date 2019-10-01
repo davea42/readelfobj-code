@@ -1,7 +1,16 @@
 #!/bin/sh
 n=test002
+if [ x$DWTOPSRCDIR = "x" ]
+then
+  top_srcdir=$top_blddir
+else
+  top_srcdir=$DWTOPSRCDIR
+fi
+srcdir=$top_srcdir/test
+
 base=$n.base
-o=libkrb5support.so.0.1.debug
+
+o=$srcdir/libkrb5support.so.0.1.debug
 #Version-readelfobj:
 #echo "START test $n "
 ./readelfobj --version   >junk.$n
@@ -12,6 +21,6 @@ then
   #Version string found
   exit 0
 fi
-echo "FAIL $n.sh found no version string in junk.$n"
+echo "FAIL $srcdir/$n.sh found no version string in junk.$n"
 exit 1
 

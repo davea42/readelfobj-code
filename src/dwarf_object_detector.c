@@ -105,6 +105,20 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RO_READ_OFF_END           32
 #define RO_SEEK_ERROR             33
 #define RO_READ_ERROR             34
+#define RO_ERR_ELF_STRING_LINK_ERROR    35
+#define RO_ERR_SECTION_SIZE       36
+#define RO_ERR_INVALID_STRING     37
+#define DW_DLE_STRING_NOT_TERMINATED      38
+#define DW_DLE_FORM_STRING_BAD_STRING     39
+#define DW_DLE_CORRUPT_GNU_DEBUGLINK      40
+#define DW_DLE_CORRUPT_NOTE_GNU_DEBUGID   41
+#define DW_DLE_CORRUPT_GNU_DEBUGID_STRING 42
+#define DW_DLE_CORRUPT_GNU_DEBUGID_SIZE   43
+#define DW_DLE_ALLOC_FAIL                 44
+#define DW_DLE_ERROR_NO_DOS_HEADER        45
+#define DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE 46
+
+
 
 #ifndef EI_NIDENT
 #define EI_NIDENT 16
@@ -469,7 +483,7 @@ is_pe_object(int fd,
         locendian = DW_ENDIAN_LITTLE;
     } else {
         /* Not dos header not a PE file we recognize */
-        *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
+        *errcode = DW_DLE_ERROR_NO_DOS_HEADER;
         return DW_DLV_ERROR;
     }
     ASNAR(word_swap,nt_address, dhinmem.dh_image_offset);
@@ -495,7 +509,7 @@ is_pe_object(int fd,
         nt_sig = lsig;
     }
     if (nt_sig != IMAGE_NT_SIGNATURE) {
-        *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
+        *errcode = DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE;
         return DW_DLV_ERROR;
     }
     res = object_read_random(fd,(char *)&ifh,
@@ -625,7 +639,7 @@ dwarf_object_detector_fd(int fd,
         *filesize = (size_t)fsize;
         return DW_DLV_OK;
     }
-    *errcode = RO_ERR_NOT_A_KNOWN_TYPE;
+    /* errcode already set., DW_DLV_NO_ENTRY impossible */ 
     return DW_DLV_ERROR;
 }
 

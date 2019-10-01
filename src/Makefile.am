@@ -105,6 +105,7 @@ test_linkedtopath_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 check_TESTS = testdebuglink.sh
+AM_TESTS_ENVIRONMENT = DWTOPSRCDIR='$(top_srcdir)'; export DWTOPSRCDIR;
 
 man_MANS = readelfobj.1
 

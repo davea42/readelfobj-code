@@ -1,3 +1,27 @@
+2019-09-30: David Anderson
+     * Makefile.am: adding AM_TESTS_ENVIRONMENT for out-of-tree
+       make check.
+     * dwarf_object_detector.c: Brought list of errors
+       so all such are the same.
+       For a PE file, now reports a more-specific error
+       if such cannot be processed. Still true that
+       only an executable/dll can be processed, 
+       not  .o object file.
+     * dwarf_reading.h: Now handles --enable-nonstandardprintf
+       option. Also a couple new more specific error codes
+       added: DW_DLE_ERROR_NO_DOS_HEADER 
+       DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE
+     * errormessages.c: Now more complete and with
+       additional detail in some error strings.
+     * object_detector_main.c:  Now error messages
+       a little more specific.
+     * readobjpe.c: Was claiming it was readobjmacho
+       in the usage message. Fixed so it says readobjpe.
+     * testdebuglink.sh: Now properly tests with
+       make check in a separate build directory.
+2019-09-29: David Anderson
+     * readobjpe.c: Usage message said 'readobjmacho'
+       but now says 'readobjpe'.
 2019-09-28: David Anderson
      * dwarf_debuglink.c,readelfobj.c: Fixed a few instances
        of trailing whitespace.

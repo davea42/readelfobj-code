@@ -7,9 +7,17 @@ then
    echo "No test done"
    exit 1
 fi
+top_blddir=`pwd`/..
+if [ x$DWTOPSRCDIR = "x" ]
+then
+  top_srcdir=$top_blddir
+else
+  top_srcdir=$DWTOPSRCDIR
+fi
+srcdir=$top_srcdir/test
 
 fail=0
-for i in test[0-9]*.sh
+for i in $srcdir/test[0-9]*.sh
 do
   sh $i
   if [ $? -ne 0 ]

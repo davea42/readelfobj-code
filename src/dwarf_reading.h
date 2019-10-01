@@ -46,6 +46,16 @@ extern "C" {
 #endif /* DW_DLV_OK */
 
 #if (SIZEOF_UNSIGNED_LONG < 8) && (SIZEOF_UNSIGNED_LONG_LONG == 8)
+#if defined(_WIN32) && defined(HAVE_NONSTANDARD_PRINTF_64_FORMAT)
+#define LONGESTXFMT  "0x%I64x"
+#define LONGESTXFMT8 "0x%08I64x"
+#define LONGESTUFMT  "%I64u"
+#define LONGESTUFMT2  "%2I64u"
+#define LONGESTUFMT8 "%08I64u"
+#define LONGESTSFMT  "%I64d"
+#define LONGESTUTYPE unsigned long long
+#define LONGESTSTYPE long long
+#else
 #define LONGESTXFMT  "0x%llx"
 #define LONGESTXFMT8 "0x%08llx"
 #define LONGESTUFMT  "%llu"
@@ -54,6 +64,7 @@ extern "C" {
 #define LONGESTSFMT  "%lld"
 #define LONGESTUTYPE unsigned long long
 #define LONGESTSTYPE long long
+#endif
 #else
 #define LONGESTXFMT  "0x%lx"
 #define LONGESTXFMT8 "0x%08lx"
@@ -141,6 +152,8 @@ extern "C" {
 #define DW_DLE_CORRUPT_GNU_DEBUGID_STRING 42
 #define DW_DLE_CORRUPT_GNU_DEBUGID_SIZE   43
 #define DW_DLE_ALLOC_FAIL                 44
+#define DW_DLE_ERROR_NO_DOS_HEADER        45
+#define DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE 46
 
 const char *dwarf_get_errname(int i);
 #define P printf

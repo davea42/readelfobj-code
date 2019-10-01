@@ -1,3 +1,6 @@
+2019-09-30   David Anderson
+    * test*.sh: All now deal with doing a 'make check' out-of-tree.
+      and added test022 and test023.
 2019-09-28   David Anderson
     * Makefile.am: Making 'make dist' work.
     * Makefile.in: Regenerated.

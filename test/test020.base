@@ -1,4 +1,4 @@
-Section Groups: No section groups or .dwo present. Elf object file stream.o
+Section Groups: No section groups or .dwo present. Elf object file yyy/stream.o
  Elf Header ident bytes:  7f454c46 02010100 00000000 00000000
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x1 (ELFDATA2LSB)
@@ -57,7 +57,7 @@ Section count: 29
 [28] 0x00003438 0x000000cc .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
 Summary: 3562 bytes for 8 debug sections
 }
-Section Groups: No section groups or .dwo present. No .dynamic section exists in stream.o
+Section Groups: No section groups or .dwo present. No .dynamic section exists in yyy/stream.o
 
 Symbols from .symtab: 38 at offset 0x30a8
 {
