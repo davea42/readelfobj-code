@@ -134,7 +134,7 @@ _dwarf_check_string_valid(
         diff = start - p;
         P("Error  string start  pointer error: loc "
             LONGESTSFMT
-            " bytes before available area \n",diff);
+            " bytes before available area \n",(Dwarf_Signed)diff);
         *errcode = suggested_error;
         return DW_DLV_ERROR;
     }
@@ -142,7 +142,7 @@ _dwarf_check_string_valid(
         diff = p - start;
         P("Error  string end  pointer error, not terminated "
             " before end of area. Length:  "
-            LONGESTSFMT  "\n",diff);
+            LONGESTSFMT  "\n",(Dwarf_Signed)diff);
         *errcode = suggested_error;
         return DW_DLV_ERROR;
     }

@@ -1,6 +1,8 @@
 2019-10-03: David Anderson
      * dwarf_debuglink.c: Added include of stddef.h
        so ptrdiff_t works (C90 says it is in stddef.h).
+       And added casts to Dwarf_Signed so printf won't
+       get warnings on 32bit systems.
 2019-09-30: David Anderson
      * testdebuglink.sh: This needed a dos2unix to be
        portable to Windows mingw.
