@@ -639,7 +639,7 @@ dwarf_object_detector_fd(int fd,
         *filesize = (size_t)fsize;
         return DW_DLV_OK;
     }
-    /* errcode already set., DW_DLV_NO_ENTRY impossible */ 
+    /* errcode already set., DW_DLV_NO_ENTRY impossible */
     return DW_DLV_ERROR;
 }
 

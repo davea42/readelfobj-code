@@ -110,7 +110,7 @@ int main(int argc, char **argv)
                 (unsigned long)filesize);
         } else if (res == DW_DLV_ERROR) {
             printf("%s FAIL: error opening file. "
-                "Errcode %s.\n",path, dwarf_get_errname(errcode)); 
+                "Errcode %s.\n",path, dwarf_get_errname(errcode));
             ++errct;
         } else {
             /* DW_DLV_NO_ENTRY */

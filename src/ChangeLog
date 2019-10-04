@@ -1,4 +1,6 @@
 2019-10-03: David Anderson
+     * dwarf_object_detector.c,object_detector_main.c: Removed
+       trailing space, one line each file.
      * dwarf_debuglink.c: Added include of stddef.h
        so ptrdiff_t works (C90 says it is in stddef.h).
        And added casts to Dwarf_Signed so printf won't
