@@ -38,7 +38,7 @@ AC_SUBST([release_info])
 
 AC_PROG_CC
 ### MacOS does not have/use malloc.h
-AC_CHECK_HEADERS([unistd.h elf.h malloc.h])
+AC_CHECK_HEADERS([unistd.h elf.h malloc.h stddef.h])
 
 AC_ARG_ENABLE([wall],
    [AS_HELP_STRING([--enable-wall],

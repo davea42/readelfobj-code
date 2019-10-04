@@ -34,6 +34,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif /* HAVE_MALLOC_H */
+#ifdef HAVE_STDDEF_H
+#include <stddef.h> /* ptrdiff_t */
+#endif /* HAVE_STDDEF_H */
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
