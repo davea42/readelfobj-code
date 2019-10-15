@@ -43,6 +43,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 #ifdef HAVE_ELF_H
 #include <elf.h>
 #endif /* HAVE_ELF_H */
+#ifdef HAVE_STDINT_H
+#include <stdint.h> /* for uintptr_t */
+#endif /* HAVE_STDINT_H */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
@@ -611,7 +614,7 @@ int _dwarf_construct_linkedto_path(
         if(!resultfullstring) {
 #ifdef TESTING
             printf("Malloc fail making final paths. Length "
-                LONGESTUFMT " bytes.\n",totalareasize);
+                LONGESTUFMT " bytes.\n",(Dwarf_Unsigned)totalareasize);
 #endif /* TESTING */
             dwarfstring_list_destructor(&base_dwlist);
             destruct_js(&joind);
@@ -701,8 +704,8 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
         P("ERROR: .gnu_debuglink is not the right length: "
             " expected end " LONGESTXFMT
             " found end at  " LONGESTXFMT ")\n",
-            (Dwarf_Unsigned)(crcptr+4),
-            (Dwarf_Unsigned)endptr);
+            (Dwarf_Unsigned)(uintptr_t)(crcptr+4),
+            (Dwarf_Unsigned)(uintptr_t)endptr);
         *errcode = DW_DLE_CORRUPT_GNU_DEBUGLINK;
         return DW_DLV_ERROR;
     }

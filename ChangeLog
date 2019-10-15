@@ -1,3 +1,7 @@
+2010-10-14: David Anderson
+    * configure.ac: Ensure uintptr_t defined.
+      Version 20191014.
+    * configure: regenerated.
 2010-10-03: David Anderson
     * configure.ac: Added a check for stddef.h.
     * configure:  Regenerated.

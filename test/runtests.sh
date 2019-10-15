@@ -15,7 +15,7 @@ else
   top_srcdir=$DWTOPSRCDIR
 fi
 srcdir=$top_srcdir/test
-
+. $top_srcdir/SHALIAS.sh
 fail=0
 for i in $srcdir/test[0-9]*.sh
 do

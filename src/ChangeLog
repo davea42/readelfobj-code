@@ -1,3 +1,8 @@
+2019-10-14: David Anderson
+     * dwarf_debuglink.c: Added (uintptr_t) cast to eliminate
+       compiler warning (on 32bit system). Added Dwarf_Signed
+       cast for similar reason. The warning only seen
+       when doing 'make check'.
 2019-10-03: David Anderson
      * dwarf_object_detector.c,object_detector_main.c: Removed
        trailing space, one line each file.

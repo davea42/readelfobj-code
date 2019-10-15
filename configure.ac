@@ -18,7 +18,7 @@ m4_define([lt_age], [v_min])
 
 ### Sets the release name.
 ###m4_define([v_date], [m4_esyscmd_s([date "+%Y%m%d"])])
-m4_define([v_date], [20190922])])
+m4_define([v_date], [20191014])])
 
 AC_PREREQ([2.52])
 ### 2nd arg to AC_INIT is the version 'number'.
@@ -38,7 +38,14 @@ AC_SUBST([release_info])
 
 AC_PROG_CC
 ### MacOS does not have/use malloc.h
-AC_CHECK_HEADERS([unistd.h elf.h malloc.h stddef.h])
+AC_CHECK_HEADERS([unistd.h elf.h malloc.h stddef.h stdint.h])
+
+### for use in casts to uint to avoid 32bit warnings.
+### Also needed by C++ cstdint
+AC_TYPE_UINTPTR_T
+AC_TYPE_INTPTR_T
+### Now we know uintptr_t is either in stdint.h or
+### is defined in config.h by configure.
 
 AC_ARG_ENABLE([wall],
    [AS_HELP_STRING([--enable-wall],

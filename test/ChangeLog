@@ -1,9 +1,13 @@
+2019-10-14   David Anderson
+    * SHALIAS.sh: New, so one can use a local SHALIAS.sh
+      where one needs an alias for make when running tests
+      so one gets gnu make. (as on FreeBSD, for example)
+    * runtests.sh: Now sources SHALIAS.sh
 2019-10-03   David Anderson
     * test010.sh,test015p.sh: These two scripts were slightly wrong
       so only worked as intended from one directory. oops. Fixed
     * test010.base,test015p.base: Slightly different baselines,
       now the way they should look.
-
 2019-09-30   David Anderson
     * test*.sh: All now deal with doing a 'make check' out-of-tree.
       and added test022 and test023.
