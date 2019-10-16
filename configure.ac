@@ -18,7 +18,7 @@ m4_define([lt_age], [v_min])
 
 ### Sets the release name.
 ###m4_define([v_date], [m4_esyscmd_s([date "+%Y%m%d"])])
-m4_define([v_date], [20191014])])
+m4_define([v_date], [20191016])])
 
 AC_PREREQ([2.52])
 ### 2nd arg to AC_INIT is the version 'number'.
@@ -120,7 +120,7 @@ s.st_name = 0;
 AC_MSG_CHECKING([for Elf64_Rel in elf.h])
 AC_MSG_RESULT([${have_elf64_rel}])
 
-AC_C_BIGENDIAN
+AC_C_BIGENDIAN([AC_DEFINE([WORDS_BIGENDIAN], [1], [Set to 1 if bigendian build])],,)
 AC_CHECK_SIZEOF([unsigned long long])
 AC_CHECK_SIZEOF([unsigned long])
 
@@ -194,6 +194,7 @@ echo "  sizeof unsigned long.: ${ac_cv_sizeof_unsigned_long}"
 echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  Nonstandardprintf....: ${enable_nonstandardprintf}"
+echo "  BuildOS-BigEndian....: ${ac_cv_c_bigendian}"
 echo
 echo "  readelfobj...........: always"
 echo

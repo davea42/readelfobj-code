@@ -1,3 +1,6 @@
+2010-10-16: David Anderson
+    * configure.ac: Now explicitly sets WORDS_BIGENDIAN properly in config.h.
+    * Makefile.in,config.h.in,configure: Regenerated.
 2010-10-14: David Anderson
     * configure.ac: Ensure uintptr_t defined.
       Version 20191014.
