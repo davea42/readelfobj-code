@@ -55,7 +55,7 @@ CLEANFILES = \
 
 
 check:
-TESTS = ./PICKUP ./runtests.sh
+TESTS = ./runtests.sh
 AM_TESTS_ENVIRONMENT = DWTOPSRCDIR='$(top_srcdir)'; export DWTOPSRCDIR;
 
 EXTRA_DIST = \

@@ -502,7 +502,7 @@ CLEANFILES = \
   readobjpe \
   readelfobj
 
-TESTS = ./PICKUP ./runtests.sh
+TESTS = ./runtests.sh
 AM_TESTS_ENVIRONMENT = DWTOPSRCDIR='$(top_srcdir)'; export DWTOPSRCDIR;
 EXTRA_DIST = \
 README  \
@@ -761,13 +761,6 @@ recheck: all
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-./PICKUP.log: ./PICKUP
-	@p='./PICKUP'; \
-	b='./PICKUP'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
 ./runtests.sh.log: ./runtests.sh
 	@p='./runtests.sh'; \
 	b='./runtests.sh'; \

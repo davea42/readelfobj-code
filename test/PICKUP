@@ -1,6 +1,31 @@
-#!/bin/bash
-cp ../src/readelfobj .
-cp ../src/object_detector .
-cp ../src/readobjmacho .
-cp ../src/readobjpe .
+#!/bin/sh
+bindir=$1
+cp $bindir/src/readelfobj readelfobj
+if [ $? -ne 0 ] 
+then
+  echo "cp of $bindir/src/readelfobj failed "
+  pwd
+  exit 1
+fi
+cp $bindir/src/object_detector object_detector
+if [ $? -ne 0 ] 
+then
+  echo "cp of $bindir/src/object_detector failed "
+  pwd
+  exit 1
+fi
+cp $bindir/src/readobjmacho readobjmacho
+if [ $? -ne 0 ] 
+then
+  echo "cp of $bindir/src/readobjmacho failed "
+  pwd
+  exit 1
+fi
+cp $bindir/src/readobjpe readobjpe
+if [ $? -ne 0 ] 
+then
+  echo "cp of $bindir/src/readobjpe failed "
+  pwd
+  exit 1
+fi
 exit 0

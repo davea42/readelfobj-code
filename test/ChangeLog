@@ -1,3 +1,7 @@
+2019-10-17   David Anderson
+    * Makefile.am,runtests.sh,PICKUP: Small changes so make check
+      works when run out=of=sourcetree.
+    * Makefile.in: regenerated.
 2019-10-14   David Anderson
     * SHALIAS.sh: New, so one can use a local SHALIAS.sh
       where one needs an alias for make when running tests
