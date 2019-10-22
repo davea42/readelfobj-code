@@ -1,3 +1,12 @@
+2019-10-21: David Anderson
+     * dwarf_debuglink.c,dwarf_load_elf_headers.c,dwarf_machoread.c,
+       dwarf_peread.c,dwarfstring.c,fd-filedata.c,filedata.c,
+       readelfobj.c,readobjmacho.c,readobjpe.c,test_dwstring.c,
+       test_linkedtopath.c: Make more thorough and 
+       consistent use use  of config.h to check headers
+       exist before #include of them. Add malloc.h
+       for certain compilers not providing malloc prototype
+       in stdlib.h
 2019-10-14: David Anderson
      * dwarf_debuglink.c: Added (uintptr_t) cast to eliminate
        compiler warning (on 32bit system). Added Dwarf_Signed

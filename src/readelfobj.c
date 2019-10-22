@@ -39,12 +39,14 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "config.h"
 #include <stdio.h>
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h> /* for exit(), C89 malloc */
+#endif /* HAVE_STDLIB_H */
 #ifdef HAVE_MALLOC_H
+/* Useful include for some Windows compilers. */
 #include <malloc.h>
 #endif /* HAVE_MALLOC_H */
-#include <stdlib.h>
 #include <string.h>
-#include <stdlib.h>
 #include <time.h>
 #ifdef HAVE_ELF_H
 #include <elf.h>

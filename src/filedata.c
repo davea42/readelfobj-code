@@ -38,7 +38,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* HAVE_UNISTD_H */
 #include <errno.h>
 #include <string.h>
-#include <stdlib.h>
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h> /* for exit(), C89 malloc */
+#endif /* HAVE_STDLIB_H */
 #include <elf.h>
 #include "dwarf_reading.h"
 #include "readelfobj.h"

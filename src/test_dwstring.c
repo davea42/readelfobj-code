@@ -30,8 +30,11 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "config.h"
 #include <stdio.h>  /* for printf */
-#include <stdlib.h>
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h> /* for exit(), C89 malloc */
+#endif /* HAVE_STDLIB_H */
 #include <string.h>
 #include "dwarfstring.h"
 #ifndef TRUE

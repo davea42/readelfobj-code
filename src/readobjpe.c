@@ -31,7 +31,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "config.h"
-#include <stdlib.h>
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h> /* for exit(), C89 malloc */
+#endif /* HAVE_STDLIB_H */
 #include <stdio.h>
 #include <string.h>
 #ifdef HAVE_UNISTD_H
