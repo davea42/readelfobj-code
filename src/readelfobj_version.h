@@ -10,7 +10,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define READELFOBJ_VERSION_DATE_STR " 2019-01-01 09:47:24-08:00  "
+#define READELFOBJ_VERSION_DATE_STR " 2019-10-28 10:53:07-07:00  "
 
 #ifdef __cplusplus
 }

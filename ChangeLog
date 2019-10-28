@@ -1,3 +1,6 @@
+2010-10-28: David Anderson
+    * configure.ac: Version 20191028.
+    * configure: Regenerated.
 2010-10-16: David Anderson
     * configure.ac: Now explicitly sets WORDS_BIGENDIAN properly in config.h.
     * Makefile.in,config.h.in,configure: Regenerated.

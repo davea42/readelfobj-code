@@ -310,6 +310,9 @@ do_one_file(const char *s)
         P("File %s is not mach-o. Ignored.\n",tru_path_buffer);
         return;
     }
+    if (strcmp(s,tru_path_buffer)) {
+         P("Reading dSYM object at %s\n",tru_path_buffer);
+    }
     res = dwarf_construct_macho_access_path(tru_path_buffer,
         &mfp,&errcode);
     if (res != RO_OK) {
@@ -355,7 +358,7 @@ do_one_file(const char *s)
         exit(1);
     }
     if (res == DW_DLV_NO_ENTRY) {
-        P("Impossible error attempting to read Mach-O object\n");
+        P("No dwarf sections exist in \"%s\"\n",tru_path_buffer);
         dwarf_destruct_macho_access(mfp);
         exit(1);
     }
