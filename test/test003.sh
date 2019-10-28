@@ -12,7 +12,11 @@ o=$srcdir/libkrb5support.so.0.1.debug
 
 #echo "START test $n "
 ./readelfobj --print-dynamic $o  >junk.$n.tmp
-dos2unix  junk.$n.tmp 2>/dev/null
+which dos2unix >/dev/null
+if [ $? -eq 0 ]
+then
+  dos2unix  junk.$n.tmp 2>/dev/null
+fi
 rm -f junkz
 echo sx $srcdir xyyyxg | sed s/\ //g >junkz
 y=`cat junkz`
@@ -26,8 +30,8 @@ diff $base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then
   cat junk.$n.out
-  echo "FAIL $n.sh results differ $base vs junk.$n"
-  echo "To update, mv junk.$n $base"
+  echo "FAIL $n.sh results differ $base vs junk.$n.tmp"
+  echo "To update, mv junk.$n.tmp $base"
   exit 1
 fi
 exit 0

@@ -1,5 +1,6 @@
 File: yyy/mach-o-object32
 Reading: yyy/mach-o-object32 (yyy/mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32)
+Reading dSYM object at yyy/mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32
 Mach-o Magic:  0xfeedface
   cputype           : 0x7 cpusubtype: 0x3
   offset size       : 4
@@ -41,6 +42,7 @@ Mach-o Magic:  0xfeedface
   [12] __apple_objc     0x0000e835 0x00000024
 File: yyy/mach-o-object64
 Reading: yyy/mach-o-object64 (yyy/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64)
+Reading dSYM object at yyy/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64
 Mach-o Magic:  0xfeedfacf
   cputype           : 0x1000007 cpusubtype: 0x3
   offset size       : 8

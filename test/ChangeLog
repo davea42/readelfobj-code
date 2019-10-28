@@ -1,3 +1,6 @@
+2019-10-28   David Anderson
+    * test*.sh: Avoid using dos2unix if it is not in $PATH.
+      It is only needed when testing under Windows.
 2019-10-17   David Anderson
     * Makefile.am,runtests.sh,PICKUP: Small changes so make check
       works when run out=of=sourcetree.

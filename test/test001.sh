@@ -11,14 +11,18 @@ srcdir=$top_srcdir/test
 base=$n.base
 o=$srcdir/libkrb5support.so.0.1.debug
 #echo "START test $n "
-./readelfobj --help $o >junk.$n
-dos2unix  junk.$n 2>/dev/null
-diff  $srcdir/$n.base junk.$n  > junk.$n.out
+./readelfobj --help $o >junk.$n.tmp
+which dos2unix >/dev/null
+if [ $? -eq 0 ]
+then
+  dos2unix  junk.$n.tmp >/dev/null
+fi
+diff  $srcdir/$n.base junk.$n.tmp > junk.$n.out
 if [ $? -ne 0 ]
 then
   cat junk.$n.out
-  echo "FAIL $n.sh results differ $n.base vs junk.$n.out"
-  echo "To update, mv junk.$n $n.base"
+  echo "FAIL $n.sh results differ $n.base vs junk.$n.tmp"
+  echo "To update, mv junk.$n.tmp $n.base"
   exit 1
 fi
 exit 0
