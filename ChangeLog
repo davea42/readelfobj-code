@@ -1,4 +1,10 @@
 2010-10-28: David Anderson
+    * configure.ac: Fixed typos so --enable-nonstandardprintf
+      can work.
+    * configure: Regenerated.
+    * scripts/FIX-CONFIGURE-TIMES: Now has starting/ending announcements
+      to make running this easier to follow.
+2010-10-28: David Anderson
     * configure.ac: Version 20191028.
     * configure: Regenerated.
 2010-10-16: David Anderson

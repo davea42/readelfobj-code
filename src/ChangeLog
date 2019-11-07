@@ -1,3 +1,9 @@
+2019-11-07: David Anderson
+     * dwarf_load_elf_headers.c: Added an UNUSEDARG to a parameter
+       that may be unused (depending on whether elf.h exists or not).
+     * dwarf_reading.h: Simplify.  Now it works with or without
+       --enable-nonstandardprintf.  And is like the libdwarf/dwarfdump
+       setup.
 2019-10-28: David Anderson
      * testdebuglink.sh: Now test for dos2unix before attempting to use it.
        It's only necessary under Windows.

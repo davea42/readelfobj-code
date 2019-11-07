@@ -2373,7 +2373,7 @@ elf_load_dynamic64(elf_filedata ep,
     return RO_OK;
 }
 
-static int validate_struct_sizes(int*errcode)
+static int validate_struct_sizes(UNUSEDARG int*errcode)
 {
 #ifdef HAVE_ELF_H
     /*  This is a sanity check when we have an elf.h

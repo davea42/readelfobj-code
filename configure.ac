@@ -72,7 +72,6 @@ AS_IF(
     ]
     )
 
-RO_CHECK_C_COMPILER_FLAGS([${c_compiler_flags}])
 
 AC_COMPILE_IFELSE(
  [AC_LANG_PROGRAM(
@@ -161,12 +160,13 @@ AC_ARG_ENABLE(nonstandardprintf,AS_HELP_STRING([--enable-nonstandardprintf],
 AS_IF(
     [ test "x$enable_nonstandardprintf" = "xyes" ],
     [
-       cxx_compiler_flags="$cxx_compiler_flags -Wno-pedantic-ms-format"
+       cxx_compiler_flags="${cxx_compiler_flags} -Wno-pedantic-ms-format"
 
-       c_compiler_flags="$c_compiler_flags -Wno-pedantic-ms-format"
+       c_compiler_flags="${c_compiler_flags} -Wno-pedantic-ms-format"
     ]
     )
 
+RO_CHECK_C_COMPILER_FLAGS([${c_compiler_flags}])
 
 
 

@@ -45,7 +45,6 @@ extern "C" {
 #define DW_DLV_ERROR 1
 #endif /* DW_DLV_OK */
 
-#if (SIZEOF_UNSIGNED_LONG < 8) && (SIZEOF_UNSIGNED_LONG_LONG == 8)
 #if defined(_WIN32) && defined(HAVE_NONSTANDARD_PRINTF_64_FORMAT)
 #define LONGESTXFMT  "0x%I64x"
 #define LONGESTXFMT8 "0x%08I64x"
@@ -64,16 +63,6 @@ extern "C" {
 #define LONGESTSFMT  "%lld"
 #define LONGESTUTYPE unsigned long long
 #define LONGESTSTYPE long long
-#endif
-#else
-#define LONGESTXFMT  "0x%lx"
-#define LONGESTXFMT8 "0x%08lx"
-#define LONGESTUFMT  "%lu"
-#define LONGESTUFMT2  "%2lu"
-#define LONGESTUFMT8 "%08lu"
-#define LONGESTSFMT  "%ld"
-#define LONGESTUTYPE unsigned long
-#define LONGESTSTYPE long
 #endif
 
 #ifndef O_BINARY

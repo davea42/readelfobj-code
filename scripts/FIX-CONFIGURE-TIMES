@@ -5,6 +5,7 @@
 # useful to run from the top-level directory
 # of readelfobj
 
+echo "Are we are in the right readelfobj directory?"
 if [ ! -d test ]
 then
   echo "Do from readelfobj directory"
@@ -25,7 +26,7 @@ then
   echo "Do from readelfobj directory"
   exit 1
 fi
-
+echo "We are in the right readelfobj directory so FIX-CONFIGURE-TIMES"
 t() {
   touch $1
   sleep 1
@@ -59,4 +60,5 @@ t Makefile.in
 t depcomp
 t src/Makefile.in
 t test/Makefile.in
+echo "Done with readelfobj FIX-CONFIGURE-TIMES"
 exit 0
