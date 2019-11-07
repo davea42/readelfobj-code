@@ -48,6 +48,42 @@ For Mingw (Windows):
   may be required to avoid errors in certain printf
   statements.
 
+RUNNING MAKE CHECK:
+  We leave out checking for success to keep these short.
+  We show --enable-wall but that's not necessary, of course.
+  We build outside the source tree to keep the tree clean.
+  Nothing here needs libelf or libelf.h, libz will be linked
+  in if it exists. 
+
+  Linux/Unix
+    src=/path/to/readelfobj
+    cd $src
+    sh scripts/FIX-CONFIGURE_TIMES # Takes 30 seconds.
+    make distclean  #Ok to fail. Just makes sure no local build.
+    bld=/tmp/robld 
+    rm -rf $bld 
+    mkdir $bld
+    cd $bld
+    # may not be necessary.
+    sh $src/configure --enable-wall
+    make check 
+  MacOS
+    Same as linux.
+
+  MinGW (Windows)
+    src=/path/to/readelfobj
+    cd $src
+    sh scripts/FIX-CONFIGURE-TIMES # Takes 30 seconds.
+    make distclean  #Ok to fail. Just makes sure no local build.
+    bld=/tmp/robld 
+    rm -rf $bld 
+    mkdir $bld
+    cd $bld
+    # Depending on compiler the --enable-nonstandardprintf
+    # may not be necessary.
+    sh $src/configure --enable-wall --disable-libelf --enable-nonstandardprintf
+    make check
+
 To update configure, update configure.ac and/or one or more
 Makefile.am and do, in the top level directory:
   autoreconf -vif
