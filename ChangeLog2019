@@ -1,0 +1,102 @@
+2010-10-28: David Anderson
+    * configure.ac: Fixed typos so --enable-nonstandardprintf
+      can work.
+    * configure: Regenerated.
+    * scripts/FIX-CONFIGURE-TIMES: Now has starting/ending announcements
+      to make running this easier to follow.
+2010-10-28: David Anderson
+    * configure.ac: Version 20191028.
+    * configure: Regenerated.
+2010-10-16: David Anderson
+    * configure.ac: Now explicitly sets WORDS_BIGENDIAN properly in config.h.
+    * Makefile.in,config.h.in,configure: Regenerated.
+2010-10-14: David Anderson
+    * configure.ac: Ensure uintptr_t defined.
+      Version 20191014.
+    * configure: regenerated.
+2010-10-03: David Anderson
+    * configure.ac: Added a check for stddef.h.
+    * configure:  Regenerated.
+2010-09-30: David Anderson
+    * Makefile.am: Trivial changes for cleaning junk.
+    * Makefile.in: Regenerated
+    * configure.ac: Added --enable-nonstandardprintf.
+      and  HAVE_NONSTANDARD_PRINTF_64_FORMAT
+    * configure: Regenerated.
+2010-09-28: David Anderson
+    * Makefile.am: Making 'make dist' work.
+    * Makefile.in: Regenerated
+2010-09-24: David Anderson
+    * configure.ac: Added new sourcfiles and
+      new test cases related to .note.gnu.debug-id
+      and .gnu_debug link section reading.
+2010-04-24: David Anderson
+    * configure.ac: Version 20190422
+2010-04-18: David Anderson
+    * configure.ac: Rev now 20190418
+    * scripts/build_all_relocs.sh: Now does sparc too
+    * scripts/raw_elf_definesdwarf_reloc_sparc.h: New. Added these
+      defines for interoperability.
+2010-01-29: David Anderson
+    * README: Corrected some out of date remarks and 
+      expanded the content.
+2010-01-26: David Anderson
+    * configure.ac: Rev now 20190126.
+2010-01-01: David Anderson
+    * configure.ac: Rev now 20190101.
+2018-11-25: David Anderson
+    * configure.ac: Rev now 20181125. Added a PE object header
+      printing program: readobjpe.
+2018-11-05: David Anderson
+    * configure.ac: Rev now 20181105. We fixed magic number detection
+      for pe, mach-o.
+2018-10-24: David Anderson
+    * configure.ac: Set a define if UNUSEDARG
+      is available to suppress some compiler warnings.
+2018-10-22: David Anderson
+    * configure.ac: 20181021. Removed no-longer-needed
+      type-size checking.
+2018-10-20: David Anderson
+    * configure.ac: Now version 20181020.
+2018-10-18: David Anderson
+    * Removed the dwarf_object_detector_f()
+      interface completely.  Access via FILE*
+      not needed.  Use dwarf_object_detector_fd(fileno(f)...
+      if you have a FILE*.
+    * configure.ac: Now version 20181018.
+      Object-detector now recognizes archives.
+2018-10-14: David Anderson
+    * configure.ac: Now version 20181014.
+2018-10-04: David Anderson
+    * configure.ac: Now version 20181007.
+2018-10-04: David Anderson
+    * configure.ac: Now version 20181003.
+    * Makefile.am: Cleans up ./config.h.in~
+2018-10-01: David Anderson
+    * configure.ac: Added a check for malloc.h
+      as MacOS does not have that header.
+2018-09-19: David Anderson
+    * configure.ac: Now locates 16bit type or errors/quits.
+2018-09-18: David Anderson
+    * Makefile.am, configure.ac: New version
+      date and now builds and tests object_detector.
+2018-09-16: David Anderson
+    * Makefile.am, configure.ac: Working toward a working 
+      'make check'
+2018-09-16: David Anderson
+    * Makefile.am: created to implement 'make check'
+2018-09-16: David Anderson
+    * tests/: Created the test directory
+      and some test cases and expected results.
+2018-08-23: David Anderson
+    * scripts/UPD.awk,scripts/FIXDATESTRING: These
+      enable easy updating of the version string that readelfobj -v
+      prints.
+2018-08-22: David Anderson
+    * configure.ac: Added AC_CHECK_SIZEOF to try to
+      get the sizes we want in readobj. Deleted some
+      blank lines.
+      Renamed the executable as readelfobj
+    * configure: Regenerated. Version 20180822.
+2018-08-20: David Anderson
+    * All new.
