@@ -1487,6 +1487,7 @@ dwarf_elf_load_rela_32(elf_filedata ep,
     sizeg = count*sizeof(struct generic_rela);
     grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
+        free(relp);
         P("ERROR: Could not malloc whole generic reloc section "
             LONGESTUFMT " of %s "
             " size " LONGESTUFMT "\n",
@@ -1587,6 +1588,7 @@ dwarf_elf_load_rel_32(elf_filedata ep,
     sizeg = count *sizeof(struct generic_rela);
     grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
+        free(relp);
         P("ERROR: Could not malloc whole generic reloc section "
             LONGESTUFMT " of %s "
             " size " LONGESTUFMT "\n",
