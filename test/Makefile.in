@@ -497,6 +497,51 @@ CLEANFILES = \
   junk.test021.out \
   junk.test023.out \
   junk.test023.out \
+  junk.test012.tmp \
+  junk.test012.tmp2 \
+  junk.test013m.tmp \
+  junk.test013m.tmp2 \
+  junk.test014m.tmp \
+  junk.test014m.tmp2 \
+  junk.test015p.tmp \
+  junk.test015p.tmp2 \
+  junk.test016p.tmp \
+  junk.test016p.tmp2 \
+  junk.test017.tmp \
+  junk.test017.tmp2 \
+  junk.test018p.tmp \
+  junk.test018p.tmp2 \
+  junk.test019.tmp \
+  junk.test019.tmp2 \
+  junk.test020.tmp \
+  junk.test020.tmp2 \
+  junk.test021.tmp \
+  junk.test021.tmp2 \
+  junk.test022.out \
+  junk.test022.tmp \
+  junk.test022.tmp2 \
+  junk.test023.tmp2 \
+  junk.test023.tmp \
+  junk.test001.tmp \
+  junk.test002.tmp \
+  junk.test003.tmp \
+  junk.test003.tmp2 \
+  junk.test004.tmp \
+  junk.test004.tmp2 \
+  junk.test005.tmp \
+  junk.test005.tmp2 \
+  junk.test006.tmp \
+  junk.test006.tmp2 \
+  junk.test007.tmp \
+  junk.test007.tmp2 \
+  junk.test008m.tmp \
+  junk.test008m.tmp2 \
+  junk.test009m.tmp \
+  junk.test009m.tmp2 \
+  junk.test010.tmp \
+  junk.test010.tmp2 \
+  junk.test011.tmp \
+  junk.test011.tmp2 \
   object_detector \
   readobjmacho \
   readobjpe \

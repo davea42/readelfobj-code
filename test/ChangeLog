@@ -1,4 +1,7 @@
 2019-10-28   David Anderson
+    * Makefile.am: Added some temp files to the CLEANFILES
+      list.
+    * Makefile.in: Regenerated.
     * test005.base,test017.base,test019.base,test020.base,
       test021.base: Now reflects the improved way of printing
       symtab symbols with an empty (zero-length) name.
