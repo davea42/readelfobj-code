@@ -1,3 +1,13 @@
+2020-01-21: David Anderson
+    * readelfobj.c(elf_print_symbols): Now prints the string
+      length of the symbol name (it is often zero) and
+      if zero prints  name-length  0: <no name> .
+      The length of the symbol name is in bytes. If the
+      name string contains European or Japanese or 
+      multi-byte  UTF-8 characters those are translated
+      to a uri-style output (as has been true all along)
+      so the character count printed might vary somewhat
+      from the byte count of the string.
 2020-01-03: David Anderson
     * dwarf_load_elf_headers.c(dwarf_elf_load_rela_32):
       Coverity Scan uncovered a memory leak in one

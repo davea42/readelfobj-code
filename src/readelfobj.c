@@ -874,7 +874,15 @@ elf_print_symbols(elf_filedata ep,
                 i, gsym->gs_name, gsym->gs_name,
                 errcode);
         } else {
-            P("  st_name  (" LONGESTUFMT  ") %s",gsym->gs_name,
+            unsigned long slen = 0;
+            if ( ! localstr[0] ) {
+                localstr = "<no name>";
+            } else {
+                slen = (unsigned long)strlen(localstr);
+            }
+            P("  st_name  (" LONGESTUFMT ") name-length %2lu: %s",
+                gsym->gs_name,
+                slen,
                 sanitized(localstr,buffer1,BUFFERSIZE));
             P("\n");
         }

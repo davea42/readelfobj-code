@@ -1,0 +1,43 @@
+2019-10-28   David Anderson
+    * test*.sh: Avoid using dos2unix if it is not in $PATH.
+      It is only needed when testing under Windows.
+2019-10-17   David Anderson
+    * Makefile.am,runtests.sh,PICKUP: Small changes so make check
+      works when run out=of=sourcetree.
+    * Makefile.in: regenerated.
+2019-10-14   David Anderson
+    * SHALIAS.sh: New, so one can use a local SHALIAS.sh
+      where one needs an alias for make when running tests
+      so one gets gnu make. (as on FreeBSD, for example)
+    * runtests.sh: Now sources SHALIAS.sh
+2019-10-03   David Anderson
+    * test010.sh,test015p.sh: These two scripts were slightly wrong
+      so only worked as intended from one directory. oops. Fixed
+    * test010.base,test015p.base: Slightly different baselines,
+      now the way they should look.
+2019-09-30   David Anderson
+    * test*.sh: All now deal with doing a 'make check' out-of-tree.
+      and added test022 and test023.
+      make check is also working under windows ( I use
+      configure --enable-nonstandardprintf, you may or may not
+      need to use the --enable-nonstandardprintf)
+2019-09-28   David Anderson
+    * Makefile.am: Making 'make dist' work.
+    * Makefile.in: Regenerated.
+2019-09-26   David Anderson
+    * test003.base,test004.base,test005.base,test006.base,test017.base:
+      New baselines reflecting the reporting on .gnu_debuglink
+      and .note.gnu.build-id (only the latter appears in
+      the currect testcases).
+2019-09-22   David Anderson
+    * test*.base: Nearly all the tests use dos2unix
+      and the -q option is not always available.
+      So dropped -q and use 2>/dev/null instead.
+2019-04-24   David Anderson
+    * test003.base,test017.base, test019.base,test020.base,
+      test021.base : to match latest elf reader.
+2019-04-18   David Anderson
+    * test020.*: A test with MIPS64 object (special relocation content). 
+    * test021.*: A test with SPARCV9 object (special relocation content).
+2019-01-01   David Anderson
+    * A new year. 

@@ -66,192 +66,192 @@ Symbols from .symtab: 38 at offset 0x30a8
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  1]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
-  st_name  (1) /home/phil/stream.c
+  st_name  (1) name-length 19: /home/phil/stream.c
 [  2]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  3]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .data
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  4]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .bss
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  5]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .mdebug.abi64
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  6]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 9 .debug_abbrev
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  7]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 .debug_info
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  8]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 12 .debug_line
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [  9]  st_value 0x0 (0)
   st_size  0x20 (32), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .bss
-  st_name  (21) avgtime
+  st_name  (21) name-length  7: avgtime
 [ 10]  st_value 0x20 (32)
   st_size  0x20 (32), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .bss
-  st_name  (29) maxtime
+  st_name  (29) name-length  7: maxtime
 [ 11]  st_value 0x0 (0)
   st_size  0x20 (32), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .data
-  st_name  (37) mintime
+  st_name  (37) name-length  7: mintime
 [ 12]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 15 .data.rel.local
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 13]  st_value 0x0 (0)
   st_size  0x20 (32), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 15 .data.rel.local
-  st_name  (45) label
+  st_name  (45) name-length  5: label
 [ 14]  st_value 0x20 (32)
   st_size  0x20 (32), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .data
-  st_name  (51) bytes
+  st_name  (51) name-length  5: bytes
 [ 15]  st_value 0x40 (64)
   st_size  0xf42400 (16000000), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .bss
-  st_name  (57) a
+  st_name  (57) name-length  1: a
 [ 16]  st_value 0xf42440 (16000064)
   st_size  0xf42400 (16000000), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .bss
-  st_name  (59) b
+  st_name  (59) name-length  1: b
 [ 17]  st_value 0x1e84840 (32000064)
   st_size  0xf42400 (16000000), st_info 0x1 (1)
   type 0x1 (1) (STT_OBJECT), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .bss
-  st_name  (61) c
+  st_name  (61) name-length  1: c
 [ 18]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 17 .debug_frame
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 19]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 19 .debug_loc
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 20]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 20 .debug_pubnames
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 21]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 22 .debug_aranges
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 22]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 24 .debug_str
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 23]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .rodata
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 24]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .MIPS.options
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 25]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 6 .pdr
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 26]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 25 .comment
-  st_name  (0) 
+  st_name  (0) name-length  0: <no name>
 [ 27]  st_value 0x0 (0)
   st_size  0xb04 (2820), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (63) main
+  st_name  (63) name-length  4: main
 [ 28]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
-  st_name  (68) puts
+  st_name  (68) name-length  4: puts
 [ 29]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
-  st_name  (73) printf
+  st_name  (73) name-length  6: printf
 [ 30]  st_value 0xb04 (2820)
   st_size  0x16c (364), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (80) checktick
+  st_name  (80) name-length  9: checktick
 [ 31]  st_value 0xc70 (3184)
   st_size  0x7c (124), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (90) mysecond
+  st_name  (90) name-length  8: mysecond
 [ 32]  st_value 0xcec (3308)
   st_size  0x41c (1052), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (99) checkSTREAMresults
+  st_name  (99) name-length 18: checkSTREAMresults
 [ 33]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
-  st_name  (118) gettimeofday
+  st_name  (118) name-length 12: gettimeofday
 [ 34]  st_value 0x1108 (4360)
   st_size  0x8c (140), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (131) tuned_STREAM_Copy
+  st_name  (131) name-length 17: tuned_STREAM_Copy
 [ 35]  st_value 0x1194 (4500)
   st_size  0x98 (152), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (149) tuned_STREAM_Scale
+  st_name  (149) name-length 18: tuned_STREAM_Scale
 [ 36]  st_value 0x122c (4652)
   st_size  0xa8 (168), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (168) tuned_STREAM_Add
+  st_name  (168) name-length 16: tuned_STREAM_Add
 [ 37]  st_value 0x12d4 (4820)
   st_size  0xb4 (180), st_info 0x12 (18)
   type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (185) tuned_STREAM_Triad
+  st_name  (185) name-length 18: tuned_STREAM_Triad
 }
 Relocation Sections
 {
