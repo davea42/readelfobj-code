@@ -5,4 +5,5 @@
     * test005.base,test017.base,test019.base,test020.base,
       test021.base: Now reflects the improved way of printing
       symtab symbols with an empty (zero-length) name.
+      Then updated again to <no-name> when zero longth.
 

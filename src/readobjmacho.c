@@ -311,7 +311,7 @@ do_one_file(const char *s)
         return;
     }
     if (strcmp(s,tru_path_buffer)) {
-         P("Reading dSYM object at %s\n",tru_path_buffer);
+        P("Reading dSYM object at %s\n",tru_path_buffer);
     }
     res = dwarf_construct_macho_access_path(tru_path_buffer,
         &mfp,&errcode);

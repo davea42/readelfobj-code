@@ -876,7 +876,7 @@ elf_print_symbols(elf_filedata ep,
         } else {
             unsigned long slen = 0;
             if ( ! localstr[0] ) {
-                localstr = "<no name>";
+                localstr = "<no-name>";
             } else {
                 slen = (unsigned long)strlen(localstr);
             }

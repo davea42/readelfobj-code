@@ -1,4 +1,6 @@
 2020-01-21: David Anderson
+    * dwarfstring.c: Removed a trailing space character.
+    * readobjmacho.c: Fixed an indentation error.
     * readelfobj.c(elf_print_symbols): Now prints the string
       length of the symbol name (it is often zero) and
       if zero prints  name-length  0: <no name> .
@@ -8,6 +10,7 @@
       to a uri-style output (as has been true all along)
       so the character count printed might vary somewhat
       from the byte count of the string.
+      Then Changing spelling of empty name to <no-name> 
 2020-01-03: David Anderson
     * dwarf_load_elf_headers.c(dwarf_elf_load_rela_32):
       Coverity Scan uncovered a memory leak in one

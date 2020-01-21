@@ -52,7 +52,7 @@ Symbols from .symtab: 13 at offset 0x560
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  1]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
@@ -62,52 +62,52 @@ Symbols from .symtab: 13 at offset 0x560
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  3]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .data
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  4]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .bss
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  5]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .tbss
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  6]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .debug_info
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  7]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 7 .debug_abbrev
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  8]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .debug_line
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [  9]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 9 .debug_str
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [ 10]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 .note.GNU-stack
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [ 11]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 .comment
-  st_name  (0) name-length  0: <no name>
+  st_name  (0) name-length  0: <no-name>
 [ 12]  st_value 0x0 (0)
   st_size  0x4 (4), st_info 0x16 (22)
   type 0x6 (6) (STT_TLS), bind 0x1 (1) (STB_GLOBAL)
