@@ -1,3 +1,6 @@
+2020-02-11   David Anderson
+    * test/test017.base: readelfobj warns more issues
+      so updated baseline to match.
 2019-10-28   David Anderson
     * Makefile.am: Added some temp files to the CLEANFILES
       list.

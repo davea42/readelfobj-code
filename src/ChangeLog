@@ -1,3 +1,6 @@
+2020-02-11: David Anderson
+    * readelfobj.c: Now check for some sh_link and sh_info
+      errors.
 2020-01-21: David Anderson
     * dwarfstring.c: Removed a trailing space character.
     * readobjmacho.c: Fixed an indentation error.

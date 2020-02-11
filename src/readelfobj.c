@@ -765,9 +765,53 @@ elf_print_sectheaders(elf_filedata ep)
             P("," LONGESTXFMT ")" ,gshdr->gh_addralign);
         }
         P("\n");
+        if ( gshdr->gh_type == SHT_REL || 
+           gshdr->gh_type == SHT_RELA) {
+
+           if (gshdr->gh_link >= generic_count) {
+              P("Warning: Section " LONGESTUFMT " %s" 
+                  " is a relocation section but sh_link"
+                  " is not a valid section index\n",i,namestr);
+           } else {
+               struct generic_shdr *tshdr = 0;
+               tshdr = ep->f_shdr + gshdr->gh_link;
+               if (tshdr->gh_type != SHT_SYMTAB) {
+                   P("Warning: Section " LONGESTUFMT " %s" 
+                       " is a relocation section but sh_link"
+                       " does not index a symtab\n",i,namestr);
+               }
+           }
+           if (gshdr->gh_info >= generic_count) {
+              P("Warning: Section " LONGESTUFMT " %s" 
+                  " is a relocation section but sh_info"
+                  " is not a valid section index\n",i,namestr);
+           }
+        } else if (gshdr->gh_type == SHT_SYMTAB  ||
+           gshdr->gh_type == SHT_DYNSYM ) {
+
+           if (gshdr->gh_link >= generic_count) {
+               struct generic_shdr *tshdr = 0;
+
+               P("Warning: Section " LONGESTUFMT " %s" 
+                   " is a symtab/dynsym section but sh_link"
+                   " is not a valid string table index\n",i,namestr);
+            } else {
+               struct generic_shdr *tshdr = 0;
+
+               tshdr = ep->f_shdr + gshdr->gh_link;
+               if (tshdr->gh_type != SHT_STRTAB) {
+                   P("Warning: Section " LONGESTUFMT " %s" 
+                       " is a symtab/dynsym section but sh_info"
+                       " is not a valid string table index\n",
+                       i,namestr);
+               }
+             }
+        }
         if (gshdr->gh_relcount && !ep->f_symtab_sect_index) {
-            P("Warning: Section " LONGESTUFMT " %s is a relocation section"
-                " but there is no .symtab. Possibly invalid relocations.\n",
+            P("Warning: Section " LONGESTUFMT " %s is a "
+                "relocation section"
+                " but there is no .symtab. "
+                "Possibly invalid relocations.\n",
                 i,namestr);
         }
     }
