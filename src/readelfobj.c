@@ -768,6 +768,19 @@ elf_print_sectheaders(elf_filedata ep)
         if ( gshdr->gh_type == SHT_REL || 
            gshdr->gh_type == SHT_RELA) {
 
+           if ( gshdr->gh_type == SHT_REL &&
+              strncmp(namestr,".rel.",5) ) {
+              P("Warning: Section " LONGESTUFMT " %s" 
+                  " is an SHT_REL relocation section but its name "
+                  " does not start with \".rel.\"\n",i,namestr);
+
+           } else if ( gshdr->gh_type == SHT_RELA &&
+              strncmp(namestr,".rela.",6) ) {
+              P("Warning: Section " LONGESTUFMT " %s" 
+                  " is an SHT_RELA relocation section but its name "
+                  " does not start with \".rela.\"\n",i,namestr);
+           }
+
            if (gshdr->gh_link >= generic_count) {
               P("Warning: Section " LONGESTUFMT " %s" 
                   " is a relocation section but sh_link"
@@ -775,7 +788,8 @@ elf_print_sectheaders(elf_filedata ep)
            } else {
                struct generic_shdr *tshdr = 0;
                tshdr = ep->f_shdr + gshdr->gh_link;
-               if (tshdr->gh_type != SHT_SYMTAB) {
+               if (tshdr->gh_type != SHT_SYMTAB &&
+                   tshdr->gh_type != SHT_DYNSYM ) {
                    P("Warning: Section " LONGESTUFMT " %s" 
                        " is a relocation section but sh_link"
                        " does not index a symtab\n",i,namestr);
@@ -790,8 +804,6 @@ elf_print_sectheaders(elf_filedata ep)
            gshdr->gh_type == SHT_DYNSYM ) {
 
            if (gshdr->gh_link >= generic_count) {
-               struct generic_shdr *tshdr = 0;
-
                P("Warning: Section " LONGESTUFMT " %s" 
                    " is a symtab/dynsym section but sh_link"
                    " is not a valid string table index\n",i,namestr);
