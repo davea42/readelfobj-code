@@ -63,9 +63,7 @@ Section count: 36
 [ 5] 0x00008fbe 0x00000534 .gnu.version   (SHF_ALLOC)(SHT_GNU_versym SHT_HIOS)(3,0x0,0x2)
 [ 6] 0x000094f8 0x00000070 .gnu.version_r (SHF_ALLOC)(SHT_GNU_verneed)(4,0x2,0x8)
 [ 7] 0x00009568 0x00009480 .rela.dyn      (SHF_ALLOC)(SHT_RELA)(3,0x0,0x8)
-Warning: Section 7 .rela.dyn is a relocation section but sh_link does not index a symtab
 [ 8] 0x000129e8 0x000017e8 .rela.plt      (SHF_ALLOC SHF_INFO_LINK)(SHT_RELA)(3,0x16,0x8)
-Warning: Section 8 .rela.plt is a relocation section but sh_link does not index a symtab
 [ 9] 0x000141d0 0x00000017 .init          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x4)
 [10] 0x000141f0 0x00001000 .plt           (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x10)
 [11] 0x000151f0 0x00000018 .plt.got       (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x8)
