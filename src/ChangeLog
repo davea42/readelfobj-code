@@ -1,3 +1,11 @@
+2020-06-25: David Anderson
+    * dwarf_peread.c: Now checks for a zero string pointer
+      (from a fuzzed object) and avoids doing strdup(),
+      providing a simple name "<sec name missing>"
+      pointing out the problem..
+    * readobjpe.c: Now calls sanitized() so that
+      regardless of content the section name data will
+      print something safe and recognizable (uri-style).
 2020-02-11: David Anderson
     * readelfobj.c: Now check for some sh_link and sh_info
       errors.

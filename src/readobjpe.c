@@ -49,6 +49,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define BUFFERSIZE 1000
 static char buffer1[BUFFERSIZE];
+#define BUFFERSIZE 1000
+static char buffer2[BUFFERSIZE];
 
 #define TRUE 1
 #define FALSE 0
@@ -76,7 +78,8 @@ pe_sections_display(dwarf_pe_object_access_internals_t *pep)
             LONGESTXFMT8 "\n",
             i,sp->SecHeaderOffset);
         printf("  Name:  %20s   : %20s \n",
-            sp->name,sp->dwarfsectname);
+            sanitized(sp->name,buffer1,BUFFERSIZE),
+            sanitized(sp->dwarfsectname,buffer2,BUFFERSIZE));
         printf("  VirtSize       : " LONGESTXFMT8
             "  (" LONGESTUFMT ")\n",
             sp->VirtualSize,sp->VirtualSize);
@@ -100,8 +103,12 @@ pe_headers_display(dwarf_pe_object_access_internals_t *pe)
     struct dwarf_pe_generic_file_header *gfh = 0;
     struct dwarf_pe_generic_optional_header *ofh = 0;
 
+    if (!pe->pe_path) {
+        pe->pe_path = strdup("<null path name>"); 
+    }
     printf("File: %s  Object type letter: %c version: %d\n",
-        pe->pe_path?pe->pe_path:"?",pe->pe_ident[0],
+        sanitized(pe->pe_path,buffer1,BUFFERSIZE),
+        pe->pe_ident[0],
         pe->pe_ident[0]);
     printf(" 64bit?         : %s\n",pe->pe_is_64bit?"yes":"no");
     printf(" filesize       : " LONGESTUFMT "\n",
@@ -253,7 +260,8 @@ main(int argc,char **argv)
             }
             fin = fopen(filename,"r");
             if(fin == NULL) {
-                P("No such file as %s\n",argv[0]);
+                P("No such file as %s\n",
+                    sanitized(filename,buffer1,BUFFERSIZE));
                 continue;
             }
             fclose(fin);

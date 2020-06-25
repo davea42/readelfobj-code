@@ -194,6 +194,10 @@ pe_get_section_info (void *obj,
     if (section_index < pep->pe_section_count) {
         struct dwarf_pe_generic_image_section_header *sp = 0;
         sp = pep->pe_sectionptr + section_index;
+printf("dadebug ImageBase 0x%lx  Virtual 0x%lx %d %s\n",
+(unsigned long)pep->pe_OptionalHeader.ImageBase,
+(unsigned long)sp->VirtualAddress,
+__LINE__,__FILE__);
         return_section->addr = pep->pe_OptionalHeader.ImageBase +
             sp->VirtualAddress;
         return_section->type = 0;
@@ -436,7 +440,11 @@ dwarf_pe_load_dwarf_section_headers(
         if (res != DW_DLV_OK) {
             return res;
         }
-        sec_outp->dwarfsectname = strdup(expname);
+        if (expname) {
+           sec_outp->dwarfsectname = strdup(expname);
+        } else {
+           sec_outp->dwarfsectname = strdup("<sec name missing>");
+        }
 
         if ( !sec_outp->name || !sec_outp->dwarfsectname) {
             *errcode = DW_DLE_ALLOC_FAIL;
