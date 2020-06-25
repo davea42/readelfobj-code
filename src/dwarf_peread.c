@@ -235,6 +235,8 @@ load_optional_header32(dwarf_pe_object_access_internals_t *pep,
         hdr.Magic);
     pep->pe_OptionalHeader.MajorLinkerVersion= hdr.MajorLinkerVersion;
     pep->pe_OptionalHeader.MinorLinkerVersion= hdr.MinorLinkerVersion;
+    ASNAR(pep->pe_copy_word,pep->pe_OptionalHeader.ImageBase,
+        hdr.ImageBase);
     ASNAR(pep->pe_copy_word,pep->pe_OptionalHeader.SizeOfCode,
         hdr.SizeOfCode);
     ASNAR(pep->pe_copy_word,pep->pe_OptionalHeader.SizeOfImage,

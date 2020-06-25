@@ -24,7 +24,7 @@ Optional Header
   Magic         : 0x0000010b
   SectionAlign  : 0x00000000
   SizeOfHeadrs  : 0x00000600
-  ImageBase     : 0x00000000
+  ImageBase     : 0x6a840000
 Display 18 sections.
 Section 0 fileoff: 0x00000000
   Name:                         :                      

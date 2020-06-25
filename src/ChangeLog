@@ -1,4 +1,8 @@
 2020-06-25: David Anderson
+    * dwarf_peread.c: For pe32 one optional header
+      field was not getting updated. ImageBase
+      Now it is.
+2020-06-25: David Anderson
     * dwarf_peread.c: Now checks for a zero string pointer
       (from a fuzzed object) and avoids doing strdup(),
       providing a simple name "<sec name missing>"
