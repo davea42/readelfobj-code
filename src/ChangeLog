@@ -1,3 +1,8 @@
+2020-06-30: David Anderson
+    * dwarf_load_elf_headers.c: Added a sanity check.
+    * dwarf_peread.c: Removed debug printfs left in
+      by accident and fixed an indent problem..
+    * readobjpe.c: Removed a trailing whitespace character.
 2020-06-25: David Anderson
     * dwarf_peread.c: For pe32 one optional header
       field was not getting updated. ImageBase

@@ -104,7 +104,7 @@ pe_headers_display(dwarf_pe_object_access_internals_t *pe)
     struct dwarf_pe_generic_optional_header *ofh = 0;
 
     if (!pe->pe_path) {
-        pe->pe_path = strdup("<null path name>"); 
+        pe->pe_path = strdup("<null path name>");
     }
     printf("File: %s  Object type letter: %c version: %d\n",
         sanitized(pe->pe_path,buffer1,BUFFERSIZE),

@@ -2075,6 +2075,17 @@ elf_load_sect_namestring(elf_filedata ep, int *errcode)
     stringsecbase = ep->f_elf_shstrings_data;
     gshdr = ep->f_shdr;
     generic_count = ep->f_loc_shdr.g_count;
+    if (generic_count> ep->f_filesize) {
+        P("ERROR: Something badly wrong with "
+            "namestring section "
+            " %s "
+            " count " LONGESTUFMT
+            " filesize " LONGESTUFMT
+            "\n",
+            sanitized(gshdr->gh_namestring,buffer1,BUFFERSIZE),
+            generic_count,ep->f_filesize);
+        return RO_ERROR;
+    }
     for(i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr =
             "<Invalid sh_name value. Corrupt Elf.>";
