@@ -1,3 +1,11 @@
+2020-07-03: David Anderson
+    * dwarf_debuglink.c: If shdr->gh_namestring is NULL
+      (corrupted object file)
+      do not try strcmp() on it!
+    * readelfobj.c: If the target section name is NULL
+      supply "<no-name!>" as a spelling.
+    * sanitized.c: If the incoming string pointer is null
+      supply that same spelling as in readelfobj.c
 2020-06-30: David Anderson
     * dwarf_load_elf_headers.c: Added a sanity check.
     * dwarf_peread.c: Removed debug printfs left in

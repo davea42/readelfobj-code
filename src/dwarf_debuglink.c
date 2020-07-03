@@ -739,6 +739,10 @@ dwarf_gnu_debuglink(elf_filedata ep,
     Dwarf_Unsigned i = 0;
 
     for (i = 0;i < seccount; ++i,shdr++) {
+        if(!shdr->gh_namestring) {
+             /*  something is badly wrong!  Corrupt object. */
+             continue;
+        }
         if (!strcmp(".gnu_debuglink",shdr->gh_namestring)) {
             linkshdr = shdr;
         } else  if (!strcmp(".note.gnu.build-id",shdr->gh_namestring)) {

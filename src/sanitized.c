@@ -225,7 +225,7 @@ const char *
 sanitized(const char *s,char *outbuf, unsigned outbuf_len)
 {
     if (!s) {
-        do_sanity_insert("",outbuf,outbuf_len);
+        do_sanity_insert("<no-name!>",outbuf,outbuf_len);
         return outbuf;
     }
     if (no_questionable_chars(s)) {

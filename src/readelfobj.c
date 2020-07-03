@@ -915,7 +915,7 @@ elf_print_symbols(elf_filedata ep,
             targetsecname = dwarf_get_elf_symbol_shn_type(
                 gsym->gs_shndx,buffer2,BUFFERSIZE);
         }
-        P(" %s",targetsecname);
+        P(" %s",targetsecname?targetsecname:"<no-name!>");
         P("\n");
         res = dwarf_get_elf_symstr_string(ep,
             is_symtab,gsym->gs_name,
