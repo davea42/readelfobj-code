@@ -82,6 +82,7 @@ const char *ro_errname[] = {
 "DW_DLE_ALLOC_FAIL(44) malloc failed",             /*    44 */
 "DW_DLE_ERROR_NO_DOS_HEADER(45) so we do not accept the file as pe",    /*    45 */
 "DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE(46) so we do not accept the file as pe",/* 46 */
+"DW_DLE_MACHO_CORRUPT_HEADER(47) Corrupt object code",/* 47 */
 0
 };
 

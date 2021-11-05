@@ -2111,6 +2111,11 @@ elf_load_elf_header32(elf_filedata ep,int *errcode)
     dw_elf32_ehdr ehdr32;
     struct generic_ehdr *ehdr = 0;
 
+    if (ep->f_filesize <= sizeof(ehdr32)) {
+        P("ERROR: file header32 does not fit in file "
+            "with just %u bytes\n",(unsigned int)ep->f_filesize);
+        return DW_DLV_NO_ENTRY;
+    }
     res = RRMOA(ep->f_fd,&ehdr32,0,sizeof(ehdr32),ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("ERROR: could not read whole ELF file header of %s\n",
@@ -2136,6 +2141,11 @@ elf_load_elf_header64(elf_filedata ep,int *errcode)
     dw_elf64_ehdr ehdr64;
     struct generic_ehdr *ehdr = 0;
 
+    if (ep->f_filesize <= sizeof(ehdr64)) {
+        P("ERROR: file header64 does not fit in file "
+            "with just %u bytes\n",(unsigned int)ep->f_filesize);
+        return DW_DLV_NO_ENTRY;
+    }
     res = RRMOA(ep->f_fd,&ehdr64,0,sizeof(ehdr64),ep->f_filesize,errcode);
     if(res != RO_OK) {
         P("ERROR: could not read whole ELF file header of %s\n",

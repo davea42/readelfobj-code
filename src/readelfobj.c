@@ -93,15 +93,15 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define ALIGN8 8
 
 static void do_one_file(const char *filename);
-static void elf_print_elf_header(elf_filedata ep);
-static void elf_print_progheaders(elf_filedata ep);
-static void elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned);
-static void elf_print_sectheaders(elf_filedata ep);
-static void elf_print_gnu_debuglink(elf_filedata ep);
-static void elf_print_sg_groups(elf_filedata ep);
-static void elf_print_relocation_details(elf_filedata ep,int isrela,
+static int elf_print_elf_header(elf_filedata ep);
+static int elf_print_progheaders(elf_filedata ep);
+static int elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned);
+static int elf_print_sectheaders(elf_filedata ep);
+static int elf_print_gnu_debuglink(elf_filedata ep);
+static int elf_print_sg_groups(elf_filedata ep);
+static int elf_print_relocation_details(elf_filedata ep,int isrela,
     struct generic_shdr * gsh);
-static void elf_print_symbols(elf_filedata ep,int is_symtab,
+static int elf_print_symbols(elf_filedata ep,int is_symtab,
     struct generic_symentry * gsym,
     Dwarf_Unsigned ecount,
     const char *secname);
@@ -318,10 +318,35 @@ check_dynamic_section(elf_filedata ep)
 static void
 print_minimum(elf_filedata ep)
 {
-    elf_print_elf_header(ep);
+    int res = 0;
+    res = elf_print_elf_header(ep);
+    if (res != DW_DLV_OK) {
+        return;
+    }
     elf_print_progheaders(ep);
-    elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
-    elf_print_sectheaders(ep);
+    if (res != DW_DLV_OK) {
+        return;
+    }
+    res = elf_print_elf_header(ep);
+    if (res != DW_DLV_OK) {
+        return;
+    }
+    res = elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
+    if (res != DW_DLV_OK) {
+        return;
+    }
+    res = elf_print_elf_header(ep);
+    if (res != DW_DLV_OK) {
+        return;
+    }
+    res = elf_print_sectheaders(ep);
+    if (res != DW_DLV_OK) {
+        return;
+    }
+    res = elf_print_elf_header(ep);
+    if (res != DW_DLV_OK) {
+        return;
+    }
     elf_print_gnu_debuglink(ep);
 }
 
@@ -329,13 +354,26 @@ static void
 print_requested(elf_filedata ep)
 {
     int errcode = 0;
+    int res = 0;
 
     if (!only_wasted_summary) {
-        elf_print_elf_header(ep);
-        elf_print_progheaders(ep);
-        elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
-        elf_print_sectheaders(ep);
-        elf_print_gnu_debuglink(ep);
+        res = elf_print_elf_header(ep);
+        if (res != DW_DLV_OK) {
+            return;
+        }
+        res = elf_print_progheaders(ep);
+        if (res != DW_DLV_OK) {
+            return;
+        }
+        res = elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
+        if (res != DW_DLV_OK) {
+            return;
+        }
+        res = elf_print_sectheaders(ep);
+        if (res != DW_DLV_OK) {
+            return;
+        }
+        res = elf_print_gnu_debuglink(ep);
     }
     if (print_groups) {
         elf_print_sg_groups(ep);
@@ -487,7 +525,6 @@ do_one_file(const char *s)
 
     res = dwarf_load_elf_header(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
         P("ERROR: unable to load elf header. errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
         dwarf_destruct_elf_access(ep,&errcode);
@@ -599,18 +636,18 @@ do_one_file(const char *s)
     print_requested(ep);
     dwarf_destruct_elf_access(ep,&errcode);
 }
-static void
+static int
 elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
 {
     struct generic_shdr *psh = 0;
     if (!stringsection) {
         P("Section strings never found.\n");
-        return;
+        return DW_DLV_OK;
     }
     if (stringsection >= ep->f_ehdr->ge_shnum) {
         printf("String section " LONGESTUFMT " invalid. Ignored.",
             stringsection);
-        return;
+        return DW_DLV_OK;
     }
 
     psh = ep->f_shdr + stringsection;;
@@ -618,6 +655,7 @@ elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
         " length " LONGESTXFMT " (" LONGESTUFMT ")" "\n",
         psh->gh_offset, psh->gh_offset,
         psh->gh_size,psh->gh_size);
+    return DW_DLV_OK;
 }
 
 /*  We're not creating a generic function for this,
@@ -658,19 +696,22 @@ elf_load_print_interp(elf_filedata ep,
 }
 
 
-static void
+static int
 elf_print_progheaders(elf_filedata ep)
 {
     Dwarf_Unsigned count = ep->f_loc_phdr.g_count;
     struct generic_phdr *gphdr = ep->f_phdr;
     Dwarf_Unsigned i = 0;
 
+    if (!ep->f_phdr) {
+        return DW_DLV_OK;
+    }
     /*  In case of error reading headers count might now be zero */
     P("\n");
     P("Program header count: " LONGESTUFMT "\n",count);
     if (!count) {
         P("\n");
-        return;
+        return DW_DLV_OK;
     }
     P("{\n");
     for( i = 0; i < count; ++i,  gphdr++) {
@@ -712,9 +753,10 @@ elf_print_progheaders(elf_filedata ep)
         }
     }
     P("}\n");
+    return DW_DLV_OK;
 }
 
-static void
+static int
 elf_print_sectheaders(elf_filedata ep)
 {
     struct generic_shdr *gshdr = 0;
@@ -724,12 +766,15 @@ elf_print_sectheaders(elf_filedata ep)
     Dwarf_Unsigned debug_sect_size = 0;
 
     gshdr = ep->f_shdr;
+    if (!gshdr) {
+        return DW_DLV_OK;
+    }
     generic_count = ep->f_loc_shdr.g_count;
     P("\n");
     P("Section count: " LONGESTUFMT "\n",generic_count);
     if (!generic_count) {
         P("\n");
-        return;
+        return DW_DLV_OK;
     }
     P(" [i] offset      size        name         (flags)(type)(link,info,align)\n");
     P("{\n");
@@ -831,9 +876,10 @@ elf_print_sectheaders(elf_filedata ep)
         LONGESTUFMT " debug sections\n",
         debug_sect_size,debug_sect_count);
     P("}\n");
+    return DW_DLV_OK;
 }
 
-static void
+static int
 elf_print_symbols(elf_filedata ep,
     int is_symtab,
     struct generic_symentry * gsym,
@@ -851,7 +897,7 @@ elf_print_symbols(elf_filedata ep,
     if (!locp) {
         P("ERROR: the %s symbols section missing, not printable\n",
             secname);
-        return;
+        return DW_DLV_OK;
     }
     P("\n");
     P("Symbols from %s: " LONGESTUFMT
@@ -944,7 +990,7 @@ elf_print_symbols(elf_filedata ep,
         }
     }
     P("}\n");
-    return;
+    return DW_DLV_OK;
 }
 
 static int
@@ -1110,7 +1156,7 @@ elf_print_relocation_content(
     return;
 }
 
-static void
+static int
 elf_print_relocation_details(
     elf_filedata ep,
     int isrela,
@@ -1122,15 +1168,20 @@ elf_print_relocation_details(
     count = gsh->gh_relcount;
     grela = gsh->gh_rels;
     elf_print_relocation_content(ep,isrela,gsh,grela,count);
+    return DW_DLV_OK;
 }
 
-static void
+static int
 elf_print_elf_header(elf_filedata ep)
 {
     Dwarf_Unsigned i = 0;
     int c = 0;
 
     P("Elf object file %s\n",sanitized(filename,buffer1,BUFFERSIZE));
+    if (!ep->f_ehdr) {
+        P("No header data available\n");
+        return DW_DLV_NO_ENTRY;
+    }
     P(" Elf Header ident bytes: ");
     for(i = 0; i < EI_NIDENT; i++) {
         if (!(i%4)) {
@@ -1199,6 +1250,7 @@ elf_print_elf_header(elf_filedata ep)
             ep->f_ehdr->ge_shnum);
         ep->f_ehdr->ge_shstrndx = 0;
     }
+    return DW_DLV_OK;
 }
 
 #define MAXWBLOCK 100000
@@ -1655,8 +1707,8 @@ elf_print_dynamic(elf_filedata ep)
     return RO_OK;
 }
 
-static
-void elf_print_sg_groups(elf_filedata ep)
+static int 
+elf_print_sg_groups(elf_filedata ep)
 {
     Dwarf_Unsigned i = 0;
     struct generic_shdr *psh = ep->f_shdr;
@@ -1665,7 +1717,7 @@ void elf_print_sg_groups(elf_filedata ep)
         !ep->f_shf_group_flag_section_count &&
         !ep->f_dwo_group_section_count ) {
         P("Section Groups: No section groups or .dwo present. ");
-        return;
+        return DW_DLV_OK;
     }
     P("Section Group arrays\n");
     P(" section  name      groupsections\n");
@@ -1711,6 +1763,7 @@ void elf_print_sg_groups(elf_filedata ep)
         P("  .dwo group count : " LONGESTUFMT "\n",
             ep->f_dwo_group_section_count);
     }
+    return DW_DLV_OK;
 }
 
 
@@ -1727,7 +1780,7 @@ byte_string_to_hex(dwarfstring *bi,
     }
 }
 
-static void
+static int
 elf_print_gnu_debuglink(elf_filedata ep)
 {
     char          *debuglinkname = 0;
@@ -1749,12 +1802,12 @@ elf_print_gnu_debuglink(elf_filedata ep)
         &debuglink_paths, &debuglink_path_count,
         &errcode);
     if (res == DW_DLV_NO_ENTRY) {
-        return;
+        return res;
     }
     if (res == DW_DLV_ERROR) {
         printf("ERROR: dwarf_gnu_debuglink failed. Errcode %d"
             " reading %s\n",errcode,ep->f_path);
-        return;
+        return DW_DLV_NO_ENTRY;
     }
     printf("GNU .gnu_debuglink and .note.gnu.buildid\n");
     printf("{\n");
@@ -1792,4 +1845,5 @@ elf_print_gnu_debuglink(elf_filedata ep)
     }
     printf("}\n");
     free(debuglink_paths);
+    return DW_DLV_NO_ENTRY;
 }

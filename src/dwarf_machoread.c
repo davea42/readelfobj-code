@@ -193,6 +193,21 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
     ASNAR(mfp->mo_copy_word,mfp->mo_header.ncmds,mh32.ncmds);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.sizeofcmds,mh32.sizeofcmds);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh32.flags);
+    if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize ||
+        mfp->mo_header.ncmds >= mfp->mo_filesize ||
+        mfp->mo_header.ncmds >= mfp->mo_header.sizeofcmds)  {
+        printf("ERROR: %s header32 size fields bogus "
+            "filesize is %lu,"
+            "number of commands is %lu,"
+            "size of commands is %lu. \n",
+            dwarf_get_errname(DW_DLE_MACHO_CORRUPT_HEADER),
+            (unsigned long)mfp->mo_filesize,
+            (unsigned long)mfp->mo_header.ncmds,
+            (unsigned long)mfp->mo_header.sizeofcmds);
+        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
+        return DW_DLV_ERROR;
+    }
+    
     mfp->mo_header.reserved = 0;
     mfp->mo_command_count = mfp->mo_header.ncmds;
     mfp->mo_command_start_offset = sizeof(mh32);
@@ -222,6 +237,20 @@ load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
     ASNAR(mfp->mo_copy_word,mfp->mo_header.sizeofcmds,mh64.sizeofcmds);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh64.flags);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.reserved,mh64.reserved);
+    if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize ||
+        mfp->mo_header.ncmds >= mfp->mo_filesize ||
+        mfp->mo_header.ncmds >= mfp->mo_header.sizeofcmds)  {
+        printf("ERROR: %s header32 size fields bogus "
+            "filesize is %lu,"
+            "number of commands is %lu,"
+            "size of commands is %lu. \n",
+            dwarf_get_errname(DW_DLE_MACHO_CORRUPT_HEADER),
+            (unsigned long)mfp->mo_filesize,
+            (unsigned long)mfp->mo_header.ncmds,
+            (unsigned long)mfp->mo_header.sizeofcmds);
+        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
+        return DW_DLV_ERROR;
+    }
     mfp->mo_command_count = mfp->mo_header.ncmds;
     mfp->mo_command_start_offset = sizeof(mh64);
     return DW_DLV_OK;
