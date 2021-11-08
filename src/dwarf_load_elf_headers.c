@@ -2652,6 +2652,9 @@ read_gs_section_group(elf_filedata ep,
         /* There is ambiguity on the endianness of this stuff. */
         if (va != 1 && va != 0x1000000) {
             /*  Could be corrupted elf object. */
+            printf("Elf group header zero-th flag field seems "
+                " corrupted and is 0x%lx, not GRP_COMDAT\n",
+                (unsigned long)va);
             *errcode = RO_ERR_GROUP_ERROR;
             free(data);
             free(grouparray);
@@ -2668,18 +2671,34 @@ read_gs_section_group(elf_filedata ep,
             ASNAR(memcpy,gseca,dblock);
             ASNAR(dwarf_ro_memcpy_swap_bytes,gsecb,dblock);
             if (!gseca) {
+                printf("Elf group header corruption "
+                    "group record %lu section index field "
+                    "is zero, corrupted data\n",
+                    (unsigned long)i);
                 free(data);
                 free(grouparray);
                 *errcode = RO_ERR_GROUP_ERROR;
                 return DW_DLV_ERROR;
             }
             grouparray[i] = gseca;
-            if (gseca > ep->f_loc_shdr.g_count) {
+            if (gseca >= ep->f_loc_shdr.g_count) {
                 /*  Might be confused endianness by
                     the compiler generating the SHT_GROUP.
                     This is pretty horrible. */
 
-                if (gsecb > ep->f_loc_shdr.g_count) {
+                if (gsecb >= ep->f_loc_shdr.g_count) {
+                    printf("Elf group header corruption "
+                        "group record %lu section num "
+                        "field is %lu (other endian is %lu) "
+                        "but only %lu sections exist "
+                        "(0-%lu)"
+                        "\n",
+                        (unsigned long)i,
+                        (unsigned long)gseca,
+                        (unsigned long)gsecb,
+                        (unsigned long)ep->f_loc_shdr.g_count,
+                        (unsigned long)ep->f_loc_shdr.g_count-1
+                        );
                     *errcode = RO_ERR_GROUP_ERROR;
                     free(data);
                     free(grouparray);
@@ -2692,6 +2711,12 @@ read_gs_section_group(elf_filedata ep,
             targpsh = ep->f_shdr + gseca;
             if (targpsh->gh_section_group_number) {
                 /* multi-assignment to groups. Oops. */
+                printf("Elf group header corruption "
+                    "section group number %lu "
+                    "has duplicate setting of group number"
+                    "%lu \n",
+                    (unsigned long)i,
+                    (unsigned long)targpsh->gh_section_group_number);
                 free(data);
                 free(grouparray);
                 *errcode = RO_ERR_GROUP_ERROR;
@@ -2784,6 +2809,13 @@ elf_setup_all_section_groups(elf_filedata ep,
         if(string_endswith(name,".dwo")) {
             if (psh->gh_section_group_number) {
                 /* multi-assignment to groups. Oops. */
+                printf("Elf group header corruption "
+                    "section group number %lu in %s"
+                    "has duplicate setting of group number"
+                    "%lu \n",
+                    (unsigned long)i,
+                    name,
+                    (unsigned long)psh->gh_section_group_number);
                 *errcode = RO_ERR_GROUP_ERROR;
                 return DW_DLV_ERROR;
             }

@@ -135,7 +135,6 @@ char *Usage = "Usage: readelfobj <options> file ...\n"
     "--help         print this message\n"
     "--version      print version string\n";
 
-
 int
 main(int argc,char **argv)
 {
@@ -143,20 +142,20 @@ main(int argc,char **argv)
     int filecount = 0;
     int printed_version = FALSE;
 
-    if( argc == 1) {
+    if (argc == 1) {
         printf("%s\n",Usage);
         exit(1);
     } else {
         int myerr = 0;
 
         argv++;
-        for(i =1; i<argc; i++,argv++) {
-            if((strcmp(argv[0],"--help") == 0) ||
+        for (i =1; i<argc; i++,argv++) {
+            if ((strcmp(argv[0],"--help") == 0) ||
                 (strcmp(argv[0],"-h") == 0)) {
                 P("%s",Usage);
                 exit(0);
             }
-            if(strcmp(argv[0],"--all") == 0) {
+            if (strcmp(argv[0],"--all") == 0) {
                 print_symtab_sections= 1;
                 print_wasted= 1;
                 print_reloc_sections= 1;
@@ -164,31 +163,31 @@ main(int argc,char **argv)
                 print_groups= 1;
                 continue;
             }
-            if(strcmp(argv[0],"--print-groups") == 0) {
+            if (strcmp(argv[0],"--print-groups") == 0) {
                 print_groups= 1;
                 continue;
             }
-            if(strcmp(argv[0],"--print-symtabs") == 0) {
+            if (strcmp(argv[0],"--print-symtabs") == 0) {
                 print_symtab_sections= 1;
                 continue;
             }
-            if(strcmp(argv[0],"--only-wasted-summary") == 0) {
+            if (strcmp(argv[0],"--only-wasted-summary") == 0) {
                 only_wasted_summary= 1;
                 continue;
             }
-            if(strcmp(argv[0],"--print-wasted") == 0) {
+            if (strcmp(argv[0],"--print-wasted") == 0) {
                 print_wasted= 1;
                 continue;
             }
-            if(strcmp(argv[0],"--print-relocs") == 0) {
+            if (strcmp(argv[0],"--print-relocs") == 0) {
                 print_reloc_sections= 1;
                 continue;
             }
-            if(strcmp(argv[0],"--print-dynamic") == 0) {
+            if (strcmp(argv[0],"--print-dynamic") == 0) {
                 print_dynamic_sections= 1;
                 continue;
             }
-            if((strcmp(argv[0],"--version") == 0) ||
+            if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readelfobj: %s\n",
                     READELFOBJ_VERSION_DATE_STR);
@@ -200,13 +199,14 @@ main(int argc,char **argv)
             }
             filename = argv[0];
             if (printfilenames) {
-                P("File: %s\n",sanitized(filename,buffer1,BUFFERSIZE));
+                P("File: %s\n",sanitized(filename,buffer1,
+                    BUFFERSIZE));
             }
             errno = 0;
             fin = fopen(filename,"r");
-            if(fin == NULL) {
+            if (fin == NULL) {
                 myerr = errno;
-                if(myerr) {
+                if (myerr) {
                     P("Cannot open %s. Errno %d %s\n",argv[0],
                         myerr,strerror(myerr));
                 } else {
@@ -253,7 +253,7 @@ check_dynamic_section(elf_filedata ep)
     }
 
     /*  In case of error reading headers count might now be zero */
-    for( i = 0; i < pcount; ++i,  gphdr++) {
+    for ( i = 0; i < pcount; ++i,  gphdr++) {
         const char *typename =
             dwarf_get_elf_program_header_type_name(
             gphdr->gp_type, buffer1,BUFFERSIZE);
@@ -269,7 +269,7 @@ check_dynamic_section(elf_filedata ep)
     }
 
     gshdr = ep->f_shdr;
-    for(i = 0; i < scount; i++, ++gshdr) {
+    for (i = 0; i < scount; i++, ++gshdr) {
         const char *namestr = sanitized(gshdr->gh_namestring,
             buffer1,BUFFERSIZE);
         if (!strcmp(namestr,".dynamic")) {
@@ -327,23 +327,11 @@ print_minimum(elf_filedata ep)
     if (res != DW_DLV_OK) {
         return;
     }
-    res = elf_print_elf_header(ep);
-    if (res != DW_DLV_OK) {
-        return;
-    }
     res = elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
     if (res != DW_DLV_OK) {
         return;
     }
-    res = elf_print_elf_header(ep);
-    if (res != DW_DLV_OK) {
-        return;
-    }
     res = elf_print_sectheaders(ep);
-    if (res != DW_DLV_OK) {
-        return;
-    }
-    res = elf_print_elf_header(ep);
     if (res != DW_DLV_OK) {
         return;
     }
@@ -381,7 +369,7 @@ print_requested(elf_filedata ep)
     if (print_dynamic_sections) {
         elf_print_dynamic(ep);
     }
-    if(print_symtab_sections ) {
+    if (print_symtab_sections ) {
         if (ep->f_symtab_sect_index) {
             struct generic_shdr * psh = ep->f_shdr +
                 ep->f_symtab_sect_index;
@@ -399,7 +387,7 @@ print_requested(elf_filedata ep)
             elf_print_symbols(ep,TRUE,ep->f_symtab,
                 ep->f_loc_symtab.g_count,namestr);
         }
-        if(ep->f_dynsym_sect_index) {
+        if (ep->f_dynsym_sect_index) {
             struct generic_shdr * psh = ep->f_shdr +
                 ep->f_dynsym_sect_index;
             const char *namestr = psh->gh_namestring;
@@ -422,7 +410,7 @@ print_requested(elf_filedata ep)
                 sanitized(filename,buffer1,BUFFERSIZE));
         }
     }
-    if(print_reloc_sections) {
+    if (print_reloc_sections) {
         unsigned reloc_count = 0;
         Dwarf_Unsigned i = 0;
         struct generic_shdr * psh = 0;
@@ -432,7 +420,7 @@ print_requested(elf_filedata ep)
         psh = ep->f_shdr;
         for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
             const char *namestr = psh->gh_namestring;
-            if(!strncmp(namestr,".rel.",5)) {
+            if (!strncmp(namestr,".rel.",5)) {
                 ++reloc_count;
                 elf_print_relocation_details(ep,FALSE,psh);
             } else if (!strncmp(namestr,".rela.",6)) {
@@ -467,7 +455,6 @@ print_requested(elf_filedata ep)
     check_dynamic_section(ep);
     report_wasted_space(ep);
 }
-
 
 char namebuffer[BUFFERSIZE*4];
 static void
@@ -537,7 +524,6 @@ do_one_file(const char *s)
         return;
     }
 
-
     res = dwarf_load_elf_sectheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         print_minimum(ep);
@@ -586,14 +572,14 @@ do_one_file(const char *s)
         return;
     }
     res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
-    if( res == DW_DLV_ERROR) {
+    if (res == DW_DLV_ERROR) {
         print_minimum(ep);
         P("ERROR: Unable to load .dynsym section."
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
     }
     res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
-    if( res == DW_DLV_ERROR) {
+    if (res == DW_DLV_ERROR) {
         print_minimum(ep);
         P("ERROR: Unable to load .symtab section."
             " errcode %d (%s)\n",
@@ -605,9 +591,9 @@ do_one_file(const char *s)
 
         for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
             const char *namestr = psh->gh_namestring;
-            if(!strncmp(namestr,".rel.",5)) {
+            if (!strncmp(namestr,".rel.",5)) {
                 res = dwarf_load_elf_rel(ep,i,&errcode);
-                if(res == DW_DLV_ERROR) {
+                if (res == DW_DLV_ERROR) {
                     print_minimum(ep);
                     P("ERROR reading .rel section "
                         LONGESTUFMT " Error code %d (%s) file:%s \n",
@@ -619,10 +605,11 @@ do_one_file(const char *s)
                 }
             } else if (!strncmp(namestr,".rela.",6)) {
                 res = dwarf_load_elf_rela(ep,i,&errcode);
-                if(res == DW_DLV_ERROR) {
+                if (res == DW_DLV_ERROR) {
                     print_minimum(ep);
                     P("ERROR reading .rela section "
-                        LONGESTUFMT " %s Error code %d (%s) file:%s \n",
+                        LONGESTUFMT
+                        " %s Error code %d (%s) file:%s \n",
                         i,
                         sanitized(namestr,buffer2,BUFFERSIZE),
                         errcode,dwarf_get_errname(errcode),
@@ -680,13 +667,13 @@ elf_load_print_interp(elf_filedata ep,
             return;
     }
     buf = malloc(size);
-    if(buf == 0) {
+    if (buf == 0) {
         P("ERROR: malloc failed reading interpreter data\n");
         return;
     }
     res = RRMOA(ep->f_fd,buf,offset,size,
         ep->f_filesize,&errcode);
-    if(res != RO_OK) {
+    if (res != RO_OK) {
         P("ERROR: Read interp string failed\n");
         return;
     }
@@ -694,7 +681,6 @@ elf_load_print_interp(elf_filedata ep,
     free(buf);
     return;
 }
-
 
 static int
 elf_print_progheaders(elf_filedata ep)
@@ -714,7 +700,7 @@ elf_print_progheaders(elf_filedata ep)
         return DW_DLV_OK;
     }
     P("{\n");
-    for( i = 0; i < count; ++i,  gphdr++) {
+    for ( i = 0; i < count; ++i,  gphdr++) {
         P("Program header " LONGESTUFMT ,i);
         P("  type %s " LONGESTXFMT,
             dwarf_get_elf_program_header_type_name(gphdr->gp_type,
@@ -735,19 +721,19 @@ elf_print_progheaders(elf_filedata ep)
         P("\n");
 
         P("  flags " LONGESTXFMT ,gphdr->gp_flags);
-        if(gphdr->gp_flags & PF_X) {
+        if (gphdr->gp_flags & PF_X) {
             P(" PF_X");
         }
-        if(gphdr->gp_flags & PF_W) {
+        if (gphdr->gp_flags & PF_W) {
             P(" PF_W");
         }
-        if(gphdr->gp_flags & PF_R) {
+        if (gphdr->gp_flags & PF_R) {
             P(" PF_R");
         }
         P(", align " LONGESTXFMT " (" LONGESTUFMT ")",
             gphdr->gp_align,gphdr->gp_align);
         P("\n");
-        if(gphdr->gp_type == PT_INTERP) {
+        if (gphdr->gp_type == PT_INTERP) {
             elf_load_print_interp(ep,gphdr->gp_offset,
                 gphdr->gp_filesz);
         }
@@ -776,9 +762,10 @@ elf_print_sectheaders(elf_filedata ep)
         P("\n");
         return DW_DLV_OK;
     }
-    P(" [i] offset      size        name         (flags)(type)(link,info,align)\n");
+    P(" [i] offset      size        name         "
+        "(flags)(type)(link,info,align)\n");
     P("{\n");
-    for(i = 0; i < generic_count; i++, ++gshdr) {
+    for (i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr = 0;
 
         namestr = sanitized(gshdr->gh_namestring,
@@ -794,7 +781,7 @@ elf_print_sectheaders(elf_filedata ep)
         /*P(" (" LONGESTUFMT8 ") ",gshdr->gh_size); */
         P(" %-14s",namestr);
         /*P(" "  LONGESTXFMT,gshdr->gh_flags); */
-        if(!gshdr->gh_flags) {
+        if (!gshdr->gh_flags) {
             P(" (0)");
         } else {
             P(" %s",
@@ -889,7 +876,7 @@ elf_print_symbols(elf_filedata ep,
     Dwarf_Unsigned i = 0;
     struct location *locp = 0;
 
-    if(is_symtab) {
+    if (is_symtab) {
         locp = &ep->f_loc_symtab;
     } else {
         locp = &ep->f_loc_dynsym;
@@ -905,18 +892,17 @@ elf_print_symbols(elf_filedata ep,
         sanitized(secname,buffer1,BUFFERSIZE),ecount,
         locp->g_offset);
     P("{\n");
-    if(ecount > 0) {
+    if (ecount > 0) {
         P("[Index] Value    Size    Type              "
             "Bind       Other          Shndx   Name\n");
     }
 
-    for(i = 0; i < ecount; ++i,++gsym) {
+    for (i = 0; i < ecount; ++i,++gsym) {
         int errcode = 0;
         int res;
         const char *localstr = 0;
         struct generic_shdr *shp = 0;
         const char *targetsecname = "";
-
 
         P("[%3d]",(int)i);
         P("  st_value "
@@ -1088,9 +1074,9 @@ elf_print_relocation_content(
         count,gsh->gh_info,
         gsh->gh_link);
 
-
-    P(" [i]   offset   info        type symbol %s\n",isrela?"    addend":"");
-    for(i = 0; i < count; ++i,grela++) {
+    P(" [i]   offset   info        type symbol %s\n",isrela?
+        "    addend":"");
+    for (i = 0; i < count; ++i,grela++) {
         int errcode = 0;
         const char *symname = "";
         const char *typename = "";
@@ -1108,7 +1094,6 @@ elf_print_relocation_content(
             get_elf_reloc_name(ep->f_ehdr->ge_machine,
                 grela->gr_type,&typename,&errcode);
         }
-
 
         P("[" LONGESTUFMT "] ",i);
         P(" "
@@ -1183,7 +1168,7 @@ elf_print_elf_header(elf_filedata ep)
         return DW_DLV_NO_ENTRY;
     }
     P(" Elf Header ident bytes: ");
-    for(i = 0; i < EI_NIDENT; i++) {
+    for (i = 0; i < EI_NIDENT; i++) {
         if (!(i%4)) {
             P(" ");
         }
@@ -1215,14 +1200,16 @@ elf_print_elf_header(elf_filedata ep)
     i = ep->f_ehdr->ge_ident[EI_ABIVERSION];
     P("  ABI version   = " LONGESTXFMT "\n",i);
     i = ep->f_ehdr->ge_type;
-    P("  e_type     : " LONGESTXFMT " (%s)\n",i,(i == ET_NONE)? "ET_NONE No file type":
+    P("  e_type     : " LONGESTXFMT " (%s)\n",i,(i == ET_NONE)?
+        "ET_NONE No file type":
         (i == ET_REL)? "ET_REL Relocatable file":
         (i == ET_EXEC)? "ET_EXEC Executable file":
         (i == ET_DYN)? "ET_DYN Shared object file":
         (i == ET_CORE) ? "ET_CORE Core file":
         (i >= 0xff00 && i < 0xffff)? "Processor-specific type":
         "unknown");
-    /* See http://www.uxsglobal.com/developers/gabi/latest/ch4.eheader.html  */
+    /*  See http://www.uxsglobal.com/developers/gabi/latest/
+        ch4.eheader.html  */
     P("  e_machine  : " LONGESTXFMT" (%s)\n",ep->f_ehdr->ge_machine,
         dwarf_get_elf_machine_name(ep->f_ehdr->ge_machine));
     P("  e_version  : " LONGESTXFMT  "\n", ep->f_ehdr->ge_version);
@@ -1235,13 +1222,14 @@ elf_print_elf_header(elf_filedata ep)
     P("  e_phnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_phnum);
     P("  e_shentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_shentsize);
     P("  e_shnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_shnum);
-    if(ep->f_ehdr->ge_shstrndx == SHN_UNDEF) {
-        P("  Section strings are not present e_shstrndx ==SHN_UNDEF\n");
+    if (ep->f_ehdr->ge_shstrndx == SHN_UNDEF) {
+        P("  Section strings are not present e_shstrndx "
+            "==SHN_UNDEF\n");
     } else {
         P("  Section strings are in section "
             LONGESTUFMT "\n",ep->f_ehdr->ge_shstrndx);
     }
-    if(ep->f_ehdr->ge_shstrndx > ep->f_ehdr->ge_shnum) {
+    if (ep->f_ehdr->ge_shstrndx > ep->f_ehdr->ge_shnum) {
         P("String section index is wrong: "
             LONGESTUFMT " vs only "
             LONGESTUFMT " sections."
@@ -1272,7 +1260,7 @@ is_wasted_space_zero(elf_filedata ep,
         checklen = MAXWBLOCK;
     }
     allocspace = (char *)malloc(alloclen);
-    if(!allocspace) {
+    if (!allocspace) {
         P("Unable to malloc " LONGESTUFMT
             "bytes for zero checking.\n",
             alloclen);
@@ -1315,16 +1303,16 @@ comproffset(const void *l_in, const void *r_in)
     const struct in_use_s *r = r_in;
     int strfield = 0;
 
-    if( l->u_offset < r->u_offset) {
+    if (l->u_offset < r->u_offset) {
         return -1;
     }
-    if( l->u_offset > r->u_offset) {
+    if (l->u_offset > r->u_offset) {
         return 1;
     }
-    if( l->u_lastbyte < r->u_lastbyte) {
+    if (l->u_lastbyte < r->u_lastbyte) {
         return -1;
     }
-    if( l->u_lastbyte > r->u_lastbyte) {
+    if (l->u_lastbyte > r->u_lastbyte) {
         return 1;
     }
     /*  When shdr and phdr (etc) use a specific area
@@ -1333,7 +1321,6 @@ comproffset(const void *l_in, const void *r_in)
     strfield = strcmp(l->u_name,r->u_name);
     return strfield;
 }
-
 
 static void
 report_wasted_space(elf_filedata  ep)
@@ -1357,8 +1344,9 @@ report_wasted_space(elf_filedata  ep)
         return;
     }
     memset(&low_instance,0,sizeof(low_instance));
-    iuarray = ( struct in_use_s *)malloc(iucount*sizeof( struct in_use_s));
-    if(!iuarray) {
+    iuarray = ( struct in_use_s *)malloc(iucount*
+        sizeof( struct in_use_s));
+    if (!iuarray) {
         P("ERROR: Cannot malloc array for space calculations\n");
         return;
     }
@@ -1412,7 +1400,7 @@ report_wasted_space(elf_filedata  ep)
         }
         if (iupa->u_offset > low_instance.u_lastbyte) {
             Dwarf_Unsigned diff = 0;
-            if(iupa->u_align > 1) {
+            if (iupa->u_align > 1) {
                 Dwarf_Unsigned misaligned = low_instance.u_lastbyte %
                     iupa->u_align;
                 Dwarf_Unsigned newlast = low_instance.u_lastbyte;
@@ -1439,10 +1427,11 @@ report_wasted_space(elf_filedata  ep)
                             low_instance.u_lastbyte,
                             distance,&wasted_space_zero);
                         if (res == RO_OK) {
-                            if(!wasted_space_zero) {
+                            if (!wasted_space_zero) {
                                 P("  Wasted space at "
                                     LONGESTXFMT8 " of length "
-                                    LONGESTUFMT " bytes is not all zero\n",
+                                    LONGESTUFMT
+                                    " bytes is not all zero\n",
                                     low_instance.u_lastbyte,
                                     distance);
                             }
@@ -1461,7 +1450,8 @@ report_wasted_space(elf_filedata  ep)
                     P("Warning: A gap of " LONGESTUFMT
                         " forced by alignment "
                         LONGESTUFMT
-                        " would get into next area, something wrong. "
+                        " would get into next area, "
+                        "something wrong. "
                         LONGESTXFMT " > "  LONGESTXFMT
                         "\n",
                         distance,iupa->u_align,
@@ -1477,10 +1467,11 @@ report_wasted_space(elf_filedata  ep)
                     " bytes at offset " LONGESTXFMT
                     " through " LONGESTXFMT "\n",
                     diff,low_instance.u_lastbyte,iupa->u_offset);
-                res = is_wasted_space_zero(ep,low_instance.u_lastbyte,
+                res = is_wasted_space_zero(ep,
+                    low_instance.u_lastbyte,
                     diff,&wasted_space_zero);
                 if (res == RO_OK) {
-                    if(!wasted_space_zero) {
+                    if (!wasted_space_zero) {
                         P("Warning:  Wasted space at "
                             LONGESTXFMT8 " of length "
                             LONGESTUFMT " bytes is not all zero\n",
@@ -1538,7 +1529,8 @@ report_wasted_space(elf_filedata  ep)
         if (printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
-        P("Warning %s: There are " LONGESTUFMT " bytes at the end of file"
+        P("Warning %s: There are " LONGESTUFMT
+            " bytes at the end of file"
             " not appearing in any section or header\n",
             p,
             diffh);
@@ -1558,7 +1550,6 @@ report_wasted_space(elf_filedata  ep)
     }
     free(iuarray);
 }
-
 
 static char buffer6[BUFFERSIZE];
 static int
@@ -1582,7 +1573,7 @@ elf_print_dynamic(elf_filedata ep)
     }
     dynamicsect = ep->f_shdr + ep->f_dynamic_sect_index;
     bufcount = ep->f_loc_dynamic.g_count;
-    if(bufcount) {
+    if (bufcount) {
         const char *name = sanitized(dynamicsect->gh_namestring,
             buffer6,BUFFERSIZE);
 
@@ -1601,7 +1592,7 @@ elf_print_dynamic(elf_filedata ep)
     }
     gbuffer = ep->f_dynamic;
     printf(" Tag          Name             Value\n");
-    for(i = 0; i < bufcount; ++i,++gbuffer) {
+    for (i = 0; i < bufcount; ++i,++gbuffer) {
         const char *name = 0;
         const char *targname = "";
 
@@ -1694,7 +1685,6 @@ elf_print_dynamic(elf_filedata ep)
             break;
         }
 
-
         P(" "
             LONGESTXFMT8 " %-16s "
             LONGESTXFMT8 " (" LONGESTUFMT ") %s\n",
@@ -1707,7 +1697,7 @@ elf_print_dynamic(elf_filedata ep)
     return RO_OK;
 }
 
-static int 
+static int
 elf_print_sg_groups(elf_filedata ep)
 {
     Dwarf_Unsigned i = 0;
@@ -1716,7 +1706,8 @@ elf_print_sg_groups(elf_filedata ep)
     if (!ep->f_sht_group_type_section_count &&
         !ep->f_shf_group_flag_section_count &&
         !ep->f_dwo_group_section_count ) {
-        P("Section Groups: No section groups or .dwo present. ");
+        P("Section Groups: No section groups or "
+            ".dwo sections present. ");
         return DW_DLV_OK;
     }
     P("Section Group arrays\n");
@@ -1766,7 +1757,6 @@ elf_print_sg_groups(elf_filedata ep)
     return DW_DLV_OK;
 }
 
-
 static void
 byte_string_to_hex(dwarfstring *bi,
     unsigned char *buildid,
@@ -1774,7 +1764,7 @@ byte_string_to_hex(dwarfstring *bi,
 {
     unsigned i = 0;
     char buf[10];
-    for( ; i < buildid_length;++i){
+    for ( ; i < buildid_length;++i){
         sprintf(buf,"%02x",buildid[i]);
         dwarfstring_append(bi,buf);
     }
@@ -1839,7 +1829,7 @@ elf_print_gnu_debuglink(elf_filedata ep)
         dwarfstring_destructor(&bi);
     }
     printf("  Paths list count:  %u\n",debuglink_path_count);
-    for(i = 0; i <debuglink_path_count; ++i) {
+    for (i = 0; i <debuglink_path_count; ++i) {
         printf("  [%u] %s\n",i,sanitized(debuglink_paths[i],
             buffer6,sizeof(buffer6)));
     }
