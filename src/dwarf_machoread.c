@@ -316,11 +316,21 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     if (msp->fileoff > mfp->mo_filesize ||
         msp->filesize > mfp->mo_filesize) {
         /* corrupt */
+        printf("Reading command sections fails,"
+            " fileoffset %lu, "
+            " filesize %lu\n",
+            (unsigned long)msp->fileoff,
+            (unsigned long)mfp->mo_filesize);
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
     if ((msp->fileoff+msp->filesize ) > filesize) {
         /* corrupt */
+        printf("Reading command32 sections fails,"
+            " fileoffset of end of sec %lu, "
+            " filesize %lu\n",
+            (unsigned long)(msp->fileoff+msp->filesize ),
+            (unsigned long)mfp->mo_filesize);
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
@@ -328,7 +338,7 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     ASNAR(mfp->mo_copy_word,msp->initprot,sc.initprot);
     ASNAR(mfp->mo_copy_word,msp->nsects,sc.nsects);
     if (msp->nsects >= mfp->mo_filesize) {
-        printf("Reading sections fails,"
+        printf("Reading command32 sections fails,"
             " mmp_offset %lu,"
             " number of sections %lu,"
             " filesize %lu\n",
@@ -384,10 +394,21 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     if (msp->fileoff > filesize ||
         msp->filesize > filesize) {
         /* corrupt */
+        printf("Reading command 64 sections fails,"
+            " fileoffset %lu, "
+            " filesize %lu\n",
+            (unsigned long)msp->fileoff,
+            (unsigned long)mfp->mo_filesize);
+        *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
     if ((msp->fileoff+msp->filesize ) > filesize) {
         /* corrupt */
+        printf("Reading command64 sections fails,"
+            " fileoffset of end of sec %lu, "
+            " filesize %lu\n",
+            (unsigned long)(msp->fileoff+msp->filesize ),
+            (unsigned long)mfp->mo_filesize);
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
@@ -395,7 +416,7 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     ASNAR(mfp->mo_copy_word,msp->initprot,sc.initprot);
     ASNAR(mfp->mo_copy_word,msp->nsects,sc.nsects);
     if (msp->nsects >= mfp->mo_filesize) {
-        printf("Reading sections fails,"
+        printf("Reading command64 sections fails,"
             " mmp_offset %lu,"
             " number of sections %lu,"
             " filesize %lu\n",
