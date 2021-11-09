@@ -56,7 +56,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 #include "dwarfstring.h"
 #include "dwarf_debuglink.h"
 
-
 static int errcount = 0;
 
 static void
@@ -86,7 +85,6 @@ test1(void)
     int res = 0;
     char *end = testbuffer +100;
     int errcode = 0;
-
 
     testbuffer[0] = 0;
     strcpy(testbuffer,msg);
@@ -129,11 +127,11 @@ checkjoin(int expret,int gotret,char*expstr,char*gotstr,
     }
     if (strcmp(expstr,gotstr)) {
         errcount++;
-        printf("ERROR expected string \"%s\", got \"%s\" line %d %s\n",
+        printf("ERROR expected string \"%s\", got \"%s\" "
+            "line %d %s\n",
             expstr,gotstr,line,filename_in);
     }
 }
-
 
 #if 0
 int
@@ -220,11 +218,9 @@ test2(void)
     checkjoin(DW_DLV_OK,res,"/",dwarfstring_string(&targ),
         __LINE__,__FILE__);
 
-
     dwarfstring_destructor(&targ);
     dwarfstring_destructor(&inp);
 }
-
 
 static void
 checklinkedto(int expret,int gotret,
@@ -248,27 +244,13 @@ printpaths(unsigned count,char **array)
     unsigned i = 0;
 
     printf("    Paths:\n");
-    for(i = 0 ; i < count ; ++i) {
+    for (i = 0 ; i < count ; ++i) {
         char *s = array[i];
 
         printf("    [%2d] \"%s\"\n",i,s);
     }
     printf("\n");
 }
-
-#if 0
-int _dwarf_construct_linkedto_path(
-   char         **global_prefixes_in,
-   unsigned       length_global_prefixes_in,
-   char          *pathname_in,
-   char          *link_string_in, /* from debug link */
-   unsigned char  *crc_in, /* from debug_link, 4 bytes */
-   unsigned       builid_length, /* from gnu buildid */
-   unsigned char *builid, /* from gnu buildid */
-   char        ***paths_out,
-   unsigned      *paths_out_length,
-   int *errcode);
-#endif
 
 static unsigned char buildid[20] = {
     0x11,0x22,0x33, 0x44,
@@ -304,7 +286,6 @@ test3(void)
     global_prefix = (char **)malloc(global_prefix_len);
     global_prefix[0] = "/usr/lib/debug";
     global_prefix[1] = "/fake/lib/debug";
-
 
     dwarfstring_constructor(&result);
     res =_dwarf_construct_linkedto_path(global_prefix,
@@ -359,8 +340,6 @@ test3(void)
     paths_returned_count = 0;
     errcode = 0;
 }
-
-
 
 int main()
 {

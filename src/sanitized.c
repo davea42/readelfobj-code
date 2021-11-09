@@ -30,7 +30,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-
 #include "config.h"
 #include <stdio.h>
 #include <string.h>
@@ -61,10 +60,10 @@ the others are translated.
 NUL Null             0  00              Ctrl-@ ^@
 SOH Start of heading 1  01      Alt-1   Ctrl-A ^A
 STX Start of text    2  02      Alt-2   Ctrl-B ^B
-ETX End of text	     3  03      Alt-3   Ctrl-C ^C
-EOT End of transmission	4 04    Alt-4   Ctrl-D ^D
+ETX End of text      3  03      Alt-3   Ctrl-C ^C
+EOT End of transmission 4 04    Alt-4   Ctrl-D ^D
 ENQ Enquiry          5    05    Alt-5   Ctrl-E ^E
-ACK Acknowledge	     6    06    Alt-6   Ctrl-F ^F
+ACK Acknowledge      6    06    Alt-6   Ctrl-F ^F
 BEL Bell             7    07    Alt-7   Ctrl-G ^G
 BS  Backspace        8    08    Alt-8   Ctrl-H ^H
 HT  Horizontal tab   9    09    Alt-9   Ctrl-I ^I
@@ -73,7 +72,7 @@ VT  Vertical tab    11    0B    Alt-11  Ctrl-K ^K
 FF  Form feed       12    0C    Alt-12  Ctrl-L ^L
 CR  Carriage return 13    0D    Alt-13  Ctrl-M ^M
 SO  Shift out       14    0E    Alt-14  Ctrl-N ^N
-SI  Shift in        15    0F    Alt-15	Ctrl-O ^O
+SI  Shift in        15    0F    Alt-15  Ctrl-O ^O
 DLE Data line escape 16   10    Alt-16  Ctrl-P ^P
 DC1 Device control 1 17   11    Alt-17  Ctrl-Q ^Q
 DC2 Device control 2 18   12    Alt-18  Ctrl-R ^R
@@ -106,7 +105,6 @@ Since we do not handle utf-8 properly nor detect it
 we turn all non-ASCII to %xx below.
 */
 
-
 /*  do_sanity_insert() and no_questionable_chars()
     absolutely must have the same idea of
     questionable characters.  Be Careful.
@@ -123,7 +121,7 @@ do_sanity_insert( const char *s,char *buffer,unsigned len)
     unsigned charcount = 0;
     char smallbuf[8];
 
-    for( ; *cp; cp++) {
+    for ( ; *cp; cp++) {
         unsigned c = *cp & 0xff ;
 
         if (charcount  > (len - 30)) {
@@ -189,7 +187,7 @@ static int
 no_questionable_chars(const char *s) {
     const char *cp = s;
 
-    for( ; *cp; cp++) {
+    for ( ; *cp; cp++) {
         unsigned c = *cp & 0xff ;
         if (c >= 0x20 && c <=0x7e) {
             /* Usual case, ASCII printable characters */
@@ -219,7 +217,6 @@ no_questionable_chars(const char *s) {
     }
     return TRUE;
 }
-
 
 const char *
 sanitized(const char *s,char *outbuf, unsigned outbuf_len)

@@ -37,7 +37,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     the data area used) most useful for C strings.
 */
 
-
 #include "config.h"
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
@@ -84,7 +83,7 @@ dwarfstring_resize_to(struct dwarfstring_s *g,unsigned long newlen)
         g->s_size - g->s_avail;
     unsigned long malloclen = newlen+1;
 
-    if(malloclen < minimumnewlen) {
+    if (malloclen < minimumnewlen) {
         malloclen = minimumnewlen;
     }
     b = malloc(malloclen);
@@ -119,7 +118,8 @@ dwarfstring_reset(struct dwarfstring_s *g)
 }
 
 int
-dwarfstring_constructor_fixed(struct dwarfstring_s *g,unsigned long len)
+dwarfstring_constructor_fixed(struct dwarfstring_s *g,
+    unsigned long len)
 {
     int r = FALSE;
 
@@ -193,7 +193,7 @@ dwarfstring_append(struct dwarfstring_s *g,char *str)
 {
     unsigned long dlen = 0;
 
-    if(!str) {
+    if (!str) {
         return TRUE;
     }
     dlen = strlen(str);

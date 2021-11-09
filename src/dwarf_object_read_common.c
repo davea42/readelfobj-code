@@ -94,7 +94,6 @@ dwarf_object_read_random(int fd,char *buf,off_t loc,
     return DW_DLV_OK;
 }
 
-
 /*
   A byte-swapping version of memcpy
   for cross-endian use.

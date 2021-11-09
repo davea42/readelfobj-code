@@ -41,13 +41,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define FALSE 0
 #endif /* TRUE */
 
-
 #ifndef DW_DLV_OK
 #define DW_DLV_NO_ENTRY -1
 #define DW_DLV_OK        0
 #define DW_DLV_ERROR     1
 #endif /* DW_DLV_OK */
-
 
 const char *dwarf_file_type[6] = {
 "file type unknown",
@@ -67,7 +65,6 @@ const char *dwarf_endian_type[6] = {
 0
 };
 
-
 #define PATHSIZE 2000
 static char finalpath[PATHSIZE];
 
@@ -78,7 +75,7 @@ int main(int argc, char **argv)
     int zero_outpath = 0;
     int errct = 0;
 
-    for( ;ct < argc ; ct++) {
+    for ( ;ct < argc ; ct++) {
         char *path = argv[ct];
         int res = 0;
         unsigned ftype = 0;

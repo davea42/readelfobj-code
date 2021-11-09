@@ -118,8 +118,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_DLE_ERROR_NO_DOS_HEADER        45
 #define DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE 46
 
-
-
 #ifndef EI_NIDENT
 #define EI_NIDENT 16
 #define EI_CLASS  4
@@ -133,7 +131,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define DSYM_SUFFIX ".dSYM/Contents/Resources/DWARF/"
 #define PATHSIZE 2000
-
 
 #ifndef  MH_MAGIC
 /* mach-o 32bit */
@@ -153,7 +150,7 @@ magic_copy(unsigned char *d, unsigned len)
     unsigned long v = 0;
 
     v = d[0];
-    for(i = 1 ; i < len; ++i) {
+    for (i = 1 ; i < len; ++i) {
         v <<= 8;
         v |=  d[i];
     }
@@ -175,7 +172,6 @@ magic_copy(unsigned char *d, unsigned len)
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
 
-
 #define EI_NIDENT 16
 /* An incomplete elf header, good for 32 and 64bit elf */
 struct elf_header {
@@ -186,23 +182,33 @@ struct elf_header {
 };
 
 /*  Windows. Certain PE objects.
-    The following references may be of interest.
-https://msdn.microsoft.com/library/windows/desktop/ms680547(v=vs.85).aspx       #PE format overview and various machine magic numbers
+The following references may be of interest.
+https://msdn.microsoft.com/library/windows/desktop/
+ms680547(v=vs.85).aspx
+#PE format overview and various machine magic numbers
 
-https://msdn.microsoft.com/en-us/library/ms809762.aspx  # describes some details of PE headers, basically an overview
+https://msdn.microsoft.com/en-us/library/ms809762.aspx
+# describes some details of PE headers, basically an overview
 
-https://msdn.microsoft.com/en-us/library/windows/desktop/aa383751(v=vs.85).aspx #defines sizes of various types
+https://msdn.microsoft.com/en-us/library/windows/
+desktop/aa383751(v=vs.85).aspx #defines sizes of various types
 
-https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms680313(v=vs.85).aspx #defines IMAGE_FILE_HEADER and Machine fields (32/64)
+https://msdn.microsoft.com/fr-fr/library/windows/
+desktop/ms680313(v=vs.85).aspx
+#defines IMAGE_FILE_HEADER and Machine fields (32/64)
 
-https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms680305(v=vs.85).aspx #defines IMAGE_DATA_DIRECTORY
+https://msdn.microsoft.com/fr-fr/library/windows/
+desktop/ms680305(v=vs.85).aspx #defines IMAGE_DATA_DIRECTORY
 
-https://msdn.microsoft.com/en-us/library/windows/desktop/ms680339(v=vs.85).aspx #Defines IMAGE_OPTIONAL_HEADER and some magic numbers
+https://msdn.microsoft.com/en-us/library/windows/
+desktop/ms680339(v=vs.85).aspx
+#Defines IMAGE_OPTIONAL_HEADER and some magic numbers
 
-https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms680336(v=vs.85).aspx # defines _IMAGE_NT_HEADERS 32 64
+https://msdn.microsoft.com/fr-fr/library/windows/
+desktop/ms680336(v=vs.85).aspx # defines _IMAGE_NT_HEADERS 32 64
 
-https://msdn.microsoft.com/en-us/library/windows/desktop/ms680341(v=vs.85).aspx # defines _IMAGE_SECTION_HEADER
-
+https://msdn.microsoft.com/en-us/library/windows/
+desktop/ms680341(v=vs.85).aspx # defines _IMAGE_SECTION_HEADER
 */
 
 /* ===== START pe structures */
@@ -219,7 +225,6 @@ struct dos_header {
 #define IMAGE_FILE_MACHINE_I386  0x14c
 #define IMAGE_FILE_MACHINE_IA64  0x200
 #define IMAGE_FILE_MACHINE_AMD64 0x8664
-
 
 struct pe_image_file_header {
     TYP(im_machine,2);
@@ -300,8 +305,6 @@ object_read_random(int fd,char *buf,off_t loc,
     return DW_DLV_OK;
 }
 
-
-
 /*  For following MacOS file naming convention */
 static const char *
 getseparator (const char *f)
@@ -345,8 +348,6 @@ dw_stpcpy(char *dest,const char *src)
     *dp = 0;
     return dp;
 }
-
-
 
 /* This started like Elf, so check initial fields. */
 static int
@@ -420,7 +421,7 @@ is_archive_magic(struct elf_header *h)
     int len = sizeof(archive_magic);
     const char *cp = (const char *)h;
 
-    for( ; i < len; ++i) {
+    for ( ; i < len; ++i) {
         if (cp[i] != archive_magic[i]) {
             return FALSE;
         }
@@ -463,23 +464,24 @@ is_pe_object(int fd,
     dos_sig = magic_copy((unsigned char *)dhinmem.dh_mz,
         sizeof(dhinmem.dh_mz));
     if (dos_sig == IMAGE_DOS_SIGNATURE) {
-        /*  IMAGE_DOS_SIGNATURE assumes bytes reversed by little-endian
+        /*  IMAGE_DOS_SIGNATURE assumes bytes
+            reversed by little-endian
             load, so we intrepet a match the other way. */
         /*  BIG ENDIAN. From looking at hex characters in object  */
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy;
-#else   /* LITTLE ENDIAN */
+#else  /* LITTLE ENDIAN */
         word_swap = memcpy_swap_bytes;
-#endif  /* LITTLE- BIG-ENDIAN */
+#endif /* LITTLE- BIG-ENDIAN */
         locendian = DW_ENDIAN_BIG;
     } else if (dos_sig == IMAGE_DOS_REVSIGNATURE) {
         /* raw load, so  intrepet a match the other way. */
         /* LITTLE ENDIAN */
 #ifdef WORDS_BIGENDIAN
         word_swap = memcpy_swap_bytes;
-#else   /* LITTLE ENDIAN */
+#else  /* LITTLE ENDIAN */
         word_swap = memcpy;
-#endif  /* LITTLE- BIG-ENDIAN */
+#endif /* LITTLE- BIG-ENDIAN */
         locendian = DW_ENDIAN_LITTLE;
     } else {
         /* Not dos header not a PE file we recognize */
@@ -590,7 +592,7 @@ dwarf_object_detector_fd(int fd,
     ssize_t readval = 0;
 
     fsize = lseek(fd,0L,SEEK_END);
-    if(fsize < 0) {
+    if (fsize < 0) {
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
@@ -600,7 +602,7 @@ dwarf_object_detector_fd(int fd,
         return DW_DLV_ERROR;
     }
     lsval  = lseek(fd,0L,SEEK_SET);
-    if(lsval < 0) {
+    if (lsval < 0) {
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }

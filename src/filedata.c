@@ -57,7 +57,7 @@ get_filedata(const char *name, int fd,struct filedata_s *fida)
     struct stat sbuf;
 
     res = fstat(fd,&sbuf);
-    if(res) {
+    if (res) {
         int myerr = errno;
         printf("FAIL reading %s with errno %d %s\n",
             sanitized(name,buffer1,BUFFERSIZE),

@@ -33,7 +33,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #include "dwarf_reading.h"
 
-
 const char *ro_errname[] = {
 "DW_DLV_OK",
 "DW_DLV_ERROR",
@@ -62,7 +61,8 @@ const char *ro_errname[] = {
 "RO_ERR_RELCOUNTMISMATCH",/*    24 */
 "RO_ERR_NULL_ELF_POINTER",/*    25 */
 "RO_ERR_NOT_A_KNOWN_TYPE(26)",/*    26 */
-"RO_ERR_SIZE_SMALL(27) a pe file is too small to be an object file.",/*          27 */
+    /*          27 */
+"RO_ERR_SIZE_SMALL(27) a pe file is too small to be an object file.",
 "RO_ERR_FILE_WRONG_TYPE",/*     28 */
 "RO_ERR_ELF_STRING_SECT",/*     29 */
 "RO_ERR_GROUP_ERROR",/*         30 */
@@ -80,12 +80,13 @@ const char *ro_errname[] = {
 "DW_DLE_CORRUPT_GNU_DEBUGID_STRING",/* 42 */
 "DW_DLE_CORRUPT_GNU_DEBUGID_SIZE",/*   43 */
 "DW_DLE_ALLOC_FAIL(44) malloc failed",             /*    44 */
-"DW_DLE_ERROR_NO_DOS_HEADER(45) so we do not accept the file as pe",    /*    45 */
-"DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE(46) so we do not accept the file as pe",/* 46 */
+    /*    45 */
+"DW_DLE_ERROR_NO_DOS_HEADER(45) so we do not accept the file as pe",
+"DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE(46) so we do not "
+    "accept the file as pe",/* 46 */
 "DW_DLE_MACHO_CORRUPT_HEADER(47) Corrupt object code",/* 47 */
 0
 };
-
 
 const char *
 dwarf_get_errname(int i)

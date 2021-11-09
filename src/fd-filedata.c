@@ -58,7 +58,7 @@ get_filedata(const char *name, int fd,struct filedata_s *fida)
     LONGESTUTYPE usize = 0;
 
     res = fseek(fd,0L,SEEK_END);
-    if(res) {
+    if (res) {
         int myerr = errno;
         printf("FAIL fseek end %s with errno %d %s\n",
             sanitized(name,buffer1,BUFFERSIZE),
@@ -77,7 +77,7 @@ get_filedata(const char *name, int fd,struct filedata_s *fida)
     }
     usize = ssize;
     res = fseek(fd,0L,SEEK_SET);
-    if(res) {
+    if (res) {
         int myerr = errno;
         printf("FAIL fseek 0  %s with errno %d %s\n",
             sanitized(name,buffer1,BUFFERSIZE),

@@ -50,7 +50,7 @@ static void
 check_string(const char *msg,char *exp,
     char *actual,int line)
 {
-    if(!strcmp(exp,actual)) {
+    if (!strcmp(exp,actual)) {
         return;
     }
     printf("FAIL %s expected \"%s\" got \"%s\" test line %d\n",
@@ -60,7 +60,7 @@ static void
 check_value(const char *msg,unsigned long exp,
     unsigned long actual,int line)
 {
-    if(exp == actual) {
+    if (exp == actual) {
         return;
     }
     printf("FAIL %s expected %lu got %lu test line %d\n",
@@ -230,8 +230,6 @@ test4(void)
     }
     dwarfstring_destructor(&g);
 }
-
-
 
 int main()
 {
