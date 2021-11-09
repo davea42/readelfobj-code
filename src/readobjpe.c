@@ -70,7 +70,7 @@ pe_sections_display(dwarf_pe_object_access_internals_t *pep)
 
     printf("Display " LONGESTUFMT " sections.\n",
         count);
-    for( ; i < count; ++i) {
+    for ( ; i < count; ++i) {
         struct dwarf_pe_generic_image_section_header *sp =
             pep->pe_sectionptr + i;
 
@@ -230,21 +230,21 @@ main(int argc,char **argv)
     int filecount = 0;
     int printed_version = FALSE;
 
-    if( argc == 1) {
+    if ( argc == 1) {
         printf("%s\n",Usage);
         exit(1);
     } else {
         argv++;
-        for(i =1; i<argc; i++,argv++) {
+        for (i =1; i<argc; i++,argv++) {
             const char * filename = 0;
             FILE *fin = 0;
 
-            if((strcmp(argv[0],"--help") == 0) ||
+            if ((strcmp(argv[0],"--help") == 0) ||
                 (strcmp(argv[0],"-h") == 0)) {
                 P("%s",Usage);
                 exit(0);
             }
-            if((strcmp(argv[0],"--version") == 0) ||
+            if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readobjpe: %s\n",
                     READELFOBJ_VERSION_DATE_STR);
@@ -256,10 +256,11 @@ main(int argc,char **argv)
             }
             filename = argv[0];
             if (printfilenames) {
-                P("File: %s\n",sanitized(filename,buffer1,BUFFERSIZE));
+                P("File: %s\n",sanitized(filename,buffer1,
+                    BUFFERSIZE));
             }
             fin = fopen(filename,"r");
-            if(fin == NULL) {
+            if (fin == NULL) {
                 P("No such file as %s\n",
                     sanitized(filename,buffer1,BUFFERSIZE));
                 continue;

@@ -67,14 +67,13 @@ char *Usage = "Usage: readobjmacho <options> file ...\n"
     "--help     print this message\n"
     "--version  print version string\n";
 
-
 static char tru_path_buffer[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
 static void do_one_file(const char *s);
 
 static struct commands_text_s {
-   const char *name;
-   unsigned long val;
+    const char *name;
+    unsigned long val;
 } commandname [] = {
 {"LC_SEGMENT",    0x1},
 {"LC_SYMTAB",     0x2},
@@ -125,14 +124,13 @@ get_command_name(Dwarf_Unsigned v)
 {
     unsigned i = 0;
 
-    for( ; commandname[i].name; i++) {
+    for ( ; commandname[i].name; i++) {
         if (v==commandname[i].val) {
             return commandname[i].name;
         }
     }
     return ("Unknown");
 }
-
 
 int
 main(int argc,char **argv)
@@ -141,21 +139,21 @@ main(int argc,char **argv)
     int filecount = 0;
     int printed_version = FALSE;
 
-    if( argc == 1) {
+    if ( argc == 1) {
         printf("%s\n",Usage);
         exit(1);
     } else {
         argv++;
-        for(i =1; i<argc; i++,argv++) {
+        for (i =1; i<argc; i++,argv++) {
             const char * filename = 0;
             FILE *fin = 0;
 
-            if((strcmp(argv[0],"--help") == 0) ||
+            if ((strcmp(argv[0],"--help") == 0) ||
                 (strcmp(argv[0],"-h") == 0)) {
                 P("%s",Usage);
                 exit(0);
             }
-            if((strcmp(argv[0],"--version") == 0) ||
+            if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readobjmacho: %s\n",
                     READELFOBJ_VERSION_DATE_STR);
@@ -167,10 +165,11 @@ main(int argc,char **argv)
             }
             filename = argv[0];
             if (printfilenames) {
-                P("File: %s\n",sanitized(filename,buffer1,BUFFERSIZE));
+                P("File: %s\n",sanitized(filename,buffer1,
+                    BUFFERSIZE));
             }
             fin = fopen(filename,"r");
-            if(fin == NULL) {
+            if (fin == NULL) {
                 P("No such file as %s\n",argv[0]);
                 continue;
             }
@@ -186,9 +185,6 @@ main(int argc,char **argv)
     return RO_OK;
 }
 
-
-
-
 static void
 print_macho_segments(struct macho_filedata_s *mfp)
 {
@@ -199,7 +195,8 @@ print_macho_segments(struct macho_filedata_s *mfp)
 
     P("  Segments count:" LONGESTUFMT " starting at "
         LONGESTXFMT8 ":\n",segmentcount,mfp->mo_command_start_offset);
-    P("    command                 segname      fileoff   filesize\n");
+    P("    command                 segname      "
+        "fileoff   filesize\n");
     for ( ; i < segmentcount; ++i, ++cmdp) {
         P("  [" LONGESTUFMT "] "
             LONGESTXFMT " %-15s"
@@ -226,7 +223,7 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp)
     P(" Sections count: " LONGESTUFMT "  offset " LONGESTXFMT8 "\n",
         count,gsp->offset_of_sec_rec);
     P("                         offset size \n");
-    for(i =0; i < count; ++i,++gsp) {
+    for (i =0; i < count; ++i,++gsp) {
         P("  [" LONGESTUFMT "] %-16s"
             " " LONGESTXFMT8
             " " LONGESTXFMT8
@@ -237,7 +234,6 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp)
     }
 }
 
-
 static void
 print_macho_commands(struct macho_filedata_s *mfp)
 {
@@ -245,7 +241,8 @@ print_macho_commands(struct macho_filedata_s *mfp)
     struct generic_macho_command *cmdp = 0;
 
     cmdp = mfp->mo_commands;
-    P(" Commands: at offset " LONGESTXFMT "\n",mfp->mo_command_start_offset);
+    P(" Commands: at offset " LONGESTXFMT "\n",
+        mfp->mo_command_start_offset);
     for ( ; i < mfp->mo_command_count; ++i, ++cmdp) {
         P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT8 " %-14s"
             " cmdsize: " LONGESTUFMT " (" LONGESTXFMT8 ")\n",
