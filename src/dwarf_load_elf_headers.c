@@ -497,8 +497,8 @@ generic_shdr_from_shdr32(elf_filedata ep,
     if (res != RO_OK) {
         P("Read  " LONGESTUFMT
             " bytes section headers failed\n",count*entsize);
-        free(psh);
-        free(gshdr);
+        free(orig_psh);
+        free(orig_gshdr);
         return res;
     }
     for (i = 0; i < count;
@@ -514,6 +514,21 @@ generic_shdr_from_shdr32(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
+        if (gshdr->gh_size >= ep->f_filesize &&
+            gshdr->gh_type != SHT_NOBITS) {
+            free(orig_psh);
+            free(orig_gshdr);
+            printf("Section Size32 > filesize. Corrupt object "
+                "Section number %lu, "
+                "Section size 0x%lx, "
+                "File size 0x%lx\n",
+                (unsigned long)i,
+                (unsigned long)gshdr->gh_size,
+                (unsigned long)ep->f_filesize);
+            *errcode = RO_ERR_SECTION_SIZE;
+            return DW_DLV_ERROR;
+        }
+
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
                 gshdr->gh_offset,gshdr->gh_size,ALIGN4);
@@ -590,6 +605,22 @@ generic_shdr_from_shdr64(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
+        if (gshdr->gh_size >= ep->f_filesize &&
+            gshdr->gh_type != SHT_NOBITS) {
+            free(orig_psh);
+            free(orig_gshdr);
+            printf("Section Size64 > filesize. Corrupt object "
+                "Section number %lu, "
+                "Section size 0x%lx, "
+                "File size 0x%lx\n",
+                (unsigned long)i,
+                (unsigned long)gshdr->gh_size,
+                (unsigned long)ep->f_filesize);
+            *errcode = RO_ERR_SECTION_SIZE;
+            return DW_DLV_ERROR;
+        }
+
+                
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
                 gshdr->gh_offset,gshdr->gh_size,ALIGN8);
@@ -776,6 +807,16 @@ dwarf_generic_elf_load_symbols(elf_filedata  ep,
 
     if (!secnum) {
         return DW_DLV_NO_ENTRY;
+    }
+    if (psh->gh_size >= ep->f_filesize) {
+        printf("Loading Symbols section %s  ERROR: "
+            "Section  size 0x%lx, "
+            "File  size 0x%lx \n",
+            secname,
+            (unsigned long)psh->gh_size,
+            (unsigned long)ep->f_filesize);
+            *errcode = RO_ERR_SECTION_SIZE;
+            return DW_DLV_ERROR;
     }
     namestr = secname;
     if (ep->f_offsetsize == 32) {
