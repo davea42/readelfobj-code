@@ -627,6 +627,11 @@ static int
 elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
 {
     struct generic_shdr *psh = 0;
+    if (!ep->f_shdr) {
+        P("Section strings never found. String section number %lu\n",
+            (unsigned long)stringsection);
+        return DW_DLV_OK;
+    }
     if (!stringsection) {
         P("Section strings never found.\n");
         return DW_DLV_OK;

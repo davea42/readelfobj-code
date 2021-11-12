@@ -514,19 +514,18 @@ generic_shdr_from_shdr32(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
-        if (gshdr->gh_size >= ep->f_filesize &&
-            gshdr->gh_type != SHT_NOBITS) {
-            free(orig_psh);
-            free(orig_gshdr);
-            printf("Section Size32 > filesize. Corrupt object "
+printf("dadebug hdr size 0x%lx filesize  0x%lx\n",(unsigned long)gshdr->gh_size,
+(unsigned long)ep->f_filesize);
+        if ((gshdr->gh_size >= ep->f_filesize ||
+            (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize) 
+            && gshdr->gh_type != SHT_NOBITS) {
+            printf("ERROR: Section Size32 > filesize. Corrupt object "
                 "Section number %lu, "
                 "Section size 0x%lx, "
                 "File size 0x%lx\n",
                 (unsigned long)i,
                 (unsigned long)gshdr->gh_size,
                 (unsigned long)ep->f_filesize);
-            *errcode = RO_ERR_SECTION_SIZE;
-            return DW_DLV_ERROR;
         }
 
         if (!is_empty_section(gshdr->gh_type)) {
@@ -605,22 +604,19 @@ generic_shdr_from_shdr64(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
-        if (gshdr->gh_size >= ep->f_filesize &&
-            gshdr->gh_type != SHT_NOBITS) {
-            free(orig_psh);
-            free(orig_gshdr);
-            printf("Section Size64 > filesize. Corrupt object "
+printf("dadebug hdr size 0x%lx filesize  0x%lx\n",(unsigned long)gshdr->gh_size,
+(unsigned long)ep->f_filesize);
+        if ((gshdr->gh_size >= ep->f_filesize ||
+            (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
+            && gshdr->gh_type != SHT_NOBITS) {
+            printf("ERROR: Section Size64 > filesize. Corrupt object "
                 "Section number %lu, "
                 "Section size 0x%lx, "
                 "File size 0x%lx\n",
                 (unsigned long)i,
                 (unsigned long)gshdr->gh_size,
                 (unsigned long)ep->f_filesize);
-            *errcode = RO_ERR_SECTION_SIZE;
-            return DW_DLV_ERROR;
         }
-
-                
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
                 gshdr->gh_offset,gshdr->gh_size,ALIGN8);
@@ -917,6 +913,15 @@ generic_rel_from_rela32(elf_filedata ep,
         *errcode = RO_ERR_RELSECTIONSIZE;
         return  DW_DLV_ERROR;
     }
+    if (size >= ep->f_filesize) {
+        P("ERROR: Bogus size of relocations section "
+            "0x%lx "
+            "greater than filesize 0x%lx\n",
+            (unsigned long)size,
+            (unsigned long)ep->f_filesize);
+        *errcode = RO_ERR_RELSECTIONSIZE;
+        return  DW_DLV_ERROR;
+    }
     for ( i = 0; i < ecount; ++i,++relp,++grel) {
         ASNAR(ep->f_copy_word,grel->gr_offset,relp->r_offset);
         ASNAR(ep->f_copy_word,grel->gr_info,relp->r_info);
@@ -958,6 +963,15 @@ generic_rel_from_rela64(elf_filedata ep,
             LONGESTUFMT ". "
             " not divisible by %u\n",
             size,(unsigned)sizeof(dw_elf64_rela));
+        *errcode = RO_ERR_RELSECTIONSIZE;
+        return  DW_DLV_ERROR;
+    }
+    if (size >= ep->f_filesize) {
+        P("ERROR: Bogus size of relocations section "
+            "0x%lx "
+            " greater than filesize 0x%lx\n",
+            (unsigned long)size,
+            (unsigned long)ep->f_filesize);
         *errcode = RO_ERR_RELSECTIONSIZE;
         return  DW_DLV_ERROR;
     }
@@ -1008,9 +1022,17 @@ generic_rel_from_rel32(elf_filedata ep,
     size2 = ecount * sizeof(dw_elf32_rel);
     if (size != size2) {
         P("ERROR: Bogus size of relocations section "
-            LONGESTUFMT ". "
-            " not divisible by %lu\n",
-            size,(unsigned long)sizeof(dw_elf32_rel));
+            "%lu not divisible by %lu\n",
+            (unsigned long)size,(unsigned long)sizeof(dw_elf32_rel));
+        *errcode = RO_ERR_RELSECTIONSIZE;
+        return  DW_DLV_ERROR;
+    }
+    if (size >= ep->f_filesize) {
+        P("ERROR: Bogus size of relocations section "
+            "0x%lx "
+            " greater than filesize 0x%lx\n",
+            (unsigned long)size,
+            (unsigned long)ep->f_filesize);
         *errcode = RO_ERR_RELSECTIONSIZE;
         return  DW_DLV_ERROR;
     }
@@ -1047,6 +1069,15 @@ generic_rel_from_rel64(elf_filedata ep,
             size,(unsigned long)sizeof(dw_elf64_rel));
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
+    }
+    if (size >= ep->f_filesize) {
+        P("ERROR: Bogus size of relocations section "
+            "0x%lx "
+            " greater than filesize 0x%lx\n",
+            (unsigned long)size,
+            (unsigned long)ep->f_filesize);
+        *errcode = RO_ERR_RELSECTIONSIZE;
+        return  DW_DLV_ERROR;
     }
     for ( i = 0; i < ecount; ++i,++relp,++grel) {
         grel->gr_isrela = 0;
