@@ -514,8 +514,6 @@ generic_shdr_from_shdr32(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
-printf("dadebug hdr size 0x%lx filesize  0x%lx\n",(unsigned long)gshdr->gh_size,
-(unsigned long)ep->f_filesize);
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize) 
             && gshdr->gh_type != SHT_NOBITS) {
@@ -604,8 +602,6 @@ generic_shdr_from_shdr64(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_info,psh->sh_info);
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
-printf("dadebug hdr size 0x%lx filesize  0x%lx\n",(unsigned long)gshdr->gh_size,
-(unsigned long)ep->f_filesize);
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
