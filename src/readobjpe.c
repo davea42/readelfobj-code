@@ -83,6 +83,15 @@ pe_sections_display(dwarf_pe_object_access_internals_t *pep)
         printf("  VirtSize       : " LONGESTXFMT8
             "  (" LONGESTUFMT ")\n",
             sp->VirtualSize,sp->VirtualSize);
+        if (sp->VirtualSize >= pep->pe_filesize) {
+            printf("Error in PE section %lu: "
+                "Section VirtualSize is 0x%lx but file size "
+                "is 0x%lx\n",
+                (unsigned long)i,
+                (unsigned long)sp->VirtualSize,
+                (unsigned long)pep->pe_filesize);
+        }
+
         printf("  VirtAddr       : " LONGESTXFMT8
             "  (" LONGESTUFMT ")\n",
             sp->VirtualAddress,sp->VirtualAddress);

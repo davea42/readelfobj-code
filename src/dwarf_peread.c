@@ -443,6 +443,14 @@ dwarf_pe_load_dwarf_section_headers(
         sec_outp->SecHeaderOffset = cur_offset;
         ASNAR(pep->pe_copy_word,sec_outp->VirtualSize,
             filesect.Misc.VirtualSize);
+        if (sec_outp->VirtualSize >= pep->pe_filesize) {
+            printf("Error in PE section %lu: "
+                "Section VirtualSize is 0x%lx but file size "
+                "is 0x%lx\n",
+                (unsigned long)i,
+                (unsigned long)sec_outp->VirtualSize,
+                (unsigned long)pep->pe_filesize);
+        }
         ASNAR(pep->pe_copy_word,sec_outp->VirtualAddress,
             filesect.VirtualAddress);
         ASNAR(pep->pe_copy_word,sec_outp->SizeOfRawData,
