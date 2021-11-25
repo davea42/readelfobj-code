@@ -1,3 +1,7 @@
+2020-11-25: David Anderson
+    * Revised the build to have autogen.sh and
+      assume its use, no recording in git of
+      Makefile.in etc.
 2020-01-21: David Anderson
     * configure.ac: Now version 20200121
     * configure: regenerated
