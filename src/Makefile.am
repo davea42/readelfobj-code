@@ -49,7 +49,6 @@ readelfobj_CFLAGS = $(RO_CFLAGS_WARN)
 readelfobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
-
 readobjmacho_SOURCES =  readobjmacho.c \
 sanitized.h \
 dwarf_object_read_common.c \

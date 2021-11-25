@@ -1,3 +1,9 @@
+2021-11-25 
+  Revised version to be semantic versioning instead
+  of date versioning.
+  The new version is 0.1.0
+  Revised the build to use autogen, and not
+  record time-sensitive content in github.
 2018-12-18 
   Now nothing here depends on elf.h (though it will
   be #included if it exists) or libelf.
