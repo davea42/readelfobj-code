@@ -33,6 +33,7 @@ ChangeLog \
 ChangeLog2018 \
 NEWS \
 README \
+autogen.sh \
 scripts/build_access.py \
 scripts/build_all_relocs.sh \
 scripts/machotype.py  \
@@ -43,6 +44,7 @@ scripts/raw_elf_definesdwarf_reloc_mips.h    \
 scripts/raw_elf_definesdwarf_reloc_ppc64.h   \
 scripts/raw_elf_definesdwarf_reloc_ppc.h     \
 scripts/raw_elf_definesdwarf_reloc_sparc.h   \
-scripts/raw_elf_definesdwarf_reloc_x86_64.h 
+scripts/raw_elf_definesdwarf_reloc_x86_64.h  \
+.travis.yml 
 
 # AUTHORS, ChangeLog and COPYING must be present
