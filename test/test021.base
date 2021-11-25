@@ -1,4 +1,4 @@
-Section Groups: No section groups or .dwo present. Elf object file yyy/sparc64-64-tls.o
+Section Groups: No section groups or .dwo sections present. Elf object file yyy/sparc64-64-tls.o
  Elf Header ident bytes:  7f454c46 02020100 00000000 00000000
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x2 (ELFDATA2MSB)
@@ -18,9 +18,6 @@ Section Groups: No section groups or .dwo present. Elf object file yyy/sparc64-6
   e_shentsize: 0x40
   e_shnum    : 0xf
   Section strings are in section 12
-
-Program header count: 0
-
 String section data at 0x11b (283) length 0x81 (129)
 
 Section count: 15
@@ -43,7 +40,7 @@ Section count: 15
 [14] 0x00000698 0x00000009 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
 Summary: 190 bytes for 4 debug sections
 }
-Section Groups: No section groups or .dwo present. No .dynamic section exists in yyy/sparc64-64-tls.o
+Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/sparc64-64-tls.o
 
 Symbols from .symtab: 13 at offset 0x560
 {

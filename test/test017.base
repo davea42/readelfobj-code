@@ -1,4 +1,4 @@
-Section Groups: No section groups or .dwo present. Elf object file yyy/libdwarf.so.1.0.0
+Section Groups: No section groups or .dwo sections present. Elf object file yyy/libdwarf.so.1.0.0
  Elf Header ident bytes:  7f454c46 02010100 00000000 00000000
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x1 (ELFDATA2LSB)
@@ -101,7 +101,7 @@ GNU .gnu_debuglink and .note.gnu.buildid
   Paths list count:  1
   [0] /usr/lib/debug/f2/a4b27cd88039e197dc34ad3eacbd1f75199065.debug
 }
-Section Groups: No section groups or .dwo present. 
+Section Groups: No section groups or .dwo sections present. 
 Section .dynamic (20): Entries:31 Offset:0x00066d58
  Tag          Name             Value
  0x00000001 (DT_NEEDED)      0x00003b23 (15139) libelf.so.1
