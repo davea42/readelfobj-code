@@ -667,7 +667,7 @@ elf_load_print_interp(elf_filedata ep,
                 "\n", ep->f_filesize,offset,size);
             return;
     }
-    buf = malloc(size);
+    buf = malloc(size+1);
     if (buf == 0) {
         P("ERROR: malloc failed reading interpreter data\n");
         return;
@@ -679,6 +679,8 @@ elf_load_print_interp(elf_filedata ep,
         P("ERROR: Read interp string failed\n");
         return;
     }
+    /* forcing null terminator */
+    buf[size] = 0;
     res = _dwarf_check_string_valid(buf,buf,buf+size,
         DW_DLE_FORM_STRING_BAD_STRING,
         &errcode);
