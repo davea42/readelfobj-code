@@ -804,7 +804,8 @@ struct buildid_s {
     char bu_ownernamesize[4];
     char bu_buildidsize[4];
     char bu_type[4];
-    char bu_owner[1];
+    /*  Owner name usually "GNU"
+        length faked here. */
 };
 
 static int
@@ -841,6 +842,14 @@ extract_buildid(elf_filedata ep,
         }
         buildidshdr->gh_content = secdata;
     }
+    if (secsize < sizeof(struct buildid_s)) {
+        P("ERROR section .note.gnu.build-id too small: "
+            " section length: " LONGESTXFMT
+            " minimum struct size " LONGESTXFMT  "\n",
+            secsize,(Dwarf_Unsigned)sizeof(struct buildid_s));
+        *errcode =  DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
+        return DW_DLV_ERROR;
+    }
     ptr = buildidshdr->gh_content;
     secoffset = buildidshdr->gh_offset;
     res = RRMOA(ep->f_fd,ptr,secoffset,secsize,
@@ -854,14 +863,6 @@ extract_buildid(elf_filedata ep,
             secoffset,secsize,secoffset + secsize);
         return res;
     }
-    if (secsize < sizeof(struct buildid_s)) {
-        P("ERROR section .note.gnu.build-id too small: "
-            " section length: " LONGESTXFMT
-            " minimum struct size " LONGESTXFMT  "\n",
-            secsize,(Dwarf_Unsigned) sizeof(struct buildid_s));
-        *errcode =  DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
-        return DW_DLV_ERROR;
-    }
     /*  We hold gh_content till all is closed
         as we return pointers into it
         if all goes well. */
@@ -871,9 +872,7 @@ extract_buildid(elf_filedata ep,
     ASNAR(ep->f_copy_word,type,     bu->bu_type);
     if (namesize >= secsize) {
         P("ERROR section .note.gnu.build-id name size "
-            "size too big: "
-             LONGESTUFMT
-            "\n",
+            "size too big: " LONGESTUFMT "\n",
             namesize);
         *errcode = DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
         return DW_DLV_ERROR;
@@ -887,7 +886,8 @@ extract_buildid(elf_filedata ep,
         *errcode = DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
         return DW_DLV_ERROR;
     }
-    if (bu->bu_owner[namesize-1]) {
+    nameptr = ptr + sizeof(struct buildid_s);
+    if (nameptr[namesize-1]) {
         P("ERROR section .note.gnu.build-id owner "
             "not null-terminated. "
             "Required length " LONGESTUFMT " plus NUL terminator\n",
@@ -895,7 +895,6 @@ extract_buildid(elf_filedata ep,
         *errcode = DW_DLE_CORRUPT_GNU_DEBUGID_STRING;
         return DW_DLV_ERROR;
     }
-    nameptr = &bu->bu_owner[0];
     nameend = nameptr + namesize;
     res = _dwarf_check_string_valid(nameptr,
         nameptr,
@@ -915,11 +914,11 @@ extract_buildid(elf_filedata ep,
         return DW_DLV_ERROR;
     }
 
-    finalsize = sizeof(struct buildid_s)-1 + namesize + descrsize;
+    finalsize =   sizeof(struct buildid_s) + namesize + descrsize;
     if (finalsize > secsize) {
         P("ERROR section .note.gnu.build-id owner final "
             "size wrong: "
-            " size " LONGESTUFMT
+            "size " LONGESTUFMT
             " required length " LONGESTUFMT "\n",
             descrsize,
             finalsize);
@@ -927,9 +926,9 @@ extract_buildid(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     *type_returned = type;
-    *owner_name_returned = &bu->bu_owner[0];
+    *owner_name_returned = nameptr;
     *build_id_length_returned = descrsize;
     *build_id_returned = (unsigned char *)ptr +
-        sizeof(struct buildid_s)-1 + namesize;
+        sizeof(struct buildid_s) + namesize;
     return DW_DLV_OK;
 }

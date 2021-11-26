@@ -516,7 +516,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
         ASNAR(ep->f_copy_word,gshdr->gh_addralign,psh->sh_addralign);
         ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
         if ((gshdr->gh_size >= ep->f_filesize ||
-            (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize) 
+            (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
             printf("ERROR: Section Size32 > filesize. Corrupt object "
                 "Section number %lu, "
