@@ -341,7 +341,6 @@ print_minimum(elf_filedata ep)
 static void
 print_requested(elf_filedata ep)
 {
-    int errcode = 0;
     int res = 0;
 
     if (!only_wasted_summary) {
@@ -381,7 +380,6 @@ print_requested(elf_filedata ep)
                     LONGESTUFMT " section\n",
                     link,
                     ep->f_symtab_sect_strings_sect_index);
-                dwarf_destruct_elf_access(ep,&errcode);
                 return;
             }
             elf_print_symbols(ep,TRUE,ep->f_symtab,
@@ -398,7 +396,6 @@ print_requested(elf_filedata ep)
                     LONGESTUFMT " section\n",
                     link,
                     ep->f_dynsym_sect_strings_sect_index);
-                dwarf_destruct_elf_access(ep,&errcode);
                 return;
             }
             elf_print_symbols(ep,FALSE,ep->f_dynsym,
