@@ -150,7 +150,7 @@ _dwarf_check_string_valid(
         return DW_DLV_ERROR;
     }
     while (p < end) {
-        if (*p == 0) {
+        if (!*p) {
             return DW_DLV_OK;
         }
         ++p;
@@ -677,7 +677,7 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
         ep->f_filesize,errcode);
     if (res != DW_DLV_OK) {
         P("Read  " LONGESTUFMT
-            " bytes .gnu_deibuglink section failed\n",
+            " bytes .gnu_debuglink section failed\n",
             secsize);
         P("Read  offset " LONGESTXFMT " length "
             LONGESTXFMT " off+len " LONGESTXFMT "\n",
@@ -685,7 +685,6 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
         return res;
     }
     endptr = ptr + secsize;
-
     res = _dwarf_check_string_valid(ptr,
         ptr,
         endptr,
