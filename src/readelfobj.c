@@ -680,6 +680,14 @@ elf_load_print_interp(elf_filedata ep,
         P("ERROR: Read interp string failed\n");
         return;
     }
+    res = _dwarf_check_string_valid(buf,buf,buf+size,
+        DW_DLE_FORM_STRING_BAD_STRING,
+        &errcode);
+    if (res != RO_OK) {
+        free(buf);
+        P("ERROR: Interp string is not null terminated\n");
+        return;
+    }
     P("    Interpreter:  %s\n",sanitized(buf,buffer1,BUFFERSIZE));
     free(buf);
     return;
