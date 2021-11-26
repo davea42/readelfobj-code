@@ -566,7 +566,6 @@ do_one_file(const char *s)
         P("ERROR: Unable to load dynamic section,"
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
-        return;
     }
     res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
     if (res == DW_DLV_ERROR) {
