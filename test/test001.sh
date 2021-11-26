@@ -10,7 +10,7 @@ srcdir=$top_srcdir/test
 
 base=$n.base
 o=$srcdir/libkrb5support.so.0.1.debug
-#echo "START test $n "
+echo "START $n test ./readelfobj --help $o "
 ./readelfobj --help $o >junk.$n.tmp
 which dos2unix >/dev/null
 if [ $? -eq 0 ]

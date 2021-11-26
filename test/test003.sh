@@ -11,7 +11,7 @@ base=$srcdir/$n.base
 o=$srcdir/libkrb5support.so.0.1.debug
 curdir=`pwd`
 
-#echo "START test $n "
+echo "START $n test ./readelfobj --print-dynamic $o "
 ./readelfobj --print-dynamic $o  >junk.$n.tmp
 which dos2unix >/dev/null
 if [ $? -eq 0 ]

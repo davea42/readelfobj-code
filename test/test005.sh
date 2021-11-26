@@ -12,7 +12,7 @@ o=$srcdir/libkrb5support.so.0.1.debug
 curdir=`pwd`
 
 cmd="--print-symtabs"
-#echo "START test $n "
+echo "START $n ./readelfobj $cmd $o "
 ./readelfobj $cmd $o  >junk.$n.tmp
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
