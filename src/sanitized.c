@@ -163,15 +163,12 @@ do_sanity_insert( const char *s,char *buffer,unsigned len)
             charcount += 3;
             continue;
         }
-        if (c >= 0x7f) {
-            /* ISO-8859 or UTF-8. Not handled well yet. */
-            sprintf(smallbuf,"%%%02x",c & 0xff);
-            strcpy(buffer+charcount,smallbuf);
-            charcount += 3;
-            continue;
-        }
-        buffer[charcount] = c;
-        ++charcount;
+        /* ASSERT: c >= 0x7f */
+        /* ISO-8859 or UTF-8. Not handled well yet. */
+        sprintf(smallbuf,"%%%02x",c & 0xff);
+        strcpy(buffer+charcount,smallbuf);
+        charcount += 3;
+        continue;
     }
     buffer[charcount] = 0;
     return;
