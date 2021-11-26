@@ -184,14 +184,15 @@ dwarf_construct_elf_access(int fd,
     mfp->f_endian = endian;
     mfp->f_path = strdup(path);
     mfp->f_destruct_close_fd = FALSE;
-    *mp = mfp;
     mfp->f_gnu_global_path_count = 1;
     mfp->f_gnu_global_paths = (char **)malloc(sizeof(void *));
     if (!mfp->f_gnu_global_paths) {
+        free(mfp);
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
     mfp->f_gnu_global_paths[0] = strdup("/usr/lib/debug");
+    *mp = mfp;
     return DW_DLV_OK;
 }
 
