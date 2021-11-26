@@ -323,7 +323,7 @@ print_minimum(elf_filedata ep)
     if (res != DW_DLV_OK) {
         return;
     }
-    elf_print_progheaders(ep);
+    res = elf_print_progheaders(ep);
     if (res != DW_DLV_OK) {
         return;
     }
