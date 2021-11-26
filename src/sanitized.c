@@ -137,17 +137,17 @@ do_sanity_insert( const char *s,char *buffer,unsigned len)
             buffer[charcount] = 0;
             return;
         }
+        if (c == '%') {
+            /* %xx for this. Simple and unambiguous */
+            sprintf(smallbuf,"%%%02x",c & 0xff);
+            strcpy(buffer+charcount,smallbuf);
+            charcount += 3;
+            continue;
+        }
         if (c >= 0x20 && c <=0x7e) {
             /* Usual case, ASCII printable characters. */
             buffer[charcount] = c;
             ++charcount;
-            continue;
-        }
-        if (c == '%') {
-            /* %xx for this too. Simple and unambiguous */
-            sprintf(smallbuf,"%%%02x",c & 0xff);
-            strcpy(buffer+charcount,smallbuf);
-            charcount += 3;
             continue;
         }
 #ifdef _WIN32

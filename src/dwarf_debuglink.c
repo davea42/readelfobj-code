@@ -143,7 +143,7 @@ _dwarf_check_string_valid(
     }
     if (p >= end) {
         diff = p - start;
-        P("Error  string end  pointer error, not terminated "
+        P("ERROR: string end pointer error, not terminated "
             " before end of area. Length:  "
             LONGESTSFMT  "\n",(Dwarf_Signed)diff);
         *errcode = suggested_error;
@@ -661,7 +661,7 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
     if (!linkshdr->gh_content) {
         char *secdata = 0;
 
-        secdata = malloc(secsize);
+        secdata = malloc(secsize+1);
         if (!secdata) {
             P("Error  malloc fail:  size "
                 LONGESTXFMT " line %d %s\n",secsize,
@@ -675,6 +675,11 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
     secoffset = linkshdr->gh_offset;
     res = RRMOA(ep->f_fd,ptr,secoffset,secsize,
         ep->f_filesize,errcode);
+    ptr[secsize] = 0;
+    if (!secsize) {
+        P("Section size of .gnu.debuglink is zero");
+        return DW_DLV_NO_ENTRY;
+    }
     if (res != DW_DLV_OK) {
         P("Read  " LONGESTUFMT
             " bytes .gnu_debuglink section failed\n",
@@ -685,8 +690,7 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
         return res;
     }
     endptr = ptr + secsize;
-    res = _dwarf_check_string_valid(ptr,
-        ptr,
+    res = _dwarf_check_string_valid(ptr, ptr,
         endptr,
         DW_DLE_FORM_STRING_BAD_STRING,
         errcode);
@@ -813,9 +817,10 @@ extract_buildid(elf_filedata ep,
     int*   errcode)
 {
     char * ptr = 0;
-    char * endptr = 0;
     int res = DW_DLV_ERROR;
     struct buildid_s *bu = 0;
+    char *nameptr = 0;
+    char *nameend = 0;
     Dwarf_Unsigned namesize = 0;
     Dwarf_Unsigned descrsize = 0;
     Dwarf_Unsigned type = 0;
@@ -857,7 +862,6 @@ extract_buildid(elf_filedata ep,
         *errcode =  DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
         return DW_DLV_ERROR;
     }
-    endptr = ptr + secsize;
     /*  We hold gh_content till all is closed
         as we return pointers into it
         if all goes well. */
@@ -865,6 +869,15 @@ extract_buildid(elf_filedata ep,
     ASNAR(ep->f_copy_word,namesize, bu->bu_ownernamesize);
     ASNAR(ep->f_copy_word,descrsize,bu->bu_buildidsize);
     ASNAR(ep->f_copy_word,type,     bu->bu_type);
+    if (namesize >= secsize) {
+        P("ERROR section .note.gnu.build-id name size "
+            "size too big: "
+             LONGESTUFMT
+            "\n",
+            namesize);
+        *errcode = DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
+        return DW_DLV_ERROR;
+    }
     if (descrsize != 20) {
         P("ERROR section .note.gnu.build-id description "
             "size small: "
@@ -882,15 +895,17 @@ extract_buildid(elf_filedata ep,
         *errcode = DW_DLE_CORRUPT_GNU_DEBUGID_STRING;
         return DW_DLV_ERROR;
     }
-    res = _dwarf_check_string_valid(&bu->bu_owner[0],
-        &bu->bu_owner[0],
-        endptr,
+    nameptr = &bu->bu_owner[0];
+    nameend = nameptr + namesize;
+    res = _dwarf_check_string_valid(nameptr,
+        nameptr,
+        nameend,
         DW_DLE_CORRUPT_GNU_DEBUGID_STRING,
         errcode);
     if ( res != DW_DLV_OK) {
         return res;
     }
-    if ((strlen(bu->bu_owner) +1) != namesize) {
+    if ((strlen(nameptr) +1) != namesize) {
         P("ERROR section .note.gnu.build-id owner "
             "string size wrong: "
             " size " LONGESTUFMT
