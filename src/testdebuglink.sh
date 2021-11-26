@@ -9,7 +9,9 @@ else
   top_srcdir=$DWTOPSRCDIR
 fi
 srcdir=$top_srcdir/src
+curdir=$top_blddir/test
 
+echo "Run test debuglink: ./test_linkedtopath"
 ./test_linkedtopath >junk.ltp
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
@@ -21,7 +23,7 @@ diff $srcdir/baseline.ltp junk.ltp
 if [ $? -ne 0 ] 
 then
     echo "FAIL base test "
-    echo "To update baseline: mv junk.ltp $srcdir/baseline.ltp"
+    echo "To update baseline: mv $curdir/junk.ltp $srcdir/baseline.ltp"
     exit 1
 fi
 exit 0

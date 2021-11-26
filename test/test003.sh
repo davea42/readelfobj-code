@@ -9,6 +9,7 @@ fi
 srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 o=$srcdir/libkrb5support.so.0.1.debug
+curdir=`pwd`
 
 #echo "START test $n "
 ./readelfobj --print-dynamic $o  >junk.$n.tmp
@@ -30,8 +31,8 @@ diff $base junk.$n > junk.$n.out
 if [ $? -ne 0 ]
 then
   cat junk.$n.out
-  echo "FAIL $n.sh results differ $base vs junk.$n.tmp"
-  echo "To update, mv junk.$n.tmp $base"
+  echo "FAIL $n.sh results differ $base vs junk.$n"
+  echo "To update, mv $curdir/junk.$n $base"
   exit 1
 fi
 exit 0

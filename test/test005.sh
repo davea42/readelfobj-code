@@ -9,6 +9,7 @@ fi
 srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 o=$srcdir/libkrb5support.so.0.1.debug
+curdir=`pwd`
 
 cmd="--print-symtabs"
 #echo "START test $n "
@@ -31,8 +32,8 @@ diff $base junk.$n.tmp > junk.$n.out
 if [ $? -ne 0 ]
 then
   head -30 junk.$n.out
-  echo "FAIL $n.sh $cmd, results differ $base junk.$n.tmp"
-  echo "To update, mv junk.$n.tmp $base"
+  echo "FAIL $n.sh $cmd, results differ $base $curdir/junk.$n.tmp"
+  echo "To update, mv $curdir/junk.$n.tmp $base"
   exit 1
 fi
 exit 0

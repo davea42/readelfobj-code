@@ -9,6 +9,8 @@ fi
 srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 o=$srcdir/libkrb5support.so.0.1.debug
+curdir=`pwd`
+
 cmd="--print-relocs"
 #echo "START test $n "
 ./readelfobj  $cmd $o  >junk.$n.tmp
@@ -26,14 +28,12 @@ sed 'sxc:/x/c/xg' < junk.$n.tmp >junk.$n.tmp2
 sed $y < junk.$n.tmp2 >junk.$n
 rm -f junkz 
 
-
 diff $base junk.$n > junk.$n.out
-
 if [ $? -ne 0 ]
 then
   cat junk.$n.out
-  echo "FAIL $n.sh $cmd results differ $base vs junk.$n.tmp"
-  echo "To update, mv junk.$n.tmp $base"
+  echo "FAIL $n.sh $cmd results differ $base vs $curdir/junk.$n"
+  echo "To update, mv $curdir/junk.$n $base"
   exit 1
 fi
 exit 0
