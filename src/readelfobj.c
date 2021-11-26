@@ -679,6 +679,7 @@ elf_load_print_interp(elf_filedata ep,
     res = RRMOA(ep->f_fd,buf,offset,size,
         ep->f_filesize,&errcode);
     if (res != RO_OK) {
+        free(buf);
         P("ERROR: Read interp string failed\n");
         return;
     }
