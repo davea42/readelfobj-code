@@ -186,6 +186,10 @@ no_questionable_chars(const char *s) {
 
     for ( ; *cp; cp++) {
         unsigned c = *cp & 0xff ;
+        if (c == '%') {
+            /* Always sanitize a % ASCII char. */
+            return FALSE;
+        }
         if (c >= 0x20 && c <=0x7e) {
             /* Usual case, ASCII printable characters */
             continue;
@@ -197,10 +201,6 @@ no_questionable_chars(const char *s) {
 #endif /* _WIN32 */
         if (c == 0x0A || c == 0x09 ) {
             continue;
-        }
-        if (c == '%') {
-            /* Always sanitize a % ASCII char. */
-            return FALSE;
         }
         if (c < 0x20) {
             return FALSE;
