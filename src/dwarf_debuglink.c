@@ -875,6 +875,14 @@ extract_buildid(elf_filedata ep,
         *errcode = DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
         return DW_DLV_ERROR;
     }
+    if (bu->bu_owner[namesize-1]) {
+        P("ERROR section .note.gnu.build-id owner "
+            "not null-terminated. "
+            "Required length " LONGESTUFMT " plus NUL terminator\n",
+            namesize);
+        *errcode = DW_DLE_CORRUPT_GNU_DEBUGID_STRING;
+        return DW_DLV_ERROR;
+    }
     res = _dwarf_check_string_valid(&bu->bu_owner[0],
         &bu->bu_owner[0],
         endptr,
