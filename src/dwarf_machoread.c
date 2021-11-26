@@ -167,6 +167,7 @@ dwarf_destruct_macho_access(struct macho_filedata_s *mp)
         mp->mo_dwarf_sections = 0;
     }
     memset(mp,0,sizeof(*mp));
+    free(mp);
     return;
 }
 
