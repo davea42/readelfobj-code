@@ -131,7 +131,7 @@ _dwarf_check_string_valid(
     Dwarf_Small *start = areaptr;
     Dwarf_Small *p = strptr;
     Dwarf_Small *end = areaendptr;
-    ptrdiff_t diff =  0;
+    ptrdiff_t diff = 0;
 
     if (p < start) {
         diff = start - p;
@@ -143,9 +143,10 @@ _dwarf_check_string_valid(
     }
     if (p >= end) {
         diff = p - start;
-        P("ERROR: string end pointer error, not terminated "
-            " before end of area. Length:  "
-            LONGESTSFMT  "\n",(Dwarf_Signed)diff);
+        P("ERROR: string end pointer error, argument error "
+            "  Length:  "
+            LONGESTSFMT  "\n",
+            (Dwarf_Signed)diff);
         *errcode = suggested_error;
         return DW_DLV_ERROR;
     }
@@ -155,11 +156,12 @@ _dwarf_check_string_valid(
         }
         ++p;
     }
-    diff =  p - start;
+    /*  ASSERT: p >= end, p >= strptr */
+    diff = p - start;
     P("Error string not terminated error:  not ended after "
         LONGESTSFMT " bytes (past end of available bytes)\n",
         (Dwarf_Signed)diff);
-    *errcode = DW_DLE_STRING_NOT_TERMINATED;
+    *errcode = suggested_error;
     return DW_DLV_ERROR;
 }
 
@@ -832,7 +834,7 @@ extract_buildid(elf_filedata ep,
     secsize = buildidshdr->gh_size;
     if (!buildidshdr->gh_content) {
         char *secdata = 0;
-        secdata = (char *)malloc(secsize);
+        secdata = (char *)malloc(secsize+1);
         if (!secdata) {
             P("Error  malloc fail:  size "
                 LONGESTXFMT " line %d %s\n",secsize,
@@ -841,6 +843,7 @@ extract_buildid(elf_filedata ep,
             return DW_DLV_ERROR;
         }
         buildidshdr->gh_content = secdata;
+        secdata[secsize] = 0;
     }
     if (secsize < sizeof(struct buildid_s)) {
         P("ERROR section .note.gnu.build-id too small: "
