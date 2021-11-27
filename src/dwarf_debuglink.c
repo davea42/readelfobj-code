@@ -834,6 +834,9 @@ extract_buildid(elf_filedata ep,
     secsize = buildidshdr->gh_size;
     if (!buildidshdr->gh_content) {
         char *secdata = 0;
+   
+        /*  Adding extra byte so we can force a NUL
+            in the extra byte. */
         secdata = (char *)malloc(secsize+1);
         if (!secdata) {
             P("Error  malloc fail:  size "
@@ -843,9 +846,10 @@ extract_buildid(elf_filedata ep,
             return DW_DLV_ERROR;
         }
         buildidshdr->gh_content = secdata;
-        secdata[secsize] = 0;
     }
-    if (secsize < sizeof(struct buildid_s)) {
+    /*  4 is arbitrary, but the size has to be at least this
+        and should be more. */
+    if (secsize < (sizeof(struct buildid_s)+4)) {
         P("ERROR section .note.gnu.build-id too small: "
             " section length: " LONGESTXFMT
             " minimum struct size " LONGESTXFMT  "\n",
@@ -866,6 +870,9 @@ extract_buildid(elf_filedata ep,
             secoffset,secsize,secoffset + secsize);
         return res;
     }
+    /*  Forcing null terminator in the extra byte not touched
+        by the read. */
+    ptr[secsize] = 0;
     /*  We hold gh_content till all is closed
         as we return pointers into it
         if all goes well. */
@@ -893,10 +900,10 @@ extract_buildid(elf_filedata ep,
     if (nameptr[namesize-1]) {
         P("ERROR section .note.gnu.build-id owner "
             "not null-terminated. "
-            "Required length " LONGESTUFMT " plus NUL terminator\n",
+            "Required length " LONGESTUFMT " plus NUL terminator"
+            ". Forcing NUL\n",
             namesize);
-        *errcode = DW_DLE_CORRUPT_GNU_DEBUGID_STRING;
-        return DW_DLV_ERROR;
+         nameptr[namesize-1] = 0;
     }
     nameend = nameptr + namesize;
     res = _dwarf_check_string_valid(nameptr,
