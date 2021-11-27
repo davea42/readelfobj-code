@@ -834,7 +834,7 @@ extract_buildid(elf_filedata ep,
     secsize = buildidshdr->gh_size;
     if (!buildidshdr->gh_content) {
         char *secdata = 0;
-   
+
         /*  Adding extra byte so we can force a NUL
             in the extra byte. */
         secdata = (char *)malloc(secsize+1);
@@ -903,7 +903,7 @@ extract_buildid(elf_filedata ep,
             "Required length " LONGESTUFMT " plus NUL terminator"
             ". Forcing NUL\n",
             namesize);
-         nameptr[namesize-1] = 0;
+        nameptr[namesize-1] = 0;
     }
     nameend = nameptr + namesize;
     res = _dwarf_check_string_valid(nameptr,
