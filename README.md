@@ -76,7 +76,7 @@ libz will be linked in if it exists.
 
     #git clone https://github.com/davea42/readelfobj-code
     #Linux/Unix/MacOS/MinGW(Windows)
-    src=/path/to/readelfobj
+    src=/path/to/readelfobj-code
     cd $src
     sh autogen.sh
 
