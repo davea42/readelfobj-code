@@ -2,7 +2,7 @@
 Status](https://travis-ci.com/davea42/readelfobj-code.svg?branch=master)](https://travis-ci.com/github/davea42/readelfobj-code)
 
 # README.md
-Last update: November 25, 2021
+Last update: December 3, 2021
 
 The distribution consists entirely of C
 source files (along with scripts
@@ -10,6 +10,7 @@ to configure and build executables).
 
 ## Contents
 #### readelfobj
+
 A program that reads elf object files and
 prints the header information.  It also checks for certain
 errors including wasted space in the object files.  It also
@@ -17,16 +18,19 @@ dumps Elf relocation sections, Elf symtab sections, and the
 dynamic section.
 
 #### readobjpe
+
 A program that reads PE object executables or
 dlls and prints header information 
 (mainly focused on sections that may be DWARF data).
 
 #### readobjmacho
+
 A program that reads MacOS dSYM files and
 prints header information.
 (mainly focused on sections that may be DWARF data).
 
 #### object_detector
+
 A program that reads a minimal set of
 object header files (for any of the supported object types)
 and prints basic information (file type, offset size, 
@@ -49,7 +53,11 @@ may be required to avoid errors in certain printf
 
 ## RUNNING MAKE CHECK from a release
 
-Download the release and unpack
+Download the release from 
+
+    https://github.com/davea42/readelfobj-code
+
+and unpack
 
     #For example:
     tar xf readelfobj-0.1.0.xz
@@ -66,6 +74,7 @@ We show --enable-wall but that's not necessary, of course.
 We build outside the source tree to keep the tree clean.
 libz will be linked in if it exists. 
 
+    #git clone https://github.com/davea42/readelfobj-code
     #Linux/Unix/MacOS/MinGW(Windows)
     src=/path/to/readelfobj
     cd $src
