@@ -1,7 +1,7 @@
 [![Travis Build
 Status](https://travis-ci.com/davea42/readelfobj-code.svg?branch=master)](https://travis-ci.com/github/davea42/readelfobj-code)
 
-#README.md
+# README.md
 Last update: November 25, 2021
 
 The distribution consists entirely of C
@@ -50,17 +50,15 @@ may be required to avoid errors in certain printf
 ## RUNNING MAKE CHECK from a release
 
 Download the release and unpack
+
     #For example:
     tar xf readelfobj-0.1.0.xz
     cd  readelfobj-0.1.0 
     ./configure --enable-wall
     make
     make check
-
-    Building in a directory separate from
-    the download also works
- 
-
+    #Building in a directory separate from
+    #the download also works
 
 ## RUNNING MAKE CHECK from git clone:
 We leave out checking for success to keep these short.
