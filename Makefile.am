@@ -34,6 +34,7 @@ ChangeLog2018 \
 NEWS \
 README \
 autogen.sh \
+SHALIAS.sh \
 scripts/build_access.py \
 scripts/build_all_relocs.sh \
 scripts/machotype.py  \
