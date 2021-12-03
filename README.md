@@ -72,7 +72,6 @@ and unpack
 We leave out checking for success to keep these short.
 We show --enable-wall but that's not necessary, of course.
 We build outside the source tree to keep the tree clean.
-libz will be linked in if it exists. 
 
     #git clone https://github.com/davea42/readelfobj-code
     #Linux/Unix/MacOS/MinGW(Windows)
