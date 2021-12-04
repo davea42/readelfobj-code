@@ -2,7 +2,7 @@
 Status](https://travis-ci.com/davea42/readelfobj-code.svg?branch=master)](https://travis-ci.com/github/davea42/readelfobj-code)
 
 # README.md
-Last update: December 3, 2021
+Last update: December 4, 2021
 
 The distribution consists entirely of C
 source files (along with scripts
@@ -69,9 +69,12 @@ and unpack
     #the download also works
 
 ## RUNNING MAKE CHECK from git clone:
-We leave out checking for success to keep these short.
-We show --enable-wall but that's not necessary, of course.
+
+Using a git clone is not recommended as
+the autogen.sh step requires one have
+the GNU autotools installed.
 We build outside the source tree to keep the tree clean.
+
 
     #git clone https://github.com/davea42/readelfobj-code
     #Linux/Unix/MacOS/MinGW(Windows)
