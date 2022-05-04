@@ -144,6 +144,7 @@ extern "C" {
 #define DW_DLE_ERROR_NO_DOS_HEADER        45
 #define DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE 46
 #define DW_DLE_MACHO_CORRUPT_HEADER       47
+#define DW_DLE_PE_NO_SECTION_NAME         48
 
 const char *dwarf_get_errname(int i);
 #define P printf

@@ -85,6 +85,7 @@ const char *ro_errname[] = {
 "DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE(46) so we do not "
     "accept the file as pe",/* 46 */
 "DW_DLE_MACHO_CORRUPT_HEADER(47) Corrupt object code",/* 47 */
+"DW_DLE_PE_NO_SECTION_NAME(48) Corrupt section header?",
 0
 };
 
