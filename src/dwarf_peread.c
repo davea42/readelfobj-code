@@ -273,64 +273,6 @@ load_optional_header64(dwarf_pe_object_access_internals_t *pep,
     return DW_DLV_OK;
 }
 
-#if 0
-static int
-pe_load_section (void *obj, unsigned section_index,
-    unsigned char **return_data, int *error)
-{
-    dwarf_pe_object_access_internals_t *pep =
-        (dwarf_pe_object_access_internals_t*)(obj);
-
-    if (0 < section_index &&
-        section_index < pep->pe_section_count) {
-        int res = 0;
-        struct dwarf_pe_generic_image_section_header *sp =
-            pep->pe_sectionptr + section_index;
-        Dwarf_Unsigned read_length = 0;
-
-        if (sp->loaded_data) {
-            *return_data = sp->loaded_data;
-            return DW_DLV_OK;
-        }
-        if (!sp->VirtualSize) {
-            return DW_DLV_NO_ENTRY;
-        }
-        read_length = sp->SizeOfRawData;
-        if (sp->VirtualSize < read_length) {
-            /* Don't read padding that wasn't allocated in memory */
-            read_length = sp->VirtualSize;
-        }
-        if ((read_length + sp->PointerToRawData) >
-            pep->pe_filesize) {
-            *error = DW_DLE_FILE_TOO_SMALL;
-            return DW_DLV_ERROR;
-        }
-        sp->loaded_data = malloc(sp->SizeOfRawData);
-        if (!sp->loaded_data) {
-            *error = DW_DLE_ALLOC_FAIL;
-            return DW_DLV_ERROR;
-        }
-        res = dwarf_object_read_random(pep->pe_fd,sp->loaded_data,
-            sp->PointerToRawData, read_length,
-            pep->pe_filesize, error);
-        if (res != DW_DLV_OK) {
-            free(sp->loaded_data);
-            sp->loaded_data = 0;
-            return res;
-        }
-        if (sp->VirtualSize > read_length) {
-            /*  Zero space that was allocated but
-                truncated from the file */
-            memset(sp->loaded_data + read_length, 0,
-                (sp->VirtualSize - read_length));
-        }
-        *return_data = sp->loaded_data;
-        return DW_DLV_OK;
-    }
-    return DW_DLV_NO_ENTRY;
-}
-#endif /* 0 */
-
 void
 dwarf_destruct_pe_access(
     dwarf_pe_object_access_internals_t *pep)
@@ -437,20 +379,12 @@ dwarf_pe_load_dwarf_section_headers(
             sec_outp->dwarfsectname = strdup("<sec name missing>");
         }
         if ( !sec_outp->name || !sec_outp->dwarfsectname) {
-            *errcode = DW_DLE_ALLOC_FAIL;
+            *errcode = DW_DLE_PE_NO_SECTION_NAME;
             return DW_DLV_ERROR;
         }
         sec_outp->SecHeaderOffset = cur_offset;
         ASNAR(pep->pe_copy_word,sec_outp->VirtualSize,
             filesect.Misc.VirtualSize);
-        if (sec_outp->VirtualSize >= pep->pe_filesize) {
-            printf("Error in PE section %lu: "
-                "Section VirtualSize is 0x%lx but file size "
-                "is 0x%lx\n",
-                (unsigned long)i,
-                (unsigned long)sec_outp->VirtualSize,
-                (unsigned long)pep->pe_filesize);
-        }
         ASNAR(pep->pe_copy_word,sec_outp->VirtualAddress,
             filesect.VirtualAddress);
         ASNAR(pep->pe_copy_word,sec_outp->SizeOfRawData,
@@ -467,7 +401,30 @@ dwarf_pe_load_dwarf_section_headers(
             filesect.NumberOfLinenumbers);
         ASNAR(pep->pe_copy_word,sec_outp->Characteristics,
             filesect.Characteristics);
-        /* sec_outp->loaded data set when we load a section */
+        if (!sec_outp->SizeOfRawData) {
+         if (sec_outp->VirtualSize >= pep->pe_filesize) {
+             printf("WARNING in PE section %lu %s: "
+                 "Section VirtualSize is 0x%lx but file size "
+                 "is 0x%lx (a section like bss, likely ok) "
+                 "\n",
+                 (unsigned long)i,
+                 sec_outp->dwarfsectname,
+                 (unsigned long)sec_outp->VirtualSize,
+                 (unsigned long)pep->pe_filesize);
+            }
+        }
+        else {
+         if (sec_outp->VirtualSize >= pep->pe_filesize) {
+             printf("WARNING in PE section %lu %s: "
+                 "Section VirtualSize is 0x%lx but file size "
+                 "is 0x%lx (could be fine or could be "
+                 "corrupt data) \n",
+                 (unsigned long)i,
+                 sec_outp->dwarfsectname,
+                 (unsigned long)sec_outp->VirtualSize,
+                 (unsigned long)pep->pe_filesize);
+            }
+        }
     }
     return DW_DLV_OK;
 }
