@@ -1817,9 +1817,10 @@ elf_print_gnu_debuglink(elf_filedata ep)
         unsigned char *cp = crc;
 
         printf("  Section .gnu_debuglink\n");
-        printf("    link:   \"%s\"\n",sanitized(debuglinkname,
+        printf("    link              :   \"%s\"\n",
+            sanitized(debuglinkname,
             buffer6,sizeof(buffer6)));
-        printf("    crc :    0x");
+        printf("    compiler crc value:    0x");
         for (i = 0; i < 4; ++i) {
             printf("%02x ",cp[i]);
         }
