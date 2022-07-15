@@ -1420,6 +1420,11 @@ report_wasted_space(elf_filedata  ep)
                 int wasted_space_zero = FALSE;
 
                 if (misaligned) {
+                    /*  Section alignment (u_align) is set
+                        from the Elf header. For Elf32
+                        it is set 4, for Elf64 it is set 8 
+                        This is not a requirement of Elf,
+                        but is usually what is done. */
                     distance =  iupa->u_align - misaligned;
                     newlast += distance;
                 }
@@ -1458,12 +1463,17 @@ report_wasted_space(elf_filedata  ep)
                     /* A gap after alignment */
                     /* FALL thru */
                 } else {
-                    /*  ERROR in object: alignment. */
+                    /*  object: alignment. */
+                    /*  Section alignment (u_align) is set
+                        from the Elf header. For Elf32
+                        it is set 4, for Elf64 it is set 8 
+                        This is not a requirement of Elf,
+                        but is usually what is done. */
                     P("Warning: A gap of " LONGESTUFMT
-                        " forced by alignment "
+                        " suggested by Elf32/64 alignment "
                         LONGESTUFMT
-                        " would get into next area, "
-                        "something wrong. "
+                        " would get into the next area, "
+                        "which could possibly be an error. "
                         LONGESTXFMT " > "  LONGESTXFMT
                         "\n",
                         distance,iupa->u_align,
