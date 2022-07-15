@@ -1,3 +1,90 @@
+2022-07-15:  David Anderson
+    commit 6ac624505c18bcb2d097be2426bdb26fce127a79
+
+    A warning was suggesting an error when
+    really it was just a *possible* error.
+    Message is clearer now.
+            modified:   src/readelfobj.c
+
+2022-05-04:  David Anderson
+    commit 5fc8534f8a1bf3af590eee4d5c9fc55f17db40e8
+
+    Adding DW_DLE_PE_NO_SECTION_NAME as an error code.
+            modified:   dwarf_reading.h
+            modified:   errormessages.c
+
+2022-05-04:  David Anderson
+    commit 887095fb51afd9c0888f82ad031ec10476b6c116
+
+    Removed dead section-load code.
+            modified:   dwarf_peread.c
+
+2022-05-04:  David Anderson
+    commit 8498c208cf0d22d3e4267cf5edbc87bc7a2e8bc2
+
+    Now the : in print statements line up better.
+            modified:   readelfobj.c
+
+2021-12-04:  David Anderson
+    commit a97ccf15eaabc2a2158eb64913b494e6a88d7f66
+
+    Added note that to use a clone
+    the GNU autotools have to be installed.
+            modified:   README
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit f09c095215c0deefd1d54234d174bd205e682988
+
+    Does not actually use libz, remove the mention of libz.
+            modified:   README
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit 06e022f350006c3a3bee7002eeed6f056f422c06
+
+    Correcting a typo.
+            modified:   README
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit 5458078d89fd29b9cc24debea9d597096617d1a5
+
+    Now mentions download and git clone, each with instructions
+            modified:   README
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit 35ab2c3dd3833bd3c3c5544ffa9ce6d93fb7982e
+
+    Refining the text.
+            modified:   README
+            modified:   README.md
+
+2021-12-03:  David Anderson
+    commit 1d06ce5ffaac97fe8e08d2f711f7d619d053dd66
+
+    Updated the text to reflect the ability
+    to download just a release, git clone
+    not necessary.
+            modified:   README
+            new file:   README.md
+
+2021-12-03:  David Anderson
+    commit cb1ecf9eb5c226c43054cac65dd440689bb277d7
+
+    Corrected. Now has ending newling
+            modified:   .gitignore
+    One more file needed in dist, now put into any distribution.
+            modified:   Makefile.am
+
+2021-11-27:  David Anderson
+    commit a1743f806f008a5a145621754ea5cb196797a579
+
+    Now using git log as input and reformatting
+    to look like ChangeLog
+            modified:   ChangeLog
+
 2021-11-27:  David Anderson
     commit afed2a71ae594cbec666c9719103a1c94a58c114
 
