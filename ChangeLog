@@ -1,4 +1,17 @@
 2022-07-17:  David Anderson
+    commit dcb4e1a439e30f279fa79c1d6e2bebe16ae36029
+
+    Version is now 0.1.1, given small additions to the code
+    in the previous commit..
+            modified:   configure.ac
+
+2022-07-17:  David Anderson
+    commit 512591ea23b9ce349c6bad33bd955bdbe466f443
+
+    Now With latest from git log.
+            modified:   ChangeLog
+
+2022-07-17:  David Anderson
     commit 21fd0b63a1e82d4f036f1fd6319b43f3a200190f
 
     Fixed a typo in a comment.
