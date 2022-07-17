@@ -187,7 +187,9 @@ echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  Nonstandardprintf....: ${enable_nonstandardprintf}"
 echo "  BuildOS-BigEndian....: ${ac_cv_c_bigendian}"
 echo
-echo "  readelfobj...........: always"
+echo "  readelfobj,readobjpe, "
+echo "  readobjmacho, "
+echo "  object_detector      : always"
 echo
 echo "Compilation............: make (or gmake)"
 echo "  CPPFLAGS.............: $CPPFLAGS"
