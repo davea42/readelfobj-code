@@ -21,23 +21,53 @@ Section Groups: No section groups or .dwo sections present. Elf object file yyy/
 String section data at 0x11b (283) length 0x81 (129)
 
 Section count: 15
- [i] offset      size        name         (flags)(type)(link,info,align)
+ [i] offset      size        name         addr     (flags)(type)(link,info,align)
 {
 [ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
+    Hdroffset: 0x000001e0
+    Addr     : 0x00000000
 [ 1] 0x00000040 0x00000000 .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000220
+    Addr     : 0x00000000
 [ 2] 0x00000040 0x00000000 .data          (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000260
+    Addr     : 0x00000000
 [ 3] 0x00000040 0x00000000 .bss           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
+    Hdroffset: 0x000002a0
+    Addr     : 0x00000000
 [ 4] 0x00000040 0x00000004 .tbss          (SHF_WRITE SHF_ALLOC SHF_TLS)(SHT_NOBITS)(0,0x0,0x4)
+    Hdroffset: 0x000002e0
+    Addr     : 0x00000000
 [ 5] 0x00000040 0x0000004a .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000320
+    Addr     : 0x00000000
 [ 6] 0x000006a8 0x000000c0 .rela.debug_info (0)(SHT_RELA)(13,0x5,0x8)
+    Hdroffset: 0x00000360
+    Addr     : 0x00000000
 [ 7] 0x0000008a 0x00000030 .debug_abbrev  (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000003a0
+    Addr     : 0x00000000
 [ 8] 0x000000ba 0x00000026 .debug_line    (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000003e0
+    Addr     : 0x00000000
 [ 9] 0x000000e0 0x0000001e .debug_str     (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000420
+    Addr     : 0x00000000
 [10] 0x000000fe 0x0000001d .comment       (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000460
+    Addr     : 0x00000000
 [11] 0x0000011b 0x00000000 .note.GNU-stack (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000004a0
+    Addr     : 0x00000000
 [12] 0x0000011b 0x00000081 .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
+    Hdroffset: 0x000004e0
+    Addr     : 0x00000000
 [13] 0x00000560 0x00000138 .symtab        (0)(SHT_SYMTAB)(14,0xc,0x8)
+    Hdroffset: 0x00000520
+    Addr     : 0x00000000
 [14] 0x00000698 0x00000009 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
+    Hdroffset: 0x00000560
+    Addr     : 0x00000000
 Summary: 190 bytes for 4 debug sections
 }
 Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/sparc64-64-tls.o
@@ -114,16 +144,16 @@ Symbols from .symtab: 13 at offset 0x560
 Relocation Sections
 {
 
-Section 0: .rela.debug_info reloccount: 8 links-sec: 5 symtabsec: 13
- [i]   offset   info        type symbol     addend
-[0]  0x00000006 0x700000017 R_SPARC_UA32   23 7 .debug_abbrev +0
-[1]  0x0000000c 0x900000017 R_SPARC_UA32   23 9 .debug_str +12
-[2]  0x00000011 0x900000017 R_SPARC_UA32   23 9 .debug_str +24
-[3]  0x00000015 0x900000017 R_SPARC_UA32   23 9 .debug_str +0
-[4]  0x00000019 0x200000036 R_SPARC_UA64   54 2 .text +0
-[5]  0x00000021 0x200000036 R_SPARC_UA64   54 2 .text +0
-[6]  0x00000029 0x800000017 R_SPARC_UA32   23 8 .debug_line +0
-[7]  0x00000039 0xc0000004d R_SPARC_TLS_DTPOFF64 77 12 a +0
+Section 6: .rela.debug_info reloccount: 8 links-sec: 5 symtabsec: 13
+ [i]   offset   info           type.              symbol  addend
+[0]  0x00000006 0x700000017 R_SPARC_UA32   23. 7 .debug_abbrev +0
+[1]  0x0000000c 0x900000017 R_SPARC_UA32   23. 9 .debug_str +12
+[2]  0x00000011 0x900000017 R_SPARC_UA32   23. 9 .debug_str +24
+[3]  0x00000015 0x900000017 R_SPARC_UA32   23. 9 .debug_str +0
+[4]  0x00000019 0x200000036 R_SPARC_UA64   54. 2 .text +0
+[5]  0x00000021 0x200000036 R_SPARC_UA64   54. 2 .text +0
+[6]  0x00000029 0x800000017 R_SPARC_UA32   23. 8 .debug_line +0
+[7]  0x00000039 0xc0000004d R_SPARC_TLS_DTPOFF64 77. 12 a +0
 }
 Listing Used Areas
 []        offset       length  finaloffset    name

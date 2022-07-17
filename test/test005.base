@@ -53,7 +53,7 @@ Program header 6  type (PT_GNU_RELRO) 0x6474e552
 String section data at 0x20f1b (134939) length 0x184 (388)
 
 Section count: 39
- [i] offset      size        name         (flags)(type)(link,info,align)
+ [i] offset      size        name         addr     (flags)(type)(link,info,align)
 {
 [ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
 [ 1] 0x000001c8 0x00000024 .note.gnu.build-id (SHF_ALLOC)(SHT_NOTE)(0,0x0,0x4)

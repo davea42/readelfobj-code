@@ -53,7 +53,7 @@ Program header 6  type (PT_GNU_RELRO) 0x6474e552
 String section data at 0x20f1b (134939) length 0x184 (388)
 
 Section count: 39
- [i] offset      size        name         (flags)(type)(link,info,align)
+ [i] offset      size        name         addr     (flags)(type)(link,info,align)
 {
 [ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
 [ 1] 0x000001c8 0x00000024 .note.gnu.build-id (SHF_ALLOC)(SHT_NOTE)(0,0x0,0x4)
@@ -107,11 +107,11 @@ GNU .gnu_debuglink and .note.gnu.buildid
 Relocation Sections
 {
 
-Section 0: .rela.dyn reloccount: 0 links-sec: 0 symtabsec: 3
- [i]   offset   info        type symbol     addend
+Section 8: .rela.dyn reloccount: 0 links-sec: 0 symtabsec: 3
+ [i]   offset   info           type.              symbol  addend
 
-Section 0: .rela.plt reloccount: 0 links-sec: 11 symtabsec: 3
- [i]   offset   info        type symbol     addend
+Section 9: .rela.plt reloccount: 0 links-sec: 11 symtabsec: 3
+ [i]   offset   info           type.              symbol  addend
 }
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
 Warning : 1 instances of unused alignment space exist and total 1 bytes of alignment.

@@ -1,11 +1,14 @@
 Usage: readelfobj <options> file ...
 Options:
 --print-dynamic print the .dynamic section (DT_ stuff)
---print-groups print the section group of each DWARF section
---print-relocs print relocation entries (.rela & .rel)
+--print-groups  print the section group of each DWARF section
+--print-relocs  print relocation entries (.rela & .rel)
 --print-symtabs print out all elf symbols (.symtab & .dynsym)
---print-wasted print out details about file space use
-               beyond just the total wasted.
+--print-wasted  print out details about file space use
+                beyond just the total wasted.
+--print-sec-extra print out section header address field
+                and the input file offset of the Shdr
 --only-wasted-summary  Skip printing section/segment data.
---help         print this message
---version      print version string
+--all           Enables all the above options
+--help          print this message
+--version       print version string
