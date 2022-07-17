@@ -1,3 +1,38 @@
+2022-07-17:  David Anderson
+    commit 21fd0b63a1e82d4f036f1fd6319b43f3a200190f
+
+    Fixed a typo in a comment.
+            modified:   configure.ac
+
+    Removed readelfobj_version.h everywhere.
+    Everywhere changed READELFOBJ_VERSION_DATE_STR
+    to PACKAGE_VERSION (which is 0.1.0)
+            modified:   src/Makefile.am
+
+    Now keeps track of the section offset of each section
+    header too, so the printing code can report such..
+            modified:   src/dwarf_load_elf_headers.c
+
+    Added the --print-sec-extra option to report the actual file
+    offset of each section header.
+            modified:   src/readelfobj.c
+
+    Added field f_fdoffset to note (at key points) the file offset.
+    Added field gh_fdoffset to record the file offset of section headers.
+            modified:   src/readelfobj.h
+
+    Just the PACKAGE_VERSION change.
+            modified:   src/readobjmacho.c
+
+    Just the PACKAGE_VERSION change.
+            modified:   src/readobjpe.c
+
+2022-07-15:  David Anderson
+    commit d0318d4a23497264a01f837240bc4f53a4059314
+
+    Now up to date with git log.
+            modified:   ChangeLog
+
 2022-07-15:  David Anderson
     commit 6ac624505c18bcb2d097be2426bdb26fce127a79
 
