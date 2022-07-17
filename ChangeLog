@@ -1,4 +1,25 @@
 2022-07-17:  David Anderson
+    commit 9c51af9ceb0c2783b081e804a24c9cde1eecacba
+
+    baselines of tests now reflect the
+    changes in v0.1.1
+            modified:   test/test001.base
+            modified:   test/test003.base
+            modified:   test/test004.base
+            modified:   test/test005.base
+            modified:   test/test006.base
+            modified:   test/test017.base
+            modified:   test/test019.base
+            modified:   test/test020.base
+            modified:   test/test021.base
+
+2022-07-17:  David Anderson
+    commit 22aabca4bf3165aa304b54ce99d76527edc7b29c
+
+    Now with latest (v0.1.1 the new version)
+            modified:   ChangeLog
+
+2022-07-17:  David Anderson
     commit dcb4e1a439e30f279fa79c1d6e2bebe16ae36029
 
     Version is now 0.1.1, given small additions to the code
