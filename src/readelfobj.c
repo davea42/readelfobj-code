@@ -61,7 +61,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 #include "readelfobj.h"
 #include "sanitized.h"
-#include "readelfobj_version.h"
 #include "dwarf_elf_reloc_aarch64.h"
 #include "dwarf_elf_reloc_arm.h"
 #include "dwarf_elf_reloc_386.h"
@@ -115,6 +114,7 @@ int print_dynamic_sections  = 0; /* .dynamic */
 int print_wasted  = 0; /* prints space use details */
 int only_wasted_summary = 0; /* suppress standard printing */
 int print_groups = 0; /* print group information. */
+int print_sec_extra = 0; /* print address, inputfile offset */
 
 static char buffer1[BUFFERSIZE];
 static char buffer2[BUFFERSIZE];
@@ -126,14 +126,17 @@ FILE *fin;
 char *Usage = "Usage: readelfobj <options> file ...\n"
     "Options:\n"
     "--print-dynamic print the .dynamic section (DT_ stuff)\n"
-    "--print-groups print the section group of each DWARF section\n"
-    "--print-relocs print relocation entries (.rela & .rel)\n"
+    "--print-groups  print the section group of each DWARF section\n"
+    "--print-relocs  print relocation entries (.rela & .rel)\n"
     "--print-symtabs print out all elf symbols (.symtab & .dynsym)\n"
-    "--print-wasted print out details about file space use\n"
-    "               beyond just the total wasted.\n"
+    "--print-wasted  print out details about file space use\n"
+    "                beyond just the total wasted.\n"
+    "--print-sec-extra print out section header address field\n"
+    "                and the input file offset of the Shdr\n"
     "--only-wasted-summary  Skip printing section/segment data.\n"
-    "--help         print this message\n"
-    "--version      print version string\n";
+    "--all           Enables all the above options\n"
+    "--help          print this message\n"
+    "--version       print version string\n";
 
 int
 main(int argc,char **argv)
@@ -161,6 +164,11 @@ main(int argc,char **argv)
                 print_reloc_sections= 1;
                 print_dynamic_sections= 1;
                 print_groups= 1;
+                print_sec_extra = 1;
+                continue;
+            }
+            if (strcmp(argv[0],"--print-sec-extra") == 0) {
+                print_sec_extra= 1;
                 continue;
             }
             if (strcmp(argv[0],"--print-groups") == 0) {
@@ -190,7 +198,7 @@ main(int argc,char **argv)
             if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readelfobj: %s\n",
-                    READELFOBJ_VERSION_DATE_STR);
+                    PACKAGE_VERSION);
                 printed_version = TRUE;
                 continue;
             }
@@ -775,7 +783,7 @@ elf_print_sectheaders(elf_filedata ep)
         return DW_DLV_OK;
     }
     P(" [i] offset      size        name         "
-        "(flags)(type)(link,info,align)\n");
+        "addr     (flags)(type)(link,info,align)\n");
     P("{\n");
     for (i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr = 0;
@@ -809,6 +817,12 @@ elf_print_sectheaders(elf_filedata ep)
             P("," LONGESTXFMT ")" ,gshdr->gh_addralign);
         }
         P("\n");
+        if (print_sec_extra) {
+            P("    Hdroffset: " LONGESTXFMT8,gshdr->gh_fdoffset);
+            P("\n");
+            P("    Addr     : " LONGESTXFMT8,gshdr->gh_addr);
+            P("\n");
+        }
         if ( gshdr->gh_type == SHT_REL ||
             gshdr->gh_type == SHT_RELA) {
 
@@ -1086,8 +1100,9 @@ elf_print_relocation_content(
         count,gsh->gh_info,
         gsh->gh_link);
 
-    P(" [i]   offset   info        type symbol %s\n",isrela?
-        "    addend":"");
+    P(" [i]   offset   info           type.              "
+        "symbol %s\n",isrela?
+        " addend":"");
     for (i = 0; i < count; ++i,grela++) {
         int errcode = 0;
         const char *symname = "";
@@ -1116,7 +1131,7 @@ elf_print_relocation_content(
             grela->gr_info);
         P(" "
             "%-14s "
-            LONGESTUFMT,
+            LONGESTUFMT ".",
             typename,
             grela->gr_type);
         P(" "

@@ -1015,6 +1015,7 @@ struct generic_shdr {
     Dwarf_Unsigned gh_info;
     Dwarf_Unsigned gh_addralign;
     Dwarf_Unsigned gh_entsize;
+    Dwarf_Unsigned gh_fdoffset;
 
     /*  Zero unless content read in. Malloc space
         of size gh_size,  in bytes. For dwarf
@@ -1095,6 +1096,10 @@ struct elf_filedata_s {
         Only version 1 is defined. */
     char         f_ident[8];
     int          f_fd;
+    /*   f_fdoffset is the file position of the start of
+         some blob, such as section header or program header
+         or a section itself.  */
+    int          f_fdoffset;
     int          f_printf_on_error;
     int          f_machine; /* from f_ident(EI_MACHINE) */
     char *       f_path; /* non-null if known. Must be freed */

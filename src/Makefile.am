@@ -37,7 +37,6 @@ dwarf_elf_reloc_x86_64.c \
 dwarf_elf_reloc_x86_64.h \
 dwarf_load_elf_headers.c \
 errormessages.c \
-readelfobj_version.h \
 readelfobj.c \
 dwarf_reading.h \
 dw_elfstructs.h \

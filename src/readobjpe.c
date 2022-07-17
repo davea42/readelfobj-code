@@ -45,7 +45,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 #include "dwarf_peread.h"
 #include "sanitized.h"
-#include "readelfobj_version.h"
 
 #define BUFFERSIZE 1000
 static char buffer1[BUFFERSIZE];
@@ -256,7 +255,7 @@ main(int argc,char **argv)
             if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readobjpe: %s\n",
-                    READELFOBJ_VERSION_DATE_STR);
+                    PACKAGE_VERSION);
                 printed_version = TRUE;
                 continue;
             }

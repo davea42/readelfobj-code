@@ -490,7 +490,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-
+    ep->f_fdoffset = lseek(ep->f_fd,offset,SEEK_CUR);
     orig_psh = psh;
     orig_gshdr = gshdr;
     res = RRMOA(ep->f_fd,psh,offset,count*entsize,
@@ -505,6 +505,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
     for (i = 0; i < count;
         ++i,  psh++,gshdr++) {
         gshdr->gh_secnum = i;
+        gshdr->gh_fdoffset = ep->f_fdoffset +i*entsize;
         ASNAR(ep->f_copy_word,gshdr->gh_name,psh->sh_name);
         ASNAR(ep->f_copy_word,gshdr->gh_type,psh->sh_type);
         ASNAR(ep->f_copy_word,gshdr->gh_flags,psh->sh_flags);
@@ -529,7 +530,8 @@ generic_shdr_from_shdr32(elf_filedata ep,
 
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
-                gshdr->gh_offset,gshdr->gh_size,ALIGN4);
+                gshdr->gh_offset,gshdr->gh_size,
+                gshdr->gh_addralign /* was ALIGN4 */);
         }
     }
     free(orig_psh);
@@ -579,6 +581,7 @@ generic_shdr_from_shdr64(elf_filedata ep,
 
     orig_psh = psh;
     orig_gshdr = gshdr;
+    ep->f_fdoffset = lseek(ep->f_fd,offset,SEEK_CUR);
     res = RRMOA(ep->f_fd,psh,offset,count*entsize,
         ep->f_filesize,errcode);
     if (res != RO_OK) {
@@ -593,6 +596,8 @@ generic_shdr_from_shdr64(elf_filedata ep,
     }
     for (i = 0; i < count;
         ++i,  psh++,gshdr++) {
+        gshdr->gh_secnum = i;
+        gshdr->gh_fdoffset = ep->f_fdoffset +i*entsize;
         ASNAR(ep->f_copy_word,gshdr->gh_name,psh->sh_name);
         ASNAR(ep->f_copy_word,gshdr->gh_type,psh->sh_type);
         ASNAR(ep->f_copy_word,gshdr->gh_flags,psh->sh_flags);
@@ -616,7 +621,8 @@ generic_shdr_from_shdr64(elf_filedata ep,
         }
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
-                gshdr->gh_offset,gshdr->gh_size,ALIGN8);
+                gshdr->gh_offset,gshdr->gh_size,
+                gshdr->gh_addralign /* was ALIGN8 */);
         }
     }
     free(orig_psh);

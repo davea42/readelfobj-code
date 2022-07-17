@@ -58,7 +58,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 #include "dwarf_machoread.h"
 #include "sanitized.h"
-#include "readelfobj_version.h"
 
 int printfilenames = FALSE;
 
@@ -156,7 +155,7 @@ main(int argc,char **argv)
             if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readobjmacho: %s\n",
-                    READELFOBJ_VERSION_DATE_STR);
+                    PACKAGE_VERSION);
                 printed_version = TRUE;
                 continue;
             }

@@ -2,7 +2,7 @@
 ###Derived from Torri's work, but this is by David Anderson
 ###This code is public domain and can be freely used or copied.
 
-dnl defines the version name of  the libdwarf.so
+dnl defines the version name of the programs
 m4_define([v_maj], [0])
 m4_define([v_min], [1])
 m4_define([v_mic], [0])
