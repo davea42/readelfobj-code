@@ -44,7 +44,7 @@ The test directory contains numerous examples of
 using the programs.
 
 To dump DWARF section contents one should use dwarfdump
-(a part of the libdwarf project distribution) or
+(a part of the libdwarf-code github project) or
 GNU readelf (in GNU binutils).
 
 For Mingw (Windows):
