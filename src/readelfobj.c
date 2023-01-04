@@ -631,6 +631,11 @@ static int
 elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
 {
     struct generic_shdr *psh = 0;
+    if (!stringsection) {
+        P("Section strings missing String section number %lu\n",
+            (unsigned long)stringsection);
+        return DW_DLV_OK;
+    }
     if (!ep->f_shdr) {
         P("Section strings never found. String section number %lu\n",
             (unsigned long)stringsection);
@@ -1038,8 +1043,7 @@ static int
 get_elf_reloc_name(
     Dwarf_Unsigned machine,
     Dwarf_Unsigned type,
-    const char **typename_out,
-    UNUSEDARG int *errcode)
+    const char **typename_out)
 {
     const char *tname = 0;
 
@@ -1119,7 +1123,7 @@ elf_print_relocation_content(
         }
         if (grela->gr_type) {
             get_elf_reloc_name(ep->f_ehdr->ge_machine,
-                grela->gr_type,&typename,&errcode);
+                grela->gr_type,&typename);
         }
 
         P("[" LONGESTUFMT "] ",i);
@@ -1154,13 +1158,13 @@ elf_print_relocation_content(
             const char *typenx =0;
             if (grela->gr_type2) {
                 get_elf_reloc_name(ep->f_ehdr->ge_machine,
-                    grela->gr_type2,&typenx,&errcode);
+                    grela->gr_type2,&typenx);
                 P("         Type2: %u %s\n",grela->gr_type2,typenx);
             }
             typenx = 0;
             if (grela->gr_type3) {
                 get_elf_reloc_name(ep->f_ehdr->ge_machine,
-                    grela->gr_type3,&typenx,&errcode);
+                    grela->gr_type3,&typenx);
                 P("         Type3: %u %s\n",grela->gr_type3,typenx);
             }
         }
@@ -1249,8 +1253,9 @@ elf_print_elf_header(elf_filedata ep)
     P("  e_phnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_phnum);
     P("  e_shentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_shentsize);
     P("  e_shnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_shnum);
+    P("  e_shstrndx : " LONGESTXFMT  "\n", ep->f_ehdr->ge_shstrndx);
     if (ep->f_ehdr->ge_shstrndx == SHN_UNDEF) {
-        P("  Section strings are not present e_shstrndx "
+        P("  Section strings are not present e_shstrndx"
             "==SHN_UNDEF\n");
     } else {
         P("  Section strings are in section "

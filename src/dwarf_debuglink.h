@@ -77,3 +77,6 @@ int dwarf_gnu_buildid(elf_filedata ep,
 int dwarf_add_debuglink_global_path(elf_filedata ep,
     const char * pathname,
     int * errcode);
+
+/*  A generous heuristic */
+#define  DW_BUILDID_SANE_SIZE (1024*8)

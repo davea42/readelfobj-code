@@ -145,6 +145,12 @@ extern "C" {
 #define DW_DLE_DW_DLE_ERROR_NO_NT_SIGNATURE 46
 #define DW_DLE_MACHO_CORRUPT_HEADER       47
 #define DW_DLE_PE_NO_SECTION_NAME         48
+#define DW_DLE_NO_SECT_STRINGS            49
+#define DW_DLE_TOO_FEW_SECTIONS            50
+#define DW_DLE_BUILD_ID_DESCRIPTION_SIZE   51
+#define DW_DLE_BAD_SECTION_FLAGS           52
+#define DW_DLE_IMPROPER_SECTION_ZERO       53
+
 
 const char *dwarf_get_errname(int i);
 #define P printf

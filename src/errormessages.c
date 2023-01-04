@@ -76,7 +76,7 @@ const char *ro_errname[] = {
 "DW_DLE_STRING_NOT_TERMINATED",   /*   38 */
 "DW_DLE_FORM_STRING_BAD_STRING",  /*   39 */
 "DW_DLE_CORRUPT_GNU_DEBUGLINK",   /*   40 */
-"DW_DLE_CORRUPT_NOTE_GNU_DEBUGID",/*   41 */
+"DW_DLE_CORRUPT_NOTE_GNU_DEBUGID Corrupt .note.gnu.build-id section",/*   41 */
 "DW_DLE_CORRUPT_GNU_DEBUGID_STRING",/* 42 */
 "DW_DLE_CORRUPT_GNU_DEBUGID_SIZE",/*   43 */
 "DW_DLE_ALLOC_FAIL(44) malloc failed",             /*    44 */
@@ -86,6 +86,11 @@ const char *ro_errname[] = {
     "accept the file as pe",/* 46 */
 "DW_DLE_MACHO_CORRUPT_HEADER(47) Corrupt object code",/* 47 */
 "DW_DLE_PE_NO_SECTION_NAME(48) Corrupt section header?",
+"DW_DLE_NO_SECT_STRINGS(49) Corrupt Sections",
+"DW_DLE_TOO_FEW_SECTIONS(50) Corrupt object file",
+"DW_DLE_BUILD_ID_DESCRIPTION_SIZE(51) Corrupt .gnu.note/build-id section",
+"DW_DLE_BAD_SECTION_FLAGS(52) Corrupt section flag bits",
+"DW_DLE_IMPROPER_SECTION_ZERO(53) Section 0 is not empty but must be",
 0
 };
 

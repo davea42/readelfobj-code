@@ -180,11 +180,12 @@ static int
 pe_get_section_info (void *obj,
     Dwarf_Half section_index,
     Dwarf_Obj_Access_Section *return_section,
-    UNUSEDARG int *error)
+    int *error)
 {
     dwarf_pe_object_access_internals_t *pep =
         (dwarf_pe_object_access_internals_t*)(obj);
 
+    (void)error; /* avoid compiler warning */
     if (section_index < pep->pe_section_count) {
         struct dwarf_pe_generic_image_section_header *sp = 0;
         sp = pep->pe_sectionptr + section_index;
@@ -745,7 +746,6 @@ _dwarf_pe_object_access_internals_init(
     unsigned endian,
     unsigned offsetsize,
     size_t filesize,
-    UNUSEDARG Dwarf_Unsigned access,
     int *errcode)
 {
     dwarf_pe_object_access_internals_t * intfc = internals;
@@ -830,7 +830,6 @@ _dwarf_pe_object_access_init(
         path,
         lib_owns_fd,
         ftype, endian, offsetsize, filesize,
-        access,
         localerrnum);
     if (res != DW_DLV_OK){
         /* *err is already set. */

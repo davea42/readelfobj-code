@@ -128,6 +128,27 @@ is_empty_section(Dwarf_Unsigned type)
     return FALSE;
 }
 
+int nibblecounts[16] = {
+0,1,1,2,
+1,2,2,3,
+2,2,2,3,
+2,3,3,4
+};
+
+static int
+getbitsoncount(Dwarf_Unsigned v_in)
+{
+     int           bitscount = 0;
+     Dwarf_Unsigned v = v_in;
+
+     while (v) {
+         unsigned int nibble = v & 0xf;
+         bitscount += nibblecounts[nibble];
+         v >>= 4;
+     }
+     return bitscount;
+}
+
 int
 dwarf_construct_elf_access_path(const char *path,
     elf_filedata *mp,int *errcode)
@@ -201,12 +222,13 @@ dwarf_construct_elf_access(int fd,
     the caller to avoid use of the pointer. */
 int
 dwarf_destruct_elf_access(elf_filedata ep,
-    UNUSEDARG int *errcode)
+    int *errcode)
 {
     struct generic_shdr *shp = 0;
     Dwarf_Unsigned shcount = 0;
     Dwarf_Unsigned i = 0;
 
+    (void)errcode;
     for (i = 0; i < ep->f_gnu_global_path_count;++i) {
         char *d = ep->f_gnu_global_paths[i];
         free(d);
@@ -248,7 +270,7 @@ dwarf_destruct_elf_access(elf_filedata ep,
 static int
 generic_ehdr_from_32(elf_filedata ep,
     struct generic_ehdr *ehdr, dw_elf32_ehdr *e,
-    UNUSEDARG int *errcode)
+    int *errcode)
 {
     int i = 0;
 
@@ -268,6 +290,32 @@ generic_ehdr_from_32(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shentsize,e->e_shentsize);
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
+    if (ehdr->ge_shstrndx < 1) {
+        /*  Section 0 is reserved, is supposed to 
+            be an empty section. Corrupt Elf */
+        P("ERROR Header section strings section index"
+            " zero is not allowed. Section 0 cannot"
+            " have strings. See Elf ABI.\n");
+#if 0
+        *errcode = DW_DLE_NO_SECT_STRINGS;   
+        return DW_DLV_ERROR;
+#endif
+    }
+    if (ehdr->ge_shstrndx >= ehdr->ge_shnum) {
+        P("ERROR Header section strings section index "
+            LONGESTUFMT " is improper, there are only "
+            LONGESTUFMT "sections. Corrupt Elf\n",
+            ehdr->ge_shstrndx,ehdr->ge_shnum);
+#if 0
+        *errcode = DW_DLE_NO_SECT_STRINGS;   
+        return DW_DLV_ERROR;
+#endif
+    }
+    if ( ehdr->ge_shnum < 3) {
+        P("ERROR: The section count  is less than "
+            "three.  That is not enough sections "
+            "to be useable sections.\n");
+    }
     ep->f_ehdr = ehdr;
     ep->f_machine = ehdr->ge_machine;
     ep->f_loc_ehdr.g_name = "Elf File Header";
@@ -301,6 +349,33 @@ generic_ehdr_from_64(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shentsize,e->e_shentsize);
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
+    if (ehdr->ge_shstrndx < 1) {
+        /*  Section 0 is reserved, is supposed to
+            be an empty section. Corrupt Elf */
+        P("ERROR Header section strings section index"
+            " zero is not allowed. Section 0 cannot"
+            " have strings. See Elf ABI.\n");
+#if 0
+        *errcode = DW_DLE_NO_SECT_STRINGS;
+        return DW_DLV_ERROR;
+#endif
+    }
+    if (ehdr->ge_shstrndx >= ehdr->ge_shnum) {
+        /*  Bad section number  for strings. Corrupt Elf */
+        P("ERROR Header section strings section index "
+            LONGESTUFMT " is improper, there are only "
+            LONGESTUFMT "sections. Corrupt Elf\n",
+            ehdr->ge_shstrndx,ehdr->ge_shnum);
+#if 0
+        *errcode = DW_DLE_NO_SECT_STRINGS;
+        return DW_DLV_ERROR;
+#endif
+    }
+    if ( ehdr->ge_shnum < 3) {
+        P("ERROR: The section count  is less than "
+            "three.  That is not enough sections "
+            "to be useable sections.\n");
+    }
     ep->f_ehdr = ehdr;
     ep->f_machine = ehdr->ge_machine;
     ep->f_loc_ehdr.g_name = "Elf File Header";
@@ -504,6 +579,9 @@ generic_shdr_from_shdr32(elf_filedata ep,
     }
     for (i = 0; i < count;
         ++i,  psh++,gshdr++) {
+        int isempty = FALSE;
+        int bitsoncount = 0;
+
         gshdr->gh_secnum = i;
         gshdr->gh_fdoffset = ep->f_fdoffset +i*entsize;
         ASNAR(ep->f_copy_word,gshdr->gh_name,psh->sh_name);
@@ -519,7 +597,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
-            printf("ERROR: Section Size32 > filesize. Corrupt object "
+            P("ERROR: Section Size32 > filesize. Corrupt object "
                 "Section number %lu, "
                 "Section size 0x%lx, "
                 "File size 0x%lx\n",
@@ -527,7 +605,24 @@ generic_shdr_from_shdr32(elf_filedata ep,
                 (unsigned long)gshdr->gh_size,
                 (unsigned long)ep->f_filesize);
         }
-
+        isempty = is_empty_section(gshdr->gh_type); 
+        if (i == 0) {
+            /*  We require that section zero be 'empty'
+                per the Elf ABI. */
+            if (!isempty || gshdr->gh_name || gshdr->gh_flags ||
+                gshdr->gh_addr || gshdr->gh_link ||
+                gshdr->gh_info) { 
+                printf("ERROR: Section 0 must be empty, but it"
+                    " is not empty. See Elf ABI.\n");
+            }
+        } 
+        bitsoncount = getbitsoncount(gshdr->gh_flags);
+        if (bitsoncount > 8) {
+            printf("ERROR: section header sh_flags "
+                LONGESTXFMT " has too"
+                " many flag bits on (%d) to be real\n",
+                gshdr->gh_flags,bitsoncount);
+        }
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
                 gshdr->gh_offset,gshdr->gh_size,
@@ -596,6 +691,9 @@ generic_shdr_from_shdr64(elf_filedata ep,
     }
     for (i = 0; i < count;
         ++i,  psh++,gshdr++) {
+        int isempty = FALSE;
+        int bitsoncount = 0;
+
         gshdr->gh_secnum = i;
         gshdr->gh_fdoffset = ep->f_fdoffset +i*entsize;
         ASNAR(ep->f_copy_word,gshdr->gh_name,psh->sh_name);
@@ -618,6 +716,24 @@ generic_shdr_from_shdr64(elf_filedata ep,
                 (unsigned long)i,
                 (unsigned long)gshdr->gh_size,
                 (unsigned long)ep->f_filesize);
+        }
+        isempty = is_empty_section(gshdr->gh_type);
+        if (i == 0) {
+            /*  We require that section zero be 'empty'
+                per the Elf ABI. */
+            if (!isempty || gshdr->gh_name || gshdr->gh_flags ||
+                gshdr->gh_addr || gshdr->gh_link ||
+                gshdr->gh_info) { 
+                printf("ERROR: Section 0 must be empty, but it"
+                    " is not empty. See Elf ABI.\n");
+            }
+        }
+        bitsoncount = getbitsoncount(gshdr->gh_flags);
+        if (bitsoncount > 8) {
+            printf("ERROR: section header sh_flags " 
+                LONGESTXFMT " has too"
+                " many flag bits on (%d) to be real\n",
+                gshdr->gh_flags,bitsoncount);
         }
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
@@ -2159,9 +2275,14 @@ elf_load_sect_namestring(elf_filedata ep, int *errcode)
     }
     for (i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr =
-            "<Invalid sh_name value. Corrupt Elf.>";
+            "<No valid Elf section strings exist>";
         int res = 0;
 
+        if (!ep->f_ehdr->ge_shstrndx || !stringsecbase) {
+            gshdr->gh_namestring = namestr;
+            continue;
+        }
+        namestr = "<Invalid sh_name value. Corrupt Elf.>";
         res = validate_section_name_string(ep->f_elf_shstrings_length,
             i, gshdr->gh_name, stringsecbase,
             errcode);

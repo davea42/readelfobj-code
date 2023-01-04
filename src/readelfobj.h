@@ -1141,6 +1141,7 @@ struct elf_filedata_s {
     char *f_elf_shstrings_data; /* section name strings */
     /* length of currentsection.  Might be zero..*/
     Dwarf_Unsigned  f_elf_shstrings_length;
+    Dwarf_Unsigned  f_elf_shstrings_secnumber;
     /* size of malloc-d space */
     Dwarf_Unsigned  f_elf_shstrings_max;
 
