@@ -1,0 +1,10 @@
+
+Do not recompile the test source.
+
+testobj.baseobj  is the output of compiling elfextendedtestcase.c
+
+testobj.extend   is a patched version of testobj.baseobj
+so one can test if the support of elf extended (which
+allow 32bit offsets with Elf32) is working.
+
+
