@@ -1263,7 +1263,7 @@ elf_print_elf_header(elf_filedata ep)
             "section zero\n");
     }
     if (ep->f_ehdr->ge_shnum_in_shnum) {
-        printf("  e_shnum    : " LONGESTXFMT " (" LONGESTUFMT") \n", 
+        printf("  e_shnum    : " LONGESTXFMT " (" LONGESTUFMT") Number of sections\n", 
             ep->f_ehdr->ge_shnum,
             ep->f_ehdr->ge_shnum);
     } else {
@@ -1274,7 +1274,7 @@ elf_print_elf_header(elf_filedata ep)
             "section zero\n");
     }
     if (ep->f_ehdr->ge_strndx_in_strndx) {
-        printf("  e_shstrndx : " LONGESTXFMT " (" LONGESTUFMT ") \n", 
+        printf("  e_shstrndx : " LONGESTXFMT " (" LONGESTUFMT ") Section strings section\n", 
             ep->f_ehdr->ge_shstrndx,
             ep->f_ehdr->ge_shstrndx);
     } else {
