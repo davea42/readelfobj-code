@@ -515,6 +515,9 @@ do_one_file(const char *s)
     /* If there are no .group sections this will remain at 3. */
     ep->f_sg_next_group_number = 3;
 
+#if 0
+printf("dadebug now load elf hdr\n");
+#endif
     res = dwarf_load_elf_header(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("ERROR: unable to load elf header. errcode %d (%s)\n",
@@ -529,6 +532,9 @@ do_one_file(const char *s)
         return;
     }
 
+#if 0
+printf("dadebug now load secthdrs\n");
+#endif
     res = dwarf_load_elf_sectheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         print_minimum(ep);
@@ -1252,14 +1258,31 @@ elf_print_elf_header(elf_filedata ep)
     P("  e_phentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_phentsize);
     P("  e_phnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_phnum);
     P("  e_shentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_shentsize);
-    P("  e_shnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_shnum);
-    P("  e_shstrndx : " LONGESTXFMT  "\n", ep->f_ehdr->ge_shstrndx);
+    if (ep->f_ehdr->ge_shnum_extended) {
+        P("  e_shnum    :  is in extended form, value from "
+            "section zero\n");
+    }
+    if (ep->f_ehdr->ge_shnum_in_shnum) {
+        printf("  e_shnum    : " LONGESTXFMT " (" LONGESTUFMT") \n", 
+            ep->f_ehdr->ge_shnum,
+            ep->f_ehdr->ge_shnum);
+    } else {
+        P("ERROR:  e_shnum    : never set properly\n");
+    }
+    if (ep->f_ehdr->ge_strndx_extended) {
+        P("  e_shstrndx : is in extended form, value from "
+            "section zero\n");
+    }
+    if (ep->f_ehdr->ge_strndx_in_strndx) {
+        printf("  e_shstrndx : " LONGESTXFMT " (" LONGESTUFMT ") \n", 
+            ep->f_ehdr->ge_shstrndx,
+            ep->f_ehdr->ge_shstrndx);
+    } else {
+        P("ERROR  e_shstrndx : never set properly\n");
+    }
     if (ep->f_ehdr->ge_shstrndx == SHN_UNDEF) {
         P("  Section strings are not present e_shstrndx"
             "==SHN_UNDEF\n");
-    } else {
-        P("  Section strings are in section "
-            LONGESTUFMT "\n",ep->f_ehdr->ge_shstrndx);
     }
     if (ep->f_ehdr->ge_shstrndx > ep->f_ehdr->ge_shnum) {
         P("String section index is wrong: "

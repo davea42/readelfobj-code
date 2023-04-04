@@ -838,6 +838,10 @@ extern int printfilenames;
 #define SHN_HIRESERVE 0xffff
 #endif
 
+#ifndef SHN_XINDEX
+#define SHN_XINDEX 0xffff
+#endif /* SHN_XINDEX */
+
 #ifndef EV_CURRENT
 #define EV_CURRENT       1
 #endif
@@ -989,7 +993,23 @@ struct generic_ehdr {
     Dwarf_Unsigned ge_phnum;
     Dwarf_Unsigned ge_shentsize;
     Dwarf_Unsigned ge_shnum;
+    /*  if ge_shnum >= 0xff00 SHN_LORESERVE
+        Once section zero is read we put the sh_size
+        member as the true count and set ge_shnum_in_shnum TRUE.
+        ge_shnum_extended is TRUE if the object used the extension
+        mechanism */
+    unsigned char ge_shnum_in_shnum;
+    unsigned char ge_shnum_extended;
+
     Dwarf_Unsigned ge_shstrndx;
+    /* if section num of sec strings >= 0xff SHN_LORESERVE
+        this member holds SHN_XINDEX (0xffff) and the real
+        section string index is the sh_link value of section
+        0.  ge_sstrndx_extended is TRUE if the object used
+        the extension mechanism */
+    unsigned char  ge_strndx_in_strndx;
+    unsigned char  ge_strndx_extended;
+
 };
 struct generic_phdr {
     Dwarf_Unsigned gp_type;
