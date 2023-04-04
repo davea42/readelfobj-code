@@ -100,7 +100,10 @@ CLEANFILES = \
   object_detector \
   readobjmacho \
   readobjpe \
-  readelfobj
+  readelfobj \
+  elfextended/testobj \
+  elfextended/testobj64
+
 
 
 check:
