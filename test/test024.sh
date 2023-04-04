@@ -1,18 +1,26 @@
 #!/bin/sh
-n=test007
-
+n=test024
 if [ x$DWTOPSRCDIR = "x" ]
 then
   top_srcdir=$top_blddir
 else
   top_srcdir=$DWTOPSRCDIR
 fi
+top_srcdir=/home/davea/dwarf/readelfobj/code
 srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 o=$srcdir/elfextended/testobj.extend
 cmd="--only-wasted-summary"
 #echo "START test $n "
-./readelfobj $cmd $o  >junk.$n.tmp
+#./readelfobj $cmd $o  >junk.$n.tmp
+#echo "show junk.$n.tmp"
+#cat junk.$n.tmp
+
+x="./readelfobj $cmd  $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

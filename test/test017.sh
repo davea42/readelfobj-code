@@ -10,8 +10,11 @@ srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 o=$srcdir/libdwarf.so.1.0.0
 cmd="--all"
-#echo "START test $n "
-./readelfobj $cmd $o  >junk.$n.tmp
+
+x="./readelfobj $cmd $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

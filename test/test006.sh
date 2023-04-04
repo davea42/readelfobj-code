@@ -12,8 +12,10 @@ o=$srcdir/libkrb5support.so.0.1.debug
 curdir=`pwd`
 
 cmd="--print-wasted"
-#echo "START test $n "
-./readelfobj $cmd $o  >junk.$n.tmp
+x="./readelfobj $cmd $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

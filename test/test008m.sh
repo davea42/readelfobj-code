@@ -10,8 +10,10 @@ srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 
 o="$srcdir/mach-o-object32 $srcdir/mach-o-object64 $srcdir/libkrb5support.so.0.1.debug"
-#echo "START test $n "
-./object_detector  $o  >junk.$n.tmp
+x="./object_detector $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

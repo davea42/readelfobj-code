@@ -12,8 +12,10 @@ base=$srcdir/$n.base
 # This test should fail on all as we don't allow outpath
 # in the dwarf_object_detector_path call.
 o="-z $srcdir/mach-o-object32 $srcdir/mach-o-object64 $srcdir/libkrb5support.so.0.1.debug"
-#echo "START test $n "
-./object_detector  $o  >junk.$n.tmp
+x="./object_detector $cmd $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

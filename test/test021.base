@@ -16,8 +16,8 @@ Section Groups: No section groups or .dwo sections present. Elf object file yyy/
   e_phentsize: 0x0
   e_phnum    : 0x0
   e_shentsize: 0x40
-  e_shnum    : 0xf
-  Section strings are in section 12
+  e_shnum    : 0xf (15) 
+  e_shstrndx : 0xc (12) 
 String section data at 0x11b (283) length 0x81 (129)
 
 Section count: 15

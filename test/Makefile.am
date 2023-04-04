@@ -73,6 +73,10 @@ CLEANFILES = \
   junk.test022.tmp2 \
   junk.test023.tmp2 \
   junk.test023.tmp \
+  junk.test024.tmp \
+  junk.test024.tmp2 \
+  junk.test025.tmp \
+  junk.test025.tmp2 \
   junk.test001.tmp \
   junk.test002.tmp \
   junk.test003.tmp \
@@ -155,6 +159,8 @@ test020.base \
 test021.base \
 test022.base \
 test023.base \
+test024.base \
+test025.base \
 dd-irix-n32 \
 libkrb5support.so.0.1.debug \
 mach-o-object32 \

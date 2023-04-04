@@ -13,7 +13,10 @@ o="$srcdir/libexamine-0.dll"
 
 cmd=""
 #echo "START test $n "
-./object_detector  $cmd $o  >junk.$n.tmp
+x="./object_detector $cmd $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

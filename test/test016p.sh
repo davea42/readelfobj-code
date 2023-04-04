@@ -10,8 +10,10 @@ srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 o=$srcdir/libexamine-0.dll
 
-#echo "START test $n "
-./readobjpe  $o  >junk.$n.tmp
+x="./readobjpe  $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

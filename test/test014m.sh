@@ -12,8 +12,11 @@ base=$srcdir/$n.base
 # This test should fail on all as we don't allow outpath
 # in the dwarf_object_detector_path call.
 o=$srcdir/kask2/dwarfdump_G4
-#echo "START test $n "
-./object_detector  $o  >junk.$n.tmp
+cmd=""
+x="./object_detector $cmd $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

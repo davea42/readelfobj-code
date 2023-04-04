@@ -1,5 +1,5 @@
 #!/bin/sh
-n=test007
+n=test025
 
 if [ x$DWTOPSRCDIR = "x" ]
 then
@@ -12,7 +12,10 @@ base=$srcdir/$n.base
 o=$srcdir/elfextended/testobj64.extend
 cmd="--only-wasted-summary"
 #echo "START test $n "
-./readelfobj $cmd $o  >junk.$n.tmp
+x="./readelfobj $cmd  $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then

@@ -12,8 +12,10 @@ base=$srcdir/$n.base
 # gcc on mingw, windows 8.1
 o=$srcdir/frame1-frame1.o
 cmd="--all"
-#echo "START test $n "
-./readobjpe $cmd $o  >junk.$n.tmp
+x="./readobjpe $cmd  $o"
+echo "START $n $x"
+$x > junk.$n.tmp
+
 which dos2unix >/dev/null
 if [ $? -eq 0 ]
 then
