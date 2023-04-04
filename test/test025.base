@@ -1,0 +1,8 @@
+Ehdr64 string section index extended, e_shstrndx section index will be in Shdr64 sh_link
+Ehdr64 section count extended, section count will be in Shdr64 sh_size
+ Extracted actual section number 35 from section zero
+ Extracted actual section string index number 34 from section zero
+Warning : Wasted .dynamic section entries: 0x5 (5)
+Warning : Wasted .dynamic section space  : 0x50 (80)
+Warning : 3 instances of wasted section space exist and total 9679 bytes wasted.
+Warning : 2 instances of unused alignment space exist and total 9 bytes of alignment.

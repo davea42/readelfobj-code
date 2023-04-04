@@ -3,11 +3,11 @@
     for anyone to use for any purpose. */
 
 /*  Not to be compiled. This test case should remain unchanged.
-    Compile with gcc -gdwarf-5 -O0 elfextendedtestcase.c -o testobj
+    gcc -gdwarf-5 -m32 -O0 elfextendedtestcase.c -o testobj
 
-    Compile with gcc -gdwarf-5 -m64 -O0 elfextendedtestcase.c -o testobj64
+    gcc -gdwarf-5 -m64 -O0 elfextendedtestcase.c -o testobj64
 */
-#if 1
+#if 0
 #include "stdio.h"
 
 int main()
