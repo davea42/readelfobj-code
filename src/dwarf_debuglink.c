@@ -733,8 +733,6 @@ dwarf_gnu_debuglink(elf_filedata ep,
     unsigned *debuglink_paths_count,
     int*   errcode)
 {
-    int linkres = DW_DLV_ERROR;
-    int res = DW_DLV_ERROR;
     struct generic_shdr* shdr = ep->f_shdr;
     Dwarf_Unsigned seccount = ep->f_loc_shdr.g_count;
     char * pathname = ep->f_path;
@@ -773,6 +771,8 @@ dwarf_gnu_debuglink(elf_filedata ep,
         return DW_DLV_NO_ENTRY;
     }
     if (linkshdr) {
+        int linkres = 0;
+
         linkres = extract_debuglink(ep,linkshdr,
             name_returned,crc_returned,errcode);
         if (linkres == DW_DLV_ERROR) {
@@ -787,14 +787,13 @@ dwarf_gnu_debuglink(elf_filedata ep,
             buildid_length,
             buildid,
             errcode);
-#if 0
         if (buildidres == DW_DLV_ERROR) {
             return buildidres;
         }
-#endif
     }
 
     if (pathname) {
+        int res = 0;
         res =  _dwarf_construct_linkedto_path(
             ep->f_gnu_global_paths,
             ep->f_gnu_global_path_count,
@@ -806,11 +805,9 @@ dwarf_gnu_debuglink(elf_filedata ep,
             debuglink_paths_returned,
             debuglink_paths_count,
             errcode);
-#if 0
         if (res != DW_DLV_OK) {
             return res;
         }
-#endif
     } else {
         *debuglink_paths_count = 0;
     }
