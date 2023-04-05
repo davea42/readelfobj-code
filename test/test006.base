@@ -16,8 +16,8 @@ Elf object file yyy/libkrb5support.so.0.1.debug
   e_phentsize: 0x38
   e_phnum    : 0x7
   e_shentsize: 0x40
-  e_shnum    : 0x27 (39) 
-  e_shstrndx : 0x24 (36) 
+  e_shnum    : 0x27 (39) Number of sections
+  e_shstrndx : 0x24 (36) Section strings section
 
 Program header count: 7
 {

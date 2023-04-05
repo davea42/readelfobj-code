@@ -33,8 +33,8 @@ Elf object file yyy/comdatex.example.o
   e_phentsize: 0x0
   e_phnum    : 0x0
   e_shentsize: 0x28
-  e_shnum    : 0x1a (26) 
-  e_shstrndx : 0x17 (23) 
+  e_shnum    : 0x1a (26) Number of sections
+  e_shstrndx : 0x17 (23) Section strings section
 String section data at 0x37c (892) length 0xbb (187)
 
 Section count: 26
