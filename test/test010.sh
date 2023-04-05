@@ -10,6 +10,7 @@ srcdir=$top_srcdir/test
 base=$srcdir/$n.base
 o="$srcdir/dd-irix-n32 $srcdir/libc.so.6 $srcdir/libkrb5support.so.0.1.debug"
 cmd=""
+curdir=`pwd`
 
 x="./object_detector $cmd $o"
 echo "START $n $x"
@@ -34,7 +35,7 @@ if [ $? -ne 0 ]
 then
   cat junk.$n.out
   echo "FAIL $n.sh $cmd results differ $base vs junk.$n.tmp"
-  echo "To update, mv junk.$n.tmp $base"
+  echo "To update, mv $curdir/junk.$n.tmp $base"
   exit 1
 fi
 exit 0

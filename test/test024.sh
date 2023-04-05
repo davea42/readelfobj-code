@@ -9,6 +9,8 @@ fi
 top_srcdir=/home/davea/dwarf/readelfobj/code
 srcdir=$top_srcdir/test
 base=$srcdir/$n.base
+curdir=`pwd`
+
 o=$srcdir/elfextended/testobj.extend
 cmd="--only-wasted-summary"
 #echo "START test $n "
@@ -41,7 +43,7 @@ if [ $? -ne 0 ]
 then
   head -30 junk.$n.out
   echo "FAIL $n.sh $cmd, results differ $base vs junk.$n.tmp"
-  echo "To update, mv junk.$n.tmp $base"
+  echo "To update, mv $curdir/junk.$n.tmp $base"
   exit 1
 fi
 exit 0

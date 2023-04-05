@@ -7,8 +7,8 @@ else
   top_srcdir=$DWTOPSRCDIR
 fi
 srcdir=$top_srcdir/test
-
 base=$n.base
+curdir=`pwd`
 o=$srcdir/libkrb5support.so.0.1.debug
 echo "START $n test ./readelfobj --help $o "
 ./readelfobj --help $o >junk.$n.tmp
@@ -22,7 +22,7 @@ if [ $? -ne 0 ]
 then
   cat junk.$n.out
   echo "FAIL $n.sh results differ $n.base vs junk.$n.tmp"
-  echo "To update, mv junk.$n.tmp $n.base"
+  echo "To update, mv $curdir/test/junk.$n.tmp $n.base"
   exit 1
 fi
 exit 0
