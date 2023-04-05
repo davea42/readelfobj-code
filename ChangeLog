@@ -1,3 +1,182 @@
+2023-04-05:  David Anderson
+    commit c6e9712ba54df876c8cfa0353be2ada66658974b
+
+    New baselines due to a slight change in the
+    output of readelfobj.
+            modified:   test/test003.base
+            modified:   test/test004.base
+            modified:   test/test005.base
+            modified:   test/test006.base
+            modified:   test/test017.base
+            modified:   test/test019.base
+            modified:   test/test020.base
+            modified:   test/test021.base
+
+2023-04-05:  David Anderson
+    commit 998e48f11c9d8bcaf6994d63fe248283ca723e91
+
+    Now these show full paths for the mv command
+    to update a test result. Easier to use now.
+            modified:   test/test001.sh
+            modified:   test/test007.sh
+            modified:   test/test008m.sh
+            modified:   test/test009m.sh
+            modified:   test/test010.sh
+            modified:   test/test011.sh
+            modified:   test/test012.sh
+            modified:   test/test013m.sh
+            modified:   test/test014m.sh
+            modified:   test/test015p.sh
+            modified:   test/test016p.sh
+            modified:   test/test017.sh
+            modified:   test/test018p.sh
+            modified:   test/test019.sh
+            modified:   test/test020.sh
+            modified:   test/test021.sh
+            modified:   test/test022.sh
+            modified:   test/test023.sh
+            modified:   test/test024.sh
+            modified:   test/test025.sh
+
+2023-04-05:  David Anderson
+    commit 7e804ec772b0984e114c8dcc944bda95b9775754
+
+    Remove dead code (Coverity Scan noticed).
+            modified:   src/readelfobj.c
+
+2023-04-05:  David Anderson
+    commit d93ad349011a99a9e8db287740261ac3bb5312a5
+
+    Remove unused args and ensure coverity scan is happy.
+            modified:   src/dwarf_load_elf_headers.c
+
+2023-04-05:  David Anderson
+    commit ebe1260f41c478f9d6e3ee2c09b0dc93a4aaea8d
+
+    ensure a string table read in has a terminating NUL byte.
+    Issue noticed by CoverityScan
+            modified:   src/dwarf_peread.c
+
+2023-04-05:  David Anderson
+    commit 12e69a434d9d8dc9e8878540ead9036abc4a6952
+
+    Removing unused locals and enabling checks
+    for returned DW_DLV_ERROR etc in a couple places.
+            modified:   src/dwarf_debuglink.c
+
+2023-04-05:  David Anderson
+    commit 1639c68de6242dd7b8d7e4f09ae11dae91d003d4
+
+    Version is now 0.2.0 as we added new capabilities reading elf.
+            modified:   configure.ac
+
+2023-04-04:  David Anderson
+    commit 5255316ed99f48e911c04be58e329a4c558d8fd9
+
+    added 2 files to distclean
+            modified:   test/Makefile.am
+
+2023-04-04:  David Anderson
+    commit 134740d48e22528f6d488ad438dc69e41eaab729
+
+    Minor.
+            modified:   Makefile.am
+
+    Change in wording of e_shnum and shstrndx.
+            modified:   test002.sh
+            modified:   test003.base
+            modified:   test003.sh
+            modified:   test004.base
+            modified:   test004.sh
+            modified:   test005.base
+            modified:   test005.sh
+            modified:   test006.base
+            modified:   test006.sh
+            modified:   test007.sh
+            modified:   test008m.sh
+            modified:   test009m.sh
+            modified:   test010.sh
+            modified:   test011.sh
+            modified:   test012.sh
+            modified:   test013m.sh
+            modified:   test014m.sh
+            modified:   test015p.sh
+            modified:   test016p.sh
+            modified:   test017.base
+            modified:   test017.sh
+            modified:   test018p.sh
+            modified:   test019.base
+            modified:   test019.sh
+            modified:   test020.base
+            modified:   test020.sh
+            modified:   test021.base
+            modified:   test021.sh
+            modified:   test022.sh
+            modified:   test023.sh
+            modified:   test024.base
+            modified:   test024.sh
+            modified:   test025.sh
+
+2023-04-04:  David Anderson
+    commit eec56d51445ae78ceee81d382179b832a4f8573b
+
+    minor tweak of the text for section count and section strings section number..
+            modified:   src/readelfobj.c
+
+2023-04-04:  David Anderson
+    commit 57185ca22c6a9631181dc2db45b2418a08313d95
+
+    Regenerated.
+            modified:   INSTALL
+            modified:   m4/libtool.m4
+
+2023-04-04:  David Anderson
+    commit 34bf3d5458c7eb02303044194c599ef294f4c234
+
+    Seems to be good for extended Elf headers.
+            modified:   src/dwarf_load_elf_headers.c
+            modified:   src/readelfobj.c
+            modified:   src/readelfobj.h
+
+2023-04-04:  David Anderson
+    commit 5f1672795bf2c28f26c0c1ce947ae53c5ac5a965
+
+    Now with if 0 so will not build
+            modified:   elfextendedtestcase.c
+    Now matches elf32 case
+            modified:   patcher.sh
+    The elf32 original and patchec.
+            modified:   testobj.baseobj
+            modified:   testobj.extend
+
+    The new tests
+            new file:   ../test024.base
+            new file:   ../test024.sh
+            new file:   ../test025.base
+            new file:   ../test025.sh
+
+2023-04-03:  David Anderson
+    commit 568e966abdc22056fb80dd1708f46deaafe52060
+
+    these all generate object files using the
+    documented way of getting 32 or 64 bit
+    section count and a shstrindex of 32 bits  in section headers.
+            new file:   README
+            new file:   elfextendedtestcase.c
+            new file:   patcher.sh
+            new file:   testobj.baseobj
+            new file:   testobj.extend
+            new file:   testobj64.baseobj
+            new file:   testobj64.extend
+
+2023-01-04:  David Anderson
+    commit d99335642899cab664aac5afa0ccbef6b61e2064
+
+    First 2023 log entry.
+            modified:   ChangeLog
+    Finished with 2022
+            new file:   ChangeLog2022
+
 2023-01-04:  David Anderson
     commit 5f8e57110df8b0ab76d8acc5f35c92dd73cdc2f8
 
