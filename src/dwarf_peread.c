@@ -584,6 +584,7 @@ dwarf_load_pe_sections(
         /* The first 4 bytes of the string table contain
             the size of the string table. */
         char size_field[4];
+        unsigned long size = 0;
 
         memset(size_field,0,sizeof(size_field));
         res =  dwarf_object_read_random(pep->pe_fd,
@@ -598,8 +599,8 @@ dwarf_load_pe_sections(
             *errcode = DW_DLE_PE_OFFSET_BAD;
             return DW_DLV_ERROR;
         }
-        pep->pe_string_table =
-            (char *)malloc(pep->pe_string_table_size);
+        size = pep->pe_string_table_size;
+        pep->pe_string_table = (char *)malloc(size+1);
         if (!pep->pe_string_table) {
             *errcode = DW_DLE_ALLOC_FAIL;
             return DW_DLV_ERROR;
@@ -607,6 +608,7 @@ dwarf_load_pe_sections(
         res = dwarf_object_read_random(pep->pe_fd,
             pep->pe_string_table, pep->pe_string_table_offset,
             pep->pe_string_table_size, pep->pe_filesize,errcode);
+        pep->pe_string_table[size] = 0;
         if (res != DW_DLV_OK) {
             return res;
         }
