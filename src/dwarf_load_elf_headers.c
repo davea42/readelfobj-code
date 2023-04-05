@@ -271,8 +271,7 @@ dwarf_destruct_elf_access(elf_filedata ep,
 
 static int
 generic_ehdr_from_32(elf_filedata ep,
-    struct generic_ehdr *ehdr, dw_elf32_ehdr *e,
-    int *errcode)
+    struct generic_ehdr *ehdr, dw_elf32_ehdr *e)
 {
     int i = 0;
 
@@ -295,13 +294,13 @@ generic_ehdr_from_32(elf_filedata ep,
     if (ehdr->ge_shstrndx == SHN_XINDEX) {
         P("Ehdr32 string section index extended, shstrndx will be in Shdr32 sh_link\n");
         ehdr->ge_strndx_extended = TRUE;
+    } else {
+        ehdr->ge_strndx_in_strndx = TRUE;
         if (ehdr->ge_shstrndx < 1) {
             P("ERROR Header section strings section index"
                 " zero is not allowed. Section 0 cannot"
                 " have strings. See Elf ABI.\n");
         }
-    } else {
-        ehdr->ge_strndx_in_strndx = TRUE;
     }
     if (ehdr->ge_shnum >= SHN_LORESERVE) {
         P("Ehdr32 eh_shnum extended, number of sections will be in Shdr32 sh_size\n");
@@ -332,7 +331,6 @@ generic_ehdr_from_32(elf_filedata ep,
 static void
 copysection64(
     elf_filedata ep,
-    Dwarf_Unsigned i,
     struct generic_shdr *gshdr,
     dw_elf64_shdr *psh)
 {
@@ -350,13 +348,12 @@ copysection64(
 
 static int
 generic_ehdr_from_64(elf_filedata ep,
-    struct generic_ehdr *ehdr, dw_elf64_ehdr *e,
-    int *errcode)
+    struct generic_ehdr *ehdr, 
+    dw_elf64_ehdr *e)
 {
     int i = 0;
     
 
-    (void)errcode;
     for (i = 0; i < EI_NIDENT; ++i) {
         ehdr->ge_ident[i] = e->e_ident[i];
     }
@@ -377,14 +374,14 @@ generic_ehdr_from_64(elf_filedata ep,
         P("Ehdr64 string section index extended, e_shstrndx section index "
             "will be in Shdr64 sh_link\n");
         ehdr->ge_strndx_extended = TRUE; 
+/*FIXME*/
+    } else {
+        ehdr->ge_strndx_in_strndx = TRUE; 
         if (ehdr->ge_shstrndx < 1) {
             P("ERROR Header section strings section index"
                 " zero is not allowed. Section 0 cannot" 
                 " have strings. See Elf ABI.\n");
         }
-/*FIXME*/
-    } else {
-        ehdr->ge_strndx_in_strndx = TRUE; 
     }
     if (ehdr->ge_shnum >= SHN_LORESERVE) {
         P("Ehdr64 section count extended, section count will be in Shdr64 sh_size\n");
@@ -567,7 +564,6 @@ generic_phdr_from_phdr64(elf_filedata ep,
 static void
 copysection32(
     elf_filedata ep,
-    Dwarf_Unsigned i,
     struct generic_shdr *gshdr,
     dw_elf32_shdr *psh)
 {
@@ -636,7 +632,7 @@ generic_shdr_from_shdr32(elf_filedata ep,
 
         gshdr->gh_secnum = i;
         gshdr->gh_fdoffset = ep->f_fdoffset +i*entsize;
-        copysection32(ep,i,gshdr,psh);
+        copysection32(ep,gshdr,psh);
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
@@ -742,7 +738,7 @@ generic_shdr_from_shdr64(elf_filedata ep,
 
         gshdr->gh_secnum = i;
         gshdr->gh_fdoffset = ep->f_fdoffset +i*entsize;
-        copysection64(ep,i,gshdr,psh);
+        copysection64(ep,gshdr,psh);
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
@@ -1570,7 +1566,7 @@ get_counts_from_sec32_zero(
         printf("ERROR RRMOA failed reading section zero\n");
         return res;
     }
-    copysection32(ep,0,&shdg,&shd32);
+    copysection32(ep,&shdg,&shd32);
     if (geh->ge_shnum_extended) {
          geh->ge_shnum = shdg.gh_size;
          geh->ge_shnum_in_shnum = TRUE;
@@ -1697,7 +1693,7 @@ get_counts_from_sec64_zero(
         printf("ERROR RRMOA (reading the sections) FAILED\n");
         return res;
     }
-    copysection64(ep,0,&shdg,&shd64);
+    copysection64(ep,&shdg,&shd64);
     if (geh->ge_shnum_extended) {
          geh->ge_shnum = shdg.gh_size;
          geh->ge_shnum_in_shnum = TRUE;
@@ -2523,7 +2519,7 @@ elf_load_elf_header32(elf_filedata ep,int *errcode)
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res  = generic_ehdr_from_32(ep,ehdr,&ehdr32,errcode);
+    res  = generic_ehdr_from_32(ep,ehdr,&ehdr32);
     if (res == RO_OK) {
         dwarf_insert_in_use_entry(ep,"Elf32_Ehdr",0,
             sizeof(dw_elf32_ehdr),ALIGN4);
@@ -2555,7 +2551,7 @@ elf_load_elf_header64(elf_filedata ep,int *errcode)
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res  = generic_ehdr_from_64(ep,ehdr,&ehdr64,errcode);
+    res  = generic_ehdr_from_64(ep,ehdr,&ehdr64);
     if (res == RO_OK) {
         dwarf_insert_in_use_entry(ep,"Elf64_Ehdr",
             0,sizeof(dw_elf64_ehdr),ALIGN8);
