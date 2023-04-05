@@ -647,10 +647,6 @@ elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
             (unsigned long)stringsection);
         return DW_DLV_OK;
     }
-    if (!stringsection) {
-        P("Section strings never found.\n");
-        return DW_DLV_OK;
-    }
     if (stringsection >= ep->f_ehdr->ge_shnum) {
         printf("String section " LONGESTUFMT " invalid. Ignored.",
             stringsection);
