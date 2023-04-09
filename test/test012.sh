@@ -11,7 +11,7 @@ base=$srcdir/$n.base
 o="$srcdir/testarch.a"
 curdir=`pwd`
 
-x="./object_detector $cmd $o"
+x="../src/object_detector $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

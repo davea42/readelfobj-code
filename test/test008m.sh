@@ -11,7 +11,7 @@ base=$srcdir/$n.base
 curdir=`pwd`
 
 o="$srcdir/mach-o-object32 $srcdir/mach-o-object64 $srcdir/libkrb5support.so.0.1.debug"
-x="./object_detector $o"
+x="../src/object_detector $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

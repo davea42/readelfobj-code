@@ -11,7 +11,7 @@ base=$srcdir/$n.base
 o=$srcdir/libexamine-0.dll
 curdir=`pwd`
 
-x="./readobjpe  $o"
+x="../src/readobjpe  $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

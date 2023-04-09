@@ -15,7 +15,7 @@ curdir=`pwd`
 
 cmd=""
 #echo "START test $n "
-x="./object_detector $cmd $o"
+x="../src/object_detector $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

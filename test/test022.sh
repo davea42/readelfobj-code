@@ -13,7 +13,7 @@ curdir=`pwd`
 # gcc on mingw, windows 8.1
 o=$srcdir/frame1-frame1.o
 cmd="--all"
-x="./readobjpe $cmd  $o"
+x="../src/readobjpe $cmd  $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

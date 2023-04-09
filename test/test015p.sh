@@ -13,7 +13,7 @@ curdir=`pwd`
 
 o=$srcdir/libexamine-0.dll
 cmd=""
-x="./object_detector $cmd $o"
+x="../src/object_detector $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

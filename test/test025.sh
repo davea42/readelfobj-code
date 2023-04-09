@@ -1,19 +1,22 @@
 #!/bin/sh
 n=test025
 
-if [ x$DWTOPSRCDIR = "x" ]
-then
-  top_srcdir=$top_blddir
-else
-  top_srcdir=$DWTOPSRCDIR
-fi
+#if [ x$DWTOPSRCDIR = "x" ]
+#then
+#  top_srcdir=$top_blddir
+#else
+#  top_srcdir=$DWTOPSRCDIR
+#fi
+top_srcdir=$DWTOPSRCDIR
 srcdir=$top_srcdir/test
 base=$srcdir/$n.base
+echo "srcdir $srcdir"
+
 o=$srcdir/elfextended/testobj64.extend
 curdir=`pwd`
 cmd="--only-wasted-summary"
 #echo "START test $n "
-x="./readelfobj $cmd  $o"
+x="../src/readelfobj $cmd  $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

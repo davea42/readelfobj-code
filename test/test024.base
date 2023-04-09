@@ -1,7 +1,7 @@
 Ehdr32 string section index extended, shstrndx will be in Shdr32 sh_link
 Ehdr32 eh_shnum extended, number of sections will be in Shdr32 sh_size
- Extracted actual section number 35 from section zero
- Extracted actual section string index number 34 from section zero
+Extracted actual section count 35 from section zero
+Extracted actual section string index number 34 from section zero
 Warning : Wasted .dynamic section entries: 0x5 (5)
 Warning : Wasted .dynamic section space  : 0x28 (40)
 Warning : 3 instances of wasted section space exist and total 10368 bytes wasted.

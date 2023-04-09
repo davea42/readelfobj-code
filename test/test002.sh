@@ -12,7 +12,7 @@ base=$n.base
 
 o=$srcdir/libkrb5support.so.0.1.debug
 #Version-readelfobj:
-x="./readelfobj --version"
+x="../src/readelfobj --version"
 echo "==== $x"
 $x > junk.$n.tmp
 which dos2unix >/dev/null

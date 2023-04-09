@@ -11,7 +11,7 @@ base=$srcdir/$n.base
 o=$srcdir/libkrb5support.so.0.1.debug
 curdir=`pwd`
 
-x="./readelfobj --print-dynamic $o"
+x="../src/readelfobj --print-dynamic $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

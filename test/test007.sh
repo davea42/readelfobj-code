@@ -13,7 +13,7 @@ o=$srcdir/libkrb5support.so.0.1.debug
 curdir=`pwd`
 
 cmd="--only-wasted-summary"
-x="./readelfobj $cmd $o"
+x="../src/readelfobj $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

@@ -11,7 +11,7 @@ base=$srcdir/$n.base
 o=$srcdir/stream.o
 cmd="--all"
 curdir=`pwd`
-x="./readelfobj $cmd  $o"
+x="../src/readelfobj $cmd  $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

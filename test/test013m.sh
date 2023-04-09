@@ -13,7 +13,7 @@ curdir=`pwd`
 # This test should fail on all as we don't allow outpath
 # in the dwarf_object_detector_path call.
 o="-z $srcdir/mach-o-object32 $srcdir/mach-o-object64 $srcdir/libkrb5support.so.0.1.debug"
-x="./object_detector $cmd $o"
+x="../src/object_detector $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

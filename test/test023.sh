@@ -14,7 +14,7 @@ curdir=`pwd`
 o=$srcdir/frame1-frame1.o
 
 cmd="--all"
-x="./object_detector $cmd  $o"
+x="../src/object_detector $cmd  $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

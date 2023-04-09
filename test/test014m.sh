@@ -15,7 +15,7 @@ curdir=`pwd`
 # in the dwarf_object_detector_path call.
 o=$srcdir/kask2/dwarfdump_G4
 cmd=""
-x="./object_detector $cmd $o"
+x="../src/object_detector $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

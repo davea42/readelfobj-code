@@ -13,7 +13,7 @@ curdir=`pwd`
 # 64bit SPARCV9
 o=$srcdir/sparc64-64-tls.o
 cmd="--all"
-x="./readelfobj $cmd  $o"
+x="../src/readelfobj $cmd  $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

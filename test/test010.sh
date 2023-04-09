@@ -12,7 +12,7 @@ o="$srcdir/dd-irix-n32 $srcdir/libc.so.6 $srcdir/libkrb5support.so.0.1.debug"
 cmd=""
 curdir=`pwd`
 
-x="./object_detector $cmd $o"
+x="../src/object_detector $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 

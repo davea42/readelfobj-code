@@ -3,6 +3,36 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
+check:
+AM_TESTS_ENVIRONMENT = DWTOPSRCDIR='$(top_srcdir)'; export DWTOPSRCDIR;
+TESTS = ./test001.sh \
+./test002.sh  \
+./test003.sh  \
+./test004.sh  \
+./test005.sh  \
+./test006.sh  \
+./test007.sh  \
+./test008m.sh  \
+./test009m.sh  \
+./test010.sh  \
+./test011.sh  \
+./test012.sh  \
+./test013m.sh  \
+./test014m.sh  \
+./test015p.sh  \
+./test016p.sh  \
+./test017.sh  \
+./test018p.sh  \
+./test019.sh  \
+./test020.sh  \
+./test021.sh  \
+./test022.sh  \
+./test023.sh  \
+./test024.sh  \
+./test025.sh
+
+
+
 CLEANFILES = \
   junk.test001 \
   junk.test001.out \
@@ -105,10 +135,6 @@ CLEANFILES = \
   elfextended/testobj64
 
 
-
-check:
-TESTS = ./runtests.sh
-AM_TESTS_ENVIRONMENT = DWTOPSRCDIR='$(top_srcdir)'; export DWTOPSRCDIR;
 
 EXTRA_DIST = \
 README  \

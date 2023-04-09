@@ -12,7 +12,7 @@ o=$srcdir/libdwarf.so.1.0.0
 cmd="--all"
 curdir=`pwd`
 
-x="./readelfobj $cmd $o"
+x="../src/readelfobj $cmd $o"
 echo "START $n $x"
 $x > junk.$n.tmp
 
