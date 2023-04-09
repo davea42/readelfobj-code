@@ -1615,10 +1615,8 @@ elf_load_sectheaders32(elf_filedata ep,
     unsigned char have_shstrndx_number = 0;
     Dwarf_Unsigned shstrndx_number = 0;
     Dwarf_Unsigned finalcount = 0;
-    Dwarf_Unsigned finalstrxnum = 0;
 
     ehp = ep->f_ehdr;
-    finalstrxnum = ehp->ge_shstrndx;
     finalcount = ehp->ge_shnum;
     if (!ehp->ge_shnum_in_shnum || !ehp->ge_strndx_in_strndx ) {
         /*  This updates ehp values when appropriate */
@@ -1632,9 +1630,6 @@ elf_load_sectheaders32(elf_filedata ep,
         }
         if (have_shdr_count) {
             finalcount = shdr_count;
-        }
-        if (have_shstrndx_number) {
-            finalstrxnum = shstrndx_number;
         }
     }
     if (finalcount == 0) {
@@ -1751,10 +1746,8 @@ elf_load_sectheaders64(elf_filedata ep,
     unsigned char have_shstrndx_number = 0;
     Dwarf_Unsigned shstrndx_number = 0;
     Dwarf_Unsigned finalcount = 0;
-    Dwarf_Unsigned finalstrxnum = 0;
 
     ehp = ep->f_ehdr;
-    finalstrxnum = ehp->ge_shstrndx;
     finalcount = ehp->ge_shnum;
     if (!ehp->ge_shnum_in_shnum || !ehp->ge_strndx_in_strndx ) {
         /*  This updates ehp values when appropriate */
@@ -1768,9 +1761,6 @@ elf_load_sectheaders64(elf_filedata ep,
         }
         if (have_shdr_count) {
             finalcount = shdr_count;
-        }
-        if (have_shstrndx_number) {
-            finalstrxnum = shstrndx_number;
         }
     }
 
