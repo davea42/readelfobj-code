@@ -302,15 +302,18 @@ generic_ehdr_from_32(elf_filedata ep,
                 " have strings. See Elf ABI.\n");
         }
     }
-    if (ehdr->ge_shnum >= SHN_LORESERVE) {
+    if (ehdr->ge_shnum >= SHN_LORESERVE || 
+        (ehdr->ge_strndx_extended && !ehdr->ge_shnum)) {
+        /* 'man 5 elf' is wrong about how this is being done */
         P("Ehdr32 eh_shnum extended, number of sections will be in Shdr32 sh_size\n");
         ehdr->ge_shnum_extended = TRUE;
     } else {
         ehdr->ge_shnum_in_shnum = TRUE;
         if (ehdr->ge_shnum < 3) {
-            printf("ERROR section count to small to be reasonable");
+            printf("ERROR Ehdr32 section count (%lu) too small to be reasonable\n",
+                (unsigned long)ehdr->ge_shnum);
         }
-        if (ehdr->ge_strndx_in_strndx &&
+        if (ehdr->ge_strndx_in_strndx && 
             (ehdr->ge_shstrndx >= ehdr->ge_shnum)) {
             P("ERROR Header section strings section index "
                 LONGESTUFMT " is improper, there are only "
@@ -383,7 +386,9 @@ generic_ehdr_from_64(elf_filedata ep,
                 " have strings. See Elf ABI.\n");
         }
     }
-    if (ehdr->ge_shnum >= SHN_LORESERVE) {
+    if (ehdr->ge_shnum >= SHN_LORESERVE || 
+        (ehdr->ge_strndx_extended && !ehdr->ge_shnum)) {
+        /* 'man 5 elf' is wrong about how this is being done */
         P("Ehdr64 section count extended, section count will be in Shdr64 sh_size\n");
         ehdr->ge_shnum_extended = TRUE; 
     } else {
@@ -1566,40 +1571,41 @@ get_counts_from_sec32_zero(
         printf("ERROR RRMOA failed reading section zero\n");
         return res;
     }
+    *have_shdr_count = FALSE;
+    *have_shstrndx_number = FALSE;
     copysection32(ep,&shdg,&shd32);
     if (geh->ge_shnum_extended) {
          geh->ge_shnum = shdg.gh_size;
          geh->ge_shnum_in_shnum = TRUE;
-         P(" Extracted actual section number %llu"
+         P("Extracted actual section count %llu"
              " from section zero\n",geh->ge_shnum);
          if (geh->ge_shnum  < 3) {
-             P(" ERROR: number of sections %llu "
+             P("ERROR: Eh32 number of sections %llu "
                  " too small to be reasonable",geh->ge_shnum);
          }
+         *have_shdr_count = TRUE;
+         *shdr_count = geh->ge_shnum;
     }
-    *have_shdr_count = TRUE;
-    *shdr_count = geh->ge_shnum;
     if (geh->ge_strndx_extended) {
-         geh->ge_shstrndx = shdg.gh_link;
-         geh->ge_strndx_in_strndx = TRUE;
-         P(" Extracted actual section string index number %llu"
-             " from section zero\n",geh->ge_shstrndx);
-         if (geh->ge_shstrndx >=
-             geh->ge_shnum) {
-             P(" ERROR: section string index %llu larger"
-                 " than section count of %llu\n",
-                 geh->ge_shstrndx,geh->ge_shnum);
-         }
+        geh->ge_shstrndx = shdg.gh_link;
+        geh->ge_strndx_in_strndx = TRUE;
+        P("Extracted actual section string index number %llu"
+            " from section zero\n",geh->ge_shstrndx);
+        if (geh->ge_shstrndx >= geh->ge_shnum) {
+            P("ERROR: Eh32 section string index %llu larger"
+                " than section count of %llu\n",
+                geh->ge_shstrndx,geh->ge_shnum);
+        }
+        *have_shstrndx_number = TRUE;
+        *shstrndx_number = geh->ge_shstrndx;
     }
-    *have_shstrndx_number = TRUE;
-    *shstrndx_number = geh->ge_shstrndx;
     return DW_DLV_OK;
 }
 
 static int
 elf_load_sectheaders32(elf_filedata ep,
     Dwarf_Unsigned offset,Dwarf_Unsigned entsize,
-    Dwarf_Unsigned count,int *errcode)
+    int *errcode)
 {
     Dwarf_Unsigned generic_count = 0;
     int res = 0;
@@ -1608,9 +1614,14 @@ elf_load_sectheaders32(elf_filedata ep,
     Dwarf_Unsigned shdr_count = 0;
     unsigned char have_shstrndx_number = 0;
     Dwarf_Unsigned shstrndx_number = 0;
+    Dwarf_Unsigned finalcount = 0;
+    Dwarf_Unsigned finalstrxnum = 0;
 
     ehp = ep->f_ehdr;
+    finalstrxnum = ehp->ge_shstrndx;
+    finalcount = ehp->ge_shnum;
     if (!ehp->ge_shnum_in_shnum || !ehp->ge_strndx_in_strndx ) {
+        /*  This updates ehp values when appropriate */
         res = get_counts_from_sec32_zero(ep,offset,
             &have_shdr_count,&shdr_count,
             &have_shstrndx_number,&shstrndx_number,
@@ -1620,11 +1631,13 @@ elf_load_sectheaders32(elf_filedata ep,
             return res;
         }
         if (have_shdr_count) {
-            count = shdr_count;
+            finalcount = shdr_count;
         }
-/*FIXME*/
+        if (have_shstrndx_number) {
+            finalstrxnum = shstrndx_number;
+        }
     }
-    if (count == 0) {
+    if (finalcount == 0) {
         P("No section headers\n");
         return DW_DLV_NO_ENTRY;
     }
@@ -1637,33 +1650,33 @@ elf_load_sectheaders32(elf_filedata ep,
     }
     if ((offset > ep->f_filesize)||
         (entsize > 200)||
-        (count > ep->f_filesize) ||
-        ((count *entsize +offset) > ep->f_filesize)) {
+        (finalcount > ep->f_filesize) ||
+        ((finalcount *entsize +offset) > ep->f_filesize)) {
             P("ERROR: Something badly wrong with elf header"
                 " references to section headers "
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
-                "\n", ep->f_filesize,entsize,count);
+                "\n", ep->f_filesize,entsize,finalcount);
             *errcode = RO_ERR_FILEOFFSETBAD;
             return RO_ERROR;
     }
     res = generic_shdr_from_shdr32(ep,&generic_count,
-        offset,entsize,count,errcode);
+        offset,entsize,finalcount ,errcode);
     if (res != RO_OK) {
         return res;
     }
-    if (generic_count != count) {
+    if (generic_count != finalcount) {
         P("ERROR: Something badly wrong reading section headers"
             " Header count expected " LONGESTUFMT
             " while actual count " LONGESTUFMT
             " RO_ERR_SHDRCOUNTMISMATCH\n",
-            count,generic_count);
+            finalcount,generic_count);
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
     dwarf_insert_in_use_entry(ep,"Elf32_Shdr block",
-        offset,entsize*count,ALIGN4);
+        offset,entsize*finalcount,ALIGN4);
     return RO_OK;
 }
 
@@ -1697,7 +1710,7 @@ get_counts_from_sec64_zero(
     if (geh->ge_shnum_extended) {
          geh->ge_shnum = shdg.gh_size;
          geh->ge_shnum_in_shnum = TRUE;
-         P(" Extracted actual section number %llu"
+         P(" Extracted actual section count %llu"
              " from section zero\n",geh->ge_shnum);
          if (geh->ge_shnum  < 3) {
              P(" ERROR: number of sections %llu "
@@ -1728,7 +1741,7 @@ get_counts_from_sec64_zero(
 static int
 elf_load_sectheaders64(elf_filedata ep,
     Dwarf_Unsigned offset,Dwarf_Unsigned entsize,
-    Dwarf_Unsigned count,int*errcode)
+    int*errcode)
 {
     Dwarf_Unsigned generic_count = 0;
     int res = 0;
@@ -1737,9 +1750,14 @@ elf_load_sectheaders64(elf_filedata ep,
     Dwarf_Unsigned shdr_count = 0;
     unsigned char have_shstrndx_number = 0;
     Dwarf_Unsigned shstrndx_number = 0;
+    Dwarf_Unsigned finalcount = 0;
+    Dwarf_Unsigned finalstrxnum = 0;
 
     ehp = ep->f_ehdr;
+    finalstrxnum = ehp->ge_shstrndx;
+    finalcount = ehp->ge_shnum;
     if (!ehp->ge_shnum_in_shnum || !ehp->ge_strndx_in_strndx ) {
+        /*  This updates ehp values when appropriate */
         res = get_counts_from_sec64_zero(ep,offset,
             &have_shdr_count,&shdr_count,
             &have_shstrndx_number,&shstrndx_number,
@@ -1749,13 +1767,14 @@ elf_load_sectheaders64(elf_filedata ep,
             return res;
         }
         if (have_shdr_count) {
-            count = shdr_count;
+            finalcount = shdr_count;
         }
-     
-/*FIXME*/
+        if (have_shstrndx_number) {
+            finalstrxnum = shstrndx_number;
+        }
     }
 
-    if (count == 0) {
+    if (finalcount == 0) {
         P("No section headers\n");
         return DW_DLV_NO_ENTRY;
     }
@@ -1768,33 +1787,33 @@ elf_load_sectheaders64(elf_filedata ep,
     }
     if ((offset > ep->f_filesize)||
         (entsize > 200)||
-        (count > ep->f_filesize) ||
-        ((count *entsize +offset) > ep->f_filesize)) {
+        (finalcount > ep->f_filesize) ||
+        ((finalcount *entsize +offset) > ep->f_filesize)) {
             P("ERROR: Something badly wrong with elf header"
                 " references to section headers "
                 " filesize " LONGESTUFMT
                 " sectionentrysize " LONGESTUFMT
                 " sectionentrycount " LONGESTUFMT
-                "\n", ep->f_filesize,entsize,count);
+                "\n", ep->f_filesize,entsize,finalcount);
             *errcode = RO_ERR_FILEOFFSETBAD;
             return RO_ERROR;
     }
     res = generic_shdr_from_shdr64(ep,&generic_count,
-        offset,entsize,count,errcode);
+        offset,entsize,finalcount,errcode);
     if (res != RO_OK) {
         return res;
     }
-    if (generic_count != count) {
+    if (generic_count != finalcount) {
         P("ERROR: Something badly wrong reading section headers"
             " Header count expected " LONGESTUFMT
             " while actual count " LONGESTUFMT
             " RO_ERR_SHDRCOUNTMISMATCH\n",
-            count,generic_count);
+            finalcount,generic_count);
         *errcode = RO_ERR_SHDRCOUNTMISMATCH;
         return RO_ERROR;
     }
     dwarf_insert_in_use_entry(ep,"Elf64_Shdr block",
-        offset,entsize*count,ALIGN8);
+        offset,entsize*finalcount,ALIGN8);
     return RO_OK;
 }
 
@@ -3297,11 +3316,11 @@ dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
     if (ep->f_offsetsize == 32) {
         res  = elf_load_sectheaders32(ep,ep->f_ehdr->ge_shoff,
             ep->f_ehdr->ge_shentsize,
-            ep->f_ehdr->ge_shnum,errcode);
+            errcode);
     } else {
         res  = elf_load_sectheaders64(ep,ep->f_ehdr->ge_shoff,
             ep->f_ehdr->ge_shentsize,
-            ep->f_ehdr->ge_shnum,errcode);
+            errcode);
     }
     if (res != DW_DLV_OK) {
         return res;
