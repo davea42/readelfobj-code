@@ -138,15 +138,15 @@ int nibblecounts[16] = {
 static int
 getbitsoncount(Dwarf_Unsigned v_in)
 {
-     int           bitscount = 0;
-     Dwarf_Unsigned v = v_in;
+    int           bitscount = 0;
+    Dwarf_Unsigned v = v_in;
 
-     while (v) {
-         unsigned int nibble = v & 0xf;
-         bitscount += nibblecounts[nibble];
-         v >>= 4;
-     }
-     return bitscount;
+    while (v) {
+        unsigned int nibble = v & 0xf;
+        bitscount += nibblecounts[nibble];
+        v >>= 4;
+    }
+    return bitscount;
 }
 
 int
@@ -292,7 +292,10 @@ generic_ehdr_from_32(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
     if (ehdr->ge_shstrndx == SHN_XINDEX) {
-        P("Ehdr32 string section index extended, shstrndx will be in Shdr32 sh_link\n");
+        P("Ehdr32 string section index extended (e_shstrndx 0x"
+            LONGESTXFMT "), "
+            "final shstrndx will be "
+            "in Shdr32 sh_link\n",ehdr->ge_shstrndx);
         ehdr->ge_strndx_extended = TRUE;
     } else {
         ehdr->ge_strndx_in_strndx = TRUE;
@@ -302,18 +305,23 @@ generic_ehdr_from_32(elf_filedata ep,
                 " have strings. See Elf ABI.\n");
         }
     }
-    if (ehdr->ge_shnum >= SHN_LORESERVE || 
+    if (ehdr->ge_shnum >= SHN_LORESERVE ||
         (ehdr->ge_strndx_extended && !ehdr->ge_shnum)) {
         /* 'man 5 elf' is wrong about how this is being done */
-        P("Ehdr32 eh_shnum extended, number of sections will be in Shdr32 sh_size\n");
+        P("Ehdr32 eh_shnum extended, number of sections "
+            "(e_shnum 0x" LONGESTXFMT ") "
+            " final shnum will be in Shdr32 sh_size\n",
+            (unsigned long long)ehdr->ge_shnum);
         ehdr->ge_shnum_extended = TRUE;
     } else {
         ehdr->ge_shnum_in_shnum = TRUE;
         if (ehdr->ge_shnum < 3) {
-            printf("ERROR Ehdr32 section count (%lu) too small to be reasonable\n",
-                (unsigned long)ehdr->ge_shnum);
+            printf("ERROR Ehdr section count "
+                "(e_shstrndx %llu) too small "
+                "to be reasonable\n",
+                (unsigned long long)ehdr->ge_shnum);
         }
-        if (ehdr->ge_strndx_in_strndx && 
+        if (ehdr->ge_strndx_in_strndx &&
             (ehdr->ge_shstrndx >= ehdr->ge_shnum)) {
             P("ERROR Header section strings section index "
                 LONGESTUFMT " is improper, there are only "
@@ -351,11 +359,10 @@ copysection64(
 
 static int
 generic_ehdr_from_64(elf_filedata ep,
-    struct generic_ehdr *ehdr, 
+    struct generic_ehdr *ehdr,
     dw_elf64_ehdr *e)
 {
     int i = 0;
-    
 
     for (i = 0; i < EI_NIDENT; ++i) {
         ehdr->ge_ident[i] = e->e_ident[i];
@@ -374,34 +381,39 @@ generic_ehdr_from_64(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
     if (ehdr->ge_shstrndx == SHN_XINDEX) {
-        P("Ehdr64 string section index extended, e_shstrndx section index "
-            "will be in Shdr64 sh_link\n");
-        ehdr->ge_strndx_extended = TRUE; 
-/*FIXME*/
+        P("Ehdr64 string section index extended (e_shstrndx 0x"
+            LONGESTXFMT "), "
+            "final shstrndx will be "
+            "in Shdr64 sh_link\n",
+            (Dwarf_Unsigned)ehdr->ge_shstrndx);
+        ehdr->ge_strndx_extended = TRUE;
     } else {
-        ehdr->ge_strndx_in_strndx = TRUE; 
+        ehdr->ge_strndx_in_strndx = TRUE;
         if (ehdr->ge_shstrndx < 1) {
             P("ERROR Header section strings section index"
-                " zero is not allowed. Section 0 cannot" 
+                " zero is not allowed. Section 0 cannot"
                 " have strings. See Elf ABI.\n");
         }
     }
-    if (ehdr->ge_shnum >= SHN_LORESERVE || 
+    if (ehdr->ge_shnum >= SHN_LORESERVE ||
         (ehdr->ge_strndx_extended && !ehdr->ge_shnum)) {
         /* 'man 5 elf' is wrong about how this is being done */
-        P("Ehdr64 section count extended, section count will be in Shdr64 sh_size\n");
-        ehdr->ge_shnum_extended = TRUE; 
+        P("Ehdr64 section count extended, number of sections "
+            "(e_shnum 0x" LONGESTXFMT ") "
+            " final will be in Shdr64 sh_size\n",
+            (Dwarf_Unsigned)ehdr->ge_shnum);
+        ehdr->ge_shnum_extended = TRUE;
     } else {
-        ehdr->ge_shnum_in_shnum = TRUE; 
+        ehdr->ge_shnum_in_shnum = TRUE;
         if (ehdr->ge_shnum < 3) {
             printf("ERROR header section count too small"
                 " to be reasonable\n");
         }
         if (ehdr->ge_strndx_in_strndx &&
             (ehdr->ge_shstrndx >= ehdr->ge_shnum)) {
-            P("ERROR Header section strings section index " 
+            P("ERROR Header section strings section index "
                 LONGESTUFMT " is improper, there are only "
-                LONGESTUFMT "sections. Corrupt Elf\n", 
+                LONGESTUFMT "sections. Corrupt Elf\n",
                 ehdr->ge_shstrndx,ehdr->ge_shnum);
         }
     }
@@ -584,7 +596,6 @@ copysection32(
     ASNAR(ep->f_copy_word,gshdr->gh_entsize,psh->sh_entsize);
 }
 
-
 static int
 generic_shdr_from_shdr32(elf_filedata ep,
     Dwarf_Unsigned * count_out,
@@ -649,20 +660,20 @@ generic_shdr_from_shdr32(elf_filedata ep,
                 (unsigned long)gshdr->gh_size,
                 (unsigned long)ep->f_filesize);
         }
-        isempty = is_empty_section(gshdr->gh_type); 
+        isempty = is_empty_section(gshdr->gh_type);
         if (i == 0) {
             /*  We require that section zero be 'empty'
-                per the Elf ABI. 
+                per the Elf ABI.
                 gh_size and gh_link
                 will not be empty if used as extended
                 section count or shstrndx */
             if (!isempty || gshdr->gh_name || gshdr->gh_flags ||
                 gshdr->gh_addr ||
-                gshdr->gh_info) { 
+                gshdr->gh_info) {
                 printf("ERROR: Section 0 must be empty, but it"
                     " is not empty. See Elf ABI.\n");
             }
-        } 
+        }
         bitsoncount = getbitsoncount(gshdr->gh_flags);
         if (bitsoncount > 8) {
             printf("ERROR: section header sh_flags "
@@ -764,14 +775,14 @@ generic_shdr_from_shdr64(elf_filedata ep,
                 section count or shstrndx */
             if (!isempty || gshdr->gh_name || gshdr->gh_flags ||
                 gshdr->gh_addr ||
-                gshdr->gh_info) { 
+                gshdr->gh_info) {
                 printf("ERROR: Section 0 must be empty, but it"
                     " is not empty. See Elf ABI.\n");
             }
         }
         bitsoncount = getbitsoncount(gshdr->gh_flags);
         if (bitsoncount > 8) {
-            printf("ERROR: section header sh_flags " 
+            printf("ERROR: section header sh_flags "
                 LONGESTXFMT " has too"
                 " many flag bits on (%d) to be real\n",
                 gshdr->gh_flags,bitsoncount);
@@ -1575,16 +1586,16 @@ get_counts_from_sec32_zero(
     *have_shstrndx_number = FALSE;
     copysection32(ep,&shdg,&shd32);
     if (geh->ge_shnum_extended) {
-         geh->ge_shnum = shdg.gh_size;
-         geh->ge_shnum_in_shnum = TRUE;
-         P("Extracted actual section count %llu"
-             " from section zero\n",geh->ge_shnum);
-         if (geh->ge_shnum  < 3) {
-             P("ERROR: Eh32 number of sections %llu "
-                 " too small to be reasonable",geh->ge_shnum);
-         }
-         *have_shdr_count = TRUE;
-         *shdr_count = geh->ge_shnum;
+        geh->ge_shnum = shdg.gh_size;
+        geh->ge_shnum_in_shnum = TRUE;
+        P("Extracted actual section count %llu"
+            " from section zero\n",geh->ge_shnum);
+        if (geh->ge_shnum  < 3) {
+            P("ERROR: Eh32 number of sections %llu "
+                " too small to be reasonable",geh->ge_shnum);
+        }
+        *have_shdr_count = TRUE;
+        *shdr_count = geh->ge_shnum;
     }
     if (geh->ge_strndx_extended) {
         geh->ge_shstrndx = shdg.gh_link;
@@ -1625,7 +1636,8 @@ elf_load_sectheaders32(elf_filedata ep,
             &have_shstrndx_number,&shstrndx_number,
             errcode);
         if (res != DW_DLV_OK) {
-            printf("ERROR get_counts_from_sec32_zero (reading the zero section) FAILED\n");
+            printf("ERROR get_counts_from_sec32_zero "
+                "(reading the zero section) FAILED\n");
             return res;
         }
         if (have_shdr_count) {
@@ -1703,35 +1715,33 @@ get_counts_from_sec64_zero(
     }
     copysection64(ep,&shdg,&shd64);
     if (geh->ge_shnum_extended) {
-         geh->ge_shnum = shdg.gh_size;
-         geh->ge_shnum_in_shnum = TRUE;
-         P(" Extracted actual section count %llu"
-             " from section zero\n",geh->ge_shnum);
-         if (geh->ge_shnum  < 3) {
-             P(" ERROR: number of sections %llu "
-                 " too small to be reasonable",geh->ge_shnum);
-         }
+        geh->ge_shnum = shdg.gh_size;
+        geh->ge_shnum_in_shnum = TRUE;
+        P(" Extracted actual section count %llu"
+            " from section zero\n",geh->ge_shnum);
+        if (geh->ge_shnum  < 3) {
+            P(" ERROR: number of sections %llu "
+                " too small to be reasonable",geh->ge_shnum);
+        }
     }
     *have_shdr_count = TRUE;
     *shdr_count = geh->ge_shnum;
     if (geh->ge_strndx_extended) {
-         geh->ge_shstrndx = shdg.gh_link;
-         geh->ge_strndx_in_strndx = TRUE;
-         P(" Extracted actual section string index number %llu"
-             " from section zero\n",geh->ge_shstrndx);
-         if (geh->ge_shstrndx >=
-             geh->ge_shnum) {
-             P(" ERROR: section string index %llu larger"
-                 " than section count of %llu\n",
-                 geh->ge_shstrndx,geh->ge_shnum);
-         }
+        geh->ge_shstrndx = shdg.gh_link;
+        geh->ge_strndx_in_strndx = TRUE;
+        P(" Extracted actual section string index number %llu"
+            " from section zero\n",geh->ge_shstrndx);
+        if (geh->ge_shstrndx >=
+            geh->ge_shnum) {
+            P(" ERROR: section string index %llu larger"
+                " than section count of %llu\n",
+                geh->ge_shstrndx,geh->ge_shnum);
+        }
     }
     *have_shstrndx_number = TRUE;
     *shstrndx_number = geh->ge_shstrndx;
     return DW_DLV_OK;
 }
-
-
 
 static int
 elf_load_sectheaders64(elf_filedata ep,
@@ -1756,7 +1766,8 @@ elf_load_sectheaders64(elf_filedata ep,
             &have_shstrndx_number,&shstrndx_number,
             errcode);
         if (res != DW_DLV_OK) {
-            printf("ERROR get_counts_from_sec64_zero (reading the zero) FAILED\n");
+            printf("ERROR get_counts_from_sec64_zero "
+                "(reading the zero) FAILED\n");
             return res;
         }
         if (have_shdr_count) {

@@ -75,8 +75,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 #define  UNUSEDARG
 #endif
 
-
-
 #if _WIN32
 #define NULL_DEVICE_NAME "NUL"
 #else
@@ -744,13 +742,13 @@ dwarf_gnu_debuglink(elf_filedata ep,
     for (i = 0;i < seccount; ++i,shdr++) {
         if (!shdr->gh_namestring) {
             /*  something is badly wrong!  Corrupt object. */
-            P("ERROR For section " LONGESTUFMT 
+            P("ERROR For section " LONGESTUFMT
                 " the namestring field is a null-pointer",i);
             continue;
         }
         if (!strcmp("<No valid Elf section strings exist>",
             shdr->gh_namestring)) {
-            P("ERROR For section " LONGESTUFMT 
+            P("ERROR For section " LONGESTUFMT
                 " the namestring field is %s"
                 " so no debuglink or debug-id section"
                 " can be found in any section.\n",
@@ -918,7 +916,8 @@ extract_buildid(elf_filedata ep,
         P("ERROR section .note.gnu.build-id description "
             "size error : "
             " description length : "
-            " length " LONGESTUFMT " greater than will fit in section\n",
+            " length " LONGESTUFMT " greater than will "
+            "fit in section\n",
             descrsize);
 #if 0
         *errcode = DW_DLE_CORRUPT_NOTE_GNU_DEBUGID;
@@ -928,7 +927,7 @@ extract_buildid(elf_filedata ep,
     if (descrsize >= DW_BUILDID_SANE_SIZE) {
         P("ERROR section .note.gnu.build-id description "
             " length : "
-            " length " LONGESTUFMT  
+            " length " LONGESTUFMT
             " is unreasonable.\n",
             descrsize);
     }

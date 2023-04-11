@@ -1,5 +1,5 @@
 Ehdr64 string section index extended (e_shstrndx 0x0xffff), final shstrndx will be in Shdr64 sh_link
-Ehdr64 section count extended, number of sections (e_shnum 0x0xff00)  final will be in Shdr64 sh_size
+Ehdr64 section count extended, number of sections (e_shnum 0x0x0)  final will be in Shdr64 sh_size
  Extracted actual section count 35 from section zero
  Extracted actual section string index number 34 from section zero
 Warning : Wasted .dynamic section entries: 0x5 (5)

@@ -403,27 +403,27 @@ dwarf_pe_load_dwarf_section_headers(
         ASNAR(pep->pe_copy_word,sec_outp->Characteristics,
             filesect.Characteristics);
         if (!sec_outp->SizeOfRawData) {
-         if (sec_outp->VirtualSize >= pep->pe_filesize) {
-             printf("WARNING in PE section %lu %s: "
-                 "Section VirtualSize is 0x%lx but file size "
-                 "is 0x%lx (a section like bss, likely ok) "
-                 "\n",
-                 (unsigned long)i,
-                 sec_outp->dwarfsectname,
-                 (unsigned long)sec_outp->VirtualSize,
-                 (unsigned long)pep->pe_filesize);
+            if (sec_outp->VirtualSize >= pep->pe_filesize) {
+                printf("WARNING in PE section %lu %s: "
+                    "Section VirtualSize is 0x%lx but file size "
+                    "is 0x%lx (a section like bss, likely ok) "
+                    "\n",
+                    (unsigned long)i,
+                    sec_outp->dwarfsectname,
+                    (unsigned long)sec_outp->VirtualSize,
+                    (unsigned long)pep->pe_filesize);
             }
         }
         else {
-         if (sec_outp->VirtualSize >= pep->pe_filesize) {
-             printf("WARNING in PE section %lu %s: "
-                 "Section VirtualSize is 0x%lx but file size "
-                 "is 0x%lx (could be fine or could be "
-                 "corrupt data) \n",
-                 (unsigned long)i,
-                 sec_outp->dwarfsectname,
-                 (unsigned long)sec_outp->VirtualSize,
-                 (unsigned long)pep->pe_filesize);
+            if (sec_outp->VirtualSize >= pep->pe_filesize) {
+                printf("WARNING in PE section %lu %s: "
+                    "Section VirtualSize is 0x%lx but file size "
+                    "is 0x%lx (could be fine or could be "
+                    "corrupt data) \n",
+                    (unsigned long)i,
+                    sec_outp->dwarfsectname,
+                    (unsigned long)sec_outp->VirtualSize,
+                    (unsigned long)pep->pe_filesize);
             }
         }
     }
