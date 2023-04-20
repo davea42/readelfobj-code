@@ -1,8 +1,27 @@
 Ehdr32 string section index extended (e_shstrndx 0x0xffff), final shstrndx will be in Shdr32 sh_link
-Ehdr32 eh_shnum extended, number of sections (e_shnum 0x0xff00)  final shnum will be in Shdr32 sh_size
-Extracted actual section count 35 from section zero
+Unusual case, eh_shstrndx is extended but e_shnum is not (maybe e_shstrndx is just a low section number).
 Extracted actual section string index number 34 from section zero
-Warning : Wasted .dynamic section entries: 0x5 (5)
-Warning : Wasted .dynamic section space  : 0x28 (40)
-Warning : 3 instances of wasted section space exist and total 10368 bytes wasted.
-Warning : 2 instances of unused alignment space exist and total 6 bytes of alignment.
+ERROR: Something badly wrong with elf header references to section headers  filesize 15944 sectionentrysize 40 sectionentrycount 65280
+Elf object file yyy/elfextended/testobj.extend
+ Elf Header ident bytes:  7f454c46 01010100 00000000 00000000
+  File class    = 0x1 (ELFCLASS32)
+  Data encoding = 0x1 (ELFDATA2LSB)
+  file version  = 0x1 (EV_CURRENT)
+  OS ABI        = 0x0 (ELFOSABI_NONE)
+  ABI version   = 0x0
+  e_type     : 0x3 (ET_DYN Shared object file)
+  e_machine  : 0x3 (EM_386)
+  e_version  : 0x1
+  e_entry    : 0x00001060
+  e_phoff    : 0x00000034
+  e_shoff    : 0x000038d0
+  e_flags    : 0x0
+  e_ehsize   : 0x34
+  e_phentsize: 0x20
+  e_phnum    : 0xb
+  e_shentsize: 0x28
+  e_shnum    : 0xff00 (65280) Number of sections
+  e_shstrndx : is in extended form, value from section zero
+  e_shstrndx : 0x22 (34) Section strings section
+Section strings never found. String section number 34
+ERROR: unable to load section headers, errcode 8 (RO_ERR_FILEOFFSETBAD)
