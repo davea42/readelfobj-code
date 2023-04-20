@@ -305,15 +305,22 @@ generic_ehdr_from_32(elf_filedata ep,
                 " have strings. See Elf ABI.\n");
         }
     }
-    if (ehdr->ge_shnum >= SHN_LORESERVE ||
-        (ehdr->ge_strndx_extended && !ehdr->ge_shnum)) {
-        /* 'man 5 elf' is wrong about how this is being done */
+    if (!ehdr->ge_shnum) {
+        ehdr->ge_shnum_extended = TRUE;
         P("Ehdr32 eh_shnum extended, number of sections "
             "(e_shnum 0x" LONGESTXFMT ") "
             " final shnum will be in Shdr32 sh_size\n",
             (unsigned long long)ehdr->ge_shnum);
-        ehdr->ge_shnum_extended = TRUE;
+        if (!ehdr->ge_strndx_extended) {
+            P("Unusual case, eh_shstrndx is is not extended "
+                "but e_shnum may be (or maybe are no sections).\n");
+        }
     } else {
+        if (ehdr->ge_strndx_extended) {
+            P("Unusual case, eh_shstrndx is extended "
+                "but e_shnum is not (maybe "
+                "e_shstrndx is just a low section number).\n");
+        }
         ehdr->ge_shnum_in_shnum = TRUE;
         if (ehdr->ge_shnum < 3) {
             printf("ERROR Ehdr section count "
@@ -395,16 +402,23 @@ generic_ehdr_from_64(elf_filedata ep,
                 " have strings. See Elf ABI.\n");
         }
     }
-    if (ehdr->ge_shnum >= SHN_LORESERVE ||
-        (ehdr->ge_strndx_extended && !ehdr->ge_shnum)) {
-        /* 'man 5 elf' is wrong about how this is being done */
+    if (!ehdr->ge_shnum) {
         P("Ehdr64 section count extended, number of sections "
             "(e_shnum 0x" LONGESTXFMT ") "
             " final will be in Shdr64 sh_size\n",
             (Dwarf_Unsigned)ehdr->ge_shnum);
         ehdr->ge_shnum_extended = TRUE;
+        if (!ehdr->ge_strndx_extended) {
+            P("Unusual case, eh_shstrndx is not extended "
+                "but e_shnum may be (or maybe are no sections).\n");
+        }
     } else {
         ehdr->ge_shnum_in_shnum = TRUE;
+        if (ehdr->ge_strndx_extended) {
+            P("Unusual case, eh_shstrndx is extended "
+                "but e_shnum is not (maybe "
+                "e_shstrndx is just a low section number).\n");
+        }
         if (ehdr->ge_shnum < 3) {
             printf("ERROR header section count too small"
                 " to be reasonable\n");
