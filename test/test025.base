@@ -1,5 +1,5 @@
 Ehdr64 string section index extended (e_shstrndx 0x0xffff), final shstrndx will be in Shdr64 sh_link
-Unusual case, eh_shstrndx is extended but e_shnum is not (maybe e_shstrndx is just a low section number).
+Unusual case, eh_shstrndx is extended but Ehdr64 e_shnum is not (maybe e_shstrndx is just a low section number).
  Extracted actual section string index number 34 from section zero
 ERROR: Something badly wrong with elf header references to section headers  filesize 16984 sectionentrysize 64 sectionentrycount 65280
 Elf object file yyy/elfextended/testobj64.extend

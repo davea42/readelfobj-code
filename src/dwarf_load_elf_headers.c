@@ -313,7 +313,7 @@ generic_ehdr_from_32(elf_filedata ep,
             (unsigned long long)ehdr->ge_shnum);
         if (!ehdr->ge_strndx_extended) {
             P("Unusual case, eh_shstrndx is is not extended "
-                "but e_shnum may be (or maybe are no sections).\n");
+                "but e_shnum may be (or maybe there are no sections).\n");
         }
     } else {
         if (ehdr->ge_strndx_extended) {
@@ -410,13 +410,14 @@ generic_ehdr_from_64(elf_filedata ep,
         ehdr->ge_shnum_extended = TRUE;
         if (!ehdr->ge_strndx_extended) {
             P("Unusual case, eh_shstrndx is not extended "
-                "but e_shnum may be (or maybe are no sections).\n");
+                "but e_shnum may be (or maybe "
+                "there are no sections).\n");
         }
     } else {
         ehdr->ge_shnum_in_shnum = TRUE;
         if (ehdr->ge_strndx_extended) {
             P("Unusual case, eh_shstrndx is extended "
-                "but e_shnum is not (maybe "
+                "but Ehdr64 e_shnum is not (maybe "
                 "e_shstrndx is just a low section number).\n");
         }
         if (ehdr->ge_shnum < 3) {
