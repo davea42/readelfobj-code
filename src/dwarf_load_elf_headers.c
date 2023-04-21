@@ -291,6 +291,17 @@ generic_ehdr_from_32(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shentsize,e->e_shentsize);
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
+    if (!ehdr->ge_shoff) {
+        P("Ehdr32 e_shoff zero, there are no sections\n");
+        ep->f_ehdr = ehdr;
+        ep->f_machine = ehdr->ge_machine;
+        ep->f_loc_ehdr.g_name = "Elf File Header";
+        ep->f_loc_ehdr.g_offset = 0;
+        ep->f_loc_ehdr.g_count = 1;
+        ep->f_loc_ehdr.g_entrysize = sizeof(dw_elf32_ehdr);
+        ep->f_loc_ehdr.g_totalsize = sizeof(dw_elf32_ehdr);
+        return RO_OK;
+    }
     if (ehdr->ge_shstrndx == SHN_XINDEX) {
         P("Ehdr32 string section index extended (e_shstrndx 0x"
             LONGESTXFMT "), "
@@ -313,7 +324,7 @@ generic_ehdr_from_32(elf_filedata ep,
             (unsigned long long)ehdr->ge_shnum);
         if (!ehdr->ge_strndx_extended) {
             P("Unusual case, eh_shstrndx is is not extended "
-                "but e_shnum may be (or maybe there are no sections).\n");
+                "but e_shnum may be.\n");
         }
     } else {
         if (ehdr->ge_strndx_extended) {
@@ -387,6 +398,17 @@ generic_ehdr_from_64(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shentsize,e->e_shentsize);
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
+    if (!ehdr->ge_shoff) {
+        P("Ehdr64 e_shoff zero, there are no sections\n");
+        ep->f_ehdr = ehdr;
+        ep->f_machine = ehdr->ge_machine;
+        ep->f_loc_ehdr.g_name = "Elf File Header";
+        ep->f_loc_ehdr.g_offset = 0;
+        ep->f_loc_ehdr.g_count = 1;
+        ep->f_loc_ehdr.g_entrysize = sizeof(dw_elf64_ehdr);
+        ep->f_loc_ehdr.g_totalsize = sizeof(dw_elf64_ehdr);
+        return RO_OK;
+    }
     if (ehdr->ge_shstrndx == SHN_XINDEX) {
         P("Ehdr64 string section index extended (e_shstrndx 0x"
             LONGESTXFMT "), "
@@ -410,8 +432,7 @@ generic_ehdr_from_64(elf_filedata ep,
         ehdr->ge_shnum_extended = TRUE;
         if (!ehdr->ge_strndx_extended) {
             P("Unusual case, eh_shstrndx is not extended "
-                "but e_shnum may be (or maybe "
-                "there are no sections).\n");
+                "but e_shnum may be.\n");
         }
     } else {
         ehdr->ge_shnum_in_shnum = TRUE;
