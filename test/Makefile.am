@@ -31,7 +31,8 @@ TESTS = ./test001.sh \
 ./test024.sh  \
 ./test025.sh  \
 ./test026.sh  \
-./test027.sh
+./test027.sh  \
+./test028.sh
 
 
 
@@ -129,6 +130,12 @@ CLEANFILES = \
   junk.test010.tmp2 \
   junk.test011.tmp \
   junk.test011.tmp2 \
+  junk.test026.tmp2 \
+  junk.test026.tmp \
+  junk.test027.tmp2 \
+  junk.test027.tmp \
+  junk.test028.tmp2 \
+  junk.test028.tmp \
   object_detector \
   readobjmacho \
   readobjpe \

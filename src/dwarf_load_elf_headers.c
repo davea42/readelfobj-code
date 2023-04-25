@@ -291,8 +291,13 @@ generic_ehdr_from_32(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shentsize,e->e_shentsize);
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
-    if (!ehdr->ge_shoff) {
-        P("Ehdr32 e_shoff zero, there are no sections\n");
+    if (ehdr->ge_shoff < sizeof(dw_elf32_ehdr)) {
+        if (!ehdr->ge_shoff) {
+            P("Ehdr32 e_shoff zero, there are no sections\n");
+        } else {
+            P("Ehdr32 e_shoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf.n",
+                (unsigned long)sizeof(dw_elf32_ehdr));
+        }
         ep->f_ehdr = ehdr;
         ep->f_machine = ehdr->ge_machine;
         ep->f_loc_ehdr.g_name = "Elf File Header";
@@ -398,8 +403,13 @@ generic_ehdr_from_64(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shentsize,e->e_shentsize);
     ASNAR(ep->f_copy_word,ehdr->ge_shnum,e->e_shnum);
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
-    if (!ehdr->ge_shoff) {
-        P("Ehdr64 e_shoff zero, there are no sections\n");
+    if (ehdr->ge_shoff < sizeof(dw_elf64_ehdr)) {
+        if (!ehdr->ge_shoff) {
+            P("Ehdr64 e_shoff zero, there are no sections\n");
+        } else {
+            P("Ehdr32 e_shoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf\n",
+                (unsigned long)sizeof(dw_elf64_ehdr));
+        }
         ep->f_ehdr = ehdr;
         ep->f_machine = ehdr->ge_machine;
         ep->f_loc_ehdr.g_name = "Elf File Header";

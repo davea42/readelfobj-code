@@ -9,4 +9,14 @@ suitable object file. The intent is to get
 an overview of the various section contents
 without, by default, looking into the sections.
 
+Update 22 April 2023:
+The code does not deal well with object files
+that are corrupted with a zero e_shoff field
+and other section-related fields non-zero.
+Crashes and erroneous output are possible.
+
+The code does not deal well with object files
+that are corrupted with a zero e_phoff field
+and other program-headeer fields non-zero.
+Crashes and erroneous output are possible.
 

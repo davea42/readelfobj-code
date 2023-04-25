@@ -335,7 +335,7 @@ print_minimum(elf_filedata ep)
     if (res != DW_DLV_OK) {
         return;
     }
-    res = elf_print_sectstrings(ep,ep->f_ehdr->ge_shstrndx);
+    res = elf_print_sectstrings(ep, ep->f_ehdr->ge_shstrndx);
     if (res != DW_DLV_OK) {
         return;
     }
