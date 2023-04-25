@@ -1,3 +1,4 @@
+Ehdr32 e_phoff zero, there are no program headers
 Section Group arrays
  section  name      groupsections
 [1]  .group               7

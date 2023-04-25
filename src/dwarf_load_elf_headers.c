@@ -352,6 +352,14 @@ generic_ehdr_from_32(elf_filedata ep,
                 ehdr->ge_shstrndx,ehdr->ge_shnum);
         }
     }
+    if (ehdr->ge_phoff < sizeof(dw_elf32_ehdr)) {
+        if (!ehdr->ge_phoff) {
+            P("Ehdr32 e_phoff zero, there are no program headers\n");
+        } else {
+            P("Ehdr32 e_phoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf.n",
+                (unsigned long)sizeof(dw_elf32_ehdr));
+        }
+    }
     ep->f_ehdr = ehdr;
     ep->f_machine = ehdr->ge_machine;
     ep->f_loc_ehdr.g_name = "Elf File Header";
@@ -461,6 +469,14 @@ generic_ehdr_from_64(elf_filedata ep,
                 LONGESTUFMT " is improper, there are only "
                 LONGESTUFMT "sections. Corrupt Elf\n",
                 ehdr->ge_shstrndx,ehdr->ge_shnum);
+        }
+    }
+    if (ehdr->ge_phoff < sizeof(dw_elf64_ehdr)) {
+        if (!ehdr->ge_phoff) {
+            P("Ehdr64 e_phoff zero, there are no program headers\n");
+        } else {
+            P("Ehdr64 e_phoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf.n",
+                (unsigned long)sizeof(dw_elf32_ehdr));
         }
     }
     ep->f_ehdr = ehdr;

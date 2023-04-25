@@ -1,3 +1,4 @@
+Ehdr64 e_phoff zero, there are no program headers
 Section Groups: No section groups or .dwo sections present. Elf object file yyy/sparc64-64-tls.o
  Elf Header ident bytes:  7f454c46 02020100 00000000 00000000
   File class    = 0x2 (ELFCLASS64
