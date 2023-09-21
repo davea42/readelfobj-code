@@ -302,6 +302,10 @@ do_one_file(const char *s)
     if (printfilenames) {
         P("Reading: %s (%s)\n",s,tru_path_buffer);
     }
+    if (ftype ==  DW_FTYPE_APPLEUNIVERSAL) {
+        P("File %s is Apple Universal Object. Ignored.\n",
+            tru_path_buffer);
+    }
     if (ftype !=  DW_FTYPE_MACH_O) {
         P("File %s is not mach-o. Ignored.\n",tru_path_buffer);
         return;

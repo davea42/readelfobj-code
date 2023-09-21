@@ -47,12 +47,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_DLV_ERROR     1
 #endif /* DW_DLV_OK */
 
-const char *dwarf_file_type[6] = {
+const char *dwarf_file_type[7] = {
 "file type unknown",
 "file type elf",
 "file type mach-o",
 "file type pe",
 "file type archive",
+"file type Apple Universal Object",
 0
 };
 

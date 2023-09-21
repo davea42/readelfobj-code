@@ -55,6 +55,7 @@ extern "C" {
 #define DW_FTYPE_MACH_O  2
 #define DW_FTYPE_PE      3
 #define DW_FTYPE_ARCHIVE 4  /* unix archive */
+#define DW_FTYPE_APPLEUNIVERSAL 5  
 #endif /* DW_FTYPE_UNKNOWN */
 
 #ifndef DW_ENDIAN_UNKNOWN

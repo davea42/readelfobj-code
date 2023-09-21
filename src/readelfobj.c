@@ -515,9 +515,6 @@ do_one_file(const char *s)
     /* If there are no .group sections this will remain at 3. */
     ep->f_sg_next_group_number = 3;
 
-#if 0
-printf("dadebug now load elf hdr\n");
-#endif
     res = dwarf_load_elf_header(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         P("ERROR: unable to load elf header. errcode %d (%s)\n",
@@ -532,9 +529,6 @@ printf("dadebug now load elf hdr\n");
         return;
     }
 
-#if 0
-printf("dadebug now load secthdrs\n");
-#endif
     res = dwarf_load_elf_sectheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         print_minimum(ep);

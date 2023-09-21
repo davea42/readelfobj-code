@@ -114,7 +114,7 @@ dwarf_construct_macho_access(int fd,
     int      res = 0;
 
     res = dwarf_object_detector_fd(fd,
-        &ftype,&endian,&offsetsize, &filesize, errcode);
+        &ftype,&endian,&offsetsize, &filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -131,6 +131,7 @@ dwarf_construct_macho_access(int fd,
     mfp->mo_path = strdup(path);
     mfp->mo_filesize = filesize;
     mfp->mo_endian = endian;
+    mfp->mo_universal_count = 0;
     mfp->mo_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;

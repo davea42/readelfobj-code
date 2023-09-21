@@ -132,6 +132,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DSYM_SUFFIX ".dSYM/Contents/Resources/DWARF/"
 #define PATHSIZE 2000
 
+#ifndef FAT_MAGIC
+#define FAT_MAGIC   0xcafebabe
+#define FAT_CIGAM   0xbebafeca  /* NXSwapLong(FAT_MAGIC) */
+#define FAT_MAGIC_64    0xcafebabf
+#define FAT_CIGAM_64    0xbfbafeca  /* NXSwapLong(FAT_MAGIC_64) */
+#endif /* FAT_MAGIC */
+
 #ifndef  MH_MAGIC
 /* mach-o 32bit */
 #define MH_MAGIC        0xfeedface
@@ -545,6 +552,39 @@ is_pe_object(int fd,
 }
 
 static int
+is_mach_o_universal(struct elf_header *h,
+    unsigned *endian,
+    unsigned *offsetsize)
+{
+    unsigned long magicval = 0;
+    unsigned locendian = 0;
+    unsigned locoffsetsize = 0;
+
+    /*  No swapping here. Need to match size of
+        the universal-object  magic field. */
+    magicval = magic_copy(h->e_ident,4);
+    if (magicval == FAT_MAGIC) {
+        locendian = DW_ENDIAN_BIG;
+        locoffsetsize = 32;
+    } else if (magicval == FAT_CIGAM) {
+        locendian = DW_ENDIAN_LITTLE;
+        locoffsetsize = 32;
+    }else if (magicval == FAT_MAGIC_64) {
+        locendian = DW_ENDIAN_BIG;
+        locoffsetsize = 64;
+    } else if (magicval == FAT_CIGAM_64) {
+        locendian = DW_ENDIAN_LITTLE;
+        locoffsetsize = 64;
+    } else {
+        return FALSE;
+    }
+    *endian = locendian;
+    *offsetsize = locoffsetsize;
+    return TRUE;
+
+}
+
+static int
 is_mach_o_magic(struct elf_header *h,
     unsigned *endian,
     unsigned *offsetsize)
@@ -586,9 +626,9 @@ dwarf_object_detector_fd(int fd,
 {
     struct elf_header h;
     size_t readlen = sizeof(h);
-    int res = 0;
-    off_t fsize = 0;
-    off_t lsval = 0;
+    int    res = 0;
+    off_t  fsize = 0;
+    off_t  lsval = 0;
     ssize_t readval = 0;
 
     fsize = lseek(fd,0L,SEEK_END);
@@ -622,6 +662,11 @@ dwarf_object_detector_fd(int fd,
             return res;
         }
         *ftype = DW_FTYPE_ELF;
+        *filesize = (size_t)fsize;
+        return DW_DLV_OK;
+    }
+    if (is_mach_o_universal(&h,endian,offsetsize)) {
+        *ftype = DW_FTYPE_APPLEUNIVERSAL;
         *filesize = (size_t)fsize;
         return DW_DLV_OK;
     }
@@ -692,7 +737,7 @@ dwarf_object_detector_path(const char  *path,
         return DW_DLV_NO_ENTRY;
     }
     res = dwarf_object_detector_fd(fd,
-        ftype,endian,offsetsize,filesize,errcode);
+        ftype,endian,offsetsize,filesize, errcode);
     if (res != DW_DLV_OK && have_outpath) {
         *outpath = 0;
     }
