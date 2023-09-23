@@ -65,6 +65,7 @@ extern "C" {
 #define TYP(n,l) char n[l]
 #endif /* TYP */
 
+
 /*  This is Apple internal naming for Universal Binaries 
     and is not 'Inclusive Terminology" !! */
 #define FAT_MAGIC   0xcafebabe
@@ -79,7 +80,7 @@ struct fat_header {
 
 struct fat_arch {
     TYP(cputype ,4);  /* cpu specifier (int) */
-    TYP(cpu_subtype,4); /* machine specifier (int) */
+    TYP(cpusubtype,4); /* machine specifier (int) */
     TYP(offset,4);     /* file offset to this object file */
     TYP(size,4);       /* size of this object file */
     TYP(align,4);      /* alignment as a power of 2 */

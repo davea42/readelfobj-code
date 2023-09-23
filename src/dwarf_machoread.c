@@ -53,6 +53,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* HAVE_UNISTD_H */
 #include "dwarf_reading.h"
 #include "dwarf_object_read_common.h"
+#include "dwarf_universal.h"
 #include "dwarf_machoread.h"
 #include "dwarf_object_detector.h"
 #include "dwarf_macho_loader.h"
@@ -75,6 +76,34 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         func(&t,&s[0],sizeof(s));               \
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
+
+#if 0
+static void
+dump_bytes(const char *msg,unsigned char * start, unsigned len)
+{
+    Dwarf_Small *end = start + len;
+    Dwarf_Small *cur = start;
+    printf("%s (0x%lx) ",msg,(unsigned long)start);
+    for (; cur < end; cur++) {
+        printf("%02x", *cur);
+    }
+    printf("\n");
+}
+#endif
+
+static unsigned long
+magic_copy(unsigned char *d, unsigned len)
+{
+    unsigned i = 0;
+    unsigned long v = 0;
+
+    v = d[0];
+    for (i = 1 ; i < len; ++i) {
+        v <<= 8;
+        v |=  d[i];
+    }
+    return v;
+}
 
 int
 dwarf_construct_macho_access_path(const char *path,
@@ -129,9 +158,10 @@ dwarf_construct_macho_access(int fd,
     mfp->mo_ident[1] = 1;
     mfp->mo_offsetsize = offsetsize;
     mfp->mo_path = strdup(path);
-    mfp->mo_filesize = filesize;
+    mfp->mo_filesize = filesize; /* if inner object is inner object sz*/
     mfp->mo_endian = endian;
     mfp->mo_universal_count = 0;
+    mfp->mo_inner_offset = 0; /* for binary inside universal obj */
     mfp->mo_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;
@@ -179,7 +209,7 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
     struct mach_header mh32;
     int res = 0;
 
-    res = RRMOA(mfp->mo_fd,&mh32,0,sizeof(mh32),
+    res = RRMOA(mfp->mo_fd,&mh32,mfp->mo_inner_offset,sizeof(mh32),
         mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -224,7 +254,7 @@ load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
     struct mach_header_64 mh64;
     int res = 0;
 
-    res = RRMOA(mfp->mo_fd,&mh64,0,sizeof(mh64),
+    res = RRMOA(mfp->mo_fd,&mh64,mfp->mo_inner_offset,sizeof(mh64),
         mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -304,7 +334,8 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_LOADSEGOFFSETBAD;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(mfp->mo_fd,&sc,mmp->offset_this_command,sizeof(sc),
+    res = RRMOA(mfp->mo_fd,&sc,
+        mfp->mo_inner_offset+mmp->offset_this_command,sizeof(sc),
         mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -382,7 +413,8 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(mfp->mo_fd,&sc,segoffset,sizeof(sc),
+    res = RRMOA(mfp->mo_fd,&sc,
+        mfp->mo_inner_offset+segoffset,sizeof(sc),
         mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
@@ -486,7 +518,8 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
     Dwarf_Unsigned seci = 0;
     Dwarf_Unsigned seccount = segp->nsects;
     Dwarf_Unsigned secalloc = seccount+1;
-    Dwarf_Unsigned curoff = segp->sectionsoffset;
+    Dwarf_Unsigned curoff = 
+        mfp->mo_inner_offset+segp->sectionsoffset;
     Dwarf_Unsigned shdrlen = sizeof(struct section);
 
     struct generic_macho_section *secs = 0;
@@ -570,7 +603,8 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
     Dwarf_Unsigned seci = 0;
     Dwarf_Unsigned seccount = segp->nsects;
     Dwarf_Unsigned secalloc = seccount+1;
-    Dwarf_Unsigned curoff = segp->sectionsoffset;
+    Dwarf_Unsigned curoff = 
+        mfp->mo_inner_offset+segp->sectionsoffset;
     Dwarf_Unsigned shdrlen = sizeof(struct section_64);
     struct generic_macho_section *secs = 0;
 
@@ -743,3 +777,300 @@ dwarf_load_macho_commands(struct macho_filedata_s *mfp,int *errcode)
     res = dwarf_macho_load_dwarf_sections(mfp,errcode);
     return res;
 }
+
+static int 
+fill_in_uni_arch_32(
+    struct fat_arch * fa, 
+    struct Dwarf_Universal_Head_s *duhd,
+    void *(*word_swap) (void *, const void *, size_t))
+{
+    Dwarf_Unsigned i = 0;
+    struct Dwarf_Universal_Arch_s * dua = 0;
+
+    dua = duhd->au_arches;
+    for( ; i < duhd->au_count; ++i,++fa,++dua) {
+        ASNAR(word_swap,dua->au_cputype,fa->cputype);
+        ASNAR(word_swap,dua->au_cpusubtype,fa->cpusubtype);
+        ASNAR(word_swap,dua->au_offset,fa->offset);
+        ASNAR(word_swap,dua->au_size,fa->size);
+printf("dadebug 32b offset 0x%lx size 0x%lx \n",(unsigned long)dua->au_offset,(unsigned long)dua->au_size);
+        ASNAR(word_swap,dua->au_align,fa->align);
+        dua->au_reserved = 0;
+    }
+
+    return DW_DLV_OK;
+}
+
+static int
+fill_in_uni_arch_64(
+    struct fat_arch_64 * fa, 
+    struct Dwarf_Universal_Head_s *duhd,
+    void *(*word_swap) (void *, const void *, size_t))
+{
+    Dwarf_Unsigned i = 0;
+    struct Dwarf_Universal_Arch_s * dua = 0;
+
+    dua = duhd->au_arches;
+    for( ; i < duhd->au_count; ++i,++fa,++dua) {
+        ASNAR(word_swap,dua->au_cputype,fa->cputype);
+        ASNAR(word_swap,dua->au_cpusubtype,fa->cpusubtype);
+        ASNAR(word_swap,dua->au_offset,fa->offset);
+        ASNAR(word_swap,dua->au_size,fa->size);
+printf("dadebug 64b offset 0x%lx size 0x%lx \n",(unsigned long)dua->au_offset,(unsigned long)dua->au_size);
+        ASNAR(word_swap,dua->au_align,fa->align);
+        ASNAR(word_swap,dua->au_align,fa->align);
+        ASNAR(word_swap,dua->au_reserved,fa->reserved);
+    }
+
+    return DW_DLV_OK;
+}
+
+static const struct Dwarf_Universal_Head_s duhzero; 
+static const struct fat_header fhzero; 
+int dwarf_object_detector_universal_head(
+    char         *dw_path, 
+    ULONGEST      dw_filesize,
+    ULONGEST     *dw_contentcount, 
+    Dwarf_Universal_Head * dw_head,
+    int            *errcode)
+{
+    struct Dwarf_Universal_Head_s duhd;
+    struct Dwarf_Universal_Head_s *duhdp = 0;
+    struct fat_header fh;
+    int fd = -1;
+    int res = 0;
+    void *(*word_swap) (void *, const void *, size_t);
+    int locendian = 0;
+    int locoffsetsize = 0;
+    
+
+    duhd = duhzero;
+    fh = fhzero;
+    fd = open(dw_path, O_RDONLY|O_BINARY);
+    if (fd < 0) {
+        printf("Opening path %s for universal binary failed\n",
+           dw_path);
+        *errcode = RO_ERR_PATH_SIZE;
+        return DW_DLV_ERROR;
+    }
+    /* Picking larger fat-arch for safety */
+    res = RRMOA(fd,&fh,0,sizeof(fh), dw_filesize,errcode);
+    if (res != DW_DLV_OK) {
+        printf("Reading struct %s for universal binary header failed\n",
+            dw_path);
+        return res;
+    }
+    duhd.au_magic = magic_copy((unsigned char *)&fh.magic[0],4);
+    if (duhd.au_magic == FAT_MAGIC) {
+        locendian = DW_ENDIAN_BIG;
+        locoffsetsize = 32;
+    } else if (duhd.au_magic == FAT_CIGAM) {
+        locendian = DW_ENDIAN_LITTLE;
+        locoffsetsize = 32;
+    }else if (duhd.au_magic == FAT_MAGIC_64) {
+        locendian = DW_ENDIAN_BIG;
+        locoffsetsize = 64;
+    } else if (duhd.au_magic == FAT_CIGAM_64) {
+        locendian = DW_ENDIAN_LITTLE;
+        locoffsetsize = 64;
+    } else {
+        printf("Reading magic number universal compare failed "
+            "Inconsistent\n");
+        *errcode = RO_ERR_FILE_WRONG_TYPE;
+        return DW_DLV_ERROR;
+    }
+#ifdef WORDS_BIGENDIAN
+    if (locendian == DW_ENDIAN_LITTLE 
+        || locendian == DW_ENDIAN_OPPOSITE ) {
+        word_swap = dwarf_ro_memcpy_swap_bytes;
+    } else {
+        word_swap = memcpy;
+    }
+#else  /* LITTLE ENDIAN */
+    if (locendian == DW_ENDIAN_LITTLE 
+        || locendian == DW_ENDIAN_SAME ) {
+        word_swap = memcpy;
+    } else {
+        word_swap = dwarf_ro_memcpy_swap_bytes;
+    }
+#endif /* LITTLE- BIG-ENDIAN */
+
+
+    ASNAR(word_swap,duhd.au_count,fh.nfat_arch);
+    /*  The limit is a first-cut safe heuristic. */
+    if (duhd.au_count >= (dw_filesize/2) ) {
+        printf("Universal Binary header count impossible: "
+           LONGESTUFMT "\n",
+            duhd.au_count);
+        *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR ;
+        close(fd);
+        return DW_DLV_ERROR;
+    }
+    printf("dadebug ubinary count %llu\n",duhd.au_count);
+    duhd.au_arches = (struct  Dwarf_Universal_Arch_s*)
+        calloc(duhd.au_count, sizeof(struct Dwarf_Universal_Arch_s));
+    if (!duhd.au_arches) {
+        printf("Universal Binary au_arches alloc fail line %d\n",
+            __LINE__);
+        *errcode = DW_DLE_ALLOC_FAIL;
+        close(fd);
+        return DW_DLV_ERROR;
+    }
+    if (locoffsetsize == 32) {
+        struct fat_arch * fa = 0;
+        fa = (struct fat_arch *)calloc(duhd.au_count,
+            sizeof(struct fat_arch));
+        if (!fa) {
+            printf("Universal Binary au_arches alloc fail line %d\n",
+               __LINE__);
+            *errcode = DW_DLE_ALLOC_FAIL;
+            free(duhd.au_arches);
+            duhd.au_arches = 0;
+            free(fa);
+            close(fd);
+            return res;
+        }
+        res = RRMOA(fd,fa,/*offset=*/sizeof(fh),
+            duhd.au_count*sizeof(*fa),
+            dw_filesize,errcode);
+        if (res != DW_DLV_OK) {
+            printf("Universal Binary value read fail line %d\n",
+               __LINE__);
+            free(duhd.au_arches);
+            duhd.au_arches = 0;
+            free(fa);
+            close(fd);
+            return res;
+        }
+printf("dadebug fill_in_32\n");
+        res = fill_in_uni_arch_32(fa,&duhd,word_swap);
+        if (res != DW_DLV_OK) {
+            free(duhd.au_arches);
+            printf("Universal Binary value read fail line %d\n",
+               __LINE__);
+            duhd.au_arches = 0;
+            free(fa);
+            close(fd);
+            return res;
+        }
+        free(fa);
+        fa = 0;
+    } else { /* 64 */
+        struct fat_arch_64 * fa = 0;
+        fa = (struct fat_arch_64 *)calloc(duhd.au_count,
+            sizeof(struct fat_arch));
+        if (!fa) {
+            printf("Universal Binary au_arches alloc fail line %d\n",
+               __LINE__);
+            *errcode = DW_DLE_ALLOC_FAIL;
+            free(duhd.au_arches);
+            duhd.au_arches = 0;
+            close(fd);
+            return res;
+        }
+        res = RRMOA(fd,fa,/*offset*/sizeof(fh),
+            duhd.au_count*sizeof(fa),
+            dw_filesize,errcode);
+        if (res == DW_DLV_ERROR) {
+            printf("Universal Binary value read fail line %d\n",
+               __LINE__);
+            free(duhd.au_arches);
+            duhd.au_arches = 0;
+            free(fa);
+            close(fd);
+            return res;
+        }
+printf("dadebug fill_in_64\n");
+        res = fill_in_uni_arch_64(fa,&duhd,word_swap);
+        if (res != DW_DLV_OK) {
+            printf("Universal Binary value read fail line %d\n",
+               __LINE__);
+            free(duhd.au_arches);
+            duhd.au_arches = 0;
+            close(fd);
+            return res;
+        }
+        free(fa);
+        fa = 0;
+    }
+
+    duhdp = malloc(sizeof(*duhdp));
+    if (!duhdp) {
+        printf("Universal Binary au_arches alloc fail line %d\n",
+            __LINE__);
+        free(duhd.au_arches);
+        duhd.au_arches = 0;
+        *errcode = DW_DLE_ALLOC_FAIL;
+        close(fd);
+        return res;
+    }
+    memcpy(duhdp,&duhd,sizeof(duhd));
+    *dw_contentcount = duhd.au_count;
+    duhdp->au_arches = duhd.au_arches;
+    *dw_head = duhdp;
+    close(fd);
+    return res;
+}
+
+#if 0
+static void
+print_arch_item(ULONGEST i,
+    struct  Dwarf_Universal_Arch_s* arch)
+{
+    printf(" Universal Binary Index " LONGESTUFMT "\n",i);
+    printf("   cpu     " LONGESTXFMT "\n",arch->au_cputype);
+    printf("   cpusubt " LONGESTXFMT "\n",arch->au_cpusubtype);
+    printf("   offset  " LONGESTXFMT "\n",arch->au_offset);
+    printf("   size    " LONGESTXFMT "\n",arch->au_size);
+    printf("   align   " LONGESTXFMT "\n",arch->au_align);
+}
+#endif
+
+int dwarf_object_detector_universal_instance(
+    Dwarf_Universal_Head dw_head,
+    ULONGEST  dw_index_of,
+    ULONGEST *dw_cpu_type,
+    ULONGEST *dw_cpusubtype,
+    ULONGEST *dw_offset,
+    ULONGEST *dw_size,
+    ULONGEST *dw_align,
+    int         *errcode)
+{
+    struct  Dwarf_Universal_Arch_s* arch = 0;
+
+    if (!dw_head) {
+         printf("Missing argument to "
+            "dwarf_object_detector_universal_instance");
+         *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
+         return DW_DLV_ERROR;
+    }
+    if (dw_index_of >= dw_head->au_count){
+         printf("Requested index "
+            LONGESTUFMT
+            " to specific binary "
+            "is too larg: valid: 0 to "
+            LONGESTUFMT "-1\n",
+            dw_index_of, dw_head->au_count);
+         return DW_DLV_NO_ENTRY;
+    }
+    arch =  dw_head->au_arches +dw_index_of;
+    *dw_cpu_type = arch->au_cputype;
+    *dw_cpusubtype = arch->au_cpusubtype; 
+    *dw_offset = arch->au_offset;
+    *dw_size = arch->au_size;
+    *dw_align = arch->au_align;
+#if 0
+    print_arch_item(dw_index_of,arch);
+#endif
+    return DW_DLV_OK;
+}
+void dwarf_dealloc_universal_head(Dwarf_Universal_Head dw_head)
+{
+    if (!dw_head) {
+        return;
+    }
+    free(dw_head->au_arches);
+    dw_head->au_arches = 0;
+    free(dw_head);
+}
+

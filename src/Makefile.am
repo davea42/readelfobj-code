@@ -39,6 +39,7 @@ dwarf_load_elf_headers.c \
 errormessages.c \
 readelfobj.c \
 dwarf_reading.h \
+dwarf_universal.h \
 dw_elfstructs.h \
 readelfobj.h \
 sanitized.h \
@@ -82,6 +83,8 @@ readobjpe_CPPFLAGS = \
 
 object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.c \
+   dwarf_machoread.c \
+   dwarf_object_read_common.c \
    errormessages.c \
    dwarf_object_detector.h
 object_detector_CFLAGS = $(RO_CFLAGS_WARN) 

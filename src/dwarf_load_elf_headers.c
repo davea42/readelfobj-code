@@ -51,6 +51,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* HAVE_ELF_H */
 #include "dw_elfstructs.h"
 #include "dwarf_reading.h"
+#include "dwarf_universal.h"
 #include "dwarf_object_detector.h"
 #include "dwarf_object_read_common.h"
 #include "readelfobj.h"

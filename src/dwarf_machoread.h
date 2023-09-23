@@ -37,8 +37,30 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
+#ifndef LONGESTUTYPE
+#define LONGESTUTYPE unsigned long long
+#endif
+
 #define Dwarf_Unsigned LONGESTUTYPE
 #define Dwarf_Small    unsigned char
+
+struct Dwarf_Universal_Arch_s;
+struct Dwarf_Universal_Head_s {
+    Dwarf_Unsigned au_magic;
+    Dwarf_Unsigned au_count;
+    struct Dwarf_Universal_Arch_s * au_arches;
+    
+};
+struct Dwarf_Universal_Arch_s {
+    Dwarf_Unsigned au_cputype;
+    Dwarf_Unsigned au_cpusubtype;
+    Dwarf_Unsigned au_offset;
+    Dwarf_Unsigned au_size;
+    Dwarf_Unsigned au_align;
+    Dwarf_Unsigned au_reserved;
+};
+
+
 
 struct generic_macho_header {
     Dwarf_Unsigned   magic;
@@ -105,7 +127,8 @@ struct macho_filedata_s {
     int              mo_fd;
     int              mo_destruct_close_fd; /*aka: lib owns fd */
     int              mo_is_64bit;
-    Dwarf_Unsigned   mo_filesize;
+    Dwarf_Unsigned   mo_filesize; /* object file size */
+    Dwarf_Unsigned   mo_inner_offset; /* for universal inner */
     Dwarf_Small      mo_offsetsize; /* 32 or 64 section data */
     Dwarf_Small      mo_pointersize;
     int              mo_ftype;

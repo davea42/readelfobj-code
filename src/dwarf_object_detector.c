@@ -40,6 +40,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_STRING_H
 #include <string.h> /* memcpy, strcpy */
 #endif /* HAVE_STRING_H */
+#include "dwarf_machoread.h" /* for Dwarf_Unsigned */
 #include "dwarf_object_detector.h"
 
 /* This is the main() program for the object_detector executable. */
@@ -52,6 +53,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef O_RDONLY
 #define O_RDONLY 0
 #endif
+
 
 /*  TYP, SIZEOFT32 and ASNAR
     mean we can use correctly-sized arrays of char for the

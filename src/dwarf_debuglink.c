@@ -55,6 +55,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 #include <fcntl.h> /* for open() */
 #include <errno.h>
 #include "dwarf_reading.h"
+#include "dwarf_machoread.h" /* for Dwarf_Unsigned */
 #include "dwarf_object_detector.h"
 #include "dwarf_object_read_common.h"
 #include "readelfobj.h"
