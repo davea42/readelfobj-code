@@ -78,6 +78,14 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
 
+static int
+dwarf_object_detector_universal_head_fd(
+    int fd,
+    Dwarf_Unsigned      dw_filesize,
+    unsigned int      *dw_contentcount,
+    Dwarf_Universal_Head * dw_head,
+    int            *errcode);
+
 #if 0
 static void
 dump_bytes(const char *msg,unsigned char * start, unsigned len)
@@ -109,7 +117,8 @@ magic_copy(unsigned char *d, unsigned len)
 int
 dwarf_construct_macho_access_path(const char *path,
     unsigned int uninumber,
-    struct macho_filedata_s **mp,int *errcode)
+    struct macho_filedata_s **mp,
+    int *errcode)
 {
     int fd = -1;
     int res = 0;
@@ -121,8 +130,9 @@ dwarf_construct_macho_access_path(const char *path,
         return DW_DLV_ERROR;
     }
     res = dwarf_construct_macho_access(fd,
+        path,
         uninumber,
-        path,&mymp,errcode);
+        &mymp,errcode);
     if (res != DW_DLV_OK) {
         close(fd);
         return res;
@@ -138,10 +148,12 @@ dwarf_construct_macho_access_path(const char *path,
    The filesize being that of the inner binary,
    and the fileoffset being the offset of the inner
    binary (so by definition > 0);
+*/
    
-int
-res = dwarf_macho_inner_object_fd(int fd,
+static int
+dwarf_macho_inner_object_fd(int fd,
     unsigned int uninumber,
+    Dwarf_Unsigned outer_filesize,
     unsigned int *ftype,
     unsigned int *unibinarycount,
     unsigned int *endian,
@@ -151,57 +163,58 @@ res = dwarf_macho_inner_object_fd(int fd,
     int *errcode)
 {
     int res = 0;
-    Dwarf_Universal_Head head = 0;
-    unsigned int ucontentcount = 0;
-    size_t ufilesize = 0;
+    Dwarf_Universal_Head  head = 0;
     Dwarf_Unsigned innerbase = 0;
     Dwarf_Unsigned innersize = 0;
-    
-FIXME
+
     res =  dwarf_object_detector_universal_head_fd(
-        fd, &ufilesize, &ucontentcount,
+        fd, outer_filesize, unibinarycount,
         &head, errcode);
     if (res != DW_DLV_OK) {
-        return;
+        return res;
     }
-    if (uninumber >= ucontentcount) {
+    if (uninumber >= *unibinarycount) {
          printf("FAIL: Requested inner binary number invalid\n");
          *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
-         dwarf_dealloc_universal_head(head)
+         dwarf_dealloc_universal_head(head);
          return DW_DLV_ERROR;
     }
     /*  Now find the precise details of uninumber 
         instance we want */
     
-    innerbase = head->au_arches[uninumber].du_offset;
-    innersize = head->au_arches[uninumber].du_size;
-    if (innersize >= filesize || innerbase >= filesize) {
+    innerbase = head->au_arches[uninumber].au_offset;
+    innersize = head->au_arches[uninumber].au_size;
+printf("dadebug innerbase 0x%llx innersize 0x%llx \n",innerbase,innersize);
+    if (innersize >= outer_filesize || innerbase >= outer_filesize) {
         printf("FAIL: inner object impossible. Corrupt Dwarf\n");
         *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
-        dwarf_dealloc_universal_head(head)
-        return DW_DLV_ERROR:
+        dwarf_dealloc_universal_head(head);
+        return DW_DLV_ERROR;
     }
+#if 0
     if (innerbase >= innersize) {
         printf("FAIL: base of inner object impossible. "
             "Corrupt Dwarf\n");
         printf("FAIL: base of inner impossible\n");
         *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
-        dwarf_dealloc_universal_head(head)
-        return DW_DLV_ERROR:
+        dwarf_dealloc_universal_head(head);
+        return DW_DLV_ERROR;
     }
+#endif
 
     printf("dadebug innerbaseoffset " LONGESTXFMT
         " and size " LONGESTXFMT "\n",innerbase,innersize);
 
     /* Now access inner to return its specs */
-    dwarf_object_detector_fd_a(fd,
-
-            innerbase, innersize
-           
-FIXME
-
-    dwarf_dealloc_universal_head(head)
-
+    res = dwarf_object_detector_fd_a(fd,
+        ftype,endian,offsetsize,innerbase,&innersize,errcode);
+    if (res != DW_DLV_OK) {       
+        dwarf_dealloc_universal_head(head);
+        return res;
+    }
+    *fileoffset = innerbase;
+    *filesize = innersize;
+    dwarf_dealloc_universal_head(head);
     return DW_DLV_OK;
 }
 
@@ -213,35 +226,36 @@ dwarf_construct_macho_access(int fd,
     unsigned int uninumber,
     struct macho_filedata_s **mp,int *errcode)
 {
-    unsigned ftype = 0;
-    unsigned endian = 0;
-    unsigned offsetsize = 0;
-    Dwarf_Unsigned   filesize = 0;
-    Dwarf_Unsigned   fileoffset = 0;
+    unsigned       ftype = 0;
+    unsigned       endian = 0;
+    unsigned       offsetsize = 0;
+    Dwarf_Unsigned filesize = 0;
     struct macho_filedata_s *mfp = 0;
-    int      res = 0;
-    unsigned int ftypei = 0;
-    unsigned int endiani = 0;
-    unsigned int offsetsizei = 0;
+    int            res = 0;
+    unsigned int   ftypei = 0;
+    unsigned int   endiani = 0;
+    unsigned int   offsetsizei = 0;
     Dwarf_Unsigned filesizei = 0;
     Dwarf_Unsigned fileoffseti = 0;
-    unsigned int unibinarycounti = 0;
+    unsigned int   unibinarycounti = 0;
 
+    /*  This for outer object, normal or universal.
+        Hence base is 0 */
     res = dwarf_object_detector_fd_a(fd,
-        &ftype,&endian,&offsetsize, &filesize,errcode);
+        &ftype,&endian,&offsetsize,0, &filesize,errcode);
     if (res != DW_DLV_OK) {
-        printf("FAIL: object_detector  %u"
-               failed on Mach-O object\n");
+        printf("FAIL: object_detector failed on Mach-O object\n");
         return res;
     }
     if (ftype == DW_FTYPE_APPLEUNIVERSAL) {
-FIXME
-        res = dwarf_macho_inner_object_fd(fd,uninumber,
+        res = dwarf_macho_inner_object_fd(fd,
+            uninumber,
+            filesize,
             &ftypei,&unibinarycounti,&endiani,
             &offsetsizei,&fileoffseti,&filesizei,errcode);
         if (res != DW_DLV_OK) {
             printf("FAIL: Macho access to universal inner binary %u"
-               failed\n",uninumber);
+                "failed\n",uninumber);
             return res;
         }
         filesize = filesizei;
@@ -261,10 +275,11 @@ FIXME
     mfp->mo_path = strdup(path);
     mfp->mo_filesize = filesize;
     mfp->mo_endian = endian;
-    mfp->mo_universal_count = unibinarycounti;
 
     /* for binary inside universal obj */
+    mfp->mo_universal_count = unibinarycounti;
     mfp->mo_inner_offset = fileoffseti; 
+
     mfp->mo_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;
@@ -933,19 +948,19 @@ static const struct fat_header fhzero;
 int dwarf_object_detector_universal_head(
     char         *dw_path, 
     Dwarf_Unsigned      dw_filesize,
-    Dwarf_Unsigned     *dw_contentcount, 
+    unsigned int     *dw_contentcount, 
     Dwarf_Universal_Head * dw_head,
     int            *errcode)
 {
     int fd = -1;
     int res = 0;
+#if 0
     void *(*word_swap) (void *, const void *, size_t);
     int locendian = 0;
     int locoffsetsize = 0;
-   
-
-    duhd = duhzero;
     fh = fhzero;
+#endif
+
     fd = open(dw_path, O_RDONLY|O_BINARY);
     if (fd < 0) {
         printf("Opening path %s for universal binary failed\n",
@@ -958,29 +973,28 @@ int dwarf_object_detector_universal_head(
     if (res != DW_DLV_OK) {
         return res;
     }
-FIXME
     close(fd);
     return res;
 }
-int dwarf_object_detector_universal_head_fd(
+static int 
+dwarf_object_detector_universal_head_fd(
     int fd,
     Dwarf_Unsigned      dw_filesize,
-    Dwarf_Unsigned     *dw_contentcount, 
+    unsigned int      *dw_contentcount, 
     Dwarf_Universal_Head * dw_head,
-    int            *errcode)
+    int                *errcode)
 {
-    struct Dwarf_Universal_Head_s duhd;
+    struct Dwarf_Universal_Head_s  duhd;
     struct Dwarf_Universal_Head_s *duhdp = 0;
-    struct fat_header fh;
-    int fd = -1;
-    int res = 0;
+    struct  fat_header fh;
+    int     res = 0;
     void *(*word_swap) (void *, const void *, size_t);
-    int locendian = 0;
-    int locoffsetsize = 0;
-    
+    int     locendian = 0;
+    int     locoffsetsize = 0;
 
     duhd = duhzero;
     fh = fhzero;
+#if 0
     fd = open(dw_path, O_RDONLY|O_BINARY);
     if (fd < 0) {
         printf("Opening path %s for universal binary failed\n",
@@ -988,11 +1002,12 @@ int dwarf_object_detector_universal_head_fd(
         *errcode = RO_ERR_PATH_SIZE;
         return DW_DLV_ERROR;
     }
-    /* Picking larger fat-arch for safety */
+#endif
+    /*  A universal head is always at offset zero. */
     res = RRMOA(fd,&fh,0,sizeof(fh), dw_filesize,errcode);
     if (res != DW_DLV_OK) {
-        printf("Reading struct %s for universal binary header failed\n",
-            dw_path);
+        printf("Reading struct for universal binary "
+            "header failed\n");
         return res;
     }
     duhd.au_magic = magic_copy((unsigned char *)&fh.magic[0],4);
@@ -1199,6 +1214,7 @@ int dwarf_object_detector_universal_instance(
 #endif
     return DW_DLV_OK;
 }
+
 void dwarf_dealloc_universal_head(Dwarf_Universal_Head dw_head)
 {
     if (!dw_head) {

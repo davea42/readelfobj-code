@@ -318,7 +318,7 @@ do_one_file(const char *s)
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
-    size_t filesize = 0;
+    Dwarf_Unsigned filesize = 0;
     int res = 0;
     struct macho_filedata_s *mfp = 0;
     int errcode = 0;
@@ -342,7 +342,6 @@ do_one_file(const char *s)
         P("Reading dSYM object at %s\n",tru_path_buffer);
     }
     res = dwarf_construct_macho_access_path(tru_path_buffer,
-        ftype,
         unibinarynumber,
         &mfp,&errcode);
     if (res != RO_OK) {

@@ -14,9 +14,9 @@ struct Dwarf_Universal_Head_s;
 typedef struct Dwarf_Universal_Head_s *  Dwarf_Universal_Head;
 
 int dwarf_object_detector_universal_head(
-    char         *dw_path,
-    Dwarf_Unsigned      dw_filesize,
-    Dwarf_Unsigned     *dw_contentcount,
+    char           *dw_path,
+    Dwarf_Unsigned  dw_filesize,
+    unsigned int   *dw_contentcount,
     Dwarf_Universal_Head * dw_head,
     int            *errcode);
 

@@ -102,7 +102,7 @@ report_universal(char *targpath,unsigned endian,
     unsigned offsetsize,size_t filesize,int *errcode)
 {
     Dwarf_Universal_Head unihead = 0;
-    Dwarf_Unsigned contentcount = 0;
+    unsigned int contentcount = 0;
     int res = 0;
     Dwarf_Unsigned i = 0;
 
@@ -112,8 +112,7 @@ report_universal(char *targpath,unsigned endian,
          return res;
     }
     printf("  Mach-O Universal binary\n");
-    printf("                   count: " LONGESTUFMT "\n",
-        contentcount); 
+    printf("                   count: %u\n", contentcount); 
     printf("              offsetsize: %u\n", offsetsize);
     printf("                filesize: 0x%lx\n", 
         (unsigned long)filesize);
@@ -169,11 +168,11 @@ int main(int argc, char **argv)
 
     for ( ;ct < argc ; ct++) {
         char *path = argv[ct];
-        int res = 0;
-        unsigned ftype = 0;
-        unsigned endian = 0;
-        unsigned offsetsize = 0;
-        size_t filesize = 0;
+        int          res = 0;
+        unsigned int ftype = 0;
+        unsigned int endian = 0;
+        unsigned int offsetsize = 0;
+        Dwarf_Unsigned filesize = 0;
         char *finalpathp = finalpath;
         finalpath[0] = 0;
 
