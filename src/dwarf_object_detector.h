@@ -89,19 +89,38 @@ extern "C" {
     the argument values other than path
     must be considered to be in an unknown state. */
 
+#ifndef Dwarf_Unsigned
+#define Dwarf_Unsigned unsigned long long
+#endif
+#ifndef Dwarf_Signed
+#define Dwarf_Signed   long long
+#endif
+#ifndef Dwarf_Small
+#define Dwarf_Small    unsigned char
+#endif
+
+
+
 int dwarf_object_detector_path(const char  *path,
     char *outpath,size_t outpath_len,
     unsigned *ftype,
     unsigned *endian,
     unsigned *offsetsize,
-    size_t   *filesize,
+    Dwarf_Unsigned   *filesize,
     int * errcode);
 
 int dwarf_object_detector_fd(int fd,
     unsigned *ftype,
     unsigned *endian,
     unsigned *offsetsize,
-    size_t   *filesize,
+    Dwarf_Unsigned *filesize,
+    int * errcode);
+int dwarf_object_detector_fd_a(int fd,
+    unsigned *ftype,
+    unsigned *endian,
+    unsigned *offsetsize,
+    Dwarf_Unsigned fd_offset_base,
+    Dwarf_Unsigned *filesize,
     int * errcode);
 
 #ifdef __cplusplus

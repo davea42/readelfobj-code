@@ -49,6 +49,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_ELF_H
 #include <elf.h>
 #endif /* HAVE_ELF_H */
+#include "dwarf_types.h"
 #include "dw_elfstructs.h"
 #include "dwarf_reading.h"
 #include "dwarf_universal.h"
@@ -183,7 +184,7 @@ dwarf_construct_elf_access(int fd,
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
-    size_t   filesize;
+    Dwarf_Unsigned   filesize;
     elf_filedata mfp = 0;
     int      res = 0;
 

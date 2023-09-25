@@ -37,12 +37,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-#ifndef LONGESTUTYPE
-#define LONGESTUTYPE unsigned long long
-#endif
-
-#define Dwarf_Unsigned LONGESTUTYPE
-#define Dwarf_Small    unsigned char
 
 struct Dwarf_Universal_Arch_s;
 struct Dwarf_Universal_Head_s {

@@ -47,6 +47,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <malloc.h>
 #endif /* HAVE_MALLOC_H */
 #include <string.h> /* for strlen */
+#include "dwarf_types.h"
 #include "dwarfstring.h"
 #ifndef TRUE
 #define TRUE 1

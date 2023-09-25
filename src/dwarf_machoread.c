@@ -51,6 +51,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
+#include "dwarf_types.h"
 #include "dwarf_reading.h"
 #include "dwarf_object_read_common.h"
 #include "dwarf_universal.h"
@@ -107,6 +108,7 @@ magic_copy(unsigned char *d, unsigned len)
 
 int
 dwarf_construct_macho_access_path(const char *path,
+    unsigned int uninumber,
     struct macho_filedata_s **mp,int *errcode)
 {
     int fd = -1;
@@ -119,6 +121,7 @@ dwarf_construct_macho_access_path(const char *path,
         return DW_DLV_ERROR;
     }
     res = dwarf_construct_macho_access(fd,
+        uninumber,
         path,&mymp,errcode);
     if (res != DW_DLV_OK) {
         close(fd);
@@ -129,23 +132,121 @@ dwarf_construct_macho_access_path(const char *path,
     return res;
 }
 
+/* Reads universal binary headers, gets to
+   the chosen inner binary, and returns the
+   values from the inner binary.
+   The filesize being that of the inner binary,
+   and the fileoffset being the offset of the inner
+   binary (so by definition > 0);
+   
+int
+res = dwarf_macho_inner_object_fd(int fd,
+    unsigned int uninumber,
+    unsigned int *ftype,
+    unsigned int *unibinarycount,
+    unsigned int *endian,
+    unsigned int *offsetsize,
+    Dwarf_Unsigned *fileoffset,
+    Dwarf_Unsigned *filesize,
+    int *errcode)
+{
+    int res = 0;
+    Dwarf_Universal_Head head = 0;
+    unsigned int ucontentcount = 0;
+    size_t ufilesize = 0;
+    Dwarf_Unsigned innerbase = 0;
+    Dwarf_Unsigned innersize = 0;
+    
+FIXME
+    res =  dwarf_object_detector_universal_head_fd(
+        fd, &ufilesize, &ucontentcount,
+        &head, errcode);
+    if (res != DW_DLV_OK) {
+        return;
+    }
+    if (uninumber >= ucontentcount) {
+         printf("FAIL: Requested inner binary number invalid\n");
+         *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
+         dwarf_dealloc_universal_head(head)
+         return DW_DLV_ERROR;
+    }
+    /*  Now find the precise details of uninumber 
+        instance we want */
+    
+    innerbase = head->au_arches[uninumber].du_offset;
+    innersize = head->au_arches[uninumber].du_size;
+    if (innersize >= filesize || innerbase >= filesize) {
+        printf("FAIL: inner object impossible. Corrupt Dwarf\n");
+        *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
+        dwarf_dealloc_universal_head(head)
+        return DW_DLV_ERROR:
+    }
+    if (innerbase >= innersize) {
+        printf("FAIL: base of inner object impossible. "
+            "Corrupt Dwarf\n");
+        printf("FAIL: base of inner impossible\n");
+        *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
+        dwarf_dealloc_universal_head(head)
+        return DW_DLV_ERROR:
+    }
+
+    printf("dadebug innerbaseoffset " LONGESTXFMT
+        " and size " LONGESTXFMT "\n",innerbase,innersize);
+
+    /* Now access inner to return its specs */
+    dwarf_object_detector_fd_a(fd,
+
+            innerbase, innersize
+           
+FIXME
+
+    dwarf_dealloc_universal_head(head)
+
+    return DW_DLV_OK;
+}
+
+
 /* Here path is not essential. Pass in with "" if unknown. */
 int
 dwarf_construct_macho_access(int fd,
     const char *path,
+    unsigned int uninumber,
     struct macho_filedata_s **mp,int *errcode)
 {
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
-    size_t   filesize;
+    Dwarf_Unsigned   filesize = 0;
+    Dwarf_Unsigned   fileoffset = 0;
     struct macho_filedata_s *mfp = 0;
     int      res = 0;
+    unsigned int ftypei = 0;
+    unsigned int endiani = 0;
+    unsigned int offsetsizei = 0;
+    Dwarf_Unsigned filesizei = 0;
+    Dwarf_Unsigned fileoffseti = 0;
+    unsigned int unibinarycounti = 0;
 
-    res = dwarf_object_detector_fd(fd,
+    res = dwarf_object_detector_fd_a(fd,
         &ftype,&endian,&offsetsize, &filesize,errcode);
     if (res != DW_DLV_OK) {
+        printf("FAIL: object_detector  %u"
+               failed on Mach-O object\n");
         return res;
+    }
+    if (ftype == DW_FTYPE_APPLEUNIVERSAL) {
+FIXME
+        res = dwarf_macho_inner_object_fd(fd,uninumber,
+            &ftypei,&unibinarycounti,&endiani,
+            &offsetsizei,&fileoffseti,&filesizei,errcode);
+        if (res != DW_DLV_OK) {
+            printf("FAIL: Macho access to universal inner binary %u"
+               failed\n",uninumber);
+            return res;
+        }
+        filesize = filesizei;
+        endian = endiani;
+        offsetsize = offsetsizei;
     }
 
     mfp = calloc(1,sizeof(struct macho_filedata_s));
@@ -158,10 +259,12 @@ dwarf_construct_macho_access(int fd,
     mfp->mo_ident[1] = 1;
     mfp->mo_offsetsize = offsetsize;
     mfp->mo_path = strdup(path);
-    mfp->mo_filesize = filesize; /* if inner object is inner object sz*/
+    mfp->mo_filesize = filesize;
     mfp->mo_endian = endian;
-    mfp->mo_universal_count = 0;
-    mfp->mo_inner_offset = 0; /* for binary inside universal obj */
+    mfp->mo_universal_count = unibinarycounti;
+
+    /* for binary inside universal obj */
+    mfp->mo_inner_offset = fileoffseti; 
     mfp->mo_destruct_close_fd = FALSE;
     *mp = mfp;
     return DW_DLV_OK;
@@ -829,8 +932,40 @@ static const struct Dwarf_Universal_Head_s duhzero;
 static const struct fat_header fhzero; 
 int dwarf_object_detector_universal_head(
     char         *dw_path, 
-    ULONGEST      dw_filesize,
-    ULONGEST     *dw_contentcount, 
+    Dwarf_Unsigned      dw_filesize,
+    Dwarf_Unsigned     *dw_contentcount, 
+    Dwarf_Universal_Head * dw_head,
+    int            *errcode)
+{
+    int fd = -1;
+    int res = 0;
+    void *(*word_swap) (void *, const void *, size_t);
+    int locendian = 0;
+    int locoffsetsize = 0;
+   
+
+    duhd = duhzero;
+    fh = fhzero;
+    fd = open(dw_path, O_RDONLY|O_BINARY);
+    if (fd < 0) {
+        printf("Opening path %s for universal binary failed\n",
+           dw_path);
+        *errcode = RO_ERR_PATH_SIZE;
+        return DW_DLV_ERROR;
+    }
+    res = dwarf_object_detector_universal_head_fd(fd,
+        dw_filesize, dw_contentcount, dw_head, errcode);
+    if (res != DW_DLV_OK) {
+        return res;
+    }
+FIXME
+    close(fd);
+    return res;
+}
+int dwarf_object_detector_universal_head_fd(
+    int fd,
+    Dwarf_Unsigned      dw_filesize,
+    Dwarf_Unsigned     *dw_contentcount, 
     Dwarf_Universal_Head * dw_head,
     int            *errcode)
 {
@@ -1014,7 +1149,7 @@ printf("dadebug fill_in_64\n");
 
 #if 0
 static void
-print_arch_item(ULONGEST i,
+print_arch_item(unsigned int i,
     struct  Dwarf_Universal_Arch_s* arch)
 {
     printf(" Universal Binary Index " LONGESTUFMT "\n",i);
@@ -1028,12 +1163,12 @@ print_arch_item(ULONGEST i,
 
 int dwarf_object_detector_universal_instance(
     Dwarf_Universal_Head dw_head,
-    ULONGEST  dw_index_of,
-    ULONGEST *dw_cpu_type,
-    ULONGEST *dw_cpusubtype,
-    ULONGEST *dw_offset,
-    ULONGEST *dw_size,
-    ULONGEST *dw_align,
+    Dwarf_Unsigned  dw_index_of,
+    Dwarf_Unsigned *dw_cpu_type,
+    Dwarf_Unsigned *dw_cpusubtype,
+    Dwarf_Unsigned *dw_offset,
+    Dwarf_Unsigned *dw_size,
+    Dwarf_Unsigned *dw_align,
     int         *errcode)
 {
     struct  Dwarf_Universal_Arch_s* arch = 0;

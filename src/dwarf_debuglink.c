@@ -54,6 +54,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 #include <sys/stat.h> /* for open() */
 #include <fcntl.h> /* for open() */
 #include <errno.h>
+#include "dwarf_types.h"
 #include "dwarf_reading.h"
 #include "dwarf_machoread.h" /* for Dwarf_Unsigned */
 #include "dwarf_object_detector.h"

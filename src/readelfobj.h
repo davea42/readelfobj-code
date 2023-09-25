@@ -36,9 +36,15 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-#define Dwarf_Unsigned LONGESTUTYPE
-#define Dwarf_Signed   LONGESTSTYPE
+#ifndef Dwarf_Unsigned
+#define Dwarf_Unsigned unsigned long long
+#endif
+#ifndef Dwarf_Signed
+#define Dwarf_Signed   long long
+#endif
+#ifndef Dwarf_Small
 #define Dwarf_Small    unsigned char
+#endif
 
 extern char *filename;
 extern int printfilenames;

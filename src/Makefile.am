@@ -39,6 +39,7 @@ dwarf_load_elf_headers.c \
 errormessages.c \
 readelfobj.c \
 dwarf_reading.h \
+dwarf_types.h \
 dwarf_universal.h \
 dw_elfstructs.h \
 readelfobj.h \

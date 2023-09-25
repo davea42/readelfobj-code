@@ -35,9 +35,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define Dwarf_Unsigned LONGESTUTYPE
-#define Dwarf_Small    unsigned char
-
 #define DW_DLE_STRING_OFFSET_BAD RO_ERR_STRINGOFFSETBIG
 #define DW_DLE_FILE_TOO_SMALL    RO_ERR_TOOSMALL
 #define DW_DLE_PE_OFFSET_BAD     RO_ERR_FILEOFFSETBAD

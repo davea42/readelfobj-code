@@ -56,6 +56,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* HAVE_UNISTD_H */
 #include <unistd.h>
 #include <errno.h>
+#include "dwarf_types.h"
 #include "dwarf_reading.h"
 #include "dwarf_object_detector.h"
 #include "dwarf_object_read_common.h"
@@ -469,7 +470,7 @@ do_one_file(const char *s)
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
-    size_t filesize = 0;
+    Dwarf_Unsigned filesize = 0;
     int errcode = 0;
     elf_filedata ep = 0;
 

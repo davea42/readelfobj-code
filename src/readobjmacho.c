@@ -52,6 +52,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
+#include "dwarf_types.h"
 #include "dwarf_reading.h"
 #include "dwarf_macho_loader.h"
 #include "dwarf_object_detector.h"
@@ -60,11 +61,14 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "sanitized.h"
 
 int printfilenames = FALSE;
+unsigned int unibinarynumber = 0;
 
 char *Usage = "Usage: readobjmacho <options> file ...\n"
     "Options:\n"
     "--help     print this message\n"
-    "--version  print version string\n";
+    "--version  print version string\n" 
+    "--universalnumber=<n>  If a Universal Binary\n" 
+    "  print binary number n. Defaults to zero\n";
 
 static char tru_path_buffer[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
@@ -131,6 +135,27 @@ get_command_name(Dwarf_Unsigned v)
     return ("Unknown");
 }
 
+static int
+findnumber(char *s)
+{
+    int newv = 0;
+    char *nptr = 0;
+
+    if (strlen(s) < 1) {
+        printf("Error --unarybinarynumber= missing value. "
+           " Giving up.\n");
+        exit(1);
+    }
+    newv = strtoul((const char *)s,&nptr,10);
+    if ( nptr && !*nptr) {
+        return newv;
+    }
+    printf("Error --unarybinarynumber=%s "
+        "does not have a valid number. "
+        " Giving up.\n",s);
+    exit(1);
+}
+
 int
 main(int argc,char **argv)
 {
@@ -157,6 +182,12 @@ main(int argc,char **argv)
                 P("Version-readobjmacho: %s\n",
                     PACKAGE_VERSION);
                 printed_version = TRUE;
+                continue;
+            }
+            if (!strncmp(argv[0],"--unibinarynumber=",18)) {
+                unibinarynumber=findnumber(argv[0]+18);
+                printf("If universal binary, use inner binary "
+                    "number %d\n",unibinarynumber);
                 continue;
             }
             if ( (i+1) < argc) {
@@ -302,11 +333,8 @@ do_one_file(const char *s)
     if (printfilenames) {
         P("Reading: %s (%s)\n",s,tru_path_buffer);
     }
-    if (ftype ==  DW_FTYPE_APPLEUNIVERSAL) {
-        P("File %s is Apple Universal Object. Ignored.\n",
-            tru_path_buffer);
-    }
-    if (ftype !=  DW_FTYPE_MACH_O) {
+    if (ftype != DW_FTYPE_MACH_O &&
+        ftype != DW_FTYPE_APPLEUNIVERSAL) {
         P("File %s is not mach-o. Ignored.\n",tru_path_buffer);
         return;
     }
@@ -314,6 +342,8 @@ do_one_file(const char *s)
         P("Reading dSYM object at %s\n",tru_path_buffer);
     }
     res = dwarf_construct_macho_access_path(tru_path_buffer,
+        ftype,
+        unibinarynumber,
         &mfp,&errcode);
     if (res != RO_OK) {
         P("Warning: Unable to open %s for detailed reading. Err %d\n",

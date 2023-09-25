@@ -39,6 +39,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* lseek read close */
 #endif /* HAVE_UNISTD_H */
+#include "dwarf_types.h"
 #include "dwarf_reading.h"
 #include "dwarf_pe_descr.h" /* for flags */
 #include "dwarf_object_detector.h"

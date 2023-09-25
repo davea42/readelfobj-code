@@ -31,6 +31,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #include <string.h> /* memcpy, strcpy */
+#include "dwarf_types.h"
 #include "dwarf_reading.h"
 #include "dwarf_universal.h"
 #include "dwarf_object_detector.h"
@@ -78,19 +79,19 @@ const char *dwarf_endian_type[6] = {
 int dwarf_object_detector_universal_head(
     char         *dw_path,
     unsigned      dw_filetype /* DW_FTYPE_APPLEUNIVERSAL */,
-    ULONGEST      dw_filesize,
-    ULONGEST     *dw_contentcount,
+    Dwarf_Unsigned      dw_filesize,
+    Dwarf_Unsigned     *dw_contentcount,
     Dwarf_Universal_Head * dw_head,
     int            *errcode);
 
 int dwarf_object_detector_universal_instance(
     Dwarf_Universal_Head dw_head,
-    ULONGEST  dw_index_of,
-    ULONGEST *dw_cpu_type,
-    ULONGEST *dw_cpu_subtype,
-    ULONGEST *dw_offset,
-    ULONGEST *dw_size,
-    ULONGEST *dw_align,
+    Dwarf_Unsigned  dw_index_of,
+    Dwarf_Unsigned *dw_cpu_type,
+    Dwarf_Unsigned *dw_cpu_subtype,
+    Dwarf_Unsigned *dw_offset,
+    Dwarf_Unsigned *dw_size,
+    Dwarf_Unsigned *dw_align,
     int         *errcode);
 void dwarf_dealloc_universal_head(Dwarf_Universal_Head dw_head);
 #endif
@@ -101,9 +102,9 @@ report_universal(char *targpath,unsigned endian,
     unsigned offsetsize,size_t filesize,int *errcode)
 {
     Dwarf_Universal_Head unihead = 0;
-    ULONGEST contentcount = 0;
+    Dwarf_Unsigned contentcount = 0;
     int res = 0;
-    ULONGEST i = 0;
+    Dwarf_Unsigned i = 0;
 
     res = dwarf_object_detector_universal_head(targpath,
          filesize,&contentcount,&unihead,errcode);
@@ -119,11 +120,11 @@ report_universal(char *targpath,unsigned endian,
     printf("                  endian: %s\n",
         dwarf_endian_type[endian]); 
     for ( ; i < contentcount; ++i) {
-       ULONGEST cpu_type = 0;
-       ULONGEST cpu_subtype = 0;
-       ULONGEST offset = 0;
-       ULONGEST size = 0;
-       ULONGEST align = 0;
+       Dwarf_Unsigned cpu_type = 0;
+       Dwarf_Unsigned cpu_subtype = 0;
+       Dwarf_Unsigned offset = 0;
+       Dwarf_Unsigned size = 0;
+       Dwarf_Unsigned align = 0;
 
        res = dwarf_object_detector_universal_instance(
            unihead,i,&cpu_type,&cpu_subtype,&offset,

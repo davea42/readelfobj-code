@@ -40,6 +40,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_STRING_H
 #include <string.h> /* memcpy, strcpy */
 #endif /* HAVE_STRING_H */
+#include "dwarf_types.h"
 #include "dwarf_machoread.h" /* for Dwarf_Unsigned */
 #include "dwarf_object_detector.h"
 
@@ -281,20 +282,20 @@ memcpy_swap_bytes(void *s1, const void *s2, size_t len)
 
 static int
 object_read_random(int fd,char *buf,off_t loc,
-    size_t size,off_t filesize,int *errc)
+    size_t size,Dwarf_Unsigned filesize,int *errc)
 {
     off_t scode = 0;
     ssize_t rcode = 0;
     off_t endpoint = 0;
 
-    if (loc >= filesize) {
+    if ((Dwarf_Unsigned)loc >= filesize) {
         /*  Seek can seek off the end. Lets not allow that.
             The object is corrupt. */
         *errc = RO_SEEK_OFF_END;
         return DW_DLV_ERROR;
     }
     endpoint = loc+size;
-    if (endpoint > filesize) {
+    if ((Dwarf_Unsigned)endpoint > filesize) {
         /*  Let us -not- try to read past end of object.
             The object is corrupt. */
         *errc = RO_READ_OFF_END;
@@ -442,7 +443,7 @@ is_archive_magic(struct elf_header *h)
     Return of DW_DLV_OK  it is a PE file we recognize. */
 static int
 is_pe_object(int fd,
-    size_t filesize,
+    Dwarf_Unsigned filesize,
     unsigned *endian,
     unsigned *offsetsize,
     int *errcode)
@@ -498,12 +499,12 @@ is_pe_object(int fd,
         return DW_DLV_ERROR;
     }
     ASNAR(word_swap,nt_address, dhinmem.dh_image_offset);
-    if (filesize < nt_address) {
+    if (filesize < (Dwarf_Unsigned)nt_address) {
         /* Not dos header not a PE file we recognize */
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
     }
-    if (filesize < (nt_address +
+    if (filesize < (Dwarf_Unsigned)(nt_address +
         SIZEOFT32 +
         sizeof(struct pe_image_file_header))) {
         *errcode = RO_ERR_TOOSMALL;
@@ -623,7 +624,34 @@ dwarf_object_detector_fd(int fd,
     unsigned *ftype,
     unsigned *endian,
     unsigned *offsetsize,
-    size_t   *filesize,
+    Dwarf_Unsigned *filesize,
+    int *errcode)
+{
+    Dwarf_Unsigned fileoffsetbase = 0;
+    int res = 0;
+
+    res = dwarf_object_detector_fd_a(fd,
+        ftype,endian,offsetsize,
+        fileoffsetbase,filesize,
+        errcode);
+#if 0
+    if (fileoffsetbase) {
+        printf(" For inner object use "
+            "dwarf_object_detector_fd_a() instead\n");
+        *errcode =  RO_ERR_NOT_A_KNOWN_TYPE;
+        return DW_DLV_ERROR;
+    }
+#endif
+    return res;
+}
+
+int
+dwarf_object_detector_fd_a(int fd,
+    unsigned *ftype,
+    unsigned *endian,
+    unsigned *offsetsize,
+    Dwarf_Unsigned fileoffsetbase,
+    Dwarf_Unsigned *filesize,
     int *errcode)
 {
     struct elf_header h;
@@ -633,8 +661,29 @@ dwarf_object_detector_fd(int fd,
     off_t  lsval = 0;
     ssize_t readval = 0;
 
-    fsize = lseek(fd,0L,SEEK_END);
+#if 0
+    if (fileoffsetbase >= filesize) {
+        printf("FAIL: fileoffsetbase >= filesize: impossible\n");
+        *errcode = RO_ERR_SEEK;
+        return DW_DLV_ERROR;
+    }
+#endif
+
+    fsize = lseek(fd,fileoffsetbase,SEEK_END);
     if (fsize < 0) {
+        printf("FAIL: fsize <= offsetbase impossible\n");
+        *errcode = RO_ERR_SEEK;
+        return DW_DLV_ERROR;
+    }
+#if 0
+    if (fsize <= 0) {
+        printf("FAIL: fsize <= offsetbase impossible\n");
+        *errcode = RO_ERR_SEEK;
+        return DW_DLV_ERROR;
+    }
+#endif
+    if ((Dwarf_Unsigned)fsize <= fileoffsetbase) {
+        printf("FAIL: fsize <= offsetbase impossible\n");
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
@@ -643,7 +692,7 @@ dwarf_object_detector_fd(int fd,
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
     }
-    lsval  = lseek(fd,0L,SEEK_SET);
+    lsval  = lseek(fd,fileoffsetbase,SEEK_SET);
     if (lsval < 0) {
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
@@ -664,28 +713,28 @@ dwarf_object_detector_fd(int fd,
             return res;
         }
         *ftype = DW_FTYPE_ELF;
-        *filesize = (size_t)fsize;
+        *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
     }
     if (is_mach_o_universal(&h,endian,offsetsize)) {
         *ftype = DW_FTYPE_APPLEUNIVERSAL;
-        *filesize = (size_t)fsize;
+        *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
     }
     if (is_mach_o_magic(&h,endian,offsetsize)) {
         *ftype = DW_FTYPE_MACH_O;
-        *filesize = (size_t)fsize;
+        *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
     }
     if (is_archive_magic(&h)) {
         *ftype = DW_FTYPE_ARCHIVE;
-        *filesize = (size_t)fsize;
+        *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
     }
     res = is_pe_object(fd,fsize,endian,offsetsize,errcode);
     if (res == DW_DLV_OK ) {
         *ftype = DW_FTYPE_PE;
-        *filesize = (size_t)fsize;
+        *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
     }
     /* errcode already set., DW_DLV_NO_ENTRY impossible */
@@ -698,7 +747,7 @@ dwarf_object_detector_path(const char  *path,
     unsigned *ftype,
     unsigned *endian,
     unsigned *offsetsize,
-    size_t   *filesize,
+    Dwarf_Unsigned *filesize,
     int *errcode)
 {
     char *cp = 0;
