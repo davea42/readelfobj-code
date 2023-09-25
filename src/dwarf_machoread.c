@@ -167,6 +167,7 @@ dwarf_macho_inner_object_fd(int fd,
     Dwarf_Unsigned innerbase = 0;
     Dwarf_Unsigned innersize = 0;
 
+printf("fd %d line %d\n",fd,__LINE__);
     res =  dwarf_object_detector_universal_head_fd(
         fd, outer_filesize, unibinarycount,
         &head, errcode);
@@ -206,14 +207,23 @@ printf("dadebug innerbase 0x%llx innersize 0x%llx \n",innerbase,innersize);
         " and size " LONGESTXFMT "\n",innerbase,innersize);
 
     /* Now access inner to return its specs */
-    res = dwarf_object_detector_fd_a(fd,
-        ftype,endian,offsetsize,innerbase,&innersize,errcode);
+    { 
+        /*  But ignore the size this returns! 
+            we determined that above. the following call
+            does not get the inner size, we got that 
+            just above here! */
+        Dwarf_Unsigned fake_size = 0;
+        res = dwarf_object_detector_fd_a(fd,
+            ftype,endian,offsetsize,innerbase,&fake_size,
+            errcode);
+    }
     if (res != DW_DLV_OK) {       
         dwarf_dealloc_universal_head(head);
         return res;
     }
     *fileoffset = innerbase;
     *filesize = innersize;
+printf("dadebug Returning innerbase 0x%llx innersize 0x%llx \n",innerbase,innersize);
     dwarf_dealloc_universal_head(head);
     return DW_DLV_OK;
 }
@@ -261,6 +271,7 @@ dwarf_construct_macho_access(int fd,
         filesize = filesizei;
         endian = endiani;
         offsetsize = offsetsizei;
+printf("dadebug filesize 0x%llx  line %d %s\n",filesize,__LINE__,__FILE__);
     }
 
     mfp = calloc(1,sizeof(struct macho_filedata_s));
@@ -1053,7 +1064,6 @@ dwarf_object_detector_universal_head_fd(
            LONGESTUFMT "\n",
             duhd.au_count);
         *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR ;
-        close(fd);
         return DW_DLV_ERROR;
     }
     printf("dadebug ubinary count %llu\n",duhd.au_count);
@@ -1063,7 +1073,6 @@ dwarf_object_detector_universal_head_fd(
         printf("Universal Binary au_arches alloc fail line %d\n",
             __LINE__);
         *errcode = DW_DLE_ALLOC_FAIL;
-        close(fd);
         return DW_DLV_ERROR;
     }
     if (locoffsetsize == 32) {
@@ -1077,7 +1086,6 @@ dwarf_object_detector_universal_head_fd(
             free(duhd.au_arches);
             duhd.au_arches = 0;
             free(fa);
-            close(fd);
             return res;
         }
         res = RRMOA(fd,fa,/*offset=*/sizeof(fh),
@@ -1089,7 +1097,6 @@ dwarf_object_detector_universal_head_fd(
             free(duhd.au_arches);
             duhd.au_arches = 0;
             free(fa);
-            close(fd);
             return res;
         }
 printf("dadebug fill_in_32\n");
@@ -1100,7 +1107,6 @@ printf("dadebug fill_in_32\n");
                __LINE__);
             duhd.au_arches = 0;
             free(fa);
-            close(fd);
             return res;
         }
         free(fa);
@@ -1115,7 +1121,6 @@ printf("dadebug fill_in_32\n");
             *errcode = DW_DLE_ALLOC_FAIL;
             free(duhd.au_arches);
             duhd.au_arches = 0;
-            close(fd);
             return res;
         }
         res = RRMOA(fd,fa,/*offset*/sizeof(fh),
@@ -1127,7 +1132,6 @@ printf("dadebug fill_in_32\n");
             free(duhd.au_arches);
             duhd.au_arches = 0;
             free(fa);
-            close(fd);
             return res;
         }
 printf("dadebug fill_in_64\n");
@@ -1137,7 +1141,6 @@ printf("dadebug fill_in_64\n");
                __LINE__);
             free(duhd.au_arches);
             duhd.au_arches = 0;
-            close(fd);
             return res;
         }
         free(fa);
@@ -1151,14 +1154,12 @@ printf("dadebug fill_in_64\n");
         free(duhd.au_arches);
         duhd.au_arches = 0;
         *errcode = DW_DLE_ALLOC_FAIL;
-        close(fd);
         return res;
     }
     memcpy(duhdp,&duhd,sizeof(duhd));
     *dw_contentcount = duhd.au_count;
     duhdp->au_arches = duhd.au_arches;
     *dw_head = duhdp;
-    close(fd);
     return res;
 }
 

@@ -53,6 +53,9 @@ dwarf_object_read_random(int fd,char *buf,off_t loc,
     ssize_t rcode = 0;
     off_t endpoint = 0;
 
+printf("dadebug RRMOA at location 0x%lx size 0x%lx filesz 0x%lx\n",
+(unsigned long)loc,(unsigned long)size,
+(unsigned long)filesize);
     if (loc >= filesize) {
         /*  Seek can seek off the end. Lets not allow that.
             The object is corrupt. */

@@ -660,7 +660,10 @@ dwarf_object_detector_fd_a(int fd,
     off_t  fsize = 0;
     off_t  lsval = 0;
     ssize_t readval = 0;
+    Dwarf_Unsigned remaininglen  = 0;
 
+    printf("dadebug fd %d line %d %s\n",fd,__LINE__,__FILE__);
+    printf("dadebug fileoffsetbase 0x%llx\n",fileoffsetbase);
 #if 0
     if (fileoffsetbase >= filesize) {
         printf("FAIL: fileoffsetbase >= filesize: impossible\n");
@@ -669,25 +672,33 @@ dwarf_object_detector_fd_a(int fd,
     }
 #endif
 
-    fsize = lseek(fd,fileoffsetbase,SEEK_END);
+#if 0
+    fsize = lseek(fd,0L,SEEK_SET);
+printf("dadebug fsize %ld line %d\n",fsize,__LINE__);
+#endif
+    fsize = lseek(fd,0L,SEEK_END);
+printf("dadebug fsize %ld line %d\n",fsize,__LINE__);
     if (fsize < 0) {
-        printf("FAIL: fsize <= offsetbase impossible\n");
+        printf("FAIL: fsize < 0 impossible\n");
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
-#if 0
-    if (fsize <= 0) {
-        printf("FAIL: fsize <= offsetbase impossible\n");
+#if 1
+    if (fsize < 0) {
+        printf("FAIL: fsize < zero impossible\n");
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
 #endif
+    remaininglen = (Dwarf_Unsigned)fsize - fileoffsetbase;
+#if 1
     if ((Dwarf_Unsigned)fsize <= fileoffsetbase) {
         printf("FAIL: fsize <= offsetbase impossible\n");
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
-    if (fsize <= (off_t)readlen) {
+#endif
+    if (remaininglen <= readlen) {
         /* Not a real object file */
         *errcode = RO_ERR_TOOSMALL;
         return DW_DLV_ERROR;
