@@ -567,19 +567,27 @@ is_mach_o_universal(struct elf_header *h,
         the universal-object  magic field. */
     magicval = magic_copy(h->e_ident,4);
     if (magicval == FAT_MAGIC) {
+#if 0
 printf("dadebug FAT_MAGIC 32\n");
+#endif
         locendian = DW_ENDIAN_BIG;
         locoffsetsize = 32;
     } else if (magicval == FAT_CIGAM) {
+#if 0
 printf("dadebug FAT_CIGAM 32\n");
+#endif
         locendian = DW_ENDIAN_LITTLE;
         locoffsetsize = 32;
     }else if (magicval == FAT_MAGIC_64) {
+#if 0
 printf("dadebug FAT_MAGIC_64\n");
+#endif
         locendian = DW_ENDIAN_BIG;
         locoffsetsize = 64;
     } else if (magicval == FAT_CIGAM_64) {
+#if 0
 printf("dadebug FAT_CIGAM_64\n");
+#endif
         locendian = DW_ENDIAN_LITTLE;
         locoffsetsize = 64;
     } else {
@@ -666,8 +674,10 @@ dwarf_object_detector_fd_a(int fd,
     ssize_t readval = 0;
     Dwarf_Unsigned remaininglen  = 0;
 
+#if 0
     printf("dadebug fd %d line %d %s\n",fd,__LINE__,__FILE__);
     printf("dadebug fileoffsetbase 0x%llx\n",fileoffsetbase);
+#endif
 #if 0
     if (fileoffsetbase >= filesize) {
         printf("FAIL: fileoffsetbase >= filesize: impossible\n");
@@ -675,33 +685,26 @@ dwarf_object_detector_fd_a(int fd,
         return DW_DLV_ERROR;
     }
 #endif
-
+    fsize = lseek(fd,0L,SEEK_END);
 #if 0
-    fsize = lseek(fd,0L,SEEK_SET);
 printf("dadebug fsize %ld line %d\n",fsize,__LINE__);
 #endif
-    fsize = lseek(fd,0L,SEEK_END);
-printf("dadebug fsize %ld line %d\n",fsize,__LINE__);
     if (fsize < 0) {
         printf("FAIL: fsize < 0 impossible\n");
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
-#if 1
     if (fsize < 0) {
         printf("FAIL: fsize < zero impossible\n");
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
-#endif
     remaininglen = (Dwarf_Unsigned)fsize - fileoffsetbase;
-#if 1
     if ((Dwarf_Unsigned)fsize <= fileoffsetbase) {
         printf("FAIL: fsize <= offsetbase impossible\n");
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
-#endif
     if (remaininglen <= readlen) {
         /* Not a real object file */
         *errcode = RO_ERR_TOOSMALL;
@@ -732,13 +735,11 @@ printf("dadebug fsize %ld line %d\n",fsize,__LINE__);
         return DW_DLV_OK;
     }
     if (is_mach_o_universal(&h,endian,offsetsize)) {
-printf("dadebug  DW_FTYPE_APPLEUNIVERSAL\n");
         *ftype = DW_FTYPE_APPLEUNIVERSAL;
         *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
     }
     if (is_mach_o_magic(&h,endian,offsetsize)) {
-printf("dadebug  DW_FTYPE_MACH_O\n");
         *ftype = DW_FTYPE_MACH_O;
         *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
