@@ -12,6 +12,11 @@
     inside it) is
       readobjmacho --universalnumber=1
     for example
+
+    The printed result from object_detector
+    on a universal binary shows a little for
+    each one contained, but the description
+    is not useful.  Needs work.
             modified:   dwarf_machoread.c
             modified:   dwarf_object_detector.c
             modified:   dwarf_object_read_common.c
