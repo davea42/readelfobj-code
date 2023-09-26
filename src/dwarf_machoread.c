@@ -86,7 +86,7 @@ dwarf_object_detector_universal_head_fd(
     Dwarf_Universal_Head * dw_head,
     int            *errcode);
 
-#if 0
+#if 1
 static void
 dump_bytes(const char *msg,unsigned char * start, unsigned len)
 {
@@ -257,12 +257,14 @@ dwarf_construct_macho_access(int fd,
         printf("FAIL: object_detector failed on Mach-O object\n");
         return res;
     }
+    printf("dadebug outer ftype %d\n",(int)ftype);
     if (ftype == DW_FTYPE_APPLEUNIVERSAL) {
         res = dwarf_macho_inner_object_fd(fd,
             uninumber,
             filesize,
             &ftypei,&unibinarycounti,&endiani,
             &offsetsizei,&fileoffseti,&filesizei,errcode);
+    printf("dadebug inner ftype %d\n",(int)ftypei);
         if (res != DW_DLV_OK) {
             printf("FAIL: Macho access to universal inner binary %u"
                 "failed\n",uninumber);
@@ -272,8 +274,11 @@ dwarf_construct_macho_access(int fd,
         endian = endiani;
         offsetsize = offsetsizei;
 printf("dadebug filesize 0x%llx  line %d %s\n",filesize,__LINE__,__FILE__);
+printf("dadebug offsetsizei %u line %d\n",offsetsizei,__LINE__);
     }
 
+printf("dadebug constructing macho_filedata)s\n");
+printf("dadebug offsetsize %u line %d\n",offsetsize,__LINE__);
     mfp = calloc(1,sizeof(struct macho_filedata_s));
     if (!mfp) {
         *errcode = RO_ERR_MALLOC;
@@ -285,7 +290,23 @@ printf("dadebug filesize 0x%llx  line %d %s\n",filesize,__LINE__,__FILE__);
     mfp->mo_offsetsize = offsetsize;
     mfp->mo_path = strdup(path);
     mfp->mo_filesize = filesize;
-    mfp->mo_endian = endian;
+#ifdef WORDS_BIGENDIAN
+    if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_OPPOSITE ) {
+        mfp->mo_copy_word = dwarf_ro_memcpy_swap_bytes;
+        mfp->mo_endian = DW_ENDIAN_LITTLE;
+    } else {
+        mfp->mo_copy_word = memcpy;
+        mfp->mo_endian = DW_ENDIAN_BIG;
+    }
+#else  /* LITTLE ENDIAN */
+    if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_SAME ) {
+        mfp->mo_copy_word = memcpy;
+        mfp->mo_endian = DW_ENDIAN_LITTLE;
+    } else {
+        mfp->mo_copy_word = dwarf_ro_memcpy_swap_bytes;
+        mfp->mo_endian = DW_ENDIAN_BIG;
+    }
+#endif /* LITTLE- BIG-ENDIAN */
 
     /* for binary inside universal obj */
     mfp->mo_universal_count = unibinarycounti;
@@ -337,12 +358,16 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
 {
     struct mach_header mh32;
     int res = 0;
+    Dwarf_Unsigned inner = mfp->mo_inner_offset;
 
-    res = RRMOA(mfp->mo_fd,&mh32,mfp->mo_inner_offset,sizeof(mh32),
-        mfp->mo_filesize,errcode);
+printf("dadebug now 32bit RRMOA inner 0x%lx\n",
+(unsigned long)inner);
+    res = RRMOA(mfp->mo_fd,&mh32,inner,sizeof(mh32),
+        inner+mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
+dump_bytes("RRMOA 32bit dadebug ",(unsigned char *)&mh32,sizeof(mh32));
     /* Do not adjust endianness of magic, leave as-is. */
     ASNAR(memcpy,mfp->mo_header.magic,mh32.magic);
     /* We will print the swapped one. */
@@ -382,9 +407,11 @@ load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
 {
     struct mach_header_64 mh64;
     int res = 0;
+    Dwarf_Unsigned inner = mfp->mo_inner_offset;
 
-    res = RRMOA(mfp->mo_fd,&mh64,mfp->mo_inner_offset,sizeof(mh64),
-        mfp->mo_filesize,errcode);
+printf("dadebug now 64bit RRMOA header\n");
+    res = RRMOA(mfp->mo_fd,&mh64,inner,sizeof(mh64),
+        inner+mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -427,8 +454,10 @@ dwarf_load_macho_header(struct macho_filedata_s *mfp, int *errcode)
     int res = 0;
 
     if (mfp->mo_offsetsize == 32) {
+printf("dadebug offsetsize 32\n");
         res = load_macho_header32(mfp,errcode);
     } else if (mfp->mo_offsetsize == 64) {
+printf("dadebug offsetsize 64\n");
         res = load_macho_header64(mfp,errcode);
     } else {
         *errcode = RO_ERR_BADOFFSETSIZE;
@@ -449,6 +478,7 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     Dwarf_Unsigned filesize = mfp->mo_filesize;
     Dwarf_Unsigned segoffset = mmp->offset_this_command;
     Dwarf_Unsigned afterseghdr = segoffset + sizeof(sc);
+    Dwarf_Unsigned inner = mfp->mo_inner_offset;
 
     if (segoffset > filesize ||
         mmp->cmdsize > filesize ||
@@ -463,9 +493,10 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_LOADSEGOFFSETBAD;
         return DW_DLV_ERROR;
     }
+printf("dadebug segment command 32bit RRMOA header\n");
     res = RRMOA(mfp->mo_fd,&sc,
-        mfp->mo_inner_offset+mmp->offset_this_command,sizeof(sc),
-        mfp->mo_filesize,errcode);
+        inner+mmp->offset_this_command,sizeof(sc),
+        inner+mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -528,7 +559,9 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     Dwarf_Unsigned filesize = mfp->mo_filesize;
     Dwarf_Unsigned segoffset = mmp->offset_this_command;
     Dwarf_Unsigned afterseghdr = segoffset + sizeof(sc);
+    Dwarf_Unsigned inner = mfp->mo_inner_offset;
 
+printf("dadebug segment command 64bit RRMOA header\n");
     if (segoffset > filesize ||
         mmp->cmdsize > filesize ||
         (mmp->cmdsize + segoffset) > filesize ) {
@@ -543,8 +576,8 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
         return DW_DLV_ERROR;
     }
     res = RRMOA(mfp->mo_fd,&sc,
-        mfp->mo_inner_offset+segoffset,sizeof(sc),
-        mfp->mo_filesize,errcode);
+        inner+segoffset,sizeof(sc),
+        inner+mfp->mo_filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -647,8 +680,7 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
     Dwarf_Unsigned seci = 0;
     Dwarf_Unsigned seccount = segp->nsects;
     Dwarf_Unsigned secalloc = seccount+1;
-    Dwarf_Unsigned curoff = 
-        mfp->mo_inner_offset+segp->sectionsoffset;
+    Dwarf_Unsigned curoff = segp->sectionsoffset; /* no inner here*/
     Dwarf_Unsigned shdrlen = sizeof(struct section);
 
     struct generic_macho_section *secs = 0;
@@ -672,6 +704,7 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         struct section mosec;
         int res = 0;
         Dwarf_Unsigned endoffset = 0;
+        Dwarf_Unsigned inner = mfp->mo_inner_offset;
 
         endoffset = curoff + sizeof(mosec);
         if (curoff >=  mfp->mo_filesize ||
@@ -686,8 +719,10 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
             *errcode  = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
-        res = RRMOA(mfp->mo_fd,&mosec,curoff,sizeof(mosec),
-            mfp->mo_filesize,errcode);
+printf("dadebug section command 32bit RRMOA \n");
+        res = RRMOA(mfp->mo_fd,&mosec,
+            inner+curoff,sizeof(mosec),
+            inner+mfp->mo_filesize,errcode);
         if (res != DW_DLV_OK) {
             return res;
         }
@@ -732,8 +767,7 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
     Dwarf_Unsigned seci = 0;
     Dwarf_Unsigned seccount = segp->nsects;
     Dwarf_Unsigned secalloc = seccount+1;
-    Dwarf_Unsigned curoff = 
-        mfp->mo_inner_offset+segp->sectionsoffset;
+    Dwarf_Unsigned curoff = segp->sectionsoffset; /* no inner here*/
     Dwarf_Unsigned shdrlen = sizeof(struct section_64);
     struct generic_macho_section *secs = 0;
 
@@ -755,6 +789,7 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         int res = 0;
         struct section_64 mosec;
         Dwarf_Unsigned endoffset = 0;
+        Dwarf_Unsigned inner = mfp->mo_inner_offset;
 
         endoffset = curoff + sizeof(mosec);
         if (curoff >=  mfp->mo_filesize ||
@@ -769,8 +804,9 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
             *errcode  = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
-        res = RRMOA(mfp->mo_fd,&mosec,curoff,sizeof(mosec),
-            mfp->mo_filesize,errcode);
+printf("dadebug section command 64bit RRMOA \n");
+        res = RRMOA(mfp->mo_fd,&mosec,inner+curoff,sizeof(mosec),
+            inner+mfp->mo_filesize,errcode);
         if (res != DW_DLV_OK) {
             return res;
         }
@@ -788,7 +824,7 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         if (secs->offset > mfp->mo_filesize ||
             secs->size > mfp->mo_filesize ||
             (secs->offset+secs->size) > mfp->mo_filesize) {
-            printf("Reading sections32 fails,"
+            printf("Reading sections64 fails,"
                 " fileoffset %lu,"
                 " size %lu,"
                 " filesize %lu\n",
@@ -861,6 +897,7 @@ dwarf_load_macho_commands(struct macho_filedata_s *mfp,int *errcode)
     struct generic_macho_command *mcp = 0;
     unsigned segment_command_count = 0;
     int res = 0;
+    Dwarf_Unsigned inner = mfp->mo_inner_offset;
 
     if ((curoff + mfp->mo_command_count * sizeof(mc)) >=
         mfp->mo_filesize) {
@@ -878,8 +915,9 @@ dwarf_load_macho_commands(struct macho_filedata_s *mfp,int *errcode)
     }
     mcp = mfp->mo_commands;
     for ( ; cmdi < mfp->mo_header.ncmds; ++cmdi,++mcp ) {
-        res = RRMOA(mfp->mo_fd,&mc,curoff,sizeof(mc),
-            mfp->mo_filesize,errcode);
+printf("dadebug load_macho_commands 32/64 RRMOA\n");
+        res = RRMOA(mfp->mo_fd,&mc,inner+curoff,sizeof(mc),
+            inner+mfp->mo_filesize,errcode);
         if (res != RO_OK) {
             return res;
         }

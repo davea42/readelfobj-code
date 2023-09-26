@@ -567,15 +567,19 @@ is_mach_o_universal(struct elf_header *h,
         the universal-object  magic field. */
     magicval = magic_copy(h->e_ident,4);
     if (magicval == FAT_MAGIC) {
+printf("dadebug FAT_MAGIC 32\n");
         locendian = DW_ENDIAN_BIG;
         locoffsetsize = 32;
     } else if (magicval == FAT_CIGAM) {
+printf("dadebug FAT_CIGAM 32\n");
         locendian = DW_ENDIAN_LITTLE;
         locoffsetsize = 32;
     }else if (magicval == FAT_MAGIC_64) {
+printf("dadebug FAT_MAGIC_64\n");
         locendian = DW_ENDIAN_BIG;
         locoffsetsize = 64;
     } else if (magicval == FAT_CIGAM_64) {
+printf("dadebug FAT_CIGAM_64\n");
         locendian = DW_ENDIAN_LITTLE;
         locoffsetsize = 64;
     } else {
@@ -728,11 +732,13 @@ printf("dadebug fsize %ld line %d\n",fsize,__LINE__);
         return DW_DLV_OK;
     }
     if (is_mach_o_universal(&h,endian,offsetsize)) {
+printf("dadebug  DW_FTYPE_APPLEUNIVERSAL\n");
         *ftype = DW_FTYPE_APPLEUNIVERSAL;
         *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;
     }
     if (is_mach_o_magic(&h,endian,offsetsize)) {
+printf("dadebug  DW_FTYPE_MACH_O\n");
         *ftype = DW_FTYPE_MACH_O;
         *filesize = (Dwarf_Unsigned)fsize;
         return DW_DLV_OK;

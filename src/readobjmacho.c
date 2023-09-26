@@ -325,6 +325,9 @@ do_one_file(const char *s)
 
     res = dwarf_object_detector_path(s,tru_path_buffer,BUFFERSIZE,
         &ftype,&endian,&offsetsize,&filesize,&errcode);
+printf("dadebug ftype %u offsetsize %u line %d\n",ftype,offsetsize,__LINE__); 
+printf("dadebug endian %u filesize 0x%lu line %d\n",ftype,
+(unsigned long)filesize,__LINE__); 
     if (res != DW_DLV_OK) {
         P("ERROR: Unable to read \"%s\", ignoring file. "
             "Errcode %d\n", s,errcode);
@@ -349,26 +352,6 @@ do_one_file(const char *s)
             s,errcode);
         return;
     }
-#ifdef WORDS_BIGENDIAN
-    if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_OPPOSITE ) {
-        mfp->mo_copy_word = dwarf_ro_memcpy_swap_bytes;
-        mfp->mo_endian = DW_ENDIAN_LITTLE;
-    } else {
-        mfp->mo_copy_word = memcpy;
-        mfp->mo_endian = DW_ENDIAN_BIG;
-    }
-#else  /* LITTLE ENDIAN */
-    if (endian == DW_ENDIAN_LITTLE || endian == DW_ENDIAN_SAME ) {
-        mfp->mo_copy_word = memcpy;
-        mfp->mo_endian = DW_ENDIAN_LITTLE;
-    } else {
-        mfp->mo_copy_word = dwarf_ro_memcpy_swap_bytes;
-        mfp->mo_endian = DW_ENDIAN_BIG;
-    }
-#endif /* LITTLE- BIG-ENDIAN */
-
-    mfp->mo_filesize = filesize;
-    mfp->mo_offsetsize = offsetsize;
     res = dwarf_load_macho_header(mfp,&errcode);
     if (res != DW_DLV_OK) {
         P("Warning: %s macho-header not loaded giving up."
