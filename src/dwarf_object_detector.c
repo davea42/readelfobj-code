@@ -370,9 +370,6 @@ fill_in_elf_fields(struct elf_header *h,
 {
     unsigned locendian = 0;
     unsigned locoffsetsize = 0;
-#if 0
-    void *(*word_swap) (void *, const void *, size_t);
-#endif
 
     switch(h->e_ident[EI_CLASS]) {
     case ELFCLASS32:
@@ -388,23 +385,9 @@ fill_in_elf_fields(struct elf_header *h,
     switch(h->e_ident[EI_DATA]) {
     case ELFDATA2LSB:
         locendian = DW_ENDIAN_LITTLE;
-#if 0
-#ifdef WORDS_BIGENDIAN
-        word_swap = memcpy_swap_bytes;
-#else  /* LITTLE ENDIAN */
-        word_swap = memcpy;
-#endif /* LITTLE- BIG-ENDIAN */
-#endif
         break;
     case ELFDATA2MSB:
         locendian = DW_ENDIAN_BIG;
-#if 0
-#ifdef WORDS_BIGENDIAN
-        word_swap = memcpy;
-#else  /* LITTLE ENDIAN */
-        word_swap = memcpy_swap_bytes;
-#endif /* LITTLE- BIG-ENDIAN */
-#endif
         break;
     default:
         *errcode = RO_ERR_ELF_ENDIAN;
@@ -567,27 +550,15 @@ is_mach_o_universal(struct elf_header *h,
         the universal-object  magic field. */
     magicval = magic_copy(h->e_ident,4);
     if (magicval == FAT_MAGIC) {
-#if 0
-printf("dadebug FAT_MAGIC 32\n");
-#endif
         locendian = DW_ENDIAN_BIG;
         locoffsetsize = 32;
     } else if (magicval == FAT_CIGAM) {
-#if 0
-printf("dadebug FAT_CIGAM 32\n");
-#endif
         locendian = DW_ENDIAN_LITTLE;
         locoffsetsize = 32;
     }else if (magicval == FAT_MAGIC_64) {
-#if 0
-printf("dadebug FAT_MAGIC_64\n");
-#endif
         locendian = DW_ENDIAN_BIG;
         locoffsetsize = 64;
     } else if (magicval == FAT_CIGAM_64) {
-#if 0
-printf("dadebug FAT_CIGAM_64\n");
-#endif
         locendian = DW_ENDIAN_LITTLE;
         locoffsetsize = 64;
     } else {
@@ -646,14 +617,6 @@ dwarf_object_detector_fd(int fd,
         ftype,endian,offsetsize,
         fileoffsetbase,filesize,
         errcode);
-#if 0
-    if (fileoffsetbase) {
-        printf(" For inner object use "
-            "dwarf_object_detector_fd_a() instead\n");
-        *errcode =  RO_ERR_NOT_A_KNOWN_TYPE;
-        return DW_DLV_ERROR;
-    }
-#endif
     return res;
 }
 
@@ -674,21 +637,7 @@ dwarf_object_detector_fd_a(int fd,
     ssize_t readval = 0;
     Dwarf_Unsigned remaininglen  = 0;
 
-#if 0
-    printf("dadebug fd %d line %d %s\n",fd,__LINE__,__FILE__);
-    printf("dadebug fileoffsetbase 0x%llx\n",fileoffsetbase);
-#endif
-#if 0
-    if (fileoffsetbase >= filesize) {
-        printf("FAIL: fileoffsetbase >= filesize: impossible\n");
-        *errcode = RO_ERR_SEEK;
-        return DW_DLV_ERROR;
-    }
-#endif
     fsize = lseek(fd,0L,SEEK_END);
-#if 0
-printf("dadebug fsize %ld line %d\n",fsize,__LINE__);
-#endif
     if (fsize < 0) {
         printf("FAIL: fsize < 0 impossible\n");
         *errcode = RO_ERR_SEEK;

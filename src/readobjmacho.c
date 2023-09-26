@@ -325,11 +325,6 @@ do_one_file(const char *s)
 
     res = dwarf_object_detector_path(s,tru_path_buffer,BUFFERSIZE,
         &ftype,&endian,&offsetsize,&filesize,&errcode);
-#if 0
-printf("dadebug ftype %u offsetsize %u line %d\n",ftype,offsetsize,__LINE__); 
-printf("dadebug endian %u filesize 0x%lu line %d\n",ftype,
-(unsigned long)filesize,__LINE__); 
-#endif
     if (res != DW_DLV_OK) {
         P("ERROR: Unable to read \"%s\", ignoring file. "
             "Errcode %d\n", s,errcode);
