@@ -945,7 +945,7 @@ fill_in_uni_arch_32(
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
-        if ((dua->au_size+dua->au_offset) >= duhd->au_filesize) {
+        if ((dua->au_size+dua->au_offset) > duhd->au_filesize) {
             printf(" Reading Univ Binary item %lu "
                 "the size+offset value is "
                 LONGESTXFMT
@@ -1004,7 +1004,7 @@ fill_in_uni_arch_64(
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
-        if ((dua->au_size+dua->au_offset) >= duhd->au_filesize) {
+        if ((dua->au_size+dua->au_offset) > duhd->au_filesize) {
             printf(" Reading Univ Binary item %lu "
                 "the size+offset value is "
                 LONGESTXFMT
