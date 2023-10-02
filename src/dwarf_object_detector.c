@@ -611,6 +611,7 @@ dwarf_object_detector_fd(int fd,
     int *errcode)
 {
     Dwarf_Unsigned fileoffsetbase = 0;
+ 
     int res = 0;
 
     res = dwarf_object_detector_fd_a(fd,
@@ -648,7 +649,7 @@ dwarf_object_detector_fd_a(int fd,
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }
-    remaininglen = (Dwarf_Unsigned)fsize - fileoffsetbase;
+    remaininglen = fsize - fileoffsetbase;
     if ((Dwarf_Unsigned)fsize <= fileoffsetbase) {
         printf("FAIL: fsize <= offsetbase impossible\n");
         *errcode = RO_ERR_SEEK;

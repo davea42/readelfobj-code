@@ -167,7 +167,6 @@ dwarf_macho_inner_object_fd(int fd,
     Dwarf_Unsigned innerbase = 0;
     Dwarf_Unsigned innersize = 0;
 
-printf("fd %d line %d\n",fd,__LINE__);
     res =  dwarf_object_detector_universal_head_fd(
         fd, outer_filesize, unibinarycount,
         &head, errcode);
@@ -198,6 +197,7 @@ printf("fd %d line %d\n",fd,__LINE__);
             does not get the inner size, we got that 
             just above here! */
         Dwarf_Unsigned fake_size = 0;
+
         res = dwarf_object_detector_fd_a(fd,
             ftype,endian,offsetsize,innerbase,&fake_size,
             errcode);
@@ -465,8 +465,8 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
         return DW_DLV_ERROR;
     }
     res = RRMOA(mfp->mo_fd,&sc,
-        inner+mmp->offset_this_command,sizeof(sc),
-        inner+mfp->mo_filesize,errcode);
+        inner+segoffset,sizeof(sc),
+        inner+filesize,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -915,7 +915,8 @@ static int
 fill_in_uni_arch_32(
     struct fat_arch * fa, 
     struct Dwarf_Universal_Head_s *duhd,
-    void *(*word_swap) (void *, const void *, size_t))
+    void *(*word_swap) (void *, const void *, size_t),
+    int * errcode)
 {
     Dwarf_Unsigned i = 0;
     struct Dwarf_Universal_Arch_s * dua = 0;
@@ -925,8 +926,44 @@ fill_in_uni_arch_32(
         ASNAR(word_swap,dua->au_cputype,fa->cputype);
         ASNAR(word_swap,dua->au_cpusubtype,fa->cpusubtype);
         ASNAR(word_swap,dua->au_offset,fa->offset);
+        if (dua->au_offset >= duhd->au_filesize) {
+            printf(" Reading Univ Binary item %lu "
+                "the offset value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_offset);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         ASNAR(word_swap,dua->au_size,fa->size);
+        if (dua->au_size >= duhd->au_filesize) {
+            printf(" Reading Univ Binary item %lu "
+                "the size value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_size);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
+        if ((dua->au_size+dua->au_offset) >= duhd->au_filesize) {
+            printf(" Reading Univ Binary item %lu "
+                "the size+offset value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_size+dua->au_offset);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         ASNAR(word_swap,dua->au_align,fa->align);
+        if (dua->au_align >= 32) {
+            printf(" Reading Univ Binary item %lu "
+                "the align value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_align);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         dua->au_reserved = 0;
     }
 
@@ -937,7 +974,8 @@ static int
 fill_in_uni_arch_64(
     struct fat_arch_64 * fa, 
     struct Dwarf_Universal_Head_s *duhd,
-    void *(*word_swap) (void *, const void *, size_t))
+    void *(*word_swap) (void *, const void *, size_t),
+    int * errcode)
 {
     Dwarf_Unsigned i = 0;
     struct Dwarf_Universal_Arch_s * dua = 0;
@@ -947,9 +985,44 @@ fill_in_uni_arch_64(
         ASNAR(word_swap,dua->au_cputype,fa->cputype);
         ASNAR(word_swap,dua->au_cpusubtype,fa->cpusubtype);
         ASNAR(word_swap,dua->au_offset,fa->offset);
+        if (dua->au_offset >= duhd->au_filesize) {
+            printf(" Reading Univ Binary item %lu "
+                "the offset value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_offset);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         ASNAR(word_swap,dua->au_size,fa->size);
+        if (dua->au_size >= duhd->au_filesize) {
+            printf(" Reading Univ Binary item %lu "
+                "the size value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_size);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
+        if ((dua->au_size+dua->au_offset) >= duhd->au_filesize) {
+            printf(" Reading Univ Binary item %lu "
+                "the size+offset value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_size+dua->au_offset);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         ASNAR(word_swap,dua->au_align,fa->align);
-        ASNAR(word_swap,dua->au_align,fa->align);
+        if (dua->au_align >= 64) {
+            printf(" Reading Univ Binary item %lu "
+                "the align value is "
+                LONGESTXFMT
+                ", impossible\n",
+                (unsigned long)i,dua->au_align);
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         ASNAR(word_swap,dua->au_reserved,fa->reserved);
     }
 
@@ -1008,6 +1081,7 @@ dwarf_object_detector_universal_head_fd(
             "header failed\n");
         return res;
     }
+    duhd.au_filesize = dw_filesize;
     duhd.au_magic = magic_copy((unsigned char *)&fh.magic[0],4);
     if (duhd.au_magic == FAT_MAGIC) {
         locendian = DW_ENDIAN_BIG;
@@ -1085,7 +1159,8 @@ dwarf_object_detector_universal_head_fd(
             free(fa);
             return res;
         }
-        res = fill_in_uni_arch_32(fa,&duhd,word_swap);
+        res = fill_in_uni_arch_32(fa,&duhd,word_swap,
+            errcode);
         if (res != DW_DLV_OK) {
             free(duhd.au_arches);
             printf("Universal Binary value read fail line %d\n",
@@ -1119,7 +1194,8 @@ dwarf_object_detector_universal_head_fd(
             free(fa);
             return res;
         }
-        res = fill_in_uni_arch_64(fa,&duhd,word_swap);
+        res = fill_in_uni_arch_64(fa,&duhd,word_swap,
+            errcode);
         if (res != DW_DLV_OK) {
             printf("Universal Binary value read fail line %d\n",
                __LINE__);
