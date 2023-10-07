@@ -1140,13 +1140,24 @@ dwarf_object_detector_universal_head_fd(
         fa = (struct fat_arch *)calloc(duhd.au_count,
             sizeof(struct fat_arch));
         if (!fa) {
-            printf("Universal Binary au_arches alloc fail line %d\n",
-               __LINE__);
+            printf("Universal Binary 32bit au_arches "
+                "alloc fail line %d\n",
+                __LINE__);
             *errcode = DW_DLE_ALLOC_FAIL;
             free(duhd.au_arches);
             duhd.au_arches = 0;
             free(fa);
             return res;
+        }
+        if ((sizeof(fh) +  duhd.au_count*sizeof(*fa)) >
+            duhd.au_filesize) {
+            printf("Undersized Mach-O 32 universal header!"
+                " Corrupt object file.\n");
+            *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
+            free(duhd.au_arches);
+            duhd.au_arches = 0;
+            free(fa);
+            return DW_DLV_ERROR;
         }
         res = RRMOA(fd,fa,/*offset=*/sizeof(fh),
             duhd.au_count*sizeof(*fa),
@@ -1174,7 +1185,7 @@ dwarf_object_detector_universal_head_fd(
     } else { /* 64 */
         struct fat_arch_64 * fa = 0;
         fa = (struct fat_arch_64 *)calloc(duhd.au_count,
-            sizeof(struct fat_arch));
+            sizeof(struct fat_arch_64));
         if (!fa) {
             printf("Universal Binary au_arches alloc fail line %d\n",
                __LINE__);
@@ -1182,6 +1193,16 @@ dwarf_object_detector_universal_head_fd(
             free(duhd.au_arches);
             duhd.au_arches = 0;
             return res;
+        }
+        if ((sizeof(fh) +  duhd.au_count*sizeof(*fa)) >
+            duhd.au_filesize) {
+            printf("Undersized Mach-O 64 universal header!"
+                " Corrupt object file.\n");
+            *errcode = DW_DLE_UNIVERSAL_BINARY_ERROR;
+            free(duhd.au_arches);
+            duhd.au_arches = 0;
+            free(fa);
+            return DW_DLV_ERROR;
         }
         res = RRMOA(fd,fa,/*offset*/sizeof(fh),
             duhd.au_count*sizeof(fa),
