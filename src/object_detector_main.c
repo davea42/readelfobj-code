@@ -144,9 +144,9 @@ report_universal(char *targpath,unsigned endian,
 	   printf(" cputype 0x%lx \n",(unsigned long)cpu_type);
        printf("          cpusubtype 0x%lx \n",
            (unsigned long)cpu_subtype);
-       printf("          offset " LONGESTXFMT 
-           " size " LONGESTXFMT 
-           " align " LONGESTUFMT " \n",
+       printf("          offset " LONGESTUFMT 
+           " size " LONGESTUFMT 
+           " align " LONGESTUFMT "\n",
            offset, size, align);
     }
     
@@ -166,6 +166,7 @@ int main(int argc, char **argv)
     int zero_outpath = 0;
     int errct = 0;
 
+    finalpath[0] = 0;
     for ( ;ct < argc ; ct++) {
         char *path = argv[ct];
         int          res = 0;
