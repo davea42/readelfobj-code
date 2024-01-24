@@ -841,11 +841,12 @@ dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,
     for ( ; segi < mfp->mo_segment_count; ++segi,++segp) {
         int res = 0;
 
-        if (strcmp(segp->segname,"__DWARF")) {
+        /* Check for __DWARF in DSYM, not other file types. */
+        if (mfp->mo_header.filetype == MH_DSYM &&
+            strcmp(segp->segname,"__DWARF")) {
             continue;
         }
 
-        /* Found DWARF, for now assume only one such. */
         res = dwarf_macho_load_dwarf_section_details(mfp,segp,
             segi,errcode);
         return res;

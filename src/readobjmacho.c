@@ -119,6 +119,20 @@ static struct commands_text_s {
 {"LC_FUNCTION_STARTS", 0x26 },
 {"LC_DYLD_ENVIRONMENT", 0x27 },
 {"LC_MAIN", (0x28|LC_REQ_DYLD)},
+{"LC_DATA_IN_CODE", 0x29},
+{"LC_SOURCE_VERSION", 0x2a},
+{"LC_DYLIB_CODE_SIGN_DRS", 0x2b},
+{"LC_ENCRYPTION_INFO_64", 0x2c},
+{"LC_LINKER_OPTION", 0x2d},
+{"LC_LINKER_OPTIMIZATION_HINT", 0x2e},
+{"LC_VERSION_MIN_TVOS", 0x2f},
+{"LC_VERSION_MIN_WATCHOS", 0x30},
+{"LC_NOTE", 0x31},
+{"LC_BUILD_VERSION", 0x32},
+{"LC_DYLD_EXPORTS_TRIE", (0x33 | LC_REQ_DYLD)},
+{"LC_DYLD_CHAINED_FIXUPS", (0x34 | LC_REQ_DYLD)},
+{"LC_FILESET_ENTRY", (0x35 | LC_REQ_DYLD)},
+{"LC_ATOM_INFO", 0x36},
 {0,0}
 };
 
@@ -303,7 +317,9 @@ print_macho_header(struct macho_filedata_s *mfp)
         mfp->mo_header.filetype,
         mfp->mo_header.filetype == MH_DSYM?
             "DSYM (debug sections present)":
-            "");
+            mfp->mo_header.filetype == MH_OBJECT?
+            "Object file (debug sections likely present)":
+            "Debug sections not present.");
     P("  number of commands: " LONGESTXFMT  "\n",
         mfp->mo_header.ncmds);
     P("  size of commands  : " LONGESTXFMT  "\n",
