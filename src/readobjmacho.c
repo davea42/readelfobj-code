@@ -228,7 +228,7 @@ print_all_flags(unsigned long flag)
                 if(!printedcount) {
                     printf(" %s",flagsnamesbits[j].name);
                 }else { 
-                    printf(",\n             %s\n",flagsnamesbits[j].name);
+                    printf("|\n             %s\n",flagsnamesbits[j].name);
                 }
                 ++printedcount;
                 break; /* ready for next bit */
