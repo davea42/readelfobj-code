@@ -228,7 +228,7 @@ print_all_flags(unsigned long flag)
                 if(!printedcount) {
                     printf(" %s",flagsnamesbits[j].name);
                 }else { 
-                    printf("|\n             %s\n",flagsnamesbits[j].name);
+                    printf("|\n             %s",flagsnamesbits[j].name);
                 }
                 ++printedcount;
                 break; /* ready for next bit */
@@ -408,10 +408,12 @@ print_macho_header(struct macho_filedata_s *mfp)
         " %s"    "\n",
         mfp->mo_header.filetype,
         get_filetype_name(mfp->mo_header.filetype));
-    P("  number of commands: " LONGESTXFMT  "\n",
-        mfp->mo_header.ncmds);
-    P("  size of commands  : " LONGESTXFMT  "\n",
-        mfp->mo_header.sizeofcmds);
+    P("  number of commands: " LONGESTXFMT  
+        " ("LONGESTUFMT ")\n",
+        mfp->mo_header.ncmds,mfp->mo_header.ncmds);
+    P("  size of commands  : " LONGESTXFMT  
+        " ("LONGESTUFMT ")\n",
+        mfp->mo_header.sizeofcmds, mfp->mo_header.sizeofcmds);
     P("  flags             : " LONGESTXFMT  , 
         (LONGESTUTYPE)mfp->mo_header.flags);
     print_all_flags(mfp->mo_header.flags);
