@@ -136,6 +136,56 @@ static struct commands_text_s {
 {0,0}
 };
 
+static struct commands_text_s 
+    /*const char *name;
+    unsigned long val; */
+filetypename [] = {
+{"MH_OBJECT",    0x1},
+{"MH_EXECUTE",    0x2},
+{"MH_FVMLIB",    0x3 },
+{"MH_CORE",        0x4},
+{"MH_PRELOAD",    0x5 },
+{"MH_DYLIB",    0x6   },
+{"MH_DYLINKER",    0x7},
+{"MH_BUNDLE",    0x8 },
+{"MH_DYLIB_STUB",    0x9},
+{"MH_DSYM",        0xa },
+{"MH_KEXT_BUNDLE",    0xb},  
+{0,0}
+};
+static struct commands_text_s 
+    /*const char *name;
+    unsigned long val; */
+ flagsnamesbits [] = {
+{"MH_NOUNDEFS",    0x1 },
+{"MH_INCRLINK",0x2 },
+{"MH_DYLDLINK",0x4},
+{"MH_BINDATLOAD",0x8},
+{"MH_PREBOUND",0x10 },
+{"MH_SPLIT_SEGS",0x20 },
+{"MH_LAZY_INIT",0x40},
+{"MH_TWOLEVEL",0x80 },
+{"MH_FORCE_FLAT",0x100},  
+{"MH_NOMULTIDEFS",0x200 },  
+{"MH_NOFIXPREBINDING",0x400  },
+{"MH_PREBINDABLE",0x800   },
+{"MH_ALLMODSBOUND",0x1000   },
+{"MH_SUBSECTIONS_VIA_SYMBOLS",0x2000  },
+{"MH_CANONICAL",0x4000   },
+{"MH_WEAK_DEFINES",0x8000   },
+{"MH_BINDS_TO_WEAK",0x10000  },
+{"MH_ALLOW_STACK_EXECUTION",0x20000  },
+{"MH_ROOT_SAFE",0x40000  },
+{"MH_SETUID_SAFE",0x80000    },       
+{"MH_NO_REEXPORTED_DYLIBS",0x100000   },
+{"MH_PIE",0x200000    },
+{"MH_DEAD_STRIPPABLE_DYLIB",0x400000   },
+{"MH_HAS_TLV_DESCRIPTORS",0x800000   },
+{"MH_NO_HEAP_EXECUTION",0x1000000    },
+{"MH_APP_EXTENSION_SAFE",0x02000000  },
+{0,0}
+};
+
 static const char *
 get_command_name(Dwarf_Unsigned v)
 {
@@ -147,6 +197,45 @@ get_command_name(Dwarf_Unsigned v)
         }
     }
     return ("Unknown");
+}
+static const char *
+get_filetype_name(Dwarf_Unsigned v)
+{
+    unsigned i = 0;
+
+    for ( ; filetypename[i].name; i++) {
+        if (v==filetypename[i].val) {
+            return filetypename[i].name;
+        }
+    }
+    return ("Unknown");
+}
+
+/*  Add an ending newline here after flagsnamesbits dealt with */
+static void 
+print_all_flags(unsigned long flag)
+{
+    unsigned long bitmask = 1;
+    unsigned long i = 0;
+    unsigned long maxindex = 32;
+    int printedcount = 0;
+
+    for (  ; i < maxindex; ++i, bitmask <<=1) {
+        unsigned long j = 0;
+        unsigned long v = flag&bitmask;
+        for ( ; flagsnamesbits[j].name; j++) {
+            if (v == flagsnamesbits[j].val) {
+                if(!printedcount) {
+                    printf(" %s",flagsnamesbits[j].name);
+                }else { 
+                    printf(",\n             %s\n",flagsnamesbits[j].name);
+                }
+                ++printedcount;
+                break; /* ready for next bit */
+            }
+        }
+    }
+    printf("\n");
 }
 
 static int
@@ -243,7 +332,7 @@ print_macho_segments(struct macho_filedata_s *mfp)
         "fileoff   filesize\n");
     for ( ; i < segmentcount; ++i, ++cmdp) {
         P("  [" LONGESTUFMT "] "
-            LONGESTXFMT " %-15s"
+            LONGESTXFMT " %-16s"
             " %-17s"
             " " LONGESTXFMT8
             " " LONGESTXFMT8 "\n",
@@ -268,7 +357,7 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp)
         count,gsp->offset_of_sec_rec);
     P("                         offset size \n");
     for (i =0; i < count; ++i,++gsp) {
-        P("  [" LONGESTUFMT "] %-16s"
+        P("  [" LONGESTUFMT2 "] %-16s"
             " " LONGESTXFMT8
             " " LONGESTXFMT8
             "\n",
@@ -288,7 +377,8 @@ print_macho_commands(struct macho_filedata_s *mfp)
     P(" Commands: at offset " LONGESTXFMT "\n",
         mfp->mo_command_start_offset);
     for ( ; i < mfp->mo_command_count; ++i, ++cmdp) {
-        P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT8 " %-14s"
+        P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT8 
+            " %-16s"
             " cmdsize: " LONGESTUFMT " (" LONGESTXFMT8 ")\n",
             i,
             cmdp->cmd, get_command_name(cmdp->cmd),
@@ -296,6 +386,8 @@ print_macho_commands(struct macho_filedata_s *mfp)
             cmdp->cmdsize);
     }
 }
+
+
 
 static void
 print_macho_header(struct macho_filedata_s *mfp)
@@ -315,17 +407,14 @@ print_macho_header(struct macho_filedata_s *mfp)
     P("  filetype          : " LONGESTXFMT
         " %s"    "\n",
         mfp->mo_header.filetype,
-        mfp->mo_header.filetype == MH_DSYM?
-            "DSYM (debug sections present)":
-            mfp->mo_header.filetype == MH_OBJECT?
-            "Object file (debug sections likely present)":
-            "Debug sections not present.");
+        get_filetype_name(mfp->mo_header.filetype));
     P("  number of commands: " LONGESTXFMT  "\n",
         mfp->mo_header.ncmds);
     P("  size of commands  : " LONGESTXFMT  "\n",
         mfp->mo_header.sizeofcmds);
-    P("  flags             : " LONGESTXFMT  "\n",
-        mfp->mo_header.flags);
+    P("  flags             : " LONGESTXFMT  , 
+        (LONGESTUTYPE)mfp->mo_header.flags);
+    print_all_flags(mfp->mo_header.flags);
 }
 
 static void
