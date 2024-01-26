@@ -7,8 +7,8 @@ Mach-o Magic:  0xfeedface
   endian            : LITTLEENDIAN
   file size         : 0x0000e859
   filetype          : 0xa MH_DSYM
-  number of commands: 0x7
-  size of commands  : 0x7a8
+  number of commands: 0x7 (7)
+  size of commands  : 0x7a8 (1960)
   flags             : 0x0
  Commands: at offset 0x1c
   [0] cmd: 0x0000001b LC_UUID          cmdsize: 24 (0x00000018)
@@ -49,8 +49,8 @@ Mach-o Magic:  0xfeedfacf
   endian            : LITTLEENDIAN
   file size         : 0x0000f7ee
   filetype          : 0xa MH_DSYM
-  number of commands: 0x7
-  size of commands  : 0x918
+  number of commands: 0x7 (7)
+  size of commands  : 0x918 (2328)
   flags             : 0x0
  Commands: at offset 0x20
   [0] cmd: 0x0000001b LC_UUID          cmdsize: 24 (0x00000018)
