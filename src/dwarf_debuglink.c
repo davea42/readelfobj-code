@@ -745,7 +745,7 @@ dwarf_gnu_debuglink(elf_filedata ep,
         if (!shdr->gh_namestring) {
             /*  something is badly wrong!  Corrupt object. */
             P("ERROR For section " LONGESTUFMT
-                " the namestring field is a null-pointer",i);
+                " the namestring field is a null-pointer\n",i);
             continue;
         }
         if (!strcmp("<No valid Elf section strings exist>",
