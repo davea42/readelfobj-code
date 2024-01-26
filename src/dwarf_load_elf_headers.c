@@ -296,9 +296,26 @@ generic_ehdr_from_32(elf_filedata ep,
     if (ehdr->ge_shoff < sizeof(dw_elf32_ehdr)) {
         if (!ehdr->ge_shoff) {
             P("Ehdr32 e_shoff zero, there are no sections\n");
+            if (ehdr->ge_shnum > 0) {
+                P("Ehdr32 e_shnum shows count %lu (0x%lx) but e_shoff "
+                    "is zero."
+                    " Corrupt Elf.\n",
+                    (unsigned long)ehdr->ge_shnum,
+                    (unsigned long)ehdr->ge_shnum);
+     
+            }
         } else {
-            P("Ehdr32 e_shoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf.n",
+            P("Ehdr32 e_shoff offset points inside Ehdr (ehdr len 0x%lx). "
+                "Corrupt Elf\n",
                 (unsigned long)sizeof(dw_elf32_ehdr));
+            if (ehdr->ge_shnum > 0) {
+                P("Ehdr32 e_shnum shows count %lu (0x%lx) but e_shoff "
+                    "is incorrect"
+                    " Corrupt Elf.\n",
+                    (unsigned long)ehdr->ge_shnum,
+                    (unsigned long)ehdr->ge_shnum);
+     
+            }
         }
         ep->f_ehdr = ehdr;
         ep->f_machine = ehdr->ge_machine;
@@ -415,10 +432,27 @@ generic_ehdr_from_64(elf_filedata ep,
     ASNAR(ep->f_copy_word,ehdr->ge_shstrndx,e->e_shstrndx);
     if (ehdr->ge_shoff < sizeof(dw_elf64_ehdr)) {
         if (!ehdr->ge_shoff) {
-            P("Ehdr64 e_shoff zero, there are no sections\n");
+            P("Ehdr32 e_shoff zero, there are no sections\n");
+            if (ehdr->ge_shnum > 0) {
+                P("Ehdr64 e_shnum shows count %lu (0x%lx) but e_shoff "
+                    "is zero."
+                    " Corrupt Elf.\n",
+                    (unsigned long)ehdr->ge_shnum,
+                    (unsigned long)ehdr->ge_shnum);
+
+            }
         } else {
-            P("Ehdr32 e_shoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf\n",
+            P("Ehdr64 e_shoff offset points inside Ehdr (ehdr len 0x%lx). "
+                "Corrupt Elf\n",
                 (unsigned long)sizeof(dw_elf64_ehdr));
+            if (ehdr->ge_shnum > 0) {
+                P("Ehdr64 e_shnum shows count %lu (0x%lx) but e_shoff "
+                    "is incorrect"
+                    " Corrupt Elf.\n",
+                    (unsigned long)ehdr->ge_shnum,
+                    (unsigned long)ehdr->ge_shnum);
+
+            }
         }
         ep->f_ehdr = ehdr;
         ep->f_machine = ehdr->ge_machine;
