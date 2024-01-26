@@ -1,4 +1,5 @@
-Ehdr32 e_shoff offset points inside Ehdr (ehdr len 0x40). Corrupt Elf
+Ehdr64 e_shoff offset points inside Ehdr (ehdr len 0x40). Corrupt Elf
+Ehdr64 e_shnum shows count 4 (0x4) but e_shoff is incorrect Corrupt Elf.
 ERROR: Section 0 must be empty, but it is not empty. See Elf ABI.
 ERROR: section header sh_flags 0xe11800274f2d5b00 has too many flag bits on (25) to be real
 ERROR: section header sh_flags 0xffffffffff00005b has too many flag bits on (45) to be real
