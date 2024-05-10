@@ -427,6 +427,38 @@ dwarf_pe_load_dwarf_section_headers(
                     (unsigned long)pep->pe_filesize);
             }
         }
+{
+            /*  A Heuristic, allowing large virtual size
+                but not unlimited as we will malloc it
+                later, as Virtualsize. */
+            Dwarf_Unsigned limit = 100*pep->pe_filesize;
+            if (limit < pep->pe_filesize) {
+                printf("WARNING the file size is large and "
+                    "multiplying 0x%llx by 100 overflows "
+                    "the size field\n",
+                    (unsigned long long)pep->pe_filesize);
+            }
+            if (sec_outp->VirtualSize >
+                ((Dwarf_Unsigned)2000*
+                (Dwarf_Unsigned)1000*
+                (Dwarf_Unsigned)1000)) {
+                printf("WARNING section VirtualSize size "
+                    "0x%llx is larger "
+                    "than 2GB and suggests this object is corrupt\n", 
+                    (unsigned long long)sec_outp->VirtualSize);
+                /* DW_DLE_PE_SECTION_SIZE_HEURISTIC_FAIL; */
+            }
+            if (sec_outp->VirtualSize > limit) {
+                printf("WARNING section VirtualSize "
+                    "0x%llx is larger "
+                    "than  100*filesize (0x%llx) and suggests this "
+                    "object is corrupt", 
+                    (unsigned long long)sec_outp->VirtualSize,
+                    (unsigned long long)limit);
+                /* Likely totally unreasonable. Bad. */
+            }
+        }
+
     }
     return DW_DLV_OK;
 }
