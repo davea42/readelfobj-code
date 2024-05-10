@@ -730,6 +730,7 @@ dwarf_construct_pe_access(int fd,
     mfp->pe_ident[1] = 1;
     mfp->pe_offsetsize = offsetsize;
     mfp->pe_pointersize = offsetsize;
+    mfp->pe_is_64bit    = ((offsetsize==64)?TRUE:FALSE);
     mfp->pe_path = strdup(path);
     mfp->pe_filesize = filesize;
     mfp->pe_endian = endian;

@@ -1,6 +1,6 @@
 Reading: yyy/kask-dwarfdump_64.exe
 File: yyy/kask-dwarfdump_64.exe  Object type letter: P version: 80
- 64bit?         : no
+ 64bit?         : yes
  filesize       : 1836905
  offsetsize     : 64
  pointersize    : 64
