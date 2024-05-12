@@ -1,4 +1,16 @@
 2024-05-12:  David Anderson
+    commit b7698403f8551bdd669bfdb9f369248287a30a97
+
+    Up to date with git log
+            modified:   ChangeLog
+
+2024-05-12:  David Anderson
+    commit 9388022c619c70f1f5a344524c8d3c3fddd21a28
+
+    Now version 0.2.1
+            modified:   configure.ac
+
+2024-05-12:  David Anderson
     commit 664be35f16378bea9959579b57e54f5ec24b875e
 
     Removed the mention of test/runtests.sh
