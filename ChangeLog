@@ -1,3 +1,397 @@
+2024-05-12:  David Anderson
+    commit 664be35f16378bea9959579b57e54f5ec24b875e
+
+    Removed the mention of test/runtests.sh
+            modified:   test/Makefile.am
+    Removed, not needed.
+            deleted:    test/runtests.sh
+
+2024-05-11:  David Anderson
+    commit ee507d6957c5fd1669ce4bbb93ba7462626263f7
+
+    Somehow got deleted but nor from test/Makefile.am
+            new file:   runtests.sh
+
+2024-05-10:  David Anderson
+    commit 301412b9b6020d49f52cb97006eada2178f90bf8
+
+    Added in the heuristics looking for impossible
+    PE objects.  In readobjpe these checks trigger warnings
+    and the reading continues.
+    Meant to mirror what checks libdwarf does (though there
+    these are hard errors).
+            modified:   src/dwarf_peread.c
+
+2024-05-10:  David Anderson
+    commit fa302f34c6421744514fb8ed1fece80b73567194
+
+    Ensure that pe_is_64bit is always set correctly.
+            modified:   src/dwarf_peread.c
+
+    Shows that pe_is_64bit now correct.
+            modified:   test/test018p.base
+
+    Small improvement in the log output
+    in case something is wrong.
+            modified:   test/test003.sh
+
+    Fix so make check works both in-source-tree
+    and out-of-source-tree.
+            modified:   test/test024.sh
+            modified:   test/test025.sh
+
+2024-01-26:  David Anderson
+    commit 7193d033549ff3af4d3e11fbf1f26ccfe7f4c1f9
+
+    Improved reporting on e_shoff and e_shnum corruption.
+            modified:   dwarf_load_elf_headers.c
+
+2024-01-26:  David Anderson
+    commit d856b2bf936a6db207ae644c3361a8f8278bade3
+
+    Updated per improved reporting on e_shoff corruption.
+            modified:   ../test/test028.base
+
+2024-01-26:  David Anderson
+    commit 9d56b1f090fcbe193e6df562cc200c7a4fa1c44e
+
+    A printf was missing its newline.
+            modified:   dwarf_debuglink.c
+
+2024-01-26:  David Anderson
+    commit a5fb6421d5acc5d9f0599f69b7139e0e34c3e116
+
+    Baseline reflects formatting changes.
+            modified:   test/test009m.base
+
+2024-01-26:  David Anderson
+    commit 1abf50ff90d4ac4ecac30a743384a605ce2cff21
+
+    Formatting improvement.
+            modified:   src/readobjmacho.c
+
+2024-01-25:  David Anderson
+    commit f9c78f161a3ad1773b5e0aa902fad5f6e49fcc76
+
+    Small output readabily change | not ,
+            modified:   readobjmacho.c
+    Update baselines for make check.
+            modified:   ../test/test009m.base
+
+2024-01-25:  David Anderson
+    commit 4c697b9d8e74f90cfcaadcdd2cf66abd063f06df
+
+    Improved readability of the output.
+            modified:   readobjmacho.c
+
+2024-01-23:  David Anderson
+    commit d89a7a70dc6bb64d8ce075249e9d6e4cbb75a8d4
+
+    Allowing NH_OBJECTS to be read for DWARF sections.
+            modified:   dwarf_macho_loader.h
+            modified:   dwarf_machoread.c
+            modified:   readobjmacho.c
+
+2023-10-07:  David Anderson
+    commit bd7c24640c949cb42bc6f5f419614f5696fd51bc
+
+    Changed some output from hex to decimal.
+            modified:   object_detector_main.c
+
+2023-10-07:  David Anderson
+    commit cc95028468b78cf76ce9470cefee109aeb601283
+
+    New sanity check and fixing alloc of fa 64
+            modified:   dwarf_machoread.c
+
+2023-10-02:  David Anderson
+    commit 8869004797459a0783e455bbf2a9bdf754a38fef
+
+    Corrected a new sanity check to be > not >=
+            modified:   dwarf_machoread.c
+
+2023-10-02:  David Anderson
+    commit 892ae7538a723d0cc0416d1970d7c6769a26ae33
+
+    Minor tweaks plus significant additional
+    checks in dwarf_machoread.c for sane
+    offset and size values.
+
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_object_detector.c
+            modified:   dwarf_universal.h
+
+2023-09-26:  David Anderson
+    commit f9918de9646d361ea8dc28f1e00933e40145113b
+
+    Added remarks on object_detector related
+    to Mach-O universal binaries.
+            modified:   ChangeLog
+
+2023-09-26:  David Anderson
+    commit 3221bbc20e3316a5742e0507574d2421796fa571
+
+    Updated.
+            modified:   ChangeLog
+
+    There should be a 2021 and 2022,
+    but such has not been created.
+    Oops.
+
+    Complete for 2020
+            new file:   ChangeLog2020
+
+2023-09-26:  David Anderson
+    commit 4138c38afeafe8a5848999530d68189e7ece0033
+
+    Removed all the debug printf's and
+    these are usable on Mach-O
+    universal binaries.
+
+    readobjmacho has a new option to choose
+    the object number from a universal binary.
+    It defaults to reading 0, and to read
+    1 (assuming the binary has two executables
+    inside it) is
+      readobjmacho --universalnumber=1
+    for example
+            modified:   dwarf_machoread.c
+            modified:   dwarf_object_detector.c
+            modified:   dwarf_object_read_common.c
+            modified:   readobjmacho.c
+
+2023-09-26:  David Anderson
+    commit b065c9f7f132ac9f7ec8557f1f5e562e78f6f516
+
+    put if 0 around the debug.
+            modified:   dwarf_machoread.c
+            modified:   dwarf_object_detector.c
+            modified:   dwarf_object_read_common.c
+            modified:   readobjmacho.c
+
+2023-09-26:  David Anderson
+    commit 76099bd265d4fcfa86f46555001580465a7b935d
+
+    Now working, at least im part, on universal binary.
+            modified:   dwarf_machoread.c
+            modified:   dwarf_object_detector.c
+            modified:   readobjmacho.c
+
+2023-09-25:  David Anderson
+    commit 6781a05be52a6771f7e2ca634467f66d202ec9f6
+
+    Not yet working.
+            modified:   dwarf_machoread.c
+            modified:   dwarf_object_detector.c
+            modified:   dwarf_object_read_common.c
+
+2023-09-25:  David Anderson
+    commit c9de658eadbfb4367fe8f81f80f5c2684a83e52e
+
+    Compiles now, new code not tested yet,except that
+    make check passes.
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_universal.h
+            modified:   object_detector_main.c
+            modified:   readobjmacho.c
+            modified:   readobjpe.c
+
+2023-09-25:  David Anderson
+    commit 5de1d16ebfb0d9d551a645b5199083cea241b2d9
+
+    Renaming types to Dwarf_Unsigned, removing ULONGEST
+            modified:   Makefile.am
+            modified:   dwarf_debuglink.c
+            modified:   dwarf_elf_naming.c
+            modified:   dwarf_load_elf_headers.c
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_object_detector.c
+            modified:   dwarf_object_detector.h
+            modified:   dwarf_object_read_common.c
+            modified:   dwarf_peread.c
+            modified:   dwarf_peread.h
+            new file:   dwarf_types.h
+            modified:   dwarf_universal.h
+            modified:   dwarfstring.c
+            modified:   object_detector_main.c
+            modified:   readelfobj.c
+            modified:   readelfobj.h
+            modified:   readobjmacho.c
+            modified:   readobjpe.c
+            modified:   test_linkedtopath.c
+
+2023-09-23:  David Anderson
+    commit f1a828f96f70e8329bf71ddad3ecf36ea3ae2eb1
+
+    Now we print certain details for Mach-O
+    universal binaries.
+            modified:   src/Makefile.am
+            modified:   src/dwarf_debuglink.c
+            modified:   src/dwarf_load_elf_headers.c
+            modified:   src/dwarf_macho_loader.h
+            modified:   src/dwarf_machoread.c
+            modified:   src/dwarf_machoread.h
+            modified:   src/dwarf_object_detector.c
+            modified:   src/dwarf_reading.h
+            new file:   src/dwarf_universal.h
+            modified:   src/object_detector_main.c
+
+2023-09-21:  David Anderson
+    commit 03c87b76fafd80d8b8d0c88e6c0d3eaad7c6c68f
+
+    Now notices Apple Universal Object.
+            modified:   dwarf_macho_loader.h
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_object_detector.c
+            modified:   dwarf_object_detector.h
+            modified:   object_detector_main.c
+            modified:   readelfobj.c
+            modified:   readobjmacho.c
+
+2023-04-24:  David Anderson
+    commit 6ce6c8e8be040feb67b7757a3db94481f5635a39
+
+    Now does a reasonableness check on e_phoff.
+    Reports if 0 (no program headers) or too small
+    to be real.
+
+            modified:   dwarf_load_elf_headers.c
+            modified:   ../test/test019.base
+            modified:   ../test/test020.base
+            modified:   ../test/test021.base
+
+2023-04-24:  David Anderson
+    commit 8066f455b63edc48055866cc0ac3aad00066508e
+
+    Comments about a weakness in readelfobj.
+            modified:   src/README
+
+    Now checks for e_shoff
+    being too small to be real.
+            modified:   src/dwarf_load_elf_headers.c
+            modified:   src/readelfobj.c
+
+    Added new test case for small non-zero
+    e_shoff
+            modified:   test/Makefile.am
+            new file:   test/fuzz_init_path-6557751518560256
+            new file:   test/test028.base
+            new file:   test/test028.sh
+
+2023-04-21:  David Anderson
+    commit 3de8706732bd8b1c9eae523059ef32a89be12555
+
+    Added a proper test for 'no sections'.
+            modified:   src/dwarf_load_elf_headers.c
+
+2023-04-21:  David Anderson
+    commit 29e1ce04f661169e7f577024a0c37176a0000e90
+
+    Minor change in wording of elf extended information.
+            modified:   src/dwarf_load_elf_headers.c
+            modified:   test/test025.base
+
+2023-04-20:  David Anderson
+    commit e90521e7d8ba81dce83dccb7e359a7941459dcdb
+
+    Updated test cases so we match the official rules.
+            modified:   test/test024.base
+            modified:   test/test024.sh
+            modified:   test/test025.base
+
+2023-04-20:  David Anderson
+    commit 8aece2b57c1c33b3a9d38c72be49feb123e43788
+
+    Corrected handling of elf extended section count.
+            modified:   src/dwarf_load_elf_headers.c
+
+2023-04-11:  David Anderson
+    commit 1dd516c9bc0ccae7142a164e213d5d63d9284928
+
+            modified:   src/dwarf_debuglink.c
+
+    Now with a better report on elf extended,
+    using man page or gnu rules.
+            modified:   src/dwarf_load_elf_headers.c
+            modified:   src/dwarf_peread.c
+            modified:   src/errormessages.c
+            modified:   src/readelfobj.c
+
+    Tests updated to the inproved report
+    on extended elf section count.
+            modified:   test/Makefile.am
+            new file:   test/elfextended/testobj64gnu.extend
+            new file:   test/elfextended/testobjgnu.extend
+            modified:   test/test024.base
+            modified:   test/test025.base
+            new file:   test/test026.base
+            new file:   test/test026.sh
+            new file:   test/test027.base
+            new file:   test/test027.sh
+
+2023-04-09:  David Anderson
+    commit 775daba8f15f38346aad37a26a30019419fa1bf6
+
+    Remove set-but-not-used local variables.
+            modified:   src/dwarf_load_elf_headers.c
+
+2023-04-09:  David Anderson
+    commit dc08ccec764ac6da9fe8691d62e03f6966be9f12
+
+    We no longer use this. Not needed now.
+            deleted:    test/runtests.sh
+
+2023-04-09:  David Anderson
+    commit 1a660bb35938e0bbe46e4cec94fa8f486d297908
+
+    Now do each test individually instead of a single test.
+            modified:   test/Makefile.am
+            modified:   test/test001.sh
+            modified:   test/test002.sh
+            modified:   test/test003.sh
+            modified:   test/test004.sh
+            modified:   test/test005.sh
+            modified:   test/test006.sh
+            modified:   test/test007.sh
+            modified:   test/test008m.sh
+            modified:   test/test009m.sh
+            modified:   test/test010.sh
+            modified:   test/test011.sh
+            modified:   test/test012.sh
+            modified:   test/test013m.sh
+            modified:   test/test014m.sh
+            modified:   test/test015p.sh
+            modified:   test/test016p.sh
+            modified:   test/test017.sh
+            modified:   test/test018p.sh
+            modified:   test/test019.sh
+            modified:   test/test020.sh
+            modified:   test/test021.sh
+            modified:   test/test022.sh
+            modified:   test/test023.sh
+            modified:   test/test024.base
+            modified:   test/test024.sh
+            modified:   test/test025.base
+            modified:   test/test025.sh
+
+2023-04-09:  David Anderson
+    commit 5ab80709244d1034c0e4c46f7a01d274706e95b3
+
+    Now handles man 5 elf
+    version of extended section count
+    as well as the version gnu ld produces.
+            modified:   src/dwarf_load_elf_headers.c
+
+2023-04-05:  David Anderson
+    commit 588ff906877c32a453dcfa6476d4a28e58ad2178
+
+    Brings ChangeLog up to date with git log
+            modified:   ChangeLog
+
 2023-04-05:  David Anderson
     commit c6e9712ba54df876c8cfa0353be2ada66658974b
 
