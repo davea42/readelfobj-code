@@ -1,5 +1,7 @@
 #!/bin/sh
 n=test003
+# on  the s390, the letter x appears
+# in the pathname so use z as the sed marker, not x.
 if [ x$DWTOPSRCDIR = "x" ]
 then
   top_srcdir=$top_blddir
@@ -21,10 +23,10 @@ then
   dos2unix  junk.$n.tmp 2>/dev/null
 fi
 rm -f junkz.$n
-echo sx $srcdir xyyyxg | sed s/\ //g >junkz.$n
+echo sz $srcdir zyyyzg | sed s/\ //g >junkz.$n
 y=`cat junkz.$n`
 # This next for windows under Mingw: c: becomes /c
-sed 'sxc:/x/c/xg' < junk.$n.tmp >junk.$n.tmp2
+sed 'szc:/z/c/zg' < junk.$n.tmp >junk.$n.tmp2
 # Now the following will strip away the sourcdir part
 sed $y < junk.$n.tmp2 >junk.$n
 

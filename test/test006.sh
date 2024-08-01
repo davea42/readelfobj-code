@@ -22,10 +22,10 @@ then
   dos2unix  junk.$n.tmp 2>/dev/null
 fi
 rm -f junkz 
-echo sx $srcdir xyyyxg | sed s/\ //g >junkz
+echo sz $srcdir zyyyzg | sed s/\ //g >junkz
 y=`cat junkz`
 # This next for windows under Mingw: c: becomes /c
-sed 'sxc:/x/c/xg' < junk.$n.tmp >junk.$n.tmp2
+sed 'szc:/z/c/zg' < junk.$n.tmp >junk.$n.tmp2
 # Now the following will strip away the sourcdir part
 sed $y < junk.$n.tmp2 >junk.$n.tmp
 rm -f junkz 
