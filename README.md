@@ -10,7 +10,18 @@ formats supported.
 
 Requires python3 and a bash or sh shell.
 
+If unsure what object format a file might be,
+the <strong>object_detector</strong> will tell you.
+(On linux and MacOs the 'file' command will do that too.)
+
 ## Contents
+#### object_detector
+
+A program that reads a minimal amount of
+object header content (for any of the supported object types)
+and prints basic information (file type, offset size, 
+and endianness) about each file.
+
 #### readelfobj
 
 A program that reads elf object files and
@@ -31,12 +42,6 @@ A program that reads MacOS dSYM files and
 prints header information.
 (mainly focused on sections that may be DWARF data).
 
-#### object_detector
-
-A program that reads a minimal set of
-object header files (for any of the supported object types)
-and prints basic information (file type, offset size, 
-and endianness) about each file.
 The only library used is standard C libc.
 
 The code does not depend on any Elf, Mach-o, or Windows
@@ -64,8 +69,8 @@ Download the release from
 and unpack
 
     #For example:
-    tar xf readelfobj-0.1.0.xz
-    cd  readelfobj-0.1.0 
+    tar xf readelfobj-0.2.1.xz
+    cd  readelfobj-0.2.1 
     ./configure --enable-wall
     make
     make check
