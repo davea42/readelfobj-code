@@ -7,17 +7,13 @@ else
   top_srcdir=$DWTOPSRCDIR
 fi
 srcdir=$top_srcdir/test
+df=$srcdir/testdiff.py
 base=$n.base
 curdir=`pwd`
 o=$srcdir/libkrb5support.so.0.1.debug
 echo "START $n test ./readelfobj --help $o "
 ../src/readelfobj --help $o >junk.$n.tmp
-which dos2unix >/dev/null
-if [ $? -eq 0 ]
-then
-  dos2unix  junk.$n.tmp >/dev/null
-fi
-diff  $srcdir/$n.base junk.$n.tmp > junk.$n.out
+$df  $srcdir/$n.base junk.$n.tmp "$srcdif" > junk.$n.out
 if [ $? -ne 0 ]
 then
   cat junk.$n.out

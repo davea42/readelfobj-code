@@ -150,7 +150,8 @@ README  \
 CLEANUP  \
 PICKUP    \
 ChangeLog  \
-ChangeLog2018  \
+ChangeLog2018 \
+dwdiff.py   \
 test001.sh  \
 test002.sh  \
 test003.sh  \
