@@ -1,12 +1,14 @@
-[![Travis Build
-Status](https://travis-ci.com/davea42/readelfobj-code.svg?branch=master)](https://travis-ci.com/github/davea42/readelfobj-code)
-
 # README.md
-Last update: December 4, 2021
+Last update: August 2, 2024
 
 The distribution consists entirely of C
-source files (along with scripts
+source files (along with GNU configure scripts
 to configure and build executables).
+Builds and works on Linux, MacOS, and Windows msys2
+and on across all of those the programs can read all the object
+formats supported.
+
+Requires python3 and a bash or sh shell.
 
 ## Contents
 #### readelfobj
@@ -15,7 +17,7 @@ A program that reads elf object files and
 prints the header information.  It also checks for certain
 errors including wasted space in the object files.  It also
 dumps Elf relocation sections, Elf symtab sections, and the
-dynamic section.
+Elf dynamic section.
 
 #### readobjpe
 
@@ -35,6 +37,7 @@ A program that reads a minimal set of
 object header files (for any of the supported object types)
 and prints basic information (file type, offset size, 
 and endianness) about each file.
+The only library used is standard C libc.
 
 The code does not depend on any Elf, Mach-o, or Windows
 libraries or headers, it just depends on a basic
@@ -47,9 +50,10 @@ To dump DWARF section contents one should use dwarfdump
 (a part of the libdwarf-code github project) or
 GNU readelf (in GNU binutils).
 
-For Mingw (Windows):
+For Msys2 (Windows):
 The configure option --enable-nonstandardprintf
-may be required to avoid errors in certain printf
+may be required to avoid errors in certain printf.
+
 
 ## RUNNING MAKE CHECK from a release
 
