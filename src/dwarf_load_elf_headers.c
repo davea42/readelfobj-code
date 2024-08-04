@@ -3092,6 +3092,20 @@ elf_flagmatches(Dwarf_Unsigned flagsword,Dwarf_Unsigned flag)
     return FALSE;
 }
 
+static void
+smaller_of(Dwarf_Unsigned a_in,Dwarf_Unsigned b_in,
+    Dwarf_Unsigned *lout, 
+    Dwarf_Unsigned *hout )
+{
+    if (a_in <= b_in) {
+        *lout = a_in;
+        *hout = b_in;
+    } else {
+        *lout = b_in;
+        *hout = a_in;
+    }
+}
+
 /*  For SHT_GROUP sections. */
 static int
 read_gs_section_group(elf_filedata ep,
@@ -3178,11 +3192,14 @@ read_gs_section_group(elf_filedata ep,
             Dwarf_Unsigned gseca = 0;
             Dwarf_Unsigned gsecb = 0;
             struct generic_shdr* targpsh = 0;
+            Dwarf_Unsigned lesser = 0;
+            Dwarf_Unsigned greater = 0;
 
             memcpy(dblock,dp,DWARF_32BIT_SIZE);
             ASNAR(memcpy,gseca,dblock);
             ASNAR(dwarf_ro_memcpy_swap_bytes,gsecb,dblock);
-            if (!gseca) {
+            smaller_of(gseca,gsecb,&lesser,&greater);
+            if (!lesser) {
                 printf("Elf group header corruption "
                     "group record %lu section index field "
                     "is zero, corrupted data\n",
@@ -3192,10 +3209,10 @@ read_gs_section_group(elf_filedata ep,
                 *errcode = RO_ERR_GROUP_ERROR;
                 return DW_DLV_ERROR;
             }
-            grouparray[i] = gseca;
-            if (gseca >= ep->f_loc_shdr.g_count) {
+            if (lesser >= ep->f_loc_shdr.g_count) {
                 /*  Might be confused endianness by
                     the compiler generating the SHT_GROUP.
+                    Or curroputed Elf.
                     This is pretty horrible. */
 
                 if (gsecb >= ep->f_loc_shdr.g_count) {
@@ -3206,8 +3223,8 @@ read_gs_section_group(elf_filedata ep,
                         "(0-%lu)"
                         "\n",
                         (unsigned long)i,
-                        (unsigned long)gseca,
-                        (unsigned long)gsecb,
+                        (unsigned long)lesser,
+                        (unsigned long)greater,
                         (unsigned long)ep->f_loc_shdr.g_count,
                         (unsigned long)ep->f_loc_shdr.g_count-1
                         );
@@ -3216,11 +3233,9 @@ read_gs_section_group(elf_filedata ep,
                     free(grouparray);
                     return DW_DLV_ERROR;
                 }
-                /* Ok. Yes, ugly. */
-                gseca = gsecb;
-                grouparray[i] = gseca;
             }
-            targpsh = ep->f_shdr + gseca;
+            grouparray[i] = lesser;
+            targpsh = ep->f_shdr + lesser;
             if (targpsh->gh_section_group_number) {
                 /* multi-assignment to groups. Oops. */
                 printf("Elf group header corruption "
