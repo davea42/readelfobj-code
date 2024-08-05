@@ -139,11 +139,7 @@ CLEANFILES = \
   object_detector \
   readobjmacho \
   readobjpe \
-  readelfobj \
-  elfextended/testobj \
-  elfextended/testobj64
-
-
+  readelfobj 
 
 EXTRA_DIST = \
 README  \
@@ -151,6 +147,7 @@ CLEANUP  \
 PICKUP    \
 ChangeLog  \
 ChangeLog2018 \
+ChangeLog2019 \
 testdiff.py   \
 test001.sh  \
 test002.sh  \
@@ -175,6 +172,11 @@ test020.sh \
 test021.sh \
 test022.sh \
 test023.sh \
+test024.sh  \
+test025.sh  \
+test026.sh  \
+test027.sh  \
+test028.sh \
 test001.base \
 test003.base  \
 test004.base  \
@@ -199,6 +201,9 @@ test022.base \
 test023.base \
 test024.base \
 test025.base \
+test026.base \
+test027.base \
+test028.base \
 dd-irix-n32 \
 libkrb5support.so.0.1.debug \
 mach-o-object32 \
@@ -209,11 +214,21 @@ kask2/dwarfdump_G4  \
 kask2/dwarfdump_G4.dSYM\
 libexamine-0.dll \
 kask-dwarfdump_64.exe \
+fuzz_init_path-6557751518560256 \
 libdwarf.so.1.0.0 \
 sparc64-64-tls.o  \
 libc.so.6   \
 stream.o    \
 testarch.a  \
 comdatex.example.o \
+elfextended/elfextendedtestcase.c \
+elfextended/testobj64.baseobj \
+elfextended/testobj.extend    \
+elfextended/testobj64.extend  \
+elfextended/testobjgnu.extend \
+elfextended/patcher.sh        \
+elfextended/testobj64gnu.extend \
+elfextended/README	          \
+elfextended/testobj.baseobj   \
 frame1-frame1.o  
 
