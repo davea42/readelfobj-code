@@ -612,8 +612,8 @@ dwarf_macho_load_segment_commands(struct macho_filedata_s *mfp,
     }
     mfp->mo_segment_commands =
         (struct generic_macho_segment_command *)
-        calloc(sizeof(struct generic_macho_segment_command),
-        mfp->mo_segment_count);
+        calloc( mfp->mo_segment_count,
+            sizeof(struct generic_macho_segment_command));
     if (!mfp->mo_segment_commands) {
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
@@ -655,8 +655,8 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
     struct generic_macho_section *secs = 0;
 
     secs = (struct generic_macho_section *)calloc(
-        sizeof(struct generic_macho_section),
-        secalloc);
+        secalloc,
+        sizeof(struct generic_macho_section));
     if (!secs) {
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_OK;
@@ -740,7 +740,8 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
     struct generic_macho_section *secs = 0;
 
     secs = (struct generic_macho_section *)
-        calloc(sizeof(struct generic_macho_section), secalloc);
+        calloc(secalloc,
+        sizeof(struct generic_macho_section));
     if (!secs) {
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
