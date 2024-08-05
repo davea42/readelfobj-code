@@ -1,5 +1,5 @@
 # README.md
-Last update: August 2, 2024
+Last update: August 5, 2024
 
 The distribution consists entirely of C
 source files (along with GNU configure scripts
@@ -69,8 +69,8 @@ Download the release from
 and unpack
 
     #For example:
-    tar xf readelfobj-0.2.1.xz
-    cd  readelfobj-0.2.1 
+    tar xf readelfobj-1.0.0.xz
+    cd  readelfobj-1.0.0 
     ./configure --enable-wall
     make
     make check

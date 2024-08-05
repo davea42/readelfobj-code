@@ -134,7 +134,7 @@ report_universal(char *targpath,unsigned endian,
                " unavailable, does not exist\n",i);
            continue;
        }
-       if (res == DW_DLV_NO_ENTRY) {
+       if (res == DW_DLV_ERROR) {
            printf(" FAIL: inner binary number "
                LONGESTUFMT
                " gets error, error code %d\n",i,*errcode);

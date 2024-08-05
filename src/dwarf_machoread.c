@@ -1052,9 +1052,6 @@ int dwarf_object_detector_universal_head(
     }
     res = dwarf_object_detector_universal_head_fd(fd,
         dw_filesize, dw_contentcount, dw_head, errcode);
-    if (res != DW_DLV_OK) {
-        return res;
-    }
     close(fd);
     return res;
 }
@@ -1224,6 +1221,7 @@ dwarf_object_detector_universal_head_fd(
                __LINE__);
             free(duhd.au_arches);
             duhd.au_arches = 0;
+            free(fa);
             return res;
         }
         free(fa);
