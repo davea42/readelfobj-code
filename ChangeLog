@@ -1,3 +1,120 @@
+2024-08-05:  David Anderson
+    commit f72c4151447697841a44b9c7fe78be1bd63a1e54
+
+    Now a tar.xz has all the ingredients needed to
+    test via 'make check'.
+            modified:   Makefile.am
+            modified:   test/Makefile.am
+
+2024-08-05:  David Anderson
+    commit 16c4febc7b30250c1ccfc5a01863e870c0ffcc71
+
+    Now to be 1.0.0
+            modified:   README.md
+            modified:   configure.ac
+
+    Fix calloc args to be in the right order and
+    some accidental things noticed by coverityscan.
+            modified:   src/dwarf_machoread.c
+            modified:   src/dwarf_object_detector.c
+            modified:   src/object_detector_main.c
+
+    Ensure test/testdiff.py gets into the release.
+            modified:   test/Makefile.am
+
+2024-08-05:  David Anderson
+    commit c4e60e301143c1a0c56dfa13f8f12860598010b3
+
+    In three places calloc() was called with
+    the size first, and count second.
+    Compilers are smart enough to notice and warn now!
+    Fixed these.
+            modified:   dwarf_machoread.c
+
+2024-08-04:  David Anderson
+    commit 0a4f028e4082262700812af945b2d428adbfefa0
+
+    Reformulated the reporting of a field
+    for a corrupt object so it reports
+    consistently on little-endian and big-endian
+    systems.
+            modified:   src/dwarf_load_elf_headers.c
+
+    The crucial new diff for simple testing.
+            new file:   test/testdiff.py
+
+2024-08-02:  David Anderson
+    commit 60be0a54b077e835a25fd260aa766553cd328685
+
+    Another revision of the introduction.
+            modified:   README.md
+
+2024-08-02:  David Anderson
+    commit f718b042a946ea2aa065b43814b271ca7a780aa5
+
+    Now just says see README.md
+            modified:   README
+
+    Now with a better initial description of the
+    project.
+            modified:   README.md
+
+2024-08-01:  David Anderson
+    commit 7ea9ad1d0436b3ce8889284e22b773b23b782339
+
+    Adding test/testdiff.py to the files to put in release.
+            modified:   Makefile.am
+
+    Altering all the test script to use testdiff.py instead
+    of ordinary diff.  So dos1unix is no longer needed
+    as python takes care of the special Windows line endings.
+            modified:   test001.sh
+            modified:   test002.sh
+            modified:   test003.sh
+            modified:   test004.sh
+            modified:   test005.sh
+            modified:   test006.sh
+            modified:   test007.sh
+            modified:   test008m.sh
+            modified:   test009m.sh
+            modified:   test010.sh
+            modified:   test011.sh
+            modified:   test012.sh
+            modified:   test013m.sh
+            modified:   test014m.sh
+            modified:   test015p.sh
+            modified:   test016p.sh
+            modified:   test017.sh
+            modified:   test018p.sh
+            modified:   test019.sh
+            modified:   test020.sh
+            modified:   test021.sh
+            modified:   test022.sh
+            modified:   test023.sh
+            modified:   test024.sh
+            modified:   test025.sh
+            modified:   test026.sh
+            modified:   test027.sh
+            modified:   test028.sh
+
+2024-08-01:  David Anderson
+    commit 9d071d01d18dd9ac2ae8eeee5822079cd68c0810
+
+    Now using z instead of x as the marker character
+    in sed scripts as x appears in the $HOME on the s390.
+    I think a better approach is needed, this is tedious
+    and error prone.
+            modified:   test003.sh
+            modified:   test004.sh
+            modified:   test005.sh
+            modified:   test006.sh
+
+2024-05-12:  David Anderson
+    commit a5f667bb100846794ef2f636f5db782e6bacacac
+
+    Now showing version change from 0.2.0 to 0.2.1
+            modified:   ChangeLog
+
 2024-05-12:  David Anderson
     commit b7698403f8551bdd669bfdb9f369248287a30a97
 
