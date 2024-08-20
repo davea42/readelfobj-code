@@ -8,7 +8,11 @@ Builds and works on Linux, MacOS, and Windows msys2
 and on across all of those the programs can read all the object
 formats supported.
 
-Requires python3 and a bash or sh shell.
+Requires a bash or sh shell, a C compiler, `python3`, `m4`, `libtool`, `autoconf`, and `automake`.
+On Debian and Ubuntu systems, these can quickly be installed with
+```
+apt-get install autoconf automake libtool m4 gcc python3
+```
 
 If unsure what object format a file might be,
 the <strong>object_detector</strong> will tell you.
