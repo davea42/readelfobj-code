@@ -1,5 +1,5 @@
 # README.md
-Last update: August 5, 2024
+Last update: August 20, 2024
 
 The distribution consists entirely of C
 source files (along with GNU configure scripts
