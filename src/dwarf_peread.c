@@ -355,7 +355,7 @@ dwarf_pe_load_dwarf_section_headers(
         int res = 0;
         IMAGE_SECTION_HEADER_dw filesect;
         char safe_name[IMAGE_SIZEOF_SHORT_NAME +1];
-        const char *expname = 0;
+        const char *expname = "<no section name>";
 
         res =  dwarf_object_read_random(pep->pe_fd,
             (char *)&filesect,cur_offset,
@@ -441,10 +441,13 @@ dwarf_pe_load_dwarf_section_headers(
             if (sec_outp->VirtualSize >
                 ((Dwarf_Unsigned)2000*
                 (Dwarf_Unsigned)1000*
-                (Dwarf_Unsigned)1000)) {
-                printf("WARNING section VirtualSize size "
+                (Dwarf_Unsigned)1000) &&
+                (sec_outp->VirtualSize > pep->pe_filesize)) {
+                printf("WARNING section %s VirtualSize size "
                     "0x%llx is larger "
-                    "than 2GB and suggests this object is corrupt\n", 
+                    "than 2GB and file size and suggests "
+                    "this object is corrupt\n", 
+                    expname,
                     (unsigned long long)sec_outp->VirtualSize);
                 /* DW_DLE_PE_SECTION_SIZE_HEURISTIC_FAIL; */
             }
