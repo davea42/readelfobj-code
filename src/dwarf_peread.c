@@ -451,7 +451,8 @@ dwarf_pe_load_dwarf_section_headers(
                     (unsigned long long)sec_outp->VirtualSize);
                 /* DW_DLE_PE_SECTION_SIZE_HEURISTIC_FAIL; */
             }
-            if (sec_outp->VirtualSize > limit) {
+            if (sec_outp->VirtualSize > limit &&
+               0 == pep->pe_is_64bit) {
                 printf("WARNING section VirtualSize "
                     "0x%llx is larger "
                     "than  100*filesize (0x%llx) and suggests this "
