@@ -46,6 +46,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 #include "dwarf_peread.h"
 #include "sanitized.h"
+#include "common_options.h"
 
 #define BUFFERSIZE 1000
 static char buffer1[BUFFERSIZE];
@@ -59,17 +60,17 @@ char *Usage = "Usage: readobjpe <options> file ...\n"
     "Options:\n"
     "--help     print this message\n"
     "--version  print version string\n";
-
-static int printfilenames = FALSE;
-
 static void
-pe_sections_display(dwarf_pe_object_access_internals_t *pep)
+pe_sections_display(dwarf_pe_object_access_internals_t *pep,
+    sec_options *options)
 {
     Dwarf_Unsigned i = 0;
     Dwarf_Unsigned count = pep->pe_section_count;
 
     printf("Display " LONGESTUFMT " sections.\n",
         count);
+/* FIXME new array */
+    (void)options;
     for ( ; i < count; ++i) {
         struct dwarf_pe_generic_image_section_header *sp =
             pep->pe_sectionptr + i;
@@ -105,6 +106,7 @@ pe_sections_display(dwarf_pe_object_access_internals_t *pep)
             "  (" LONGESTUFMT ")\n",
             sp->Characteristics,sp->Characteristics);
     }
+/*  FIXME free new array */
 }
 static void
 pe_headers_display(dwarf_pe_object_access_internals_t *pe)
@@ -169,7 +171,7 @@ pe_headers_display(dwarf_pe_object_access_internals_t *pe)
 }
 
 static void
-do_one_file(const char *name)
+do_one_file(const char *name, sec_options *options)
 {
     unsigned ftype = 0;
     unsigned endian = 0;
@@ -228,7 +230,7 @@ do_one_file(const char *name)
         return;
     }
     pe_headers_display(pep);
-    pe_sections_display(pep);
+    pe_sections_display(pep,options);
     dwarf_destruct_pe_access(pep);
 }
 
@@ -253,6 +255,14 @@ main(int argc,char **argv)
                 P("%s",Usage);
                 exit(0);
             }
+            if (strcmp(argv[0],"--sections-by-size") == 0) {
+                secoptionsdata.co_sort_section_by_size = TRUE;
+                continue;
+            }
+            if (strcmp(argv[0],"--sections-by-name") == 0) {
+                secoptionsdata.co_sort_section_by_name = TRUE;
+                continue;
+            }
             if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readobjpe: %s\n",
@@ -261,10 +271,10 @@ main(int argc,char **argv)
                 continue;
             }
             if ( (i+1) < argc) {
-                printfilenames = TRUE;
+                secoptionsdata.co_printfilenames = TRUE;
             }
             filename = argv[0];
-            if (printfilenames) {
+            if (secoptionsdata.co_printfilenames) {
                 P("File: %s\n",sanitized(filename,buffer1,
                     BUFFERSIZE));
             }
@@ -276,7 +286,7 @@ main(int argc,char **argv)
             }
             fclose(fin);
             ++filecount;
-            do_one_file(filename);
+            do_one_file(filename,&secoptionsdata);
         }
         if (!filecount && !printed_version) {
             printf("%s\n",Usage);

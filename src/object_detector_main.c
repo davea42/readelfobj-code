@@ -40,7 +40,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     an object is.
 
     object_detector [-z] path ...
- 
+
     Other than a  required path name, its only option is
     -z, which turns off searching for MacOS dSYM
     DWARF objects and for debuglink objects.
@@ -96,7 +96,6 @@ int dwarf_object_detector_universal_instance(
 void dwarf_dealloc_universal_head(Dwarf_Universal_Head dw_head);
 #endif
 
-
 static int
 report_universal(char *targpath,unsigned endian,
     unsigned offsetsize,size_t filesize,int *errcode)
@@ -107,49 +106,48 @@ report_universal(char *targpath,unsigned endian,
     Dwarf_Unsigned i = 0;
 
     res = dwarf_object_detector_universal_head(targpath,
-         filesize,&contentcount,&unihead,errcode);
+        filesize,&contentcount,&unihead,errcode);
     if (res != DW_DLV_OK) {
-         return res;
+        return res;
     }
     printf("  Mach-O Universal binary\n");
-    printf("                   count: %u\n", contentcount); 
+    printf("                   count: %u\n", contentcount);
     printf("              offsetsize: %u\n", offsetsize);
-    printf("                filesize: 0x%lx\n", 
+    printf("                filesize: 0x%lx\n",
         (unsigned long)filesize);
     printf("                  endian: %s\n",
-        dwarf_endian_type[endian]); 
+        dwarf_endian_type[endian]);
     for ( ; i < contentcount; ++i) {
-       Dwarf_Unsigned cpu_type = 0;
-       Dwarf_Unsigned cpu_subtype = 0;
-       Dwarf_Unsigned offset = 0;
-       Dwarf_Unsigned size = 0;
-       Dwarf_Unsigned align = 0;
+        Dwarf_Unsigned cpu_type = 0;
+        Dwarf_Unsigned cpu_subtype = 0;
+        Dwarf_Unsigned offset = 0;
+        Dwarf_Unsigned size = 0;
+        Dwarf_Unsigned align = 0;
 
-       res = dwarf_object_detector_universal_instance(
-           unihead,i,&cpu_type,&cpu_subtype,&offset,
-           &size,&align,errcode);
-       if (res == DW_DLV_NO_ENTRY) {
-           printf(" FAIL: inner binary number "
-               LONGESTUFMT
-               " unavailable, does not exist\n",i);
-           continue;
-       }
-       if (res == DW_DLV_ERROR) {
-           printf(" FAIL: inner binary number "
-               LONGESTUFMT
-               " gets error, error code %d\n",i,*errcode);
-           continue;
-       }
-       printf("    [%2llu] ",i);
-	   printf(" cputype 0x%lx \n",(unsigned long)cpu_type);
-       printf("          cpusubtype 0x%lx \n",
-           (unsigned long)cpu_subtype);
-       printf("          offset " LONGESTUFMT 
-           " size " LONGESTUFMT 
-           " align " LONGESTUFMT "\n",
-           offset, size, align);
+        res = dwarf_object_detector_universal_instance(
+            unihead,i,&cpu_type,&cpu_subtype,&offset,
+            &size,&align,errcode);
+        if (res == DW_DLV_NO_ENTRY) {
+            printf(" FAIL: inner binary number "
+                LONGESTUFMT
+                " unavailable, does not exist\n",i);
+            continue;
+        }
+        if (res == DW_DLV_ERROR) {
+            printf(" FAIL: inner binary number "
+                LONGESTUFMT
+                " gets error, error code %d\n",i,*errcode);
+            continue;
+        }
+        printf("    [%2llu] ",i);
+        printf(" cputype 0x%lx \n",(unsigned long)cpu_type);
+        printf("          cpusubtype 0x%lx \n",
+            (unsigned long)cpu_subtype);
+        printf("          offset " LONGESTUFMT
+            " size " LONGESTUFMT
+            " align " LONGESTUFMT "\n",
+            offset, size, align);
     }
-    
 
     dwarf_dealloc_universal_head(unihead);
     (void)targpath;

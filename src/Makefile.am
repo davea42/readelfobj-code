@@ -10,6 +10,7 @@ bin_PROGRAMS = readelfobj readobjmacho readobjpe object_detector
 TESTS = $(check_PROGRAMS) $(check_TESTS)
 
 readelfobj_SOURCES = \
+common_options.h \
 dwarf_debuglink.c     \
 dwarf_debuglink.h     \
 dwarfstring.c         \
@@ -51,6 +52,7 @@ readelfobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 readobjmacho_SOURCES =  readobjmacho.c \
+common_options.h \
 sanitized.h \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
@@ -67,6 +69,7 @@ readobjmacho_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
 
 readobjpe_SOURCES =  readobjpe.c \
+common_options.h \
 sanitized.h \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \

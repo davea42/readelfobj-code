@@ -59,6 +59,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 #include "dwarf_machoread.h"
 #include "sanitized.h"
+#include "common_options.h"
 
 int printfilenames = FALSE;
 unsigned int unibinarynumber = 0;
@@ -66,13 +67,14 @@ unsigned int unibinarynumber = 0;
 char *Usage = "Usage: readobjmacho <options> file ...\n"
     "Options:\n"
     "--help     print this message\n"
-    "--version  print version string\n" 
-    "--universalnumber=<n>  If a Universal Binary\n" 
+    "--version  print version string\n"
+    "--universalnumber=<n>  If a Universal Binary\n"
     "  print binary number n. Defaults to zero\n";
 
 static char tru_path_buffer[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
-static void do_one_file(const char *s);
+
+static void do_one_file(const char *s,sec_options *options);
 
 static struct commands_text_s {
     const char *name;
@@ -136,7 +138,7 @@ static struct commands_text_s {
 {0,0}
 };
 
-static struct commands_text_s 
+static struct commands_text_s
     /*const char *name;
     unsigned long val; */
 filetypename [] = {
@@ -150,13 +152,13 @@ filetypename [] = {
 {"MH_BUNDLE",    0x8 },
 {"MH_DYLIB_STUB",    0x9},
 {"MH_DSYM",        0xa },
-{"MH_KEXT_BUNDLE",    0xb},  
+{"MH_KEXT_BUNDLE",    0xb},
 {0,0}
 };
-static struct commands_text_s 
+static struct commands_text_s
     /*const char *name;
     unsigned long val; */
- flagsnamesbits [] = {
+flagsnamesbits [] = {
 {"MH_NOUNDEFS",    0x1 },
 {"MH_INCRLINK",0x2 },
 {"MH_DYLDLINK",0x4},
@@ -165,8 +167,8 @@ static struct commands_text_s
 {"MH_SPLIT_SEGS",0x20 },
 {"MH_LAZY_INIT",0x40},
 {"MH_TWOLEVEL",0x80 },
-{"MH_FORCE_FLAT",0x100},  
-{"MH_NOMULTIDEFS",0x200 },  
+{"MH_FORCE_FLAT",0x100},
+{"MH_NOMULTIDEFS",0x200 },
 {"MH_NOFIXPREBINDING",0x400  },
 {"MH_PREBINDABLE",0x800   },
 {"MH_ALLMODSBOUND",0x1000   },
@@ -176,7 +178,7 @@ static struct commands_text_s
 {"MH_BINDS_TO_WEAK",0x10000  },
 {"MH_ALLOW_STACK_EXECUTION",0x20000  },
 {"MH_ROOT_SAFE",0x40000  },
-{"MH_SETUID_SAFE",0x80000    },       
+{"MH_SETUID_SAFE",0x80000    },
 {"MH_NO_REEXPORTED_DYLIBS",0x100000   },
 {"MH_PIE",0x200000    },
 {"MH_DEAD_STRIPPABLE_DYLIB",0x400000   },
@@ -212,7 +214,7 @@ get_filetype_name(Dwarf_Unsigned v)
 }
 
 /*  Add an ending newline here after flagsnamesbits dealt with */
-static void 
+static void
 print_all_flags(unsigned long flag)
 {
     unsigned long bitmask = 1;
@@ -225,10 +227,11 @@ print_all_flags(unsigned long flag)
         unsigned long v = flag&bitmask;
         for ( ; flagsnamesbits[j].name; j++) {
             if (v == flagsnamesbits[j].val) {
-                if(!printedcount) {
+                if (!printedcount) {
                     printf(" %s",flagsnamesbits[j].name);
-                }else { 
-                    printf("|\n             %s",flagsnamesbits[j].name);
+                }else {
+                    printf("|\n             %s",
+                        flagsnamesbits[j].name);
                 }
                 ++printedcount;
                 break; /* ready for next bit */
@@ -246,7 +249,7 @@ findnumber(char *s)
 
     if (strlen(s) < 1) {
         printf("Error --unarybinarynumber= missing value. "
-           " Giving up.\n");
+            " Giving up.\n");
         exit(1);
     }
     newv = strtoul((const char *)s,&nptr,10);
@@ -293,6 +296,15 @@ main(int argc,char **argv)
                     "number %d\n",unibinarynumber);
                 continue;
             }
+            if (strcmp(argv[0],"--sections-by-size") == 0) {
+                secoptionsdata.co_sort_section_by_size = TRUE;
+                continue;
+            }
+            if (strcmp(argv[0],"--sections-by-name") == 0) {
+                secoptionsdata.co_sort_section_by_name = TRUE;
+                continue;
+            }
+
             if ( (i+1) < argc) {
                 printfilenames = TRUE;
             }
@@ -308,7 +320,7 @@ main(int argc,char **argv)
             }
             fclose(fin);
             ++filecount;
-            do_one_file(filename);
+            do_one_file(filename,&secoptionsdata);
         }
         if (!filecount && !printed_version) {
             printf("%s\n",Usage);
@@ -345,7 +357,8 @@ print_macho_segments(struct macho_filedata_s *mfp)
 }
 
 static void
-print_macho_dwarf_sections(struct macho_filedata_s *mfp)
+print_macho_dwarf_sections(struct macho_filedata_s *mfp,
+    sec_options *options)
 {
     Dwarf_Unsigned i = 0;
     Dwarf_Unsigned count = mfp->mo_dwarf_sectioncount;
@@ -356,6 +369,9 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp)
     P(" Sections count: " LONGESTUFMT "  offset " LONGESTXFMT8 "\n",
         count,gsp->offset_of_sec_rec);
     P("                         offset size \n");
+    /* FIXME will use options here */
+    (void)options;
+    /* FIXME here create local sec array */
     for (i =0; i < count; ++i,++gsp) {
         P("  [" LONGESTUFMT2 "] %-16s"
             " " LONGESTXFMT8
@@ -365,6 +381,7 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp)
             gsp->offset,
             gsp->size);
     }
+/* FIXME here free local sec array */
 }
 
 static void
@@ -377,7 +394,7 @@ print_macho_commands(struct macho_filedata_s *mfp)
     P(" Commands: at offset " LONGESTXFMT "\n",
         mfp->mo_command_start_offset);
     for ( ; i < mfp->mo_command_count; ++i, ++cmdp) {
-        P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT8 
+        P("  [" LONGESTUFMT "] cmd: " LONGESTXFMT8
             " %-16s"
             " cmdsize: " LONGESTUFMT " (" LONGESTXFMT8 ")\n",
             i,
@@ -386,8 +403,6 @@ print_macho_commands(struct macho_filedata_s *mfp)
             cmdp->cmdsize);
     }
 }
-
-
 
 static void
 print_macho_header(struct macho_filedata_s *mfp)
@@ -408,19 +423,19 @@ print_macho_header(struct macho_filedata_s *mfp)
         " %s"    "\n",
         mfp->mo_header.filetype,
         get_filetype_name(mfp->mo_header.filetype));
-    P("  number of commands: " LONGESTXFMT  
+    P("  number of commands: " LONGESTXFMT
         " ("LONGESTUFMT ")\n",
         mfp->mo_header.ncmds,mfp->mo_header.ncmds);
-    P("  size of commands  : " LONGESTXFMT  
+    P("  size of commands  : " LONGESTXFMT
         " ("LONGESTUFMT ")\n",
         mfp->mo_header.sizeofcmds, mfp->mo_header.sizeofcmds);
-    P("  flags             : " LONGESTXFMT  , 
+    P("  flags             : " LONGESTXFMT  ,
         (LONGESTUTYPE)mfp->mo_header.flags);
     print_all_flags(mfp->mo_header.flags);
 }
 
 static void
-do_one_file(const char *s)
+do_one_file(const char *s, sec_options *options)
 {
     unsigned ftype = 0;
     unsigned endian = 0;
@@ -480,6 +495,6 @@ do_one_file(const char *s)
     }
     print_macho_commands(mfp);
     print_macho_segments(mfp);
-    print_macho_dwarf_sections(mfp);
+    print_macho_dwarf_sections(mfp,options);
     dwarf_destruct_macho_access(mfp);
 }

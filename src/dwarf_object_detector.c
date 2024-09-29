@@ -55,7 +55,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define O_RDONLY 0
 #endif
 
-
 /*  TYP, SIZEOFT32 and ASNAR
     mean we can use correctly-sized arrays of char for the
     struct members instead of determing a proper integer
@@ -611,7 +610,7 @@ dwarf_object_detector_fd(int fd,
     int *errcode)
 {
     Dwarf_Unsigned fileoffsetbase = 0;
- 
+
     int res = 0;
 
     res = dwarf_object_detector_fd_a(fd,

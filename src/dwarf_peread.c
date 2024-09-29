@@ -427,7 +427,7 @@ dwarf_pe_load_dwarf_section_headers(
                     (unsigned long)pep->pe_filesize);
             }
         }
-{
+        {
             /*  A Heuristic, allowing large virtual size
                 but not unlimited as we will malloc it
                 later, as Virtualsize. */
@@ -446,23 +446,22 @@ dwarf_pe_load_dwarf_section_headers(
                 printf("WARNING section %s VirtualSize size "
                     "0x%llx is larger "
                     "than 2GB and file size and suggests "
-                    "this object is corrupt\n", 
+                    "this object is corrupt\n",
                     expname,
                     (unsigned long long)sec_outp->VirtualSize);
                 /* DW_DLE_PE_SECTION_SIZE_HEURISTIC_FAIL; */
             }
             if (sec_outp->VirtualSize > limit &&
-               0 == pep->pe_is_64bit) {
+                0 == pep->pe_is_64bit) {
                 printf("WARNING section VirtualSize "
                     "0x%llx is larger "
                     "than  100*filesize (0x%llx) and suggests this "
-                    "object is corrupt", 
+                    "object is corrupt",
                     (unsigned long long)sec_outp->VirtualSize,
                     (unsigned long long)limit);
                 /* Likely totally unreasonable. Bad. */
             }
         }
-
     }
     return DW_DLV_OK;
 }

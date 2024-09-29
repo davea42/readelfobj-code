@@ -72,6 +72,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_elf_reloc_x86_64.h"
 #include "dwarfstring.h"
 #include "dwarf_debuglink.h"
+#include "common_options.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -92,11 +93,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define ALIGN4 4
 #define ALIGN8 8
 
-static void do_one_file(const char *filename);
+static void do_one_file(const char *filename,sec_options*options);
 static int elf_print_elf_header(elf_filedata ep);
 static int elf_print_progheaders(elf_filedata ep);
 static int elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned);
-static int elf_print_sectheaders(elf_filedata ep);
+static int elf_print_sectheaders(elf_filedata ep,sec_options*options);
 static int elf_print_gnu_debuglink(elf_filedata ep);
 static int elf_print_sg_groups(elf_filedata ep);
 static int elf_print_relocation_details(elf_filedata ep,int isrela,
@@ -196,6 +197,15 @@ main(int argc,char **argv)
                 print_dynamic_sections= 1;
                 continue;
             }
+            if (strcmp(argv[0],"--sections-by-size") == 0) {
+                secoptionsdata.co_sort_section_by_size = TRUE;
+                continue;
+            }
+            if (strcmp(argv[0],"--sections-by-name") == 0) {
+                secoptionsdata.co_sort_section_by_name = TRUE;
+                continue;
+            }
+
             if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readelfobj: %s\n",
@@ -225,7 +235,7 @@ main(int argc,char **argv)
             }
             ++filecount;
             fclose(fin);
-            do_one_file(filename);
+            do_one_file(filename,&secoptionsdata);
         }
         if (!filecount && !printed_version) {
             printf("%s\n",Usage);
@@ -325,7 +335,7 @@ check_dynamic_section(elf_filedata ep)
 }
 
 static void
-print_minimum(elf_filedata ep)
+print_minimum(elf_filedata ep,sec_options *options)
 {
     int res = 0;
     res = elf_print_elf_header(ep);
@@ -340,7 +350,7 @@ print_minimum(elf_filedata ep)
     if (res != DW_DLV_OK) {
         return;
     }
-    res = elf_print_sectheaders(ep);
+    res = elf_print_sectheaders(ep,options);
     if (res != DW_DLV_OK) {
         return;
     }
@@ -348,7 +358,7 @@ print_minimum(elf_filedata ep)
 }
 
 static void
-print_requested(elf_filedata ep)
+print_requested(elf_filedata ep,sec_options *options)
 {
     int res = 0;
 
@@ -365,7 +375,7 @@ print_requested(elf_filedata ep)
         if (res != DW_DLV_OK) {
             return;
         }
-        res = elf_print_sectheaders(ep);
+        res = elf_print_sectheaders(ep,options);
         if (res != DW_DLV_OK) {
             return;
         }
@@ -464,7 +474,7 @@ print_requested(elf_filedata ep)
 
 char namebuffer[BUFFERSIZE*4];
 static void
-do_one_file(const char *s)
+do_one_file(const char *s,sec_options *options)
 {
     int res = 0;
     unsigned ftype = 0;
@@ -524,7 +534,7 @@ do_one_file(const char *s)
         return;
     }
     if (res == DW_DLV_NO_ENTRY) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: unable to find elf header.\n");
         dwarf_destruct_elf_access(ep,&errcode);
         return;
@@ -532,7 +542,7 @@ do_one_file(const char *s)
 
     res = dwarf_load_elf_sectheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: unable to load section headers, errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
         dwarf_destruct_elf_access(ep,&errcode);
@@ -541,7 +551,7 @@ do_one_file(const char *s)
 
     res = dwarf_load_elf_progheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: unable to load program headers. errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
         dwarf_destruct_elf_access(ep,&errcode);
@@ -550,7 +560,7 @@ do_one_file(const char *s)
 
     res = dwarf_load_elf_symstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: unable to load symbol table strings."
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
@@ -559,7 +569,7 @@ do_one_file(const char *s)
     }
     res = dwarf_load_elf_dynstr(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: unable to load dynamic section strings."
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
@@ -571,21 +581,21 @@ do_one_file(const char *s)
     }
     res = dwarf_load_elf_dynamic(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: Unable to load dynamic section,"
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
     }
     res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: Unable to load .dynsym section."
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
     }
     res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep);
+        print_minimum(ep,options);
         P("ERROR: Unable to load .symtab section."
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
@@ -599,7 +609,7 @@ do_one_file(const char *s)
             if (!strncmp(namestr,".rel.",5)) {
                 res = dwarf_load_elf_rel(ep,i,&errcode);
                 if (res == DW_DLV_ERROR) {
-                    print_minimum(ep);
+                    print_minimum(ep,options);
                     P("ERROR reading .rel section "
                         LONGESTUFMT " Error code %d (%s) file:%s \n",
                         i,errcode,dwarf_get_errname(errcode),
@@ -611,7 +621,7 @@ do_one_file(const char *s)
             } else if (!strncmp(namestr,".rela.",6)) {
                 res = dwarf_load_elf_rela(ep,i,&errcode);
                 if (res == DW_DLV_ERROR) {
-                    print_minimum(ep);
+                    print_minimum(ep,options);
                     P("ERROR reading .rela section "
                         LONGESTUFMT
                         " %s Error code %d (%s) file:%s \n",
@@ -625,7 +635,7 @@ do_one_file(const char *s)
             }
         }
     }
-    print_requested(ep);
+    print_requested(ep,options);
     dwarf_destruct_elf_access(ep,&errcode);
 }
 static int
@@ -765,7 +775,7 @@ elf_print_progheaders(elf_filedata ep)
 }
 
 static int
-elf_print_sectheaders(elf_filedata ep)
+elf_print_sectheaders(elf_filedata ep,sec_options *options)
 {
     struct generic_shdr *gshdr = 0;
     Dwarf_Unsigned generic_count = 0;
@@ -787,6 +797,8 @@ elf_print_sectheaders(elf_filedata ep)
     P(" [i] offset      size        name         "
         "addr     (flags)(type)(link,info,align)\n");
     P("{\n");
+    (void)options; /* options used here FIXME */
+/*  FIXME Here prepare ordered array */
     for (i = 0; i < generic_count; i++, ++gshdr) {
         const char *namestr = 0;
 
@@ -891,6 +903,7 @@ elf_print_sectheaders(elf_filedata ep)
         LONGESTUFMT " debug sections\n",
         debug_sect_size,debug_sect_count);
     P("}\n");
+/*  FIXME Here free ordered array */
     return DW_DLV_OK;
 }
 

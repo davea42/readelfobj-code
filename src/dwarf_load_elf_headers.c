@@ -297,24 +297,27 @@ generic_ehdr_from_32(elf_filedata ep,
         if (!ehdr->ge_shoff) {
             P("Ehdr32 e_shoff zero, there are no sections\n");
             if (ehdr->ge_shnum > 0) {
-                P("Ehdr32 e_shnum shows count %lu (0x%lx) but e_shoff "
+                P("Ehdr32 e_shnum shows count %lu "
+                    "(0x%lx) but e_shoff "
                     "is zero."
                     " Corrupt Elf.\n",
                     (unsigned long)ehdr->ge_shnum,
                     (unsigned long)ehdr->ge_shnum);
-     
+
             }
         } else {
-            P("Ehdr32 e_shoff offset points inside Ehdr (ehdr len 0x%lx). "
+            P("Ehdr32 e_shoff offset points inside Ehdr "
+                "(ehdr len 0x%lx). "
                 "Corrupt Elf\n",
                 (unsigned long)sizeof(dw_elf32_ehdr));
             if (ehdr->ge_shnum > 0) {
-                P("Ehdr32 e_shnum shows count %lu (0x%lx) but e_shoff "
+                P("Ehdr32 e_shnum shows count %lu "
+                    "(0x%lx) but e_shoff "
                     "is incorrect"
                     " Corrupt Elf.\n",
                     (unsigned long)ehdr->ge_shnum,
                     (unsigned long)ehdr->ge_shnum);
-     
+
             }
         }
         ep->f_ehdr = ehdr;
@@ -375,7 +378,8 @@ generic_ehdr_from_32(elf_filedata ep,
         if (!ehdr->ge_phoff) {
             P("Ehdr32 e_phoff zero, there are no program headers\n");
         } else {
-            P("Ehdr32 e_phoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf.n",
+            P("Ehdr32 e_phoff offset points inside Ehdr "
+                "(ehdr len 0x%lx). Corrupt Elf.n",
                 (unsigned long)sizeof(dw_elf32_ehdr));
         }
     }
@@ -434,7 +438,8 @@ generic_ehdr_from_64(elf_filedata ep,
         if (!ehdr->ge_shoff) {
             P("Ehdr32 e_shoff zero, there are no sections\n");
             if (ehdr->ge_shnum > 0) {
-                P("Ehdr64 e_shnum shows count %lu (0x%lx) but e_shoff "
+                P("Ehdr64 e_shnum shows count %lu "
+                    "(0x%lx) but e_shoff "
                     "is zero."
                     " Corrupt Elf.\n",
                     (unsigned long)ehdr->ge_shnum,
@@ -442,11 +447,13 @@ generic_ehdr_from_64(elf_filedata ep,
 
             }
         } else {
-            P("Ehdr64 e_shoff offset points inside Ehdr (ehdr len 0x%lx). "
+            P("Ehdr64 e_shoff offset points inside Ehdr "
+                "(ehdr len 0x%lx). "
                 "Corrupt Elf\n",
                 (unsigned long)sizeof(dw_elf64_ehdr));
             if (ehdr->ge_shnum > 0) {
-                P("Ehdr64 e_shnum shows count %lu (0x%lx) but e_shoff "
+                P("Ehdr64 e_shnum shows count %lu "
+                    "(0x%lx) but e_shoff "
                     "is incorrect"
                     " Corrupt Elf.\n",
                     (unsigned long)ehdr->ge_shnum,
@@ -511,7 +518,8 @@ generic_ehdr_from_64(elf_filedata ep,
         if (!ehdr->ge_phoff) {
             P("Ehdr64 e_phoff zero, there are no program headers\n");
         } else {
-            P("Ehdr64 e_phoff offset points inside Ehdr (ehdr len 0x%lx). Corrupt Elf.n",
+            P("Ehdr64 e_phoff offset points inside Ehdr "
+                "(ehdr len 0x%lx). Corrupt Elf.n",
                 (unsigned long)sizeof(dw_elf32_ehdr));
         }
     }
@@ -3094,7 +3102,7 @@ elf_flagmatches(Dwarf_Unsigned flagsword,Dwarf_Unsigned flag)
 
 static void
 smaller_of(Dwarf_Unsigned a_in,Dwarf_Unsigned b_in,
-    Dwarf_Unsigned *lout, 
+    Dwarf_Unsigned *lout,
     Dwarf_Unsigned *hout )
 {
     if (a_in <= b_in) {
