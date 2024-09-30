@@ -1,0 +1,80 @@
+Reading dSYM object at /home/davea/dwarf/readelfobj/code/test/mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32
+Mach-o Magic:  0xfeedface
+  cputype           : 0x7 cpusubtype: 0x3
+  offset size       : 4
+  endian            : LITTLEENDIAN
+  file size         : 0x0000e859
+  filetype          : 0xa MH_DSYM
+  number of commands: 0x7 (7)
+  size of commands  : 0x7a8 (1960)
+  flags             : 0x0
+ Commands: at offset 0x1c
+  [0] cmd: 0x0000001b LC_UUID          cmdsize: 24 (0x00000018)
+  [1] cmd: 0x00000002 LC_SYMTAB        cmdsize: 24 (0x00000018)
+  [2] cmd: 0x00000001 LC_SEGMENT       cmdsize: 56 (0x00000038)
+  [3] cmd: 0x00000001 LC_SEGMENT       cmdsize: 464 (0x000001d0)
+  [4] cmd: 0x00000001 LC_SEGMENT       cmdsize: 464 (0x000001d0)
+  [5] cmd: 0x00000001 LC_SEGMENT       cmdsize: 56 (0x00000038)
+  [6] cmd: 0x00000001 LC_SEGMENT       cmdsize: 872 (0x00000368)
+  Segments count:5 starting at 0x0000001c:
+    command                 segname      fileoff   filesize
+  [0] 0x1 LC_SEGMENT       __PAGEZERO        0x00000000 0x00000000
+  [1] 0x1 LC_SEGMENT       __TEXT            0x00000000 0x00000000
+  [2] 0x1 LC_SEGMENT       __DATA            0x00000000 0x00000000
+  [3] 0x1 LC_SEGMENT       __LINKEDIT        0x00001000 0x00004acb
+  [4] 0x1 LC_SEGMENT       __DWARF           0x00006000 0x00008859
+ Sections count: 13  offset 0x00000494
+                         offset size 
+  [ 5] __debug_info     0x000087ef 0x00002dea
+  [ 8] __debug_str      0x0000bb9b 0x00001b6c
+  [ 1] __debug_line     0x00006000 0x00001ad1
+  [11] __apple_types    0x0000dcc7 0x00000b6e
+  [ 3] __debug_pubtypes 0x00007f09 0x000007be
+  [ 9] __apple_names    0x0000d707 0x0000059c
+  [ 2] __debug_pubnames 0x00007ad1 0x00000438
+  [ 6] __debug_frame    0x0000b5d9 0x000003c0
+  [ 7] __debug_abbrev   0x0000b999 0x00000202
+  [ 4] __debug_aranges  0x000086c7 0x00000128
+  [10] __apple_namespac 0x0000dca3 0x00000024
+  [12] __apple_objc     0x0000e835 0x00000024
+  [ 0]                  0x00000000 0x00000000
+Reading dSYM object at /home/davea/dwarf/readelfobj/code/test/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64
+Mach-o Magic:  0xfeedfacf
+  cputype           : 0x1000007 cpusubtype: 0x3
+  offset size       : 8
+  endian            : LITTLEENDIAN
+  file size         : 0x0000f7ee
+  filetype          : 0xa MH_DSYM
+  number of commands: 0x7 (7)
+  size of commands  : 0x918 (2328)
+  flags             : 0x0
+ Commands: at offset 0x20
+  [0] cmd: 0x0000001b LC_UUID          cmdsize: 24 (0x00000018)
+  [1] cmd: 0x00000002 LC_SYMTAB        cmdsize: 24 (0x00000018)
+  [2] cmd: 0x00000019 LC_SEGMENT_64    cmdsize: 72 (0x00000048)
+  [3] cmd: 0x00000019 LC_SEGMENT_64    cmdsize: 552 (0x00000228)
+  [4] cmd: 0x00000019 LC_SEGMENT_64    cmdsize: 632 (0x00000278)
+  [5] cmd: 0x00000019 LC_SEGMENT_64    cmdsize: 72 (0x00000048)
+  [6] cmd: 0x00000019 LC_SEGMENT_64    cmdsize: 952 (0x000003b8)
+  Segments count:5 starting at 0x00000020:
+    command                 segname      fileoff   filesize
+  [0] 0x19 LC_SEGMENT_64    __PAGEZERO        0x00000000 0x00000000
+  [1] 0x19 LC_SEGMENT_64    __TEXT            0x00000000 0x00000000
+  [2] 0x19 LC_SEGMENT_64    __DATA            0x00000000 0x00000000
+  [3] 0x19 LC_SEGMENT_64    __LINKEDIT        0x00001000 0x0000531b
+  [4] 0x19 LC_SEGMENT_64    __DWARF           0x00007000 0x000087ee
+ Sections count: 12  offset 0x000005c8
+                         offset size 
+  [ 5] __debug_info     0x0000989c 0x00003087
+  [ 7] __debug_str      0x0000cb30 0x00001b6c
+  [ 1] __debug_line     0x00007000 0x00001a96
+  [10] __apple_types    0x0000ec5c 0x00000b6e
+  [ 3] __debug_pubtypes 0x00008ece 0x000007be
+  [ 8] __apple_names    0x0000e69c 0x0000059c
+  [ 2] __debug_pubnames 0x00008a96 0x00000438
+  [ 4] __debug_aranges  0x0000968c 0x00000210
+  [ 6] __debug_abbrev   0x0000c923 0x0000020d
+  [ 9] __apple_namespac 0x0000ec38 0x00000024
+  [11] __apple_objc     0x0000f7ca 0x00000024
+  [ 0]                  0x00000000 0x00000000
+File /home/davea/dwarf/readelfobj/code/test/libkrb5support.so.0.1.debug is not mach-o. Ignored.
