@@ -8,6 +8,7 @@ Options:
                 beyond just the total wasted.
 --print-sec-extra print out section header address field
                 and the input file offset of the Shdr
+--printfilenames print the name of the file being read
 --sections-by-size sort sections by section size
 --sections-by-name sort_sections by name
 --only-wasted-summary  Skip printing section/segment data.

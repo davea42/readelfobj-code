@@ -134,6 +134,7 @@ char *Usage = "Usage: readelfobj <options> file ...\n"
     "                beyond just the total wasted.\n"
     "--print-sec-extra print out section header address field\n"
     "                and the input file offset of the Shdr\n"
+    "--printfilenames print the name of the file being read\n" 
     "--sections-by-size sort sections by section size\n"
     "--sections-by-name sort_sections by name\n"
     "--only-wasted-summary  Skip printing section/segment data.\n"
@@ -217,6 +218,10 @@ main(int argc,char **argv)
                 P("Version-readelfobj: %s\n",
                     PACKAGE_VERSION);
                 printed_version = TRUE;
+                continue;
+            }
+            if ( argv[0][0] == '-') {
+                printf("Argument %s unknown, ignored\n",argv[0]);
                 continue;
             }
             filename = argv[0];

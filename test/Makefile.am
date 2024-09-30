@@ -34,7 +34,9 @@ TESTS = ./test001.sh \
 ./test027.sh  \
 ./test028.sh  \
 ./test029.sh  \
-./test030.sh
+./test030.sh \
+./test031m.sh \
+./test032m.sh
 
 
 
@@ -140,6 +142,8 @@ CLEANFILES = \
   junk.test028.tmp \
   junk.test029.tmp \
   junk.test030.tmp \
+  junk.test031m.tmp \
+  junk.test032m.tmp \
   object_detector \
   readobjmacho \
   readobjpe \
@@ -183,6 +187,8 @@ test027.sh  \
 test028.sh \
 test029.sh \
 test030.sh \
+test031m.sh \
+test032m.sh \
 test001.base \
 test003.base  \
 test004.base  \
@@ -212,6 +218,8 @@ test027.base \
 test028.base \
 test029.base \
 test030.base \
+test031m.base \
+test032m.base \
 dd-irix-n32 \
 libkrb5support.so.0.1.debug \
 mach-o-object32 \

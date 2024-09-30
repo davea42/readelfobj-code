@@ -61,7 +61,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "sanitized.h"
 #include "common_options.h"
 
-int printfilenames = FALSE;
 unsigned int unibinarynumber = 0;
 
 char *Usage = "Usage: readobjmacho <options> file ...\n"
@@ -69,6 +68,9 @@ char *Usage = "Usage: readobjmacho <options> file ...\n"
     "--help     print this message\n"
     "--version  print version string\n"
     "--universalnumber=<n>  If a Universal Binary\n"
+    "--printfilenames print the name of the file being read\n"
+    "--sections-by-size sort sections by section size\n"
+    "--sections-by-name sort_sections by name\n"
     "  print binary number n. Defaults to zero\n";
 
 static char tru_path_buffer[BUFFERSIZE];
@@ -296,20 +298,30 @@ main(int argc,char **argv)
                     "number %d\n",unibinarynumber);
                 continue;
             }
-            if (strcmp(argv[0],"--sections-by-size") == 0) {
+            if ((strcmp(argv[0],"--sections-by-size") == 0) ||
+               (strcmp(argv[0],"--section-by-size") == 0)) {
                 secoptionsdata.co_sort_section_by_size = TRUE;
+                secoptionsdata.co_sort_section_by_name = FALSE;
                 continue;
             }
-            if (strcmp(argv[0],"--sections-by-name") == 0) {
+            if ((strcmp(argv[0],"--sections-by-name") == 0)||
+               (strcmp(argv[0],"--section-by-name") == 0)) {
                 secoptionsdata.co_sort_section_by_name = TRUE;
+                secoptionsdata.co_sort_section_by_size = FALSE;
+                continue;
+            }
+            if (strcmp(argv[0],"--printfilenames") == 0) {
+                secoptionsdata.co_printfilenames = TRUE;
                 continue;
             }
 
-            if ( (i+1) < argc) {
-                printfilenames = TRUE;
+            if ( argv[0][0] == '-') {
+                printf("Argument %s unknown, ignored\n",argv[0]);
+                continue;
             }
+
             filename = argv[0];
-            if (printfilenames) {
+            if (secoptionsdata.co_printfilenames) {
                 P("File: %s\n",sanitized(filename,buffer1,
                     BUFFERSIZE));
             }
@@ -355,6 +367,70 @@ print_macho_segments(struct macho_filedata_s *mfp)
             cmdp->filesize);
     }
 }
+static int
+compare_by_secsize(const void *lin,const void *rin)
+{
+    sort_section_element * lsel = (sort_section_element *)lin;
+    Dwarf_Unsigned lsecindex = lsel->od_originalindex;
+    struct generic_macho_section * lgsp =
+        (struct generic_macho_section *)lsel->od_sec_desc;
+    Dwarf_Unsigned lsecsize = lgsp->size;
+
+    sort_section_element * rsel = (sort_section_element *)rin;
+    Dwarf_Unsigned rsecindex = rsel->od_originalindex;
+    struct generic_macho_section *rgsp =
+        (struct generic_macho_section *)rsel->od_sec_desc;
+    Dwarf_Unsigned rsecsize = rgsp->size;
+
+    if (lsecsize < rsecsize) {
+        return 1;
+    }
+    if (lsecsize > rsecsize) {
+        return -1;
+    }
+    if (lsecindex < rsecindex) {
+       return -1;
+    }
+    if (lsecindex > rsecindex) {
+       return 1;
+    }
+    /*  impossible */
+    return 0;
+}
+
+static int
+compare_by_secname(const void *lin,const void *rin)
+{
+    sort_section_element * lsel = (sort_section_element *)lin;
+    Dwarf_Unsigned lsecindex = lsel->od_originalindex;
+    struct generic_macho_section * lgsp =
+        (struct generic_macho_section *)lsel->od_sec_desc;
+    const char *lname = lgsp->sectname;
+
+    sort_section_element * rsel = (sort_section_element *)rin;
+    Dwarf_Unsigned rsecindex = rsel->od_originalindex;
+    struct generic_macho_section *rgsp =
+        (struct generic_macho_section *)rsel->od_sec_desc;
+    const char *rname = rgsp->sectname;
+
+    int res = 0;
+
+    res = strcmp(lname,rname);
+    if (res) {
+        return res;
+    }
+    if (lsecindex < rsecindex) {
+       return -1;
+    }
+    if (lsecindex > rsecindex) {
+       return 1;
+    }
+    /*  impossible */
+    return 0;
+
+}
+
+
 
 static void
 print_macho_dwarf_sections(struct macho_filedata_s *mfp,
@@ -363,25 +439,55 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp,
     Dwarf_Unsigned i = 0;
     Dwarf_Unsigned count = mfp->mo_dwarf_sectioncount;
     struct generic_macho_section * gsp = 0;
+    sort_section_element * sort_el = 0;
 
     gsp = mfp->mo_dwarf_sections;
+
+    sort_el = calloc(count,sizeof(sort_section_element));
+    if (!sort_el) {
+        P("ERROR: unable to allocate " LONGESTUFMT
+            " section elements, cannot print sections\n",
+            count);
+        return;
+    }
+    for (i = 0; i < count; i++) {
+         sort_el[i].od_originalindex = i;
+         sort_el[i].od_sec_desc = (void *)(gsp+i);
+    }
+    if (options->co_sort_section_by_size) {
+        qsort((void *)sort_el,count,
+            sizeof(sort_section_element),
+            compare_by_secsize);
+    } else if (options->co_sort_section_by_name) {
+        qsort((void *)sort_el,count,
+            sizeof(sort_section_element),
+            compare_by_secname);
+    } /* else no sort, print as is */
 
     P(" Sections count: " LONGESTUFMT "  offset " LONGESTXFMT8 "\n",
         count,gsp->offset_of_sec_rec);
     P("                         offset size \n");
-    /* FIXME will use options here */
-    (void)options;
-    /* FIXME here create local sec array */
-    for (i =0; i < count; ++i,++gsp) {
+
+
+    for (i =0; i < count; ++i) {
+        sort_section_element *sel = 0 ;
+        Dwarf_Unsigned origindex = 0;
+        const char *namestr = 0;
+ 
+        sel = &sort_el[i];
+        gsp = (struct generic_macho_section *)sel->od_sec_desc;
+        origindex = sel->od_originalindex;
+        namestr = gsp->sectname;
+        
         P("  [" LONGESTUFMT2 "] %-16s"
             " " LONGESTXFMT8
             " " LONGESTXFMT8
             "\n",
-            i,gsp->sectname,
+            origindex,namestr,
             gsp->offset,
             gsp->size);
     }
-/* FIXME here free local sec array */
+    free(sort_el);
 }
 
 static void
@@ -452,7 +558,7 @@ do_one_file(const char *s, sec_options *options)
             "Errcode %d\n", s,errcode);
         return;
     }
-    if (printfilenames) {
+    if (secoptionsdata.co_printfilenames) {
         P("Reading: %s (%s)\n",s,tru_path_buffer);
     }
     if (ftype != DW_FTYPE_MACH_O &&
@@ -462,6 +568,8 @@ do_one_file(const char *s, sec_options *options)
     }
     if (strcmp(s,tru_path_buffer)) {
         P("Reading dSYM object at %s\n",tru_path_buffer);
+    } else {
+        P("Reading dSYM object rather than name provided\n");
     }
     res = dwarf_construct_macho_access_path(tru_path_buffer,
         unibinarynumber,
