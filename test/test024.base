@@ -2,7 +2,7 @@ Ehdr32 string section index extended (e_shstrndx 0x0xffff), final shstrndx will 
 Unusual case, eh_shstrndx is extended but e_shnum is not (maybe e_shstrndx is just a low section number).
 Extracted actual section string index number 34 from section zero
 ERROR: Something badly wrong with elf header references to section headers  filesize 15944 sectionentrysize 40 sectionentrycount 65280
-Elf object file yyy/elfextended/testobj.extend
+Elf object file.
  Elf Header ident bytes:  7f454c46 01010100 00000000 00000000
   File class    = 0x1 (ELFCLASS32)
   Data encoding = 0x1 (ELFDATA2LSB)

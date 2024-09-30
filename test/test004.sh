@@ -23,7 +23,7 @@ if [ $? -ne 0 ]
 then
   cat junk.$n.out
   echo "FAIL $n.sh $cmd results differ $base vs $curdir/junk.$n"
-  echo "To update, mv $curdir/junk.$n $base"
+  echo "To update, cp $curdir/junk.$n.tmp $base"
   exit 1
 fi
 exit 0

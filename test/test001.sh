@@ -8,7 +8,7 @@ else
 fi
 srcdir=$top_srcdir/test
 df=$srcdir/testdiff.py
-base=$n.base
+base=$srcdir/$n.base
 curdir=`pwd`
 o=$srcdir/libkrb5support.so.0.1.debug
 echo "START $n test ./readelfobj --help $o "
@@ -18,8 +18,7 @@ if [ $? -ne 0 ]
 then
   cat junk.$n.out
   echo "FAIL $n.sh results differ $n.base vs junk.$n.tmp"
-  echo "To update, mv $curdir/test/junk.$n.tmp $n.base"
+  echo "To update, cp $curdir/junk.$n.tmp $base"
   exit 1
 fi
 exit 0
-

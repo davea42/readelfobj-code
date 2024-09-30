@@ -6,7 +6,7 @@ ERROR: section header sh_flags 0xffffffffff00005b has too many flag bits on (45)
 ERROR: Section Size64 > filesize. Corrupt object Section number 2, Section size 0x0, File size 0x7a9
 ERROR: Section Size64 > filesize. Corrupt object Section number 3, Section size 0x100, File size 0x7a9
 Elf group header corruption group record 1 section num field is 4 (other endian is 67108864) but only 4 sections exist (0-3)
-Elf object file yyy/fuzz_init_path-6557751518560256
+Elf object file.
  Elf Header ident bytes:  7f454c46 0202017f 3f000000 00000900
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x2 (ELFDATA2MSB)

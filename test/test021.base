@@ -1,5 +1,5 @@
 Ehdr64 e_phoff zero, there are no program headers
-Section Groups: No section groups or .dwo sections present. Elf object file yyy/sparc64-64-tls.o
+Section Groups: No section groups or .dwo sections present. Elf object file.
  Elf Header ident bytes:  7f454c46 02020100 00000000 00000000
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x2 (ELFDATA2MSB)
@@ -71,7 +71,7 @@ Section count: 15
     Addr     : 0x00000000
 Summary: 190 bytes for 4 debug sections
 }
-Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/sparc64-64-tls.o
+Section Groups: No section groups or .dwo sections present. No .dynamic section exists in /home/davea/dwarf/readelfobj/code/test/sparc64-64-tls.o
 
 Symbols from .symtab: 13 at offset 0x560
 {

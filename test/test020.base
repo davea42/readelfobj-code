@@ -1,5 +1,5 @@
 Ehdr64 e_phoff zero, there are no program headers
-Section Groups: No section groups or .dwo sections present. Elf object file yyy/stream.o
+Section Groups: No section groups or .dwo sections present. Elf object file.
  Elf Header ident bytes:  7f454c46 02010100 00000000 00000000
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x1 (ELFDATA2LSB)
@@ -113,7 +113,7 @@ Section count: 29
     Addr     : 0x00000000
 Summary: 3562 bytes for 8 debug sections
 }
-Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/stream.o
+Section Groups: No section groups or .dwo sections present. No .dynamic section exists in /home/davea/dwarf/readelfobj/code/test/stream.o
 
 Symbols from .symtab: 38 at offset 0x30a8
 {

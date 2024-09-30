@@ -49,7 +49,7 @@ if __name__ == "__main__":
     else:
         print("dwdiff.py args required: baseline newfile testsrcdir")
         exit(1)
-    hasdos, olines = readin(origfile,False)
+    hasdos, olines = readin(origfile,srcdir)
     hasdos, nlines = readin(newfile,srcdir)
     # diffs = difflib.unified_diff(olines,nlines,lineterm='')
     diffs = difflib.context_diff(
