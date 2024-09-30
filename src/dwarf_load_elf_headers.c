@@ -268,6 +268,14 @@ dwarf_destruct_elf_access(elf_filedata ep,
     }
     ep->f_ident[0] = 'X';
     free(ep->f_path);
+    if (ep->f_in_use_count) {
+        struct in_use_s * f =  ep->f_in_use;
+        struct in_use_s *nxt = 0;
+        for (; f ; f  = nxt) {
+            nxt = f->u_next;
+            free(f);
+        }
+    }
     free(ep);
     return DW_DLV_OK;
 }
