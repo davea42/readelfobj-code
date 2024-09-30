@@ -107,7 +107,7 @@ static int elf_print_symbols(elf_filedata ep,int is_symtab,
     Dwarf_Unsigned ecount,
     const char *secname);
 
-static void report_wasted_space(elf_filedata ep);
+static void report_wasted_space(elf_filedata ep,sec_options*options);
 static int elf_print_dynamic(elf_filedata ep);
 
 int print_symtab_sections = 0; /* symtab dynsym */
@@ -122,7 +122,6 @@ static char buffer1[BUFFERSIZE];
 static char buffer2[BUFFERSIZE];
 
 char *filename;
-int printfilenames;
 FILE *fin;
 
 char *Usage = "Usage: readelfobj <options> file ...\n"
@@ -135,6 +134,8 @@ char *Usage = "Usage: readelfobj <options> file ...\n"
     "                beyond just the total wasted.\n"
     "--print-sec-extra print out section header address field\n"
     "                and the input file offset of the Shdr\n"
+    "--sections-by-size sort sections by section size\n"
+    "--sections-by-name sort_sections by name\n"
     "--only-wasted-summary  Skip printing section/segment data.\n"
     "--all           Enables all the above options\n"
     "--help          print this message\n"
@@ -199,13 +200,18 @@ main(int argc,char **argv)
             }
             if (strcmp(argv[0],"--sections-by-size") == 0) {
                 secoptionsdata.co_sort_section_by_size = TRUE;
+                secoptionsdata.co_sort_section_by_name = FALSE;
                 continue;
             }
             if (strcmp(argv[0],"--sections-by-name") == 0) {
                 secoptionsdata.co_sort_section_by_name = TRUE;
+                secoptionsdata.co_sort_section_by_size = FALSE;
                 continue;
             }
-
+            if (strcmp(argv[0],"--printfilenames") == 0) {
+                secoptionsdata.co_printfilenames = TRUE;
+                continue;
+            }
             if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readelfobj: %s\n",
@@ -213,11 +219,8 @@ main(int argc,char **argv)
                 printed_version = TRUE;
                 continue;
             }
-            if ( (i+1) < argc) {
-                printfilenames = 1;
-            }
             filename = argv[0];
-            if (printfilenames) {
+            if (secoptionsdata.co_printfilenames) {
                 P("File: %s\n",sanitized(filename,buffer1,
                     BUFFERSIZE));
             }
@@ -243,6 +246,69 @@ main(int argc,char **argv)
         }
     }
     return RO_OK;
+}
+
+static int
+compare_by_secsize(const void *lin,const void *rin)
+{
+    sort_section_element * lsel = (sort_section_element *)lin;
+    Dwarf_Unsigned lsecindex = lsel->od_originalindex;
+    struct generic_shdr *lgshdr =
+        (struct generic_shdr *)lsel->od_sec_desc;
+    Dwarf_Unsigned lsecsize = lgshdr->gh_size;
+
+    sort_section_element * rsel = (sort_section_element *)rin;
+    Dwarf_Unsigned rsecindex = rsel->od_originalindex;
+    struct generic_shdr *rgshdr = 
+        (struct generic_shdr *)rsel->od_sec_desc;
+    Dwarf_Unsigned rsecsize = rgshdr->gh_size;
+
+    if (lsecsize < rsecsize) { 
+        return 1;
+    }
+    if (lsecsize > rsecsize) { 
+        return -1;
+    }
+    if (lsecindex < rsecindex) {
+       return -1;
+    }
+    if (lsecindex > rsecindex) {
+       return 1;
+    }
+    /*  impossible */
+    return 0;
+}
+
+static int
+compare_by_secname(const void *lin,const void *rin)
+{
+    sort_section_element * lsel = (sort_section_element *)lin;
+    Dwarf_Unsigned lsecindex = lsel->od_originalindex;
+    struct generic_shdr *lgshdr =
+        (struct generic_shdr *)lsel->od_sec_desc;
+    const char *lname = lgshdr->gh_namestring;
+
+    sort_section_element * rsel = (sort_section_element *)rin;
+    Dwarf_Unsigned rsecindex = rsel->od_originalindex;
+    struct generic_shdr *rgshdr =
+        (struct generic_shdr *)rsel->od_sec_desc;
+    const char *rname = rgshdr->gh_namestring;
+ 
+    int res = 0;
+
+    res = strcmp(lname,rname);
+    if (res) {
+        return res;
+    }
+    if (lsecindex < rsecindex) {
+       return -1;
+    }
+    if (lsecindex > rsecindex) {
+       return 1;
+    }
+    /*  impossible */
+    return 0;
+
 }
 
 static int
@@ -453,7 +519,7 @@ print_requested(elf_filedata ep,sec_options *options)
     if (ep->f_dynamic_sect_index &&
         ep->f_wasted_dynamic_space) {
         const char *p = "";
-        if (printfilenames) {
+        if (options->co_printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
         P("Warning %s: Wasted .dynamic section entries: "
@@ -469,7 +535,7 @@ print_requested(elf_filedata ep,sec_options *options)
             ep->f_wasted_dynamic_space);
     }
     check_dynamic_section(ep);
-    report_wasted_space(ep);
+    report_wasted_space(ep,options);
 }
 
 char namebuffer[BUFFERSIZE*4];
@@ -782,6 +848,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
     Dwarf_Unsigned i = 0;
     Dwarf_Unsigned debug_sect_count = 0;
     Dwarf_Unsigned debug_sect_size = 0;
+    sort_section_element * sort_el = 0;
 
     gshdr = ep->f_shdr;
     if (!gshdr) {
@@ -797,19 +864,42 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
     P(" [i] offset      size        name         "
         "addr     (flags)(type)(link,info,align)\n");
     P("{\n");
-    (void)options; /* options used here FIXME */
-/*  FIXME Here prepare ordered array */
-    for (i = 0; i < generic_count; i++, ++gshdr) {
+    sort_el = calloc(generic_count,sizeof(sort_section_element));
+    if (!sort_el) {
+        P("ERROR: unable to allocate " LONGESTUFMT 
+            " section elements, cannot print section\n",
+            generic_count);
+            return DW_DLV_OK;
+    }
+    for (i = 0; i < generic_count; i++) {
+         sort_el[i].od_originalindex = i;
+         sort_el[i].od_sec_desc = (void *)(gshdr+i);
+    }
+    if (options->co_sort_section_by_size) {
+        qsort((void *)sort_el,generic_count,
+            sizeof(sort_section_element),
+            compare_by_secsize);
+    } else if (options->co_sort_section_by_name) {
+        qsort((void *)sort_el,generic_count,
+            sizeof(sort_section_element),
+            compare_by_secname);
+    } /* else no sort, print as is */
+    for (i = 0; i < generic_count; i++) {
         const char *namestr = 0;
+        sort_section_element *sel = 0 ;
+        Dwarf_Unsigned origindex = 0;
+        
 
+        sel = &sort_el[i];
+        gshdr = (struct generic_shdr *)sel->od_sec_desc;
+        origindex = sel->od_originalindex;
         namestr = sanitized(gshdr->gh_namestring,
             buffer1,BUFFERSIZE);
-
         if (dwarf_load_elf_section_is_dwarf(namestr)) {
             debug_sect_count++;
             debug_sect_size += gshdr->gh_size;
         }
-        P("[" LONGESTUFMT2 "]", i);
+        P("[" LONGESTUFMT2 "]", origindex);
         P(" " LONGESTXFMT8,gshdr->gh_offset);
         P(" " LONGESTXFMT8,gshdr->gh_size);
         /*P(" (" LONGESTUFMT8 ") ",gshdr->gh_size); */
@@ -903,7 +993,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         LONGESTUFMT " debug sections\n",
         debug_sect_size,debug_sect_count);
     P("}\n");
-/*  FIXME Here free ordered array */
+    free(sort_el);
     return DW_DLV_OK;
 }
 
@@ -1203,7 +1293,12 @@ elf_print_elf_header(elf_filedata ep)
     Dwarf_Unsigned i = 0;
     int c = 0;
 
-    P("Elf object file %s\n",sanitized(filename,buffer1,BUFFERSIZE));
+    if (secoptionsdata.co_printfilenames) {
+        P("Elf object file %s\n",
+            sanitized(filename,buffer1,BUFFERSIZE));
+    } else {
+        P("Elf object file.\n");
+    }
     if (!ep->f_ehdr) {
         P("No header data available\n");
         return DW_DLV_NO_ENTRY;
@@ -1384,7 +1479,7 @@ comproffset(const void *l_in, const void *r_in)
 }
 
 static void
-report_wasted_space(elf_filedata  ep)
+report_wasted_space(elf_filedata  ep,sec_options *options)
 {
     Dwarf_Unsigned filesize = ep->f_filesize;
     Dwarf_Unsigned iucount = ep->f_in_use_count;
@@ -1572,7 +1667,7 @@ report_wasted_space(elf_filedata  ep)
     }
     if (ep->f_wasted_content_count) {
         const char *p = "";
-        if (printfilenames) {
+        if (options->co_printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
         P("Warning %s: " LONGESTUFMT
@@ -1584,7 +1679,7 @@ report_wasted_space(elf_filedata  ep)
     }
     if (ep->f_wasted_align_count) {
         const char *p = "";
-        if (printfilenames) {
+        if (options->co_printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
         P("Warning %s: " LONGESTUFMT
@@ -1597,7 +1692,7 @@ report_wasted_space(elf_filedata  ep)
     if (highoffset < filesize) {
         const char *p = "";
         Dwarf_Unsigned diffh = filesize - highoffset;
-        if (printfilenames) {
+        if (options->co_printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
         P("Warning %s: There are " LONGESTUFMT
@@ -1609,7 +1704,7 @@ report_wasted_space(elf_filedata  ep)
         Dwarf_Unsigned diffo=  highoffset - filesize;
         const char *p = "";
 
-        if (printfilenames) {
+        if (options->co_printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
         P("Warning %s: There are " LONGESTUFMT " bytes after "

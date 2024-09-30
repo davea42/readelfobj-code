@@ -11,6 +11,7 @@ TESTS = $(check_PROGRAMS) $(check_TESTS)
 
 readelfobj_SOURCES = \
 common_options.h \
+common_options.c \
 dwarf_debuglink.c     \
 dwarf_debuglink.h     \
 dwarfstring.c         \
@@ -53,6 +54,7 @@ readelfobj_CPPFLAGS = \
 
 readobjmacho_SOURCES =  readobjmacho.c \
 common_options.h \
+common_options.c \
 sanitized.h \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
@@ -70,6 +72,7 @@ readobjmacho_CPPFLAGS = \
 
 readobjpe_SOURCES =  readobjpe.c \
 common_options.h \
+common_options.c \
 sanitized.h \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \

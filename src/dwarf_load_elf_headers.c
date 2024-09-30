@@ -57,6 +57,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_read_common.h"
 #include "readelfobj.h"
 #include "sanitized.h"
+#include "common_options.h"
 
 #ifdef HAVE_UNUSED_ATTRIBUTE
 #define  UNUSEDARG __attribute__ ((unused))
@@ -1546,7 +1547,7 @@ elf_load_progheaders32(elf_filedata ep,
 
     if (count == 0) {
         const char *p = "";
-        if (printfilenames) {
+        if (secoptionsdata.co_printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
         P("No program headers %s\n",p);
@@ -1607,7 +1608,7 @@ elf_load_progheaders64(elf_filedata ep,
 
     if (count == 0) {
         const char *p = "";
-        if (printfilenames) {
+        if (secoptionsdata.co_printfilenames) {
             p = sanitized(filename,buffer1,BUFFERSIZE);
         }
         P("No program headers %s\n",p);

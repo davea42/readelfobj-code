@@ -30,27 +30,9 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef Dwarf_Unsigned
-#define Dwarf_Unsigned unsigned long long
-#endif
-#ifndef Dwarf_Signed
-#define Dwarf_Signed unsigned long long
-#endif
-#ifndef Dwarf_Small
-#define Dwarf_Small unsigned char
-#endif
+#include "config.h"
+#include <stdio.h>
+#include "dwarf_reading.h"
+#include "common_options.h"
 
-typedef struct sec_options_s {
-    unsigned char co_sort_section_by_size;
-    unsigned char co_sort_section_by_name;
-    unsigned char co_printfilenames;
-} sec_options;
-
-extern sec_options secoptionsdata;
-
-typedef struct sort_section_element_s {
-    Dwarf_Unsigned  od_originalindex;
-    void           *od_sec_desc;
-} sort_section_element;
-
-
+sec_options secoptionsdata = {FALSE,FALSE,FALSE};
