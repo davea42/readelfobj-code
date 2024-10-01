@@ -134,7 +134,7 @@ char *Usage = "Usage: readelfobj <options> file ...\n"
     "                beyond just the total wasted.\n"
     "--print-sec-extra print out section header address field\n"
     "                and the input file offset of the Shdr\n"
-    "--printfilenames print the name of the file being read\n" 
+    "--printfilenames print the name of the file being read\n"
     "--sections-by-size sort sections by section size\n"
     "--sections-by-name sort_sections by name\n"
     "--only-wasted-summary  Skip printing section/segment data.\n"
@@ -264,21 +264,21 @@ compare_by_secsize(const void *lin,const void *rin)
 
     sort_section_element * rsel = (sort_section_element *)rin;
     Dwarf_Unsigned rsecindex = rsel->od_originalindex;
-    struct generic_shdr *rgshdr = 
+    struct generic_shdr *rgshdr =
         (struct generic_shdr *)rsel->od_sec_desc;
     Dwarf_Unsigned rsecsize = rgshdr->gh_size;
 
-    if (lsecsize < rsecsize) { 
+    if (lsecsize < rsecsize) {
         return 1;
     }
-    if (lsecsize > rsecsize) { 
+    if (lsecsize > rsecsize) {
         return -1;
     }
     if (lsecindex < rsecindex) {
-       return -1;
+        return -1;
     }
     if (lsecindex > rsecindex) {
-       return 1;
+        return 1;
     }
     /*  impossible */
     return 0;
@@ -298,7 +298,7 @@ compare_by_secname(const void *lin,const void *rin)
     struct generic_shdr *rgshdr =
         (struct generic_shdr *)rsel->od_sec_desc;
     const char *rname = rgshdr->gh_namestring;
- 
+
     int res = 0;
 
     res = strcmp(lname,rname);
@@ -306,10 +306,10 @@ compare_by_secname(const void *lin,const void *rin)
         return res;
     }
     if (lsecindex < rsecindex) {
-       return -1;
+        return -1;
     }
     if (lsecindex > rsecindex) {
-       return 1;
+        return 1;
     }
     /*  impossible */
     return 0;
@@ -871,14 +871,14 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
     P("{\n");
     sort_el = calloc(generic_count,sizeof(sort_section_element));
     if (!sort_el) {
-        P("ERROR: unable to allocate " LONGESTUFMT 
+        P("ERROR: unable to allocate " LONGESTUFMT
             " section elements, cannot print section\n",
             generic_count);
             return DW_DLV_OK;
     }
     for (i = 0; i < generic_count; i++) {
-         sort_el[i].od_originalindex = i;
-         sort_el[i].od_sec_desc = (void *)(gshdr+i);
+        sort_el[i].od_originalindex = i;
+        sort_el[i].od_sec_desc = (void *)(gshdr+i);
     }
     if (options->co_sort_section_by_size) {
         qsort((void *)sort_el,generic_count,
@@ -893,7 +893,6 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         const char *namestr = 0;
         sort_section_element *sel = 0 ;
         Dwarf_Unsigned origindex = 0;
-        
 
         sel = &sort_el[i];
         gshdr = (struct generic_shdr *)sel->od_sec_desc;

@@ -299,13 +299,13 @@ main(int argc,char **argv)
                 continue;
             }
             if ((strcmp(argv[0],"--sections-by-size") == 0) ||
-               (strcmp(argv[0],"--section-by-size") == 0)) {
+                (strcmp(argv[0],"--section-by-size") == 0)) {
                 secoptionsdata.co_sort_section_by_size = TRUE;
                 secoptionsdata.co_sort_section_by_name = FALSE;
                 continue;
             }
             if ((strcmp(argv[0],"--sections-by-name") == 0)||
-               (strcmp(argv[0],"--section-by-name") == 0)) {
+                (strcmp(argv[0],"--section-by-name") == 0)) {
                 secoptionsdata.co_sort_section_by_name = TRUE;
                 secoptionsdata.co_sort_section_by_size = FALSE;
                 continue;
@@ -389,10 +389,10 @@ compare_by_secsize(const void *lin,const void *rin)
         return -1;
     }
     if (lsecindex < rsecindex) {
-       return -1;
+        return -1;
     }
     if (lsecindex > rsecindex) {
-       return 1;
+        return 1;
     }
     /*  impossible */
     return 0;
@@ -420,17 +420,15 @@ compare_by_secname(const void *lin,const void *rin)
         return res;
     }
     if (lsecindex < rsecindex) {
-       return -1;
+        return -1;
     }
     if (lsecindex > rsecindex) {
-       return 1;
+        return 1;
     }
     /*  impossible */
     return 0;
 
 }
-
-
 
 static void
 print_macho_dwarf_sections(struct macho_filedata_s *mfp,
@@ -451,8 +449,8 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp,
         return;
     }
     for (i = 0; i < count; i++) {
-         sort_el[i].od_originalindex = i;
-         sort_el[i].od_sec_desc = (void *)(gsp+i);
+        sort_el[i].od_originalindex = i;
+        sort_el[i].od_sec_desc = (void *)(gsp+i);
     }
     if (options->co_sort_section_by_size) {
         qsort((void *)sort_el,count,
@@ -468,17 +466,16 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp,
         count,gsp->offset_of_sec_rec);
     P("                         offset size \n");
 
-
     for (i =0; i < count; ++i) {
         sort_section_element *sel = 0 ;
         Dwarf_Unsigned origindex = 0;
         const char *namestr = 0;
- 
+
         sel = &sort_el[i];
         gsp = (struct generic_macho_section *)sel->od_sec_desc;
         origindex = sel->od_originalindex;
         namestr = gsp->sectname;
-        
+
         P("  [" LONGESTUFMT2 "] %-16s"
             " " LONGESTXFMT8
             " " LONGESTXFMT8
