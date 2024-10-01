@@ -113,7 +113,7 @@ Section count: 29
     Addr     : 0x00000000
 Summary: 3562 bytes for 8 debug sections
 }
-Section Groups: No section groups or .dwo sections present. No .dynamic section exists in /home/davea/dwarf/readelfobj/code/test/stream.o
+Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/stream.o
 
 Symbols from .symtab: 38 at offset 0x30a8
 {
@@ -121,7 +121,7 @@ Symbols from .symtab: 38 at offset 0x30a8
 [  0]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
   st_name  (0) name-length  0: <no-name>
 [  1]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
@@ -261,12 +261,12 @@ Symbols from .symtab: 38 at offset 0x30a8
 [ 28]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
   st_name  (68) name-length  4: puts
 [ 29]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
   st_name  (73) name-length  6: printf
 [ 30]  st_value 0xb04 (2820)
   st_size  0x16c (364), st_info 0x12 (18)
@@ -286,7 +286,7 @@ Symbols from .symtab: 38 at offset 0x30a8
 [ 33]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
   st_name  (118) name-length 12: gettimeofday
 [ 34]  st_value 0x1108 (4360)
   st_size  0x8c (140), st_info 0x12 (18)

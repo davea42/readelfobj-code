@@ -14,6 +14,16 @@ def removeccolon(linein,srcdir):
     # and replace with the simple "yyy"
     l3= l2.replace(srcdir,"yyy")
     return l3
+def writebackfile(text,name):
+    newn =  ''.join([name,"forbase"])
+    try:
+        f = open(newn, "w")
+    except:
+        print("Unable to open newn ", newn, " giving up")
+        sys.exit(1)
+    for t in text:
+        f.write(''.join([t,'\n']))
+    f.close()
 
 def readin(srcfile,srcdir):
     hasdos = False
@@ -38,6 +48,7 @@ def readin(srcfile,srcdir):
     return hasdos, out
 
 
+
 if __name__ == "__main__":
     origfile = False
     newfile = False
@@ -49,7 +60,8 @@ if __name__ == "__main__":
     else:
         print("dwdiff.py args required: baseline newfile testsrcdir")
         exit(1)
-    hasdos, olines = readin(origfile,srcdir)
+    #  The origfile should have yyy instances, not full paths.
+    hasdos, olines = readin(origfile,False)
     hasdos, nlines = readin(newfile,srcdir)
     # diffs = difflib.unified_diff(olines,nlines,lineterm='')
     diffs = difflib.context_diff(
@@ -57,7 +69,8 @@ if __name__ == "__main__":
     )
     used = False
     for s in diffs:
-        print("There are differences.")
+        print("There are differences origfile:", origfile)
+        print("                              :", newfile)
         used = True
         break
     if used:
@@ -69,5 +82,6 @@ if __name__ == "__main__":
         )
         for s in diffs:
             print(s)
+        writebackfile(nlines,newfile)
         sys.exit(1)
     sys.exit(0)

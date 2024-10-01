@@ -104,6 +104,6 @@ GNU .gnu_debuglink and .note.gnu.buildid
   Paths list count:  1
   [0] /usr/lib/debug/c9/002947babdd180e3c2aa32284a6c0fee7dc3a7.debug
 }
-No .dynamic section exists in /home/davea/dwarf/readelfobj/code/test/libkrb5support.so.0.1.debug
+No .dynamic section exists in yyy/libkrb5support.so.0.1.debug
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
 Warning : 1 instances of unused alignment space exist and total 1 bytes of alignment.

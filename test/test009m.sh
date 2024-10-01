@@ -15,13 +15,15 @@ o="$srcdir/mach-o-object32 $srcdir/mach-o-object64 $srcdir/libkrb5support.so.0.1
 x="../src/readobjmacho $o"
 echo "START $n $x"
 $x > junk.$n.tmp
-
-$df  $base junk.$n.tmp "$srcdir" > junk.$n.out
+# Emits junk.$n.tmpforbase
+nin=junk.$n.tmp
+nout=junk.$n.tmpforbase
+$df  $base $nin "$srcdir" > junk.$n.out
 if [ $? -ne 0 ]
 then
   head -30 junk.$n.out
-  echo "FAIL $n.sh $cmd, results differ $base vs junk.$n.tmp"
-  echo "To update, cp $curdir/junk.$n.tmp $base"
+  echo "FAIL $n.sh $cmd, results differ $base vs $nout"
+  echo "To update, cp $curdir/$nout $base"
   exit 1
 fi
 exit 0

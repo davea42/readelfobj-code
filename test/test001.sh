@@ -13,12 +13,15 @@ curdir=`pwd`
 o=$srcdir/libkrb5support.so.0.1.debug
 echo "START $n test ./readelfobj --help $o "
 ../src/readelfobj --help $o >junk.$n.tmp
-$df  $srcdir/$n.base junk.$n.tmp "$srcdif" > junk.$n.out
+# Emits junk.$n.tmpforbase
+nin=junk.$n.tmp
+nout=junk.$n.tmpforbase
+$df  $srcdir/$n.base $nin "$srcdif" > junk.$n.out
 if [ $? -ne 0 ]
 then
   cat junk.$n.out
-  echo "FAIL $n.sh results differ $n.base vs junk.$n.tmp"
-  echo "To update, cp $curdir/junk.$n.tmp $base"
+  echo "FAIL $n.sh results differ $n.base vs $nout"
+  echo "To update, cp $curdir/$nout $base"
   exit 1
 fi
 exit 0

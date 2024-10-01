@@ -1,4 +1,4 @@
-Reading dSYM object at /home/davea/dwarf/readelfobj/code/test/mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32
+Reading dSYM object at yyy/mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32
 Mach-o Magic:  0xfeedface
   cputype           : 0x7 cpusubtype: 0x3
   offset size       : 4
@@ -24,7 +24,7 @@ Mach-o Magic:  0xfeedface
   [3] 0x1 LC_SEGMENT       __LINKEDIT        0x00001000 0x00004acb
   [4] 0x1 LC_SEGMENT       __DWARF           0x00006000 0x00008859
  Sections count: 13  offset 0x00000494
-                         offset size 
+                         offset size
   [ 0]                  0x00000000 0x00000000
   [ 9] __apple_names    0x0000d707 0x0000059c
   [10] __apple_namespac 0x0000dca3 0x00000024
@@ -38,7 +38,7 @@ Mach-o Magic:  0xfeedface
   [ 2] __debug_pubnames 0x00007ad1 0x00000438
   [ 3] __debug_pubtypes 0x00007f09 0x000007be
   [ 8] __debug_str      0x0000bb9b 0x00001b6c
-Reading dSYM object at /home/davea/dwarf/readelfobj/code/test/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64
+Reading dSYM object at yyy/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64
 Mach-o Magic:  0xfeedfacf
   cputype           : 0x1000007 cpusubtype: 0x3
   offset size       : 8
@@ -64,7 +64,7 @@ Mach-o Magic:  0xfeedfacf
   [3] 0x19 LC_SEGMENT_64    __LINKEDIT        0x00001000 0x0000531b
   [4] 0x19 LC_SEGMENT_64    __DWARF           0x00007000 0x000087ee
  Sections count: 12  offset 0x000005c8
-                         offset size 
+                         offset size
   [ 0]                  0x00000000 0x00000000
   [ 8] __apple_names    0x0000e69c 0x0000059c
   [ 9] __apple_namespac 0x0000ec38 0x00000024
@@ -77,4 +77,4 @@ Mach-o Magic:  0xfeedfacf
   [ 2] __debug_pubnames 0x00008a96 0x00000438
   [ 3] __debug_pubtypes 0x00008ece 0x000007be
   [ 7] __debug_str      0x0000cb30 0x00001b6c
-File /home/davea/dwarf/readelfobj/code/test/libkrb5support.so.0.1.debug is not mach-o. Ignored.
+File yyy/libkrb5support.so.0.1.debug is not mach-o. Ignored.

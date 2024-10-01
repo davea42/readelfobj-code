@@ -1,4 +1,1 @@
-File: --all
-No such file as --all
-File: yyy/frame1-frame1.o
 ERROR: Unable to read "yyy/frame1-frame1.o", ignoring file. Errcode DW_DLE_ERROR_NO_DOS_HEADER(45) so we do not accept the file as pe
