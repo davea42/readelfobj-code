@@ -21,7 +21,6 @@ nout=junk.$n.tmpforbase
 $df  $base $nin "$srcdir" > junk.$n.out
 if [ $? -ne 0 ]
 then
-  head -30 junk.$n.out
   echo "FAIL $n.sh $cmd, results differ $base vs $nout"
   echo "To update, cp $curdir/$nout $base"
   exit 1

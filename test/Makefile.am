@@ -36,7 +36,9 @@ TESTS = ./test001.sh \
 ./test029.sh  \
 ./test030.sh \
 ./test031m.sh \
-./test032m.sh
+./test032m.sh \
+./test033p.sh \
+./test034p.sh
 
 
 
@@ -101,49 +103,96 @@ CLEANFILES = \
   junk.test018p.tmp2 \
   junk.test019.tmp \
   junk.test019.tmp2 \
+  junk.test019.tmp2 \
   junk.test020.tmp \
+  junk.test020.tmpforbase \
   junk.test020.tmp2 \
+  junk.test020.tmp2forbase \
   junk.test021.tmp \
+  junk.test021.tmpforbase \
   junk.test021.tmp2 \
+  junk.test021.tmp2forbase \
   junk.test022.out \
   junk.test022.tmp \
+  junk.test022.tmpforbase \
   junk.test022.tmp2 \
+  junk.test022.tmp2forbase \
   junk.test023.tmp2 \
+  junk.test023.tmp2forbase \
   junk.test023.tmp \
+  junk.test023.tmpforbase \
   junk.test024.tmp \
+  junk.test024.out \
   junk.test024.tmp2 \
+  junk.test024.tmp2forbase \
   junk.test025.tmp \
+  junk.test025.out \
   junk.test025.tmp2 \
+  junk.test025.tmp2forbase \
   junk.test001.tmp \
+  junk.test001.tmpforbase \
   junk.test002.tmp \
+  junk.test002.tmpforbase \
   junk.test003.tmp \
+  junk.test003.tmpforbase \
   junk.test003.tmp2 \
+  junk.test003.tmp2forbase \
   junk.test004.tmp \
+  junk.test004.tmpforbase \
   junk.test004.tmp2 \
+  junk.test004.tmp2forbase \
   junk.test005.tmp \
+  junk.test005.tmpforbase \
   junk.test005.tmp2 \
+  junk.test005.tmp2forbase \
   junk.test006.tmp \
+  junk.test006.tmpforbase \
   junk.test006.tmp2 \
+  junk.test006.tmp2forbase \
   junk.test007.tmp \
+  junk.test007.tmpforbase \
   junk.test007.tmp2 \
+  junk.test007.tmp2forbase \
   junk.test008m.tmp \
+  junk.test008m.tmpforbase \
   junk.test008m.tmp2 \
+  junk.test008m.tmp2forbase \
   junk.test009m.tmp \
+  junk.test009m.tmpforbase \
   junk.test009m.tmp2 \
+  junk.test009m.tmp2forbase \
   junk.test010.tmp \
+  junk.test010.tmpforbase \
   junk.test010.tmp2 \
+  junk.test010.tmp2forbase \
   junk.test011.tmp \
+  junk.test011.tmpforbase \
   junk.test011.tmp2 \
+  junk.test011.tmp2forbase \
   junk.test026.tmp2 \
+  junk.test026.tmp2forbase \
   junk.test026.tmp \
+  junk.test026.out \
   junk.test027.tmp2 \
+  junk.test027.out \
   junk.test027.tmp \
+  junk.test027.tmpforbase \
   junk.test028.tmp2 \
+  junk.test028.out \
   junk.test028.tmp \
+  junk.test028.tmpforbase \
   junk.test029.tmp \
+  junk.test029.out \
   junk.test030.tmp \
+  junk.test030.out \
   junk.test031m.tmp \
+  junk.test031m.out \
   junk.test032m.tmp \
+  junk.test032m.out \
+  junk.test033p.tmp \
+  junk.test033p.out \
+  junk.test034p.tmp \
+  junk.test034p.out \
   object_detector \
   readobjmacho \
   readobjpe \

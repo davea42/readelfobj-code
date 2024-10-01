@@ -19,7 +19,6 @@ $x > junk.$n.tmp
 $df $base junk.$n.tmp "$srcdir" > junk.$n.out
 if [ $? -ne 0 ]
 then
-  head -30 junk.$n.out
   echo "FAIL $n.sh $cmd, results differ $base vs junk.$n.tmp"
   echo "To update, cp $curdir/junk.$n.tmp $base"
   exit 1
