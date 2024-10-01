@@ -1,3 +1,258 @@
+2024-10-01:  David Anderson
+    commit 68b1ada5f6e43cd1509dc3a8674024e84164b30f
+
+    Based on the libdwarf documents.
+            new file:   CODE_OF_CONDUCT.md
+            new file:   CODINGSTYLE.md
+
+2024-10-01:  David Anderson
+    commit 480a4d65bd28ffb09d1ec9b5699912a4941e81f3
+
+    Now with complete make clean
+    and test scripts oriented to
+    ensuring no local file paths present
+            modified:   test/Makefile.am
+            modified:   test/test008m.sh
+            modified:   test/test009m.sh
+            modified:   test/test013m.sh
+            modified:   test/test014m.sh
+            modified:   test/test015p.sh
+            modified:   test/test016p.sh
+            modified:   test/test018p.sh
+            modified:   test/test031m.sh
+            modified:   test/test032m.sh
+
+2024-10-01:  David Anderson
+    commit f227f76be07ed27e7e78ef0f45240f05ae41917d
+
+    Now sorts by the correct name string with --sections-by-name
+            modified:   src/readobjpe.c
+
+2024-10-01:  David Anderson
+    commit 95c49ad0631387d330aeb759ab83768b13f59266
+
+    pe tests of --sections-by-name sections-by-size
+            new file:   test033p.base
+            new file:   test033p.sh
+            new file:   test034p.base
+            new file:   test034p.sh
+
+2024-10-01:  David Anderson
+    commit 61e0bff0dd2b0e5c4d5cfe1a39cc996940634d9d
+
+    Updated tests and now proper baselines with yyy instead
+    of local paths for files..
+            modified:   test/test001.sh
+            modified:   test/test003.base
+            modified:   test/test003.sh
+            modified:   test/test004.sh
+            modified:   test/test009m.base
+            modified:   test/test009m.sh
+            modified:   test/test019.base
+            modified:   test/test019.sh
+            modified:   test/test020.base
+            modified:   test/test020.sh
+            modified:   test/test021.base
+            modified:   test/test021.sh
+            modified:   test/test022.base
+            modified:   test/test022.sh
+            modified:   test/test031m.base
+            modified:   test/test031m.sh
+            modified:   test/test032m.base
+            modified:   test/test032m.sh
+
+    Now this emits a file with the names containing yyy
+    so  there is no dependency on local paths for files.
+            modified:   test/testdiff.py
+
+2024-10-01:  David Anderson
+    commit ea57eec3d51645b9b63393509caf657b6f91f9bd
+
+    Now with --sections-by-name and --sections-by-size
+            modified:   src/readobjpe.c
+
+2024-09-30:  David Anderson
+    commit ef09c7b5f450e03e45aaaa80aa6d7f17361ec282
+
+    Fixing indent mistakes
+    and trailing spaces.
+            modified:   dw_elfstructs.h
+            modified:   readelfobj.c
+            modified:   readobjmacho.c
+
+2024-09-30:  David Anderson
+    commit 431fb7fe326f128a41fbe1dc1b81338ea0dabe19
+
+    new tests for macho object reporting.
+            new file:   test/test031m.base
+            new file:   test/test031m.sh
+            new file:   test/test032m.base
+            new file:   test/test032m.sh
+
+2024-09-30:  David Anderson
+    commit 9139e96754b44b0cdc367aeeaaf30c37768f55c4
+
+    Now supports these options
+      --sections-by-name
+      --sections-by-size
+      --printfilenames
+            modified:   readelfobj.c
+            modified:   readobjmacho.c
+    Relevant test updatest
+            modified:   ../test/Makefile.am
+            modified:   ../test/test001.base
+            modified:   ../test/test009m.base
+
+2024-09-30:  David Anderson
+    commit 2c30fec3ecc6600fc051868f1bc6c632c4da0969
+
+    Corrected a leak found by -fsanitize
+            modified:   dwarf_load_elf_headers.c
+
+2024-09-30:  David Anderson
+    commit a3c0a36c9423b5f87db43f9437b9518b93656776
+
+    Testing the new readelfobj options:
+     --sections-by-size
+     --sections-by-name
+    If neither presented the sections are listed
+    as presented in Elf order.
+            new file:   test/test029.base
+            new file:   test/test029.sh
+            new file:   test/test030.base
+            new file:   test/test030.sh
+
+2024-09-30:  David Anderson
+    commit 1a939782b292e9a4d531b2cc877ff72aa9cf4d6f
+
+    Now with corrected 'update' commands
+    andcorrected baselines for the modified
+    readelfobj.
+            modified:   test/Makefile.am
+            modified:   test/test001.base
+            modified:   test/test001.sh
+            modified:   test/test003.base
+            modified:   test/test003.sh
+            modified:   test/test004.base
+            modified:   test/test004.sh
+            modified:   test/test005.base
+            modified:   test/test005.sh
+            modified:   test/test006.base
+            modified:   test/test006.sh
+            modified:   test/test007.sh
+            modified:   test/test008m.sh
+            modified:   test/test009m.sh
+            modified:   test/test010.sh
+            modified:   test/test011.sh
+            modified:   test/test012.sh
+            modified:   test/test013m.sh
+            modified:   test/test014m.sh
+            modified:   test/test015p.sh
+            modified:   test/test016p.sh
+            modified:   test/test017.base
+            modified:   test/test017.sh
+            modified:   test/test018p.sh
+            modified:   test/test019.base
+            modified:   test/test019.sh
+            modified:   test/test020.base
+            modified:   test/test020.sh
+            modified:   test/test021.base
+            modified:   test/test021.sh
+            modified:   test/test022.sh
+            modified:   test/test023.sh
+            modified:   test/test024.base
+            modified:   test/test024.sh
+            modified:   test/test025.base
+            modified:   test/test025.sh
+            modified:   test/test026.sh
+            modified:   test/test027.sh
+            modified:   test/test028.base
+            modified:   test/test028.sh
+            modified:   test/testdiff.py
+
+2024-09-30:  David Anderson
+    commit 45184e5e4908c11329722897549db405bbf722d0
+
+    Simpler handling of the issue of printing
+    file names or not.
+    And now, by default in readelfobj file names
+    are not printed, use --printfilenames
+    to print them.
+    Simplfied testing changing the printfilenames default.
+            modified:   src/Makefile.am
+            new file:   src/common_options.c
+            modified:   src/common_options.h
+            modified:   src/dwarf_load_elf_headers.c
+            modified:   src/readelfobj.c
+
+2024-09-29:  David Anderson
+    commit 945ab92b88a4281d2f81a3a978f3d66584f078f9
+
+    housekeeping
+            modified:   ../INSTALL
+    Added common_options.h
+            modified:   Makefile.am
+
+    the rest is mainly indent and trailing whitspace fixes,
+    but some is preparation for new options printing
+    section data.  Now the options are handled ,but
+    then do nothing yet.
+            new file:   common_options.h
+            modified:   dwarf_load_elf_headers.c
+            modified:   dwarf_machoread.c
+            modified:   dwarf_object_detector.c
+            modified:   dwarf_peread.c
+            modified:   object_detector_main.c
+            modified:   readelfobj.c
+            modified:   readobjmacho.c
+            modified:   readobjpe.c
+
+2024-09-28:  David Anderson
+    commit 46e6b356395cc7b3ba233b7d05ee24524a9e3e12
+
+    Further refinement of heuristic on section size,
+    now distinguishing 32bit from 64bit.
+            modified:   dwarf_peread.c
+
+2024-09-28:  David Anderson
+    commit d7b465fbc358351fc843a8cadf15a01ca735a875
+
+    Made a heuristic on section size more robust
+    since a user had a really big object with big .debug_info
+            modified:   dwarf_peread.c
+
+2024-08-20:  David Anderson
+    commit 07c827b24ef5dec9a9d98b5c76ef83e22571322e
+
+    Updated last-update date.
+            modified:   README.md
+
+2024-08-20:  David Anderson
+    commit 5a0237c1aea0aff129d12ea1b683338b482d850b
+    Merge: bdc347d faa8ad5
+
+    Merge pull request #2 from JohnAlexCO/main
+
+    Add dependencies to readme, add # before comment in configure
+
+2024-08-20:  John Lathrop
+    commit faa8ad534954aebdc633576ea82ae23f42c4e23a
+
+    Add dependencies to readme, add # before comment in configure
+
+2024-08-05:  David Anderson
+    commit bdc347dea1c345e0fe6fbee33942d414eede5e13
+
+    Fix a spelling error in ChangeLog
+    dos1unix->dos2unix
+            modified:   ChangeLog
+
+2024-08-05:  David Anderson
+    commit 08dffeb7fb5791a94e614dcea7914c0071928d52
+
+    Up to date now.
+            modified:   ChangeLog
+
 2024-08-05:  David Anderson
     commit f72c4151447697841a44b9c7fe78be1bd63a1e54
 
