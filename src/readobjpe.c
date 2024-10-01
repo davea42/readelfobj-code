@@ -58,26 +58,128 @@ static char buffer2[BUFFERSIZE];
 
 char *Usage = "Usage: readobjpe <options> file ...\n"
     "Options:\n"
+    "--sections-by-size sort sections by section size\n"
+    "--sections-by-name sort sections by name\n"
+    "--printfilenames print the name of the file being read\n"
     "--help     print this message\n"
     "--version  print version string\n";
+
+static int
+compare_by_secsize(const void *lin,const void *rin)
+{
+    sort_section_element * lsel = (sort_section_element *)lin;
+    Dwarf_Unsigned lsecindex = lsel->od_originalindex;
+    struct dwarf_pe_generic_image_section_header * lgsp =
+        (struct dwarf_pe_generic_image_section_header *)
+        lsel->od_sec_desc;
+    Dwarf_Unsigned lsecsize = lgsp->VirtualSize;
+
+    sort_section_element * rsel = (sort_section_element *)rin;
+    Dwarf_Unsigned rsecindex = rsel->od_originalindex;
+    struct dwarf_pe_generic_image_section_header * rgsp =
+        (struct dwarf_pe_generic_image_section_header *)
+        rsel->od_sec_desc;
+    Dwarf_Unsigned rsecsize = rgsp->VirtualSize;
+
+    if (lsecsize < rsecsize) {
+        return 1;
+    }
+    if (lsecsize > rsecsize) {
+        return -1;
+    }
+    if (lsecindex < rsecindex) {
+        return -1;
+    }
+    if (lsecindex > rsecindex) {
+        return 1;
+    }
+    /*  impossible */
+    return 0;
+}
+static int
+compare_by_secname(const void *lin,const void *rin)
+{
+    sort_section_element * lsel = (sort_section_element *)lin;
+    Dwarf_Unsigned lsecindex = lsel->od_originalindex;
+    struct dwarf_pe_generic_image_section_header * lgsp =
+        (struct dwarf_pe_generic_image_section_header *)
+        lsel->od_sec_desc;
+    const char *lname = lgsp->name; /* or dwarfsectname? */
+
+    sort_section_element * rsel = (sort_section_element *)rin;
+    Dwarf_Unsigned rsecindex = rsel->od_originalindex;
+    struct dwarf_pe_generic_image_section_header *rgsp =
+        (struct dwarf_pe_generic_image_section_header *)
+        rsel->od_sec_desc;
+    const char *rname = rgsp->name; /* or dwarfsectname? */
+
+    int res = 0;
+
+    res = strcmp(lname,rname);
+    if (res) {
+        return res;
+    }
+    if (lsecindex < rsecindex) {
+        return -1;
+    }
+    if (lsecindex > rsecindex) {
+        return 1;
+    }
+    /*  impossible */
+    return 0;
+
+}
+
+
+
 static void
 pe_sections_display(dwarf_pe_object_access_internals_t *pep,
     sec_options *options)
 {
-    Dwarf_Unsigned i = 0;
+
     Dwarf_Unsigned count = pep->pe_section_count;
+    sort_section_element * sort_el = 0;
+    struct dwarf_pe_generic_image_section_header *gsp = 0;
+    Dwarf_Unsigned i = 0;
+
+    gsp = pep->pe_sectionptr;
+
+    sort_el = calloc(count,sizeof(sort_section_element));
+    if (!sort_el) {
+        P("ERROR: unable to allocate " LONGESTUFMT
+            " section elements, cannot print sections\n",
+            count);
+        return;
+    }
+    for (i = 0; i < count; i++) {
+        sort_el[i].od_originalindex = i;
+        sort_el[i].od_sec_desc = (void *)(gsp+i);
+
+    }
+    if (options->co_sort_section_by_size) {
+        qsort((void *)sort_el,count,
+            sizeof(sort_section_element),
+            compare_by_secsize);
+    } else if (options->co_sort_section_by_name) {
+        qsort((void *)sort_el,count,
+            sizeof(sort_section_element),
+            compare_by_secname);
+    } /* else no sort, print as is */
 
     printf("Display " LONGESTUFMT " sections.\n",
         count);
-/* FIXME new array */
-    (void)options;
-    for ( ; i < count; ++i) {
-        struct dwarf_pe_generic_image_section_header *sp =
-            pep->pe_sectionptr + i;
+    for (i = 0 ; i < count; ++i) {
+        struct dwarf_pe_generic_image_section_header *sp = 0;
+        sort_section_element *sel = 0 ;
+        Dwarf_Unsigned origindex = 0;
 
+        sel = &sort_el[i];
+        origindex = sel->od_originalindex;
+        sp = (struct dwarf_pe_generic_image_section_header *)
+            sel->od_sec_desc;
         printf("Section " LONGESTUFMT " fileoff: "
             LONGESTXFMT8 "\n",
-            i,sp->SecHeaderOffset);
+            origindex,sp->SecHeaderOffset);
         printf("  Name:  %20s   : %20s \n",
             sanitized(sp->name,buffer1,BUFFERSIZE),
             sanitized(sp->dwarfsectname,buffer2,BUFFERSIZE));
@@ -88,11 +190,10 @@ pe_sections_display(dwarf_pe_object_access_internals_t *pep,
             printf("Error in PE section %lu: "
                 "Section VirtualSize is 0x%lx but file size "
                 "is 0x%lx\n",
-                (unsigned long)i,
+                (unsigned long)origindex,
                 (unsigned long)sp->VirtualSize,
                 (unsigned long)pep->pe_filesize);
         }
-
         printf("  VirtAddr       : " LONGESTXFMT8
             "  (" LONGESTUFMT ")\n",
             sp->VirtualAddress,sp->VirtualAddress);
@@ -106,7 +207,7 @@ pe_sections_display(dwarf_pe_object_access_internals_t *pep,
             "  (" LONGESTUFMT ")\n",
             sp->Characteristics,sp->Characteristics);
     }
-/*  FIXME free new array */
+    free(sort_el);
 }
 static void
 pe_headers_display(dwarf_pe_object_access_internals_t *pe)
@@ -255,14 +356,23 @@ main(int argc,char **argv)
                 P("%s",Usage);
                 exit(0);
             }
-            if (strcmp(argv[0],"--sections-by-size") == 0) {
+           if ((strcmp(argv[0],"--sections-by-size") == 0) ||
+                (strcmp(argv[0],"--section-by-size") == 0)) {
                 secoptionsdata.co_sort_section_by_size = TRUE;
+                secoptionsdata.co_sort_section_by_name = FALSE;
                 continue;
             }
-            if (strcmp(argv[0],"--sections-by-name") == 0) {
+            if ((strcmp(argv[0],"--sections-by-name") == 0)||
+                (strcmp(argv[0],"--section-by-name") == 0)) {
                 secoptionsdata.co_sort_section_by_name = TRUE;
+                secoptionsdata.co_sort_section_by_size = FALSE;
                 continue;
             }
+            if (strcmp(argv[0],"--printfilenames") == 0) {
+                secoptionsdata.co_printfilenames = TRUE;
+                continue;
+            }
+
             if ((strcmp(argv[0],"--version") == 0) ||
                 (strcmp(argv[0],"-v") == 0 )) {
                 P("Version-readobjpe: %s\n",
@@ -270,8 +380,9 @@ main(int argc,char **argv)
                 printed_version = TRUE;
                 continue;
             }
-            if ( (i+1) < argc) {
-                secoptionsdata.co_printfilenames = TRUE;
+            if ( argv[0][0] == '-') {
+                printf("Argument %s unknown, ignored\n",argv[0]);
+                continue;
             }
             filename = argv[0];
             if (secoptionsdata.co_printfilenames) {
