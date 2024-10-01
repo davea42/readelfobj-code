@@ -104,14 +104,14 @@ compare_by_secname(const void *lin,const void *rin)
     struct dwarf_pe_generic_image_section_header * lgsp =
         (struct dwarf_pe_generic_image_section_header *)
         lsel->od_sec_desc;
-    const char *lname = lgsp->name; /* or dwarfsectname? */
+    const char *lname = lgsp->dwarfsectname;
 
     sort_section_element * rsel = (sort_section_element *)rin;
     Dwarf_Unsigned rsecindex = rsel->od_originalindex;
     struct dwarf_pe_generic_image_section_header *rgsp =
         (struct dwarf_pe_generic_image_section_header *)
         rsel->od_sec_desc;
-    const char *rname = rgsp->name; /* or dwarfsectname? */
+    const char *rname = rgsp->dwarfsectname;
 
     int res = 0;
 
