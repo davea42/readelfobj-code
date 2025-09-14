@@ -141,6 +141,7 @@ struct macho_filedata_s {
 
     Dwarf_Unsigned mo_segment_count;
     struct generic_macho_segment_command *mo_segment_commands;
+    /* We are also adding __TEXT sections */
     Dwarf_Unsigned mo_dwarf_sectioncount;
     struct generic_macho_section *mo_dwarf_sections;
 

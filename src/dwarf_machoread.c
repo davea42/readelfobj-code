@@ -480,7 +480,7 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     if (msp->fileoff > mfp->mo_filesize ||
         msp->filesize > mfp->mo_filesize) {
         /* corrupt */
-        printf("Reading command sections fails,"
+        printf("Reading command segment fails,"
             " fileoffset %lu, "
             " filesize %lu\n",
             (unsigned long)msp->fileoff,
@@ -490,7 +490,7 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     }
     if ((msp->fileoff+msp->filesize ) > filesize) {
         /* corrupt */
-        printf("Reading command32 sections fails,"
+        printf("Reading command32 segments fails,"
             " fileoffset of end of sec %lu, "
             " filesize %lu\n",
             (unsigned long)(msp->fileoff+msp->filesize ),
@@ -560,7 +560,7 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     if (msp->fileoff > filesize ||
         msp->filesize > filesize) {
         /* corrupt */
-        printf("Reading command 64 sections fails,"
+        printf("Reading command 64 segments fails,"
             " fileoffset %lu, "
             " filesize %lu\n",
             (unsigned long)msp->fileoff,
@@ -570,7 +570,7 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     }
     if ((msp->fileoff+msp->filesize ) > filesize) {
         /* corrupt */
-        printf("Reading command64 sections fails,"
+        printf("Reading command64 segment fails,"
             " fileoffset of end of sec %lu, "
             " filesize %lu\n",
             (unsigned long)(msp->fileoff+msp->filesize ),
@@ -648,27 +648,53 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
     Dwarf_Unsigned seci = 0;
     Dwarf_Unsigned seccount = segp->nsects;
     Dwarf_Unsigned secalloc = seccount+1;
+
+    /* offset of sections being added */
     Dwarf_Unsigned curoff = segp->sectionsoffset; /* no inner here*/
     Dwarf_Unsigned shdrlen = sizeof(struct section);
-
+    Dwarf_Unsigned newcount = 0;
     struct generic_macho_section *secs = 0;
 
-    secs = (struct generic_macho_section *)calloc(
-        secalloc,
-        sizeof(struct generic_macho_section));
-    if (!secs) {
-        *errcode = RO_ERR_MALLOC;
-        return DW_DLV_OK;
-    }
-    mfp->mo_dwarf_sections = secs;
-    mfp->mo_dwarf_sectioncount = secalloc;
-    secs->offset_of_sec_rec = curoff;
-    /*  Leave 0 section all zeros except our offset,
+    if (mfp->mo_dwarf_sections) {
+        struct generic_macho_section * originalsections = 
+            mfp->mo_dwarf_sections;
+        newcount = mfp->mo_dwarf_sectioncount + seccount;
+        secs = (struct generic_macho_section *)calloc(
+            newcount,
+            sizeof(struct generic_macho_section));
+        if (!secs) {
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_OK;
+        }
+        memcpy(secs,mfp->mo_dwarf_sections,
+            mfp->mo_dwarf_sectioncount * 
+            sizeof(struct generic_macho_section));
+        mfp->mo_dwarf_sections = secs;
+        seci =  mfp->mo_dwarf_sectioncount ; 
+        mfp->mo_dwarf_sectioncount = newcount;
+        free(originalsections);
+        secs += seci;
+        secs->offset_of_sec_rec = curoff;
+        secalloc = newcount;
+    } else {
+        secs = (struct generic_macho_section *)calloc(
+            secalloc,
+            sizeof(struct generic_macho_section));
+        if (!secs) {
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_OK;
+        }
+        newcount = secalloc;
+        mfp->mo_dwarf_sections = secs;
+        mfp->mo_dwarf_sectioncount = secalloc;
+        secs->offset_of_sec_rec = curoff;
+        /*  Leave 0 section all zeros except our offset,
         elf-like in a sense */
-    secs->dwarfsectname = "";
-    ++secs;
-    seci = 1;
-    for (; seci < secalloc; ++seci,++secs,curoff += shdrlen ) {
+        secs->dwarfsectname = "";
+        seci = 1;
+        ++secs;
+    }
+    for (; seci < secalloc  ; ++seci,++secs,curoff += shdrlen ) {
         struct section mosec;
         int res = 0;
         Dwarf_Unsigned endoffset = 0;
@@ -704,13 +730,17 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         ASNAR(mfp->mo_copy_word,secs->reloff,mosec.reloff);
         ASNAR(mfp->mo_copy_word,secs->nreloc,mosec.nreloc);
         ASNAR(mfp->mo_copy_word,secs->flags,mosec.flags);
-        if (secs->offset > mfp->mo_filesize ||
+        
+        /* __text section size apparently refers to executable, not dSYM, so do not
+            check here */
+        if ( strcmp(secs->sectname,"__text") &&
+            (secs->offset > mfp->mo_filesize ||
             secs->size > mfp->mo_filesize ||
-            (secs->offset+secs->size) > mfp->mo_filesize) {
+            (secs->offset+secs->size) > mfp->mo_filesize)) {
             printf("Reading sections32 fails,"
-                " fileoffset %lu,"
-                " size %lu,"
-                " filesize %lu\n",
+                " fileoffset %lx,"
+                " size %lx,"
+                " filesize %lx\n",
                 (unsigned long)curoff,
                 (unsigned long)secs->size,
                 (unsigned long)mfp->mo_filesize);
@@ -720,8 +750,8 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         secs->reserved1 = 0;
         secs->reserved2 = 0;
         secs->reserved3 = 0;
-        secs->generic_segment_num  = segi;
         secs->offset_of_sec_rec = curoff;
+        secs->generic_segment_num  = segi;
     }
     return DW_DLV_OK;
 }
@@ -736,23 +766,48 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
     Dwarf_Unsigned secalloc = seccount+1;
     Dwarf_Unsigned curoff = segp->sectionsoffset; /* no inner here*/
     Dwarf_Unsigned shdrlen = sizeof(struct section_64);
+    Dwarf_Unsigned newcount = 0;
     struct generic_macho_section *secs = 0;
 
-    secs = (struct generic_macho_section *)
-        calloc(secalloc,
-        sizeof(struct generic_macho_section));
-    if (!secs) {
-        *errcode = RO_ERR_MALLOC;
-        return DW_DLV_ERROR;
-    }
-    mfp->mo_dwarf_sections = secs;
-    mfp->mo_dwarf_sectioncount = secalloc;
-    secs->offset_of_sec_rec = curoff;
-    /*  Leave 0 section all zeros except our offset,
+    if (mfp->mo_dwarf_sections) {
+        struct generic_macho_section * originalsections =
+            mfp->mo_dwarf_sections;
+        newcount = mfp->mo_dwarf_sectioncount + seccount;
+        secs = (struct generic_macho_section *)calloc(
+            newcount,
+            sizeof(struct generic_macho_section));
+        if (!secs) {
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_OK;
+        }
+        memcpy(secs,mfp->mo_dwarf_sections,
+            mfp->mo_dwarf_sectioncount * 
+            sizeof(struct generic_macho_section));
+        mfp->mo_dwarf_sections = secs;
+        seci =  mfp->mo_dwarf_sectioncount ;
+        mfp->mo_dwarf_sectioncount = newcount;
+        free(originalsections);
+        secs += seci;
+        secs->offset_of_sec_rec = curoff;
+        secalloc = newcount;
+    } else {
+        secs = (struct generic_macho_section *)calloc(
+            secalloc,
+            sizeof(struct generic_macho_section));
+        if (!secs) {
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_OK;
+        }       
+        newcount = secalloc;
+        mfp->mo_dwarf_sections = secs;
+        mfp->mo_dwarf_sectioncount = secalloc;
+        secs->offset_of_sec_rec = curoff;
+        /*  Leave 0 section all zeros except our offset,
         elf-like in a sense */
-    secs->dwarfsectname = "";
-    seci = 1;
-    ++secs;
+        secs->dwarfsectname = ""; 
+        seci = 1;
+        ++secs;
+    }
     for (; seci < secalloc; ++seci,++secs,curoff += shdrlen ) {
         int res = 0;
         struct section_64 mosec;
@@ -788,18 +843,23 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         ASNAR(mfp->mo_copy_word,secs->reloff,mosec.reloff);
         ASNAR(mfp->mo_copy_word,secs->nreloc,mosec.nreloc);
         ASNAR(mfp->mo_copy_word,secs->flags,mosec.flags);
-        if (secs->offset > mfp->mo_filesize ||
+         /* One section size apparently refers to executable, not here, so do not
+            check here */
+        if (strcmp(secs->sectname,"__text") &&
+            (secs->offset > mfp->mo_filesize ||
             secs->size > mfp->mo_filesize ||
-            (secs->offset+secs->size) > mfp->mo_filesize) {
+            (secs->offset+secs->size) > mfp->mo_filesize)) {
             printf("Reading sections64 fails,"
-                " fileoffset %lu,"
-                " size %lu,"
-                " filesize %lu\n",
+                " fileoffset 0x%lx,"
+                " size 0x%lx,"
+                " filesize 0x%lx\n",
                 (unsigned long)curoff,
                 (unsigned long)secs->size,
                 (unsigned long)mfp->mo_filesize);
+#if 0
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
+#endif
         }
         secs->reserved1 = 0;
         secs->reserved2 = 0;
@@ -840,16 +900,21 @@ dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,
         mfp->mo_segment_commands;
     for ( ; segi < mfp->mo_segment_count; ++segi,++segp) {
         int res = 0;
-
-        /* Check for __DWARF in DSYM, not other file types. */
-        if (mfp->mo_header.filetype == MH_DSYM &&
-            strcmp(segp->segname,"__DWARF")) {
+        printf("Segment name %s\n", segp->segname);
+        if ( !strcmp(segp->segname,"__PAGEZERO")) {
             continue;
         }
-
+        if ( !strcmp(segp->segname,"__LINKEDIT")) {
+            continue;
+        }
         res = dwarf_macho_load_dwarf_section_details(mfp,segp,
             segi,errcode);
-        return res;
+        if (res != DW_DLV_OK) {
+            return res;
+        }
+    }
+    if (mfp->mo_dwarf_sectioncount) {
+        return DW_DLV_OK;
     }
     return RO_NO_ENTRY;
 }

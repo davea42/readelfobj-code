@@ -62,6 +62,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "common_options.h"
 
 unsigned int unibinarynumber = 0;
+unsigned char skip_dsym_check = FALSE;
 
 char *Usage = "Usage: readobjmacho <options> file ...\n"
     "Options:\n"
@@ -71,7 +72,8 @@ char *Usage = "Usage: readobjmacho <options> file ...\n"
     "--printfilenames print the name of the file being read\n"
     "--sections-by-size sort sections by section size\n"
     "--sections-by-name sort_sections by name\n"
-    "  print binary number n. Defaults to zero\n";
+    "  print binary number n. Defaults to zero\n"
+    "--skip-dsym-check accept name as is\n";
 
 static char tru_path_buffer[BUFFERSIZE];
 static char buffer1[BUFFERSIZE];
@@ -290,6 +292,10 @@ main(int argc,char **argv)
                 P("Version-readobjmacho: %s\n",
                     PACKAGE_VERSION);
                 printed_version = TRUE;
+            }
+            if (strcmp(argv[0],"--skip-dsym-check") == 0) { 
+                printf("Skip dsym check\n");
+                skip_dsym_check = TRUE;
                 continue;
             }
             if (!strncmp(argv[0],"--unibinarynumber=",18)) {
@@ -464,23 +470,27 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp,
 
     P(" Sections count: " LONGESTUFMT "  offset " LONGESTXFMT8 "\n",
         count,gsp->offset_of_sec_rec);
-    P("                         offset size \n");
+    P("                         addr      offset     size \n");
 
     for (i =0; i < count; ++i) {
         sort_section_element *sel = 0 ;
         Dwarf_Unsigned origindex = 0;
-        const char *namestr = 0;
+        Dwarf_Unsigned addr = 0;
+        const char    *namestr = 0;
 
         sel = &sort_el[i];
         gsp = (struct generic_macho_section *)sel->od_sec_desc;
         origindex = sel->od_originalindex;
         namestr = gsp->sectname;
+        addr = gsp->addr;
 
         P("  [" LONGESTUFMT2 "] %-16s"
             " " LONGESTXFMT8
             " " LONGESTXFMT8
+            " " LONGESTXFMT8
             "\n",
             origindex,namestr,
+            addr,
             gsp->offset,
             gsp->size);
     }
@@ -547,9 +557,22 @@ do_one_file(const char *s, sec_options *options)
     int res = 0;
     struct macho_filedata_s *mfp = 0;
     int errcode = 0;
+    const char *local_path = 0;
 
-    res = dwarf_object_detector_path(s,tru_path_buffer,BUFFERSIZE,
-        &ftype,&endian,&offsetsize,&filesize,&errcode);
+    if (skip_dsym_check) {
+        res = dwarf_object_detector_path(s,
+            0,0,
+            &ftype,&endian,&offsetsize,&filesize,&errcode);
+        local_path = s;
+        P("Reading name provided %s\n",local_path);
+    } else {
+        res = dwarf_object_detector_path(s,
+            tru_path_buffer,BUFFERSIZE,
+            &ftype,&endian,&offsetsize,&filesize,&errcode);
+        local_path = (const char *)tru_path_buffer;
+        P("Reading object at %s rather than name provided.\n",
+            local_path);
+    }
     if (res != DW_DLV_OK) {
         P("ERROR: Unable to read \"%s\", ignoring file. "
             "Errcode %d\n", s,errcode);
@@ -563,16 +586,12 @@ do_one_file(const char *s, sec_options *options)
         P("File %s is not mach-o. Ignored.\n",tru_path_buffer);
         return;
     }
-    if (strcmp(s,tru_path_buffer)) {
-        P("Reading dSYM object at %s\n",tru_path_buffer);
-    } else {
-        P("Reading dSYM object rather than name provided\n");
-    }
-    res = dwarf_construct_macho_access_path(tru_path_buffer,
+    res = dwarf_construct_macho_access_path(local_path,
         unibinarynumber,
         &mfp,&errcode);
     if (res != RO_OK) {
-        P("Warning: Unable to open %s for detailed reading. Err %d\n",
+        P("Warning: Unable to open %s for detailed reading. "
+            "Err %d\n",
             s,errcode);
         return;
     }
@@ -580,7 +599,7 @@ do_one_file(const char *s, sec_options *options)
     if (res != DW_DLV_OK) {
         P("Warning: %s macho-header not loaded giving up."
             "Error %d (%s)\n",
-            tru_path_buffer,errcode,dwarf_get_errname(errcode));
+            local_path,errcode,dwarf_get_errname(errcode));
         dwarf_destruct_macho_access(mfp);
         return;
     }
@@ -594,7 +613,7 @@ do_one_file(const char *s, sec_options *options)
         exit(1);
     }
     if (res == DW_DLV_NO_ENTRY) {
-        P("No dwarf sections exist in \"%s\"\n",tru_path_buffer);
+        P("No dwarf sections exist in \"%s\"\n",local_path);
         dwarf_destruct_macho_access(mfp);
         exit(1);
     }
