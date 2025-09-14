@@ -1,0 +1,28 @@
+2025-09-14:  David Anderson
+    commit 80693339e2d74d043ebe0b005a09bb96e58bd78f
+
+    Last change was 2024, so now we have that ChangeLog
+            renamed:    ChangeLog -> ChangeLog2024
+
+2025-09-14:  David Anderson
+    commit 5cb071ad3e52ca5657aa8e7eb3705cc58f50c7df
+
+    Now we show the diff itself, not just pass/fail.
+            modified:   test/test009m.sh
+
+    New baselines to match latest Macho object file
+    reporting (prints more detail).
+            modified:   test/test009m.base
+            modified:   test/test031m.base
+            modified:   test/test032m.base
+
+2025-09-14:  David Anderson
+    commit f0c6040734a29c25b15fc6964a2ef462b82db5b6
+
+    Now do more sections in detail.
+    Now we can also see text section details .
+            modified:   src/dwarf_machoread.c
+            modified:   src/readobjmacho.c
+    Commentary: tiny change.
+            modified:   src/dwarf_machoread.h
+
