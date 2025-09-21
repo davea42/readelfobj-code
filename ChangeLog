@@ -1,3 +1,21 @@
+2025-09-21:  David Anderson
+    commit 8000b30b70173ffd777b8498ab7c8277d00447d5
+
+    When a Macos segment has no sections we
+    now simply go on to the next segment.
+    And we change a garbage segment name to <no name>
+    Directly related to ossfuzz446356422
+    which found errors before (corrupted Mach-o object)
+    Was a bug in the code for a few days.
+            modified:   src/dwarf_machoread.c
+
+2025-09-14:  David Anderson
+    commit bb8afe9f4a93dd2a357667821b682aba8650ecce
+
+    Getting just the right content in each.
+            new 2025 file:   ChangeLog
+            modified:   ChangeLog2024
+
 2025-09-14:  David Anderson
     commit 80693339e2d74d043ebe0b005a09bb96e58bd78f
 
