@@ -114,6 +114,19 @@ magic_copy(unsigned char *d, unsigned len)
     return v;
 }
 
+static int
+not_ascii(const char *s)
+{
+     unsigned char *cp = (unsigned char *)s;
+     for (  ; *cp ; ++cp) {
+         if (*cp < 0x20 || *cp > 0x7e) {
+             return TRUE;
+         }
+     }
+     return FALSE;
+}
+
+
 int
 dwarf_construct_macho_access_path(const char *path,
     unsigned int uninumber,
@@ -473,6 +486,11 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     ASNAR(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
     strncpy(msp->segname,sc.segname,16);
     msp->segname[16] =0;
+    if (not_ascii(msp->segname)) {
+        printf("Reading command segment 32: ,"
+            "the segment name is empty or non-ascii\n");
+        strcpy(msp->segname,"<no name>");
+    }
     ASNAR(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
     ASNAR(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
     ASNAR(mfp->mo_copy_word,msp->fileoff,sc.fileoff);
@@ -553,6 +571,12 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     ASNAR(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
     strncpy(msp->segname,sc.segname,16);
     msp->segname[16] =0;
+    if (not_ascii(msp->segname)) {
+         printf("Reading command_segment 64 "
+             "empty or non-ascii segmentname. Unexpected\n");
+         strcpy(msp->segname,"<no name>");
+    }
+
     ASNAR(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
     ASNAR(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
     ASNAR(mfp->mo_copy_word,msp->fileoff,sc.fileoff);
@@ -655,6 +679,13 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
     Dwarf_Unsigned newcount = 0;
     struct generic_macho_section *secs = 0;
 
+
+    if (mfp->mo_dwarf_sections &&  !seccount) {
+         printf("section_details32() section pointer "
+             "and no sections. Odd\n");
+         return DW_DLV_OK;
+    }
+
     if (mfp->mo_dwarf_sections) {
         struct generic_macho_section * originalsections = 
             mfp->mo_dwarf_sections;
@@ -687,6 +718,12 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         newcount = secalloc;
         mfp->mo_dwarf_sections = secs;
         mfp->mo_dwarf_sectioncount = secalloc;
+        if (!secalloc) {
+            printf("section_details32() section count zero "
+                "Impossible\n");
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_ERROR;
+        }
         secs->offset_of_sec_rec = curoff;
         /*  Leave 0 section all zeros except our offset,
         elf-like in a sense */
@@ -723,6 +760,13 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         secs->sectname[16] = 0;
         strncpy(secs->segname,mosec.segname,16);
         secs->segname[16] = 0;
+        if (!secs->segname[0]) {
+            printf("Reading section details 32 fails,"
+                "the segment name is empty");
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }   
+
         ASNAR(mfp->mo_copy_word,secs->addr,mosec.addr);
         ASNAR(mfp->mo_copy_word,secs->size,mosec.size);
         ASNAR(mfp->mo_copy_word,secs->offset,mosec.offset);
@@ -769,6 +813,12 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
     Dwarf_Unsigned newcount = 0;
     struct generic_macho_section *secs = 0;
 
+    if (mfp->mo_dwarf_sections &&  !seccount) {
+         printf("section_details64() section pointer "
+             "and no sections. Odd\n");
+         return DW_DLV_OK;
+    }
+
     if (mfp->mo_dwarf_sections) {
         struct generic_macho_section * originalsections =
             mfp->mo_dwarf_sections;
@@ -801,6 +851,12 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         newcount = secalloc;
         mfp->mo_dwarf_sections = secs;
         mfp->mo_dwarf_sectioncount = secalloc;
+        if (!secalloc) {
+            printf("section_details64() section count zero "
+                "Impossible\n");
+            *errcode = RO_ERR_MALLOC;
+            return DW_DLV_ERROR;
+        }
         secs->offset_of_sec_rec = curoff;
         /*  Leave 0 section all zeros except our offset,
         elf-like in a sense */
@@ -836,6 +892,13 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         secs->sectname[16] = 0;
         strncpy(secs->segname,mosec.segname,16);
         secs->segname[16] = 0;
+        if (!secs->segname[0]) {
+            printf("Reading section details 64 fails,"
+                    "the segment name is empty");
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }   
+
         ASNAR(mfp->mo_copy_word,secs->addr,mosec.addr);
         ASNAR(mfp->mo_copy_word,secs->size,mosec.size);
         ASNAR(mfp->mo_copy_word,secs->offset,mosec.offset);
@@ -900,7 +963,8 @@ dwarf_macho_load_dwarf_sections(struct macho_filedata_s *mfp,
         mfp->mo_segment_commands;
     for ( ; segi < mfp->mo_segment_count; ++segi,++segp) {
         int res = 0;
-        printf("Segment name %s\n", segp->segname);
+        printf("Segment name %s\n",segp->segname[0]?
+            segp->segname:"<none?");
         if ( !strcmp(segp->segname,"__PAGEZERO")) {
             continue;
         }
