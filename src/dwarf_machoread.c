@@ -539,7 +539,7 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     msp->segname[16] =0;
     if (!is_known_segname(msp->segname)) {
         printf("Reading command segment 32: ,"
-            "the segment name %s is Unknown. Corrupt\n",
+            "the segment name %s is Unknown. Corrupt Dwarf\n",
             msp->segname);
         *errcode = RO_ERR_FILEOFFSETBAD;
         return DW_DLV_ERROR;
@@ -814,7 +814,7 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         secs->sectname[16] = 0;
         if (not_ascii(secs->sectname)) {
             printf("A section name is not simple"
-                " ascii characters. Corrupt");
+                " ascii characters. Corrupt Dwarf\n");
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
@@ -952,7 +952,7 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         secs->sectname[16] = 0;
         if (not_ascii(secs->sectname)) {
             printf("A section name is not simple"
-                " ascii characters. Corrupt");
+                " ascii characters. Corrupt DWARF.\n");
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
