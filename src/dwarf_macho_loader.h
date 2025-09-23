@@ -636,6 +636,8 @@ struct section_64 { /* for 64-bit architectures */
 #define SECT_COMMON    "__common"    /* the section common symbols are */
                     /* allocated in by the link editor */
 
+#define    SEG_DWARF    "__DWARF" /* added by davea */
+#define    SEG_DATA_CONST    "__DATA_CONST" /* added by davea */
 #define    SEG_OBJC    "__OBJC"    /* objective-C runtime segment */
 #define SECT_OBJC_SYMBOLS "__symbol_table"    /* symbol table */
 #define SECT_OBJC_MODULES "__module_info"    /* module information */

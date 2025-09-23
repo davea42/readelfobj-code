@@ -63,6 +63,64 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define TYP(n,l) char n[l]
 #endif /* TYPE */
 
+#if 0
+const char * sectames[] = {
+SECT_BSS,  
+SECT_COMMON,   
+SECT_DATA ,
+SECT_FVMLIB_INIT0,
+SECT_FVMLIB_INIT1,
+SECT_ICON_HEADER,
+SECT_ICON_TIFF,  
+SECT_OBJC_MODULES,
+SECT_OBJC_REFS,
+SECT_OBJC_STRINGS,
+SECT_OBJC_SYMBOLS,
+#endif /* 0 */
+
+const char * knownsegnames[] = {
+SEG_DATA,
+SEG_DWARF,
+SEG_ICON,    
+SEG_IMPORT,   
+SEG_LINKEDIT,
+SEG_OBJC,   
+SEG_PAGEZERO,   
+SEG_TEXT,   
+SEG_UNIXSTACK,   
+SEG_DATA_CONST,
+}; 
+
+static int is_known_segname(char *sname)
+{
+    char *s_in = sname;
+    int i = 0;
+    int end = sizeof(knownsegnames)/sizeof(char *);
+
+    for ( ; i < end; ++i) {
+        if (strcmp(s_in,knownsegnames[i])) {
+            continue;
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+/*  We do not expect non-ascii characters in section
+    names, they are defined by the compiler-writers
+    and ABI rules. We allow an empty name... */
+static int
+not_ascii(const char *s)
+{
+    unsigned char *cp = (unsigned char *)s;
+    for (  ; *cp ; ++cp) {
+        if (*cp < 0x20 || *cp > 0x7e) { 
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
 #ifdef WORDS_BIGENDIAN
 #define ASNAR(func,t,s)                         \
     do {                                        \
@@ -113,19 +171,6 @@ magic_copy(unsigned char *d, unsigned len)
     }
     return v;
 }
-
-static int
-not_ascii(const char *s)
-{
-     unsigned char *cp = (unsigned char *)s;
-     for (  ; *cp ; ++cp) {
-         if (*cp < 0x20 || *cp > 0x7e) {
-             return TRUE;
-         }
-     }
-     return FALSE;
-}
-
 
 int
 dwarf_construct_macho_access_path(const char *path,
@@ -368,15 +413,19 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
     ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh32.flags);
     if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize ||
         mfp->mo_header.ncmds >= mfp->mo_filesize ||
-        mfp->mo_header.ncmds >= mfp->mo_header.sizeofcmds)  {
+        (mfp->mo_header.ncmds* mfp->mo_header.sizeofcmds >= 
+           mfp->mo_filesize)
+        )  {
         printf("ERROR: %s header32 size fields bogus "
             "filesize is %lu,"
             "number of commands is %lu,"
-            "size of commands is %lu. \n",
+            "size of commands is %lu. "
+            "size*number is %lu\n",
             dwarf_get_errname(DW_DLE_MACHO_CORRUPT_HEADER),
             (unsigned long)mfp->mo_filesize,
             (unsigned long)mfp->mo_header.ncmds,
-            (unsigned long)mfp->mo_header.sizeofcmds);
+            (unsigned long)mfp->mo_header.sizeofcmds,
+            (unsigned long)mfp->mo_header.ncmds*(unsigned long)mfp->mo_header.sizeofcmds);
         *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
         return DW_DLV_ERROR;
     }
@@ -414,8 +463,10 @@ load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
     ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh64.flags);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.reserved,mh64.reserved);
     if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize ||
-        mfp->mo_header.ncmds >= mfp->mo_filesize ||
-        mfp->mo_header.ncmds >= mfp->mo_header.sizeofcmds)  {
+        mfp->mo_header.ncmds >= mfp->mo_filesize  ||
+        (mfp->mo_header.ncmds* mfp->mo_header.sizeofcmds >=
+           mfp->mo_filesize)
+        )  {
         printf("ERROR: %s header32 size fields bogus "
             "filesize is %lu,"
             "number of commands is %lu,"
@@ -486,10 +537,12 @@ load_segment_command_content32(struct macho_filedata_s *mfp,
     ASNAR(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
     strncpy(msp->segname,sc.segname,16);
     msp->segname[16] =0;
-    if (not_ascii(msp->segname)) {
+    if (!is_known_segname(msp->segname)) {
         printf("Reading command segment 32: ,"
-            "the segment name is empty or non-ascii\n");
-        strcpy(msp->segname,"<no name>");
+            "the segment name %s is Unknown. Corrupt\n",
+            msp->segname);
+        *errcode = RO_ERR_FILEOFFSETBAD;
+        return DW_DLV_ERROR;
     }
     ASNAR(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
     ASNAR(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
@@ -571,12 +624,13 @@ load_segment_command_content64(struct macho_filedata_s *mfp,
     ASNAR(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
     strncpy(msp->segname,sc.segname,16);
     msp->segname[16] =0;
-    if (not_ascii(msp->segname)) {
-         printf("Reading command_segment 64 "
-             "empty or non-ascii segmentname. Unexpected\n");
-         strcpy(msp->segname,"<no name>");
+    if (!is_known_segname(msp->segname)) {
+        printf("Reading command segment 32: ,"
+            "the segment name %s is Unknown. Corrupt\n",
+            msp->segname);
+        *errcode = RO_ERR_FILEOFFSETBAD;
+        return DW_DLV_ERROR;
     }
-
     ASNAR(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
     ASNAR(mfp->mo_copy_word,msp->vmsize,sc.vmsize);
     ASNAR(mfp->mo_copy_word,msp->fileoff,sc.fileoff);
@@ -758,6 +812,12 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
         }
         strncpy(secs->sectname,mosec.sectname,16);
         secs->sectname[16] = 0;
+        if (not_ascii(secs->sectname)) {
+            printf("A section name is not simple"
+                " ascii characters. Corrupt");
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         strncpy(secs->segname,mosec.segname,16);
         secs->segname[16] = 0;
         if (!secs->segname[0]) {
@@ -890,6 +950,13 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         }
         strncpy(secs->sectname,mosec.sectname,16);
         secs->sectname[16] = 0;
+        if (not_ascii(secs->sectname)) {
+            printf("A section name is not simple"
+                " ascii characters. Corrupt");
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
+
         strncpy(secs->segname,mosec.segname,16);
         secs->segname[16] = 0;
         if (!secs->segname[0]) {
@@ -906,7 +973,8 @@ dwarf_macho_load_dwarf_section_details64(struct macho_filedata_s *mfp,
         ASNAR(mfp->mo_copy_word,secs->reloff,mosec.reloff);
         ASNAR(mfp->mo_copy_word,secs->nreloc,mosec.nreloc);
         ASNAR(mfp->mo_copy_word,secs->flags,mosec.flags);
-         /* One section size apparently refers to executable, not here, so do not
+        /* One section size apparently refers to executable,
+            not here, so do not
             check here */
         if (strcmp(secs->sectname,"__text") &&
             (secs->offset > mfp->mo_filesize ||
