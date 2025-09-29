@@ -28,31 +28,25 @@ Segment name __DWARF
   [2] 0x1 LC_SEGMENT       __DATA            0x00000000 0x00000000
   [3] 0x1 LC_SEGMENT       __LINKEDIT        0x00001000 0x00004acb
   [4] 0x1 LC_SEGMENT       __DWARF           0x00006000 0x00008859
- Sections count: 25  offset 0x000000bc
+ Sections count: 19  offset 0x000000bc
                          addr      offset     size
   [ 1] __text           0x000025c0 0x00000000 0x0004e894
   [ 4] __cstring        0x000510d2 0x00000000 0x00009ecd
-  [17] __debug_info     0x000677ef 0x000087ef 0x00002dea
-  [20] __debug_str      0x0006ab9b 0x0000bb9b 0x00001b6c
-  [13] __debug_line     0x00065000 0x00006000 0x00001ad1
-  [23] __apple_types    0x0006ccc7 0x0000dcc7 0x00000b6e
-  [10] __data           0x0005b458 0x00000000 0x00000824
-  [15] __debug_pubtypes 0x00066f09 0x00007f09 0x000007be
-  [21] __apple_names    0x0006c707 0x0000d707 0x0000059c
-  [14] __debug_pubnames 0x00066ad1 0x00007ad1 0x00000438
-  [18] __debug_frame    0x0006a5d9 0x0000b5d9 0x000003c0
-  [ 9] __const          0x0005b0c4 0x00000000 0x00000394
-  [19] __debug_abbrev   0x0006a999 0x0000b999 0x00000202
-  [12] __bss            0x0005bc98 0x00000000 0x000001e1
+  [11] __debug_info     0x000677ef 0x000087ef 0x00002dea
+  [14] __debug_str      0x0006ab9b 0x0000bb9b 0x00001b6c
+  [ 7] __debug_line     0x00065000 0x00006000 0x00001ad1
+  [17] __apple_types    0x0006ccc7 0x0000dcc7 0x00000b6e
+  [ 9] __debug_pubtypes 0x00066f09 0x00007f09 0x000007be
+  [15] __apple_names    0x0006c707 0x0000d707 0x0000059c
+  [ 8] __debug_pubnames 0x00066ad1 0x00007ad1 0x00000438
+  [12] __debug_frame    0x0006a5d9 0x0000b5d9 0x000003c0
+  [13] __debug_abbrev   0x0006a999 0x0000b999 0x00000202
   [ 3] __stub_helper    0x00050f40 0x00000000 0x00000192
-  [16] __debug_aranges  0x000676c7 0x000086c7 0x00000128
+  [10] __debug_aranges  0x000676c7 0x000086c7 0x00000128
   [ 2] __symbol_stub    0x00050e54 0x00000000 0x000000ea
-  [ 8] __la_symbol_ptr  0x0005b028 0x00000000 0x0000009c
   [ 6] __unwind_info    0x0005afac 0x00000000 0x00000048
-  [ 7] __nl_symbol_ptr  0x0005b000 0x00000000 0x00000028
-  [22] __apple_namespac 0x0006cca3 0x0000dca3 0x00000024
-  [24] __apple_objc     0x0006d835 0x0000e835 0x00000024
-  [11] __common         0x0005bc7c 0x00000000 0x00000018
+  [16] __apple_namespac 0x0006cca3 0x0000dca3 0x00000024
+  [18] __apple_objc     0x0006d835 0x0000e835 0x00000024
   [ 5] __const          0x0005af9f 0x00000000 0x0000000d
   [ 0]                  0x00000000 0x00000000 0x00000000
 Reading object at yyy/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64 rather than name provided.
@@ -85,31 +79,24 @@ Segment name __DWARF
   [2] 0x19 LC_SEGMENT_64    __DATA            0x00000000 0x00000000
   [3] 0x19 LC_SEGMENT_64    __LINKEDIT        0x00001000 0x0000531b
   [4] 0x19 LC_SEGMENT_64    __DWARF           0x00007000 0x000087ee
- Sections count: 25  offset 0x000000e0
+ Sections count: 18  offset 0x000000e0
                          addr      offset     size
   [ 1] __text           0x100000a00 0x00000000 0x00046311
   [ 4] __cstring        0x100046f64 0x00000000 0x00009ecd
-  [18] __debug_info     0x10005e89c 0x0000989c 0x00003087
-  [20] __debug_str      0x100061b30 0x0000cb30 0x00001b6c
-  [14] __debug_line     0x10005c000 0x00007000 0x00001a96
-  [11] __data           0x100051880 0x00000000 0x00000f40
-  [23] __apple_types    0x100063c5c 0x0000ec5c 0x00000b6e
-  [16] __debug_pubtypes 0x10005dece 0x00008ece 0x000007be
-  [10] __const          0x100051150 0x00000000 0x00000730
-  [21] __apple_names    0x10006369c 0x0000e69c 0x0000059c
-  [15] __debug_pubnames 0x10005da96 0x00008a96 0x00000438
-  [13] __bss            0x1000527f0 0x00000000 0x00000389
-  [17] __debug_aranges  0x10005e68c 0x0000968c 0x00000210
-  [19] __debug_abbrev   0x100061923 0x0000c923 0x0000020d
+  [11] __debug_info     0x10005e89c 0x0000989c 0x00003087
+  [13] __debug_str      0x100061b30 0x0000cb30 0x00001b6c
+  [ 7] __debug_line     0x10005c000 0x00007000 0x00001a96
+  [16] __apple_types    0x100063c5c 0x0000ec5c 0x00000b6e
+  [ 9] __debug_pubtypes 0x10005dece 0x00008ece 0x000007be
+  [14] __apple_names    0x10006369c 0x0000e69c 0x0000059c
+  [ 8] __debug_pubnames 0x10005da96 0x00008a96 0x00000438
+  [10] __debug_aranges  0x10005e68c 0x0000968c 0x00000210
+  [12] __debug_abbrev   0x100061923 0x0000c923 0x0000020d
   [ 6] __unwind_info    0x100050e40 0x00000000 0x000001b8
   [ 3] __stub_helper    0x100046dec 0x00000000 0x00000178
-  [ 9] __la_symbol_ptr  0x100051028 0x00000000 0x00000120
   [ 2] __stubs          0x100046d12 0x00000000 0x000000d8
-  [12] __common         0x1000527c0 0x00000000 0x00000028
-  [22] __apple_namespac 0x100063c38 0x0000ec38 0x00000024
-  [24] __apple_objc     0x1000647ca 0x0000f7ca 0x00000024
-  [ 7] __got            0x100051000 0x00000000 0x00000018
-  [ 8] __nl_symbol_ptr  0x100051018 0x00000000 0x00000010
+  [15] __apple_namespac 0x100063c38 0x0000ec38 0x00000024
+  [17] __apple_objc     0x1000647ca 0x0000f7ca 0x00000024
   [ 5] __const          0x100050e31 0x00000000 0x0000000d
   [ 0]                  0x00000000 0x00000000 0x00000000
 Reading object at yyy/libkrb5support.so.0.1.debug rather than name provided.
