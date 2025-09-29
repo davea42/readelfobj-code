@@ -41,6 +41,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h> /* memcpy, strcpy */
 #endif /* HAVE_STRING_H */
 #include "dwarf_types.h"
+#include "dwarf_macho_loader.h" /* for Dwarf_Unsigned */
 #include "dwarf_machoread.h" /* for Dwarf_Unsigned */
 #include "dwarf_object_detector.h"
 

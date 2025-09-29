@@ -65,6 +65,8 @@ dwarf_object_detector.c \
 dwarf_object_detector.h \
 dwarf_machoread.h \
 dwarf_machoread.c \
+dwarf_safe_arithmetic.c \
+dwarf_safe_arithmetic.h \
 dwarf_64machoread.c \
 dwarf_macho_loader.h \
 errormessages.c \
@@ -94,6 +96,9 @@ readobjpe_CPPFLAGS = \
 object_detector_SOURCES = object_detector_main.c \
    dwarf_object_detector.c \
    dwarf_machoread.c \
+   dwarf_64machoread.c \
+   dwarf_safe_arithmetic.c \
+   dwarf_safe_arithmetic.h \
    dwarf_object_read_common.c \
    errormessages.c \
    dwarf_object_detector.h

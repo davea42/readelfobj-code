@@ -56,6 +56,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 #include <errno.h>
 #include "dwarf_types.h"
 #include "dwarf_reading.h"
+#include "dwarf_macho_loader.h" 
 #include "dwarf_machoread.h" /* for Dwarf_Unsigned */
 #include "dwarf_object_detector.h"
 #include "dwarf_object_read_common.h"

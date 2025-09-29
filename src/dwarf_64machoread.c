@@ -55,6 +55,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_reading.h"
 #include "dwarf_object_read_common.h"
 #include "dwarf_universal.h"
+#include "dwarf_macho_loader.h"
 #include "dwarf_machoread.h"
 #include "dwarf_object_detector.h"
 #include "dwarf_macho_loader.h"
@@ -103,6 +104,7 @@ _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
     struct mach_header_64 mh64;
     int res = 0;
     Dwarf_Unsigned inner = mfp->mo_inner_offset;
+    Dwarf_Unsigned totalcmds = 0;
 
     res = RRMOA(mfp->mo_fd,&mh64,inner,sizeof(mh64),
         inner+mfp->mo_filesize,errcode);
@@ -122,6 +124,24 @@ _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
         mh64.sizeofcmds);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh64.flags);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.reserved,mh64.reserved);
+    res  = _dwarf_uint64_mult(mfp->mo_header.ncmds,
+        mfp->mo_header.sizeofcmds,&totalcmds);
+    if (res == DW_DLV_ERROR) {
+        printf("ERROR: header 64 cmd count*cmdsize "
+            "overflows.Corrupt\n");
+        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
+        return DW_DLV_ERROR;
+    }   
+    if (totalcmds > MAX_COMMANDS_SIZE) {
+        printf("ERROR: header 64 cmd count*cmdsize "
+            "(%lu)"
+            " exceeds limit (%lu).Corrupt\n",
+            (unsigned long)totalcmds,
+            (unsigned long)MAX_COMMANDS_SIZE);
+        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
+        return DW_DLV_ERROR;
+    }
+
     if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize ||
         mfp->mo_header.ncmds >= mfp->mo_filesize  ||
         (mfp->mo_header.ncmds* mfp->mo_header.sizeofcmds >=
@@ -179,9 +199,9 @@ _dwarf_load_segment_command_content64(struct macho_filedata_s *mfp,
     ASNAR(mfp->mo_copy_word,msp->cmdsize,sc.cmdsize);
     strncpy(msp->segname,sc.segname,16);
     msp->segname[16] =0;
-    if (!is_known_segname(msp->segname)) {
+    if (!_dwarf_is_known_segname(msp->segname)) {
         printf("Reading command segment 32: ,"
-            "the segment name %s is Unknown. Corrupt\n",
+            "the segment name (%s) is Unknown. Corrupt\n",
             msp->segname);
         *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
         return DW_DLV_ERROR;
@@ -343,19 +363,19 @@ _dwarf_macho_load_dwarf_section_details64(
         }
         strncpy(secs->sectname,mosec.sectname,16);
         secs->sectname[16] = 0;
-        if (not_ascii(secs->sectname)) {
+        if (_dwarf_not_ascii(secs->sectname)) {
             printf("A section name (%s) is not simple"
                 " ascii characters. Corrupt DWARF.\n",
                 secs->sectname);
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
-
         strncpy(secs->segname,mosec.segname,16);
         secs->segname[16] = 0;
-        if (!secs->segname[0]) {
+        if (!_dwarf_is_known_segname(secs->segname)) {
             printf("Reading section details 64 fails,"
-                    "the segment name is empty\n");
+                "the segment name (%s) is unknown\n",
+                secs->segname);
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }   

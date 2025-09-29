@@ -37,6 +37,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
+/*  There are reports that this limit of the number of bytes of
+     MAX_COMMANDS_SIZE  16464
+ 
+    Macho object commands is a hard kernel limit in iOS.
+    But our testcase /home/davea/dwarf/regressiontests/macuniv/demo 
+    uses 17K or so lets raise this, we are not using iOS */
+#define MAX_COMMANDS_SIZE  20000
 
 struct Dwarf_Universal_Arch_s;
 struct Dwarf_Universal_Head_s {
@@ -140,6 +147,7 @@ struct macho_filedata_s {
     Dwarf_Unsigned  mo_offset_after_commands;
 
     Dwarf_Unsigned mo_segment_count;
+    Dwarf_Unsigned mo_segment_size_total; 
     struct generic_macho_segment_command *mo_segment_commands;
     /* We are also adding __TEXT sections */
     Dwarf_Unsigned mo_dwarf_sectioncount;
@@ -173,6 +181,10 @@ int _dwarf_load_segment_command_content64(struct macho_filedata_s *mfp,
     struct generic_macho_segment_command *msp,
     Dwarf_Unsigned mmpindex,int *errcode);
 int _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode);
+int _dwarf_not_ascii(const char *s);
+int _dwarf_is_known_segname(char *sname);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
