@@ -431,6 +431,12 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
         *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
         return DW_DLV_ERROR;
     }
+    printf("  Total Commands count      : %lu\n",
+          (unsigned long)mfp->mo_header.ncmds);
+    printf("  Total Commands item size  : %lu\n",
+          (unsigned long)mfp->mo_header.sizeofcmds);
+    printf("  Total Commands space bytes: %lu\n",
+          (unsigned long)totalcmds);
     if (totalcmds > MAX_COMMANDS_SIZE) {
         printf("ERROR: header 32 cmd count*cmdsize "
             "(%lu)"

@@ -1,4 +1,7 @@
 Reading object at yyy/mach-o-object32.dSYM/Contents/Resources/DWARF/mach-o-object32 rather than name provided.
+  Total Commands count      : 7
+  Total Commands item size  : 1960
+  Total Commands space bytes: 13720
 Mach-o Magic:  0xfeedface
   cputype           : 0x7 cpusubtype: 0x3
   offset size       : 4
@@ -50,6 +53,9 @@ Segment name __DWARF
   [ 1] __text           0x000025c0 0x00000000 0x0004e894
   [ 6] __unwind_info    0x0005afac 0x00000000 0x00000048
 Reading object at yyy/mach-o-object64.dSYM/Contents/Resources/DWARF/mach-o-object64 rather than name provided.
+  Total Commands count      : 7
+  Total Commands item size  : 2328
+  Total Commands space bytes: 16296
 Mach-o Magic:  0xfeedfacf
   cputype           : 0x1000007 cpusubtype: 0x3
   offset size       : 8
