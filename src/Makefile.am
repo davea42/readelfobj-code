@@ -41,6 +41,8 @@ dwarf_load_elf_headers.c \
 errormessages.c \
 readelfobj.c \
 dwarf_reading.h \
+dwarf_safe_arithmetic.c \
+dwarf_safe_arithmetic.h \
 dwarf_types.h \
 dwarf_universal.h \
 dw_elfstructs.h \
@@ -63,6 +65,7 @@ dwarf_object_detector.c \
 dwarf_object_detector.h \
 dwarf_machoread.h \
 dwarf_machoread.c \
+dwarf_64machoread.c \
 dwarf_macho_loader.h \
 errormessages.c \
 sanitized.c

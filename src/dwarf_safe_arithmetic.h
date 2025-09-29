@@ -1,5 +1,5 @@
-/* Copyright (c) 2023, David Anderson
-All rights reserved.
+/*
+Copyright (c) 2023, David Anderson All rights reserved.
 
 Redistribution and use in source and binary forms, with
 or without modification, are permitted provided that the
@@ -26,44 +26,32 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
-#ifndef DWARF_UNIVERSAL_H
-#define DWARF_UNIVERSAL_H
+/*  Thanks to David Grayson/
+codereview.stackexchange.com/questions/98791/
+safe-multiplication-of-two-64-bit-signed-integers
+*/
 
-#ifndef Dwarf_Unsigned
-#define Dwarf_Unsigned unsigned long long
-#endif
-#ifndef Dwarf_Signed
-#define Dwarf_Signed unsigned long long
-#endif
-#ifndef Dwarf_Small
-#define Dwarf_Small unsigned char
-#endif
+#if 0
+int _dwarf_int64_mult(Dwarf_Signed x, Dwarf_Signed y,
+    Dwarf_Signed * result,
+    Dwarf_Debug dbg, Dwarf_Error*error);
+#endif /* 0 */
 
-#define DW_DLV_NO_ENTRY -1
-#define DW_DLV_OK        0
-#define DW_DLV_ERROR     1
+int _dwarf_uint64_mult(Dwarf_Unsigned x, Dwarf_Unsigned y,
+    Dwarf_Unsigned * result);
 
-struct Dwarf_Universal_Head_s;
-typedef struct Dwarf_Universal_Head_s *  Dwarf_Universal_Head;
+int _dwarf_uint64_add( Dwarf_Unsigned dw_lhs, Dwarf_Unsigned dw_rhs,
+    Dwarf_Unsigned *dw_result);
 
-int dwarf_object_detector_universal_head(
-    char           *dw_path,
-    Dwarf_Unsigned  dw_filesize,
-    unsigned int   *dw_contentcount,
-    Dwarf_Universal_Head * dw_head,
-    int            *errcode);
-
-int dwarf_object_detector_universal_instance(
-    Dwarf_Universal_Head dw_head,
-    Dwarf_Unsigned  dw_index_of,
-    Dwarf_Unsigned *dw_cpu_type,
-    Dwarf_Unsigned *dw_cpu_subtype,
-    Dwarf_Unsigned *dw_offset,
-    Dwarf_Unsigned *dw_size,
-    Dwarf_Unsigned *dw_align,
-    int         *errcode);
-void dwarf_dealloc_universal_head(Dwarf_Universal_Head dw_head);
-
-#endif /* DWARF_UNIVERSAL_H */
+#if 0
+/* See:
+https://stackoverflow.com/questions/
+3944505/detecting-signed-overflow-in-c-c
+*/
+int _dwarf_signed_add_check(Dwarf_Signed l, Dwarf_Signed r,
+    Dwarf_Signed *sum, Dwarf_Debug dbg,
+    Dwarf_Error *error);
+#endif /* 0 */

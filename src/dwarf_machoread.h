@@ -158,7 +158,21 @@ int dwarf_construct_macho_access(int fd,const char *path,
 int dwarf_load_macho_header(macho_filedata mfp,int *errcode);
 int dwarf_load_macho_commands(macho_filedata mfp,int *errcode);
 void dwarf_destruct_macho_access(macho_filedata mp);
-
+int _dwarf_fill_in_uni_arch_64(
+    struct fat_arch_64 * fa,
+    struct Dwarf_Universal_Head_s *duhd,
+    void *(*word_swap) (void *, const void *, size_t),
+    int * errcode);
+int _dwarf_macho_load_dwarf_section_details64(
+    struct macho_filedata_s *mfp,
+    struct generic_macho_segment_command *segp,
+    Dwarf_Unsigned segi,
+    int *errcode);
+int _dwarf_load_segment_command_content64(struct macho_filedata_s *mfp,
+    struct generic_macho_command *mmp,
+    struct generic_macho_segment_command *msp,
+    Dwarf_Unsigned mmpindex,int *errcode);
+int _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
