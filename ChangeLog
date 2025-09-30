@@ -1,3 +1,18 @@
+2025-09-30:  David Anderson
+    commit 961619145435f280b32d3ba2c9e79855d8eb5a35
+
+    Updated from git
+            modified:   ChangeLog
+
+    Updated date, removed a couple of blank lines.
+            modified:   README.md
+
+    Set version 2.2.0
+            modified:   configure.ac
+
+    Updated MAX_COMMANDS_SIZE: 20000 -> 30000
+            modified:   src/dwarf_machoread.h
+
 2025-09-29:  David Anderson
     commit 3d46dcc8225ef2adb77b2ce62a4a06ed33729b6d
 
