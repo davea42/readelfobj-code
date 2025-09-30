@@ -1,5 +1,6 @@
 # README.md
-Last update: August 20, 2024
+Last update: Sept 30, 2024.1
+Version now set to 2.2.0
 
 The distribution consists entirely of C
 source files (along with GNU configure scripts
@@ -88,7 +89,6 @@ the autogen.sh step requires one have
 the GNU autotools installed.
 We build outside the source tree to keep the tree clean.
 
-
     #git clone https://github.com/davea42/readelfobj-code
     #Linux/Unix/MacOS/MinGW(Windows)
     src=/path/to/readelfobj-code
@@ -108,4 +108,3 @@ Makefile.am and do, in the top level directory:
   autoreconf -vif
 You will need several GNU autotools installed for this
 autoreconf to work.
-

@@ -43,7 +43,7 @@ extern "C" {
     Macho object commands is a hard kernel limit in iOS.
     But our testcase /home/davea/dwarf/regressiontests/macuniv/demo 
     uses 17K or so lets raise this, we are not using iOS */
-#define MAX_COMMANDS_SIZE  20000
+#define MAX_COMMANDS_SIZE  30000
 
 struct Dwarf_Universal_Arch_s;
 struct Dwarf_Universal_Head_s {

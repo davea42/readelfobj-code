@@ -1,3 +1,82 @@
+2025-09-29:  David Anderson
+    commit 3d46dcc8225ef2adb77b2ce62a4a06ed33729b6d
+
+    Added 3 lines of output about mach-o commands.
+            modified:   src/dwarf_64machoread.c
+            modified:   src/dwarf_machoread.c
+    Update baseline to match.
+            modified:   test/test009m.base
+            modified:   test/test031m.base
+            modified:   test/test032m.base
+
+2025-09-29:  David Anderson
+    commit edd7de5e590c35a89caf08de6b2754dd7d85dcd8
+
+    Up to date with git log
+            modified:   ChangeLog
+
+2025-09-29:  David Anderson
+    commit 809f3283fad73d2f0a7bd7d8f4104ad51290d4e2
+
+    Now split readobjmacho into a base and a
+    64 piece. Easier to get 32 and 64 working alike.
+            modified:   Makefile.am
+            modified:   dwarf_64machoread.c
+            modified:   dwarf_debuglink.c
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_object_detector.c
+
+2025-09-29:  David Anderson
+    commit 2e76e37ef66a359cfe25ca265d65f45e66142738
+
+    autogen.sh changed these.
+            modified:   m4/libtool.m4
+            modified:   m4/ltoptions.m4
+            modified:   m4/ltsugar.m4
+            modified:   m4/ltversion.m4
+            modified:   m4/lt~obsolete.m4
+
+    Expected baseline changes
+            modified:   test/test009m.base
+            modified:   test/test031m.base
+            modified:   test/test032m.base
+
+2025-09-29:  David Anderson
+    commit 5c659f9c59d3c282a9dd8746378a6322395120b9
+
+    Do not use this commit! Work in progress.
+    Splitting off dwarf_64machoread.c
+            modified:   src/Makefile.am
+            new file:   src/dwarf_64machoread.c
+            modified:   src/dwarf_machoread.c
+            modified:   src/dwarf_machoread.h
+            new file:   src/dwarf_safe_arithmetic.c
+            new file:   src/dwarf_safe_arithmetic.h
+            modified:   src/dwarf_universal.h
+
+2025-09-23:  David Anderson
+    commit fb7c4c59dd42068b4a4a9cbe17306c4a3b0168fe
+
+    Modified printf to add newline and wording changes.
+            modified:   src/dwarf_machoread.c
+
+2025-09-23:  David Anderson
+    commit 298777705dc0b99a7fbab70457c23a68f21a094e
+
+    Now lists all segment names in use.
+            modified:   src/dwarf_macho_loader.h
+    Now cheks segment names against known names
+    and checks that section names are plain ascii
+    (users do not get to choose section names...)
+            modified:   src/dwarf_machoread.c
+
+2025-09-21:  David Anderson
+    commit 7c362998307c85e16e16e17748bc8f1e070034c7
+
+    Now up to date
+            modified:   ChangeLog
+
 2025-09-21:  David Anderson
     commit 8000b30b70173ffd777b8498ab7c8277d00447d5
 
