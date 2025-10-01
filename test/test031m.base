@@ -105,5 +105,4 @@ Segment name __DWARF
   [17] __apple_objc     0x1000647ca 0x0000f7ca 0x00000024
   [ 5] __const          0x100050e31 0x00000000 0x0000000d
   [ 0]                  0x00000000 0x00000000 0x00000000
-Reading object at yyy/libkrb5support.so.0.1.debug rather than name provided.
 File yyy/libkrb5support.so.0.1.debug is not mach-o. Ignored.

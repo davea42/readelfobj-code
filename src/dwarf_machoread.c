@@ -599,17 +599,23 @@ dwarf_macho_load_segment_commands(struct macho_filedata_s *mfp,
         *errcode = RO_ERR_BADOFFSETSIZE;
         return DW_DLV_ERROR;
     }
+
+#if 0 /* totally bogus error report. */
     if (segtotsize > MAX_COMMANDS_SIZE ) {
         printf("ERROR loading segment commands the total byte size "
-            "of the commands (%lu)"
+            "of the command memory space (%lu)"
             "is excessive\n",(unsigned long)segtotsize);
         *errcode = RO_ERR_BADOFFSETSIZE;
         return DW_DLV_ERROR;
     }
+#endif /* 0 */
     mfp->mo_segment_commands =
         (struct generic_macho_segment_command *)
         calloc( 1,segtotsize);
     if (!mfp->mo_segment_commands) {
+        printf("FAIL calloc call fails allocating "
+           " space for segment command array: %lu "
+           "bytes\n",(unsigned long)segtotsize);
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
@@ -772,7 +778,7 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
             printf("Reading section details 64 fails,"
                 "the segment name (%s) is unknown\n",
                 secs->segname);
-            *errcode = RO_ERR_FILEOFFSETBAD;
+            *errcode = DW_DLE_MACHO_CORRUPT_SEGMENT_NAME;
             return DW_DLV_ERROR;
         }   
         ASNAR(mfp->mo_copy_word,secs->addr,mosec.addr);

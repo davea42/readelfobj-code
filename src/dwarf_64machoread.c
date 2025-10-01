@@ -210,7 +210,7 @@ _dwarf_load_segment_command_content64(struct macho_filedata_s *mfp,
         printf("Reading command segment 32: ,"
             "the segment name (%s) is Unknown. Corrupt\n",
             msp->segname);
-        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
+        *errcode = DW_DLE_MACHO_CORRUPT_SEGMENT_NAME; 
         return DW_DLV_ERROR;
     }
     ASNAR(mfp->mo_copy_word,msp->vmaddr,sc.vmaddr);
@@ -332,7 +332,17 @@ _dwarf_macho_load_dwarf_section_details64(
         Dwarf_Unsigned offplussize = 0;
         Dwarf_Unsigned innercur = 0;
 
-        endoffset = curoff + sizeof(mosec);
+        res = _dwarf_uint64_add(curoff,sizeof(mosec),
+            &endoffset);
+        if (res == DW_DLV_ERROR) {
+            printf("Reading sections fails,"
+                "overflow adding offset (%lu) and "
+                "sec-header-size %lu\n",
+                (unsigned long)curoff,
+                (unsigned long)sizeof(mosec));
+            *errcode = RO_ERR_FILEOFFSETBAD;
+            return DW_DLV_ERROR;
+        }
         if (curoff >=  mfp->mo_filesize ||
             endoffset > mfp->mo_filesize) {
             printf("Reading sections fails,"
@@ -345,15 +355,16 @@ _dwarf_macho_load_dwarf_section_details64(
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
-        innercur = inner+curoff;
-        if (innercur < inner || innercur <curoff) {
+        res = _dwarf_uint64_add(inner,curoff,&innercur);
+        if (res == DW_DLV_ERROR) {
             printf(" Error: overflow in section inner "
                 "offset/curroff sum. Corrupt\n");
             *errcode = RO_ERR_FILEOFFSETBAD;
             return DW_DLV_ERROR;
         }
-        offplussize = inner+mfp->mo_filesize;
-        if (offplussize < inner || offplussize <mfp->mo_filesize) {
+        res = _dwarf_uint64_add(inner,mfp->mo_filesize,
+            &offplussize);
+        if (res == DW_DLV_ERROR) {
             printf(" Error: overflow in section %lu "
                 "inneroffset (%lu) +filesize (%lu) sum. Corrupt\n",
                 (unsigned long)seci,

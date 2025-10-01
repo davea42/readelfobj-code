@@ -570,8 +570,10 @@ do_one_file(const char *s, sec_options *options)
             tru_path_buffer,BUFFERSIZE,
             &ftype,&endian,&offsetsize,&filesize,&errcode);
         local_path = (const char *)tru_path_buffer;
-        P("Reading object at %s rather than name provided.\n",
+        if (strcmp(s,local_path)) {
+            P("Reading object at %s rather than name provided.\n",
             local_path);
+        }
     }
     if (res != DW_DLV_OK) {
         P("ERROR: Unable to read \"%s\", ignoring file. "

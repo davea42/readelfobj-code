@@ -93,6 +93,8 @@ const char *ro_errname[] = {
     ".gnu.note/build-id section",
 "DW_DLE_BAD_SECTION_FLAGS(52) Corrupt section flag bits",
 "DW_DLE_IMPROPER_SECTION_ZERO(53) Section 0 is not empty but must be",
+"DW_DLE_UNIVERSAL_BINARY_ERROR(54) Mach-o universal binary corrupt",
+"DW_DLE_MACHO_CORRUPT_SEGMENT_NAME(55) ",    
 0
 };
 

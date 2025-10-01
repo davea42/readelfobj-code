@@ -151,6 +151,7 @@ extern "C" {
 #define DW_DLE_BAD_SECTION_FLAGS           52
 #define DW_DLE_IMPROPER_SECTION_ZERO       53
 #define DW_DLE_UNIVERSAL_BINARY_ERROR      54
+#define DW_DLE_MACHO_CORRUPT_SEGMENT_NAME  55
 
 
 const char *dwarf_get_errname(int i);

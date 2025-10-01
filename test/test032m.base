@@ -105,5 +105,4 @@ Segment name __DWARF
   [ 2] __stubs          0x100046d12 0x00000000 0x000000d8
   [ 1] __text           0x100000a00 0x00000000 0x00046311
   [ 6] __unwind_info    0x100050e40 0x00000000 0x000001b8
-Reading object at yyy/libkrb5support.so.0.1.debug rather than name provided.
 File yyy/libkrb5support.so.0.1.debug is not mach-o. Ignored.
