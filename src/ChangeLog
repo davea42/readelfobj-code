@@ -1,3 +1,64 @@
+2025-10-01:  David Anderson
+    commit 1ef88816db8bb08b5be665143c9fcbfe6c5ce44c
+
+    Added an error for corrupt segment namre
+            modified:   dwarf_64machoread.c
+
+    Now with the new error,
+            modified:   dwarf_machoread.c
+
+    New error
+            modified:   dwarf_reading.h
+            modified:   errormessages.c
+
+    Avoids claiming
+    it changed names via dSYM when it did not do that.
+            modified:   readobjmacho.c
+
+    The corrected line in readobjmacho.c
+    changed the baselines.
+            modified:   ../test/test009m.base
+            modified:   ../test/test031m.base
+            modified:   ../test/test032m.base
+
+2025-09-30:  David Anderson
+    commit 918e7c8dfcd35816508486bb0125e4b77059ad50
+
+    Fully up to date.
+            modified:   ChangeLog
+
+2025-09-30:  David Anderson
+    commit 961619145435f280b32d3ba2c9e79855d8eb5a35
+
+    Updated from git
+            modified:   ChangeLog
+
+    Updated date, removed a couple of blank lines.
+            modified:   README.md
+
+    Set version 2.2.0
+            modified:   configure.ac
+
+    Updated MAX_COMMANDS_SIZE: 20000 -> 30000
+            modified:   src/dwarf_machoread.h
+
+2025-09-29:  David Anderson
+    commit 3d46dcc8225ef2adb77b2ce62a4a06ed33729b6d
+
+    Added 3 lines of output about mach-o commands.
+            modified:   src/dwarf_64machoread.c
+            modified:   src/dwarf_machoread.c
+    Update baseline to match.
+            modified:   test/test009m.base
+            modified:   test/test031m.base
+            modified:   test/test032m.base
+
+2025-09-29:  David Anderson
+    commit edd7de5e590c35a89caf08de6b2754dd7d85dcd8
+
+    Up to date with git log
+            modified:   ChangeLog
+
 2025-09-29:  David Anderson
     commit 809f3283fad73d2f0a7bd7d8f4104ad51290d4e2
 
