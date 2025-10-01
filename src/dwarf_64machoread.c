@@ -149,11 +149,7 @@ _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
         return DW_DLV_ERROR;
     }
 
-    if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize ||
-        mfp->mo_header.ncmds >= mfp->mo_filesize  ||
-        (mfp->mo_header.ncmds* mfp->mo_header.sizeofcmds >=
-           mfp->mo_filesize)
-        )  {
+    if (totalcmds > mfp->mo_filesize ) {
         printf("ERROR: %s header32 size fields bogus "
             "filesize is %lu,"
             "number of commands is %lu,"

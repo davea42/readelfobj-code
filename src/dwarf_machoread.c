@@ -446,11 +446,7 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
         *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
         return DW_DLV_ERROR;
     }
-    if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize ||
-        mfp->mo_header.ncmds >= mfp->mo_filesize ||
-        (mfp->mo_header.ncmds* mfp->mo_header.sizeofcmds >= 
-           mfp->mo_filesize)
-        )  {
+    if (totalcmds >= mfp->mo_filesize)  {
         printf("ERROR: %s header32 size fields bogus "
             "filesize is %lu,"
             "number of commands is %lu,"
@@ -460,7 +456,7 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
             (unsigned long)mfp->mo_filesize,
             (unsigned long)mfp->mo_header.ncmds,
             (unsigned long)mfp->mo_header.sizeofcmds,
-            (unsigned long)mfp->mo_header.ncmds*(unsigned long)mfp->mo_header.sizeofcmds);
+            (unsigned long)totalcmds);
         *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
         return DW_DLV_ERROR;
     }
