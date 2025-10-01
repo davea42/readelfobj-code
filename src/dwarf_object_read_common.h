@@ -40,7 +40,8 @@ extern "C" {
 int dwarf_object_read_random(int fd,char *buf,off_t loc,
     size_t size,off_t filesize,int *errc);
 
-void * dwarf_ro_memcpy_swap_bytes(void *s1, const void *s2, size_t len);
+void * dwarf_ro_memcpy_swap_bytes(void *s1, const void *s2,
+    size_t len);
 
 void  dwarf_safe_strcpy(char *out, long outlen,
     const char *in, long inlen);

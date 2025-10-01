@@ -38,10 +38,10 @@ extern "C" {
 #endif /* __cplusplus */
 
 /*  There are reports that this limit of the number of bytes of
-     MAX_COMMANDS_SIZE  16464
- 
+    MAX_COMMANDS_SIZE  16464
+
     Macho object commands is a hard kernel limit in iOS.
-    But our testcase /home/davea/dwarf/regressiontests/macuniv/demo 
+    But our testcase /home/davea/dwarf/regressiontests/macuniv/demo
     uses 17K or so lets raise this, we are not using iOS */
 #define MAX_COMMANDS_SIZE  30000
 
@@ -61,8 +61,6 @@ struct Dwarf_Universal_Arch_s {
     Dwarf_Unsigned au_reserved;
 };
 
-
-
 struct generic_macho_header {
     Dwarf_Unsigned   magic;
     Dwarf_Unsigned   swappedmagic;
@@ -70,7 +68,8 @@ struct generic_macho_header {
     Dwarf_Unsigned   cpusubtype;
     Dwarf_Unsigned   filetype;
     Dwarf_Unsigned   ncmds;      /* number of load commands */
-    Dwarf_Unsigned   sizeofcmds; /* the size of all the load commands */
+    Dwarf_Unsigned   sizeofcmds; /* the size of all the
+        load commands */
     Dwarf_Unsigned   flags;
     Dwarf_Unsigned   reserved;
 
@@ -147,7 +146,7 @@ struct macho_filedata_s {
     Dwarf_Unsigned  mo_offset_after_commands;
 
     Dwarf_Unsigned mo_segment_count;
-    Dwarf_Unsigned mo_segment_size_total; 
+    Dwarf_Unsigned mo_segment_size_total;
     struct generic_macho_segment_command *mo_segment_commands;
     /* We are also adding __TEXT sections */
     Dwarf_Unsigned mo_dwarf_sectioncount;
@@ -176,14 +175,15 @@ int _dwarf_macho_load_dwarf_section_details64(
     struct generic_macho_segment_command *segp,
     Dwarf_Unsigned segi,
     int *errcode);
-int _dwarf_load_segment_command_content64(struct macho_filedata_s *mfp,
+int _dwarf_load_segment_command_content64(struct macho_filedata_s
+    *mfp,
     struct generic_macho_command *mmp,
     struct generic_macho_segment_command *msp,
     Dwarf_Unsigned mmpindex,int *errcode);
-int _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode);
+int _dwarf_load_macho_header64(struct macho_filedata_s *mfp,
+    int *errcode);
 int _dwarf_not_ascii(const char *s);
 int _dwarf_is_known_segname(char *sname);
-
 
 #ifdef __cplusplus
 }

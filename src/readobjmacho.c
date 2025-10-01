@@ -293,7 +293,7 @@ main(int argc,char **argv)
                     PACKAGE_VERSION);
                 printed_version = TRUE;
             }
-            if (strcmp(argv[0],"--skip-dsym-check") == 0) { 
+            if (strcmp(argv[0],"--skip-dsym-check") == 0) {
                 printf("Skip dsym check\n");
                 skip_dsym_check = TRUE;
                 continue;

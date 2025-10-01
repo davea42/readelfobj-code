@@ -95,7 +95,6 @@ extern "C" {
 #define DW_DLV_OK         0
 #define DW_DLV_ERROR      1
 
-
 /*  Error codes returned via pointer,specific to object-reading */
 #define RO_ERR_SEEK   2
 
@@ -153,7 +152,6 @@ extern "C" {
 #define DW_DLE_UNIVERSAL_BINARY_ERROR      54
 #define DW_DLE_MACHO_CORRUPT_SEGMENT_NAME  55
 
-
 const char *dwarf_get_errname(int i);
 #define P printf
 #define F fflush(stdout)
@@ -166,7 +164,7 @@ const char *dwarf_get_errname(int i);
     do {                                    \
         if (*(signed char *)((char *)&dest +\
             sizeof(dest) - length) < 0) {   \
-            memcpy((char *)&dest, "\xff\xff\xff\xff\xff\xff\xff\xff", \
+            memcpy((char *)&dest, "\xff\xff\xff\xff\xff\xff\xff\xff",\
                 sizeof(dest) - length);     \
         }                                   \
     } while (0)
@@ -183,7 +181,6 @@ const char *dwarf_get_errname(int i);
 #endif /* end LITTLE- BIG-ENDIAN */
 
 #define BUFFERSIZE 1000  /* For sanitized() calls */
-
 
 #ifdef __cplusplus
 }

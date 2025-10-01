@@ -36,7 +36,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-
 /*  Declares the interface function.
     outpath is a place you provide, of a length outpath_len
     you consider reasonable,
@@ -55,7 +54,7 @@ extern "C" {
 #define DW_FTYPE_MACH_O  2
 #define DW_FTYPE_PE      3
 #define DW_FTYPE_ARCHIVE 4  /* unix archive */
-#define DW_FTYPE_APPLEUNIVERSAL 5  
+#define DW_FTYPE_APPLEUNIVERSAL 5
 #endif /* DW_FTYPE_UNKNOWN */
 
 #ifndef DW_ENDIAN_UNKNOWN
@@ -98,8 +97,6 @@ extern "C" {
 #ifndef Dwarf_Small
 #define Dwarf_Small    unsigned char
 #endif
-
-
 
 int dwarf_object_detector_path(const char  *path,
     char *outpath,size_t outpath_len,

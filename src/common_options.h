@@ -52,5 +52,3 @@ typedef struct sort_section_element_s {
     Dwarf_Unsigned  od_originalindex;
     void           *od_sec_desc;
 } sort_section_element;
-
-

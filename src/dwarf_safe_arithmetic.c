@@ -158,8 +158,8 @@ _dwarf_uint64_add(
     Dwarf_Unsigned bigger = 0;
 
     if (!dw_lhs || !dw_rhs) {
-         *dw_result = computed;
-         return DW_DLV_OK;
+        *dw_result = computed;
+        return DW_DLV_OK;
     }
     bigger = (dw_lhs > dw_rhs)?dw_lhs:dw_rhs;
     *dw_result = computed;

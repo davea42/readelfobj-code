@@ -4,7 +4,7 @@
     so various things no line up as they used to.
     cctools-895  in its original form
     is available from https://opensource.apple.com/
-    see Developer Tools version 8.2.1. cctools-895/include/loader.h 
+    see Developer Tools version 8.2.1. cctools-895/include/loader.h
     and cctools-1009.3/cctools/include/mach-o/loader.h */
 /*
 * Copyright (c) 1999-2010 Apple Inc.  All Rights Reserved.
@@ -34,7 +34,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
 
 #if 0 /* Not used here. DavidA. September 2018 */
 /*
@@ -66,13 +65,12 @@ extern "C" {
 #define TYP(n,l) char n[l]
 #endif /* TYP */
 
-
-/*  This is Apple internal naming for Universal Binaries 
+/*  This is Apple internal naming for Universal Binaries
     and is not 'Inclusive Terminology" !! */
 #define FAT_MAGIC   0xcafebabe
-#define FAT_CIGAM   0xbebafeca  
+#define FAT_CIGAM   0xbebafeca
 #define FAT_MAGIC_64    0xcafebabf
-#define FAT_CIGAM_64    0xbfbafeca  
+#define FAT_CIGAM_64    0xbfbafeca
 
 struct fat_header {
     TYP(magic,4);    /* FAT_MAGIC or FAT_MAGIC_64 */
@@ -597,7 +595,6 @@ struct section_64 { /* for 64-bit architectures */
 #define S_ATTR_LOC_RELOC     0x00000100    /* section has local
     relocation entries */
 
-
 /*
 * The names of segments and sections in them are mostly meaningless to the
 * link-editor.  But there are few things to support traditional UNIX
@@ -617,7 +614,6 @@ struct section_64 { /* for 64-bit architectures */
 #define    SEG_PAGEZERO    "__PAGEZERO"    /* the pagezero segment which has no */
                     /* protections and catches NULL */
                     /* references for MH_EXECUTE files */
-
 
 #define    SEG_TEXT    "__TEXT"    /* the tradition UNIX text segment */
 #define    SECT_TEXT    "__text"    /* the real text part of the text */
@@ -1066,7 +1062,6 @@ struct dysymtab_command {
 #define INDIRECT_SYMBOL_LOCAL    0x80000000
 #define INDIRECT_SYMBOL_ABS    0x40000000
 
-
 /* a table of contents entry */
 struct dylib_table_of_contents {
     TYP(symbol_index,4); /* the defined external symbol
@@ -1405,7 +1400,6 @@ struct dyld_info_command {
 #define REBASE_OPCODE_DO_REBASE_ADD_ADDR_ULEB            0x70
 #define REBASE_OPCODE_DO_REBASE_ULEB_TIMES_SKIPPING_ULEB    0x80
 
-
 /*
 * The following are used to encode binding information
 */
@@ -1435,7 +1429,6 @@ struct dyld_info_command {
 #define BIND_OPCODE_DO_BIND_ADD_ADDR_ULEB            0xA0
 #define BIND_OPCODE_DO_BIND_ADD_ADDR_IMM_SCALED            0xB0
 #define BIND_OPCODE_DO_BIND_ULEB_TIMES_SKIPPING_ULEB        0xC0
-
 
 /*
 * The following are used on the flags byte of a terminal node
@@ -1499,7 +1492,6 @@ struct fvmfile_command {
     TYP(header_addr,4); /* files virtual address */
 };
 
-
 /*
 * The entry_point_command is a replacement for thread_command.
 * It is used for main executables to specify the location (file offset)
@@ -1513,7 +1505,6 @@ struct entry_point_command {
     TYP(stacksize,8); /* if not zero, initial stack size */
 };
 
-
 /*
 * The source_version_command is an optional load command containing
 * the version of the sources used to build the binary.
@@ -1523,7 +1514,6 @@ struct source_version_command {
     TYP(cmdsize,4); /* 16 */
     TYP(version,8); /* A.B.C.D.E packed as a24.b10.c10.d10.e10 */
 };
-
 
 /*
 * The LC_DATA_IN_CODE load commands uses a linkedit_data_command
@@ -1540,8 +1530,6 @@ struct data_in_code_entry {
 #define DICE_KIND_JUMP_TABLE16      0x0003
 #define DICE_KIND_JUMP_TABLE32      0x0004
 #define DICE_KIND_ABS_JUMP_TABLE32  0x0005
-
-
 
 /*
 * Sections of type S_THREAD_LOCAL_VARIABLES contain an array

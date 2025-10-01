@@ -29,8 +29,6 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  */
 
-
-
 /* These make it easy to do some simple tests. */
 int _dwarf_check_string_valid(
     void *areaptr,
@@ -42,16 +40,16 @@ int _dwarf_check_string_valid(
 int _dwarf_pathjoinl(dwarfstring *target,dwarfstring * input);
 
 int _dwarf_construct_linkedto_path(
-   char         **global_prefixes_in,
-   unsigned       length_global_prefixes_in,
-   char          *pathname_in,
-   char          *link_string_in, /* from debug link */
-   unsigned char *crc_in, /* from debug_link, 4 bytes */
-   unsigned       buildid_length, /* from gnu buildid */
-   unsigned char *buildid, /* from gnu buildid */
-   char        ***paths_out,
-   unsigned      *paths_out_length,
-   int *errcode);
+    char         **global_prefixes_in,
+    unsigned       length_global_prefixes_in,
+    char          *pathname_in,
+    char          *link_string_in, /* from debug link */
+    unsigned char *crc_in, /* from debug_link, 4 bytes */
+    unsigned       buildid_length, /* from gnu buildid */
+    unsigned char *buildid, /* from gnu buildid */
+    char        ***paths_out,
+    unsigned      *paths_out_length,
+    int *errcode);
 
 /*  Reads the gnu buildid and debuglink sections, if they
     exist. If neither, returns DW_DLV_NO_ENTRY */

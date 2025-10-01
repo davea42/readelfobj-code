@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2023, David Anderson
 All rights reserved.
 
@@ -39,4 +39,3 @@ typedef signed   long long Dwarf_Signed;
 typedef unsigned char  Dwarf_Small;
 
 #endif
-

@@ -139,7 +139,7 @@ extern int printfilenames;
 #endif
 #ifndef PT_GNU_EH_FRAME
 #define PT_GNU_EH_FRAME 0x6474e550
-#endif  /* PT_GNU_EH_FRAME */
+#endif /* PT_GNU_EH_FRAME */
 #ifndef PT_GNU_STACK
 #define PT_GNU_STACK    0x6474e551
 #endif /* PT_GNU_STACK */
@@ -148,7 +148,7 @@ extern int printfilenames;
 #endif /* PT_GNU_RELRO */
 #ifndef PT_PAX_FLAGS
 #define PT_PAX_FLAGS 0x65041580
-#endif  /* PT_PAX_FLAGS  */
+#endif /* PT_PAX_FLAGS  */
 #ifndef PT_HIPROC
 #define PT_HIPROC 0x7fffffff
 #endif
@@ -168,7 +168,6 @@ extern int printfilenames;
 #ifndef PF_MASKPROC
 #define PF_MASKPROC     0xf0000000
 #endif
-
 
 #ifndef ET_NONE
 #define ET_NONE          0
@@ -969,7 +968,6 @@ extern int printfilenames;
 #define ELFOSABI_STANDALONE 255
 #endif
 
-
 /*  Use this for rel too. */
 struct generic_rela {
     int          gr_isrela; /* 0 means rel, non-zero means rela */
@@ -1122,9 +1120,9 @@ struct elf_filedata_s {
         Only version 1 is defined. */
     char         f_ident[8];
     int          f_fd;
-    /*   f_fdoffset is the file position of the start of
-         some blob, such as section header or program header
-         or a section itself.  */
+    /*  f_fdoffset is the file position of the start of
+        some blob, such as section header or program header
+        or a section itself.  */
     int          f_fdoffset;
     int          f_printf_on_error;
     int          f_machine; /* from f_ident(EI_MACHINE) */
@@ -1135,8 +1133,9 @@ struct elf_filedata_s {
     /* If TRUE close f_fd on destruct. */
     int          f_destruct_close_fd;
 
-    unsigned	 f_endian;
-    unsigned     f_offsetsize; /* Elf offset size, not DWARF. 32 or 64 */
+    unsigned     f_endian;
+    unsigned     f_offsetsize; /* Elf offset size, not DWARF.
+        32 or 64 */
     Dwarf_Unsigned f_filesize;
     Dwarf_Unsigned f_max_secdata_offset;
     Dwarf_Unsigned f_max_progdata_offset;
@@ -1199,7 +1198,6 @@ struct elf_filedata_s {
     Dwarf_Unsigned f_sht_group_type_section_count;
     Dwarf_Unsigned f_shf_group_flag_section_count;
     Dwarf_Unsigned f_dwo_group_section_count;
-
 
 };
 typedef struct elf_filedata_s * elf_filedata;

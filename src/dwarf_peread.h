@@ -34,7 +34,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /* __cplusplus */
 
-
 #define DW_DLE_STRING_OFFSET_BAD RO_ERR_STRINGOFFSETBIG
 #define DW_DLE_FILE_TOO_SMALL    RO_ERR_TOOSMALL
 #define DW_DLE_PE_OFFSET_BAD     RO_ERR_FILEOFFSETBAD
@@ -94,7 +93,8 @@ struct dwarf_pe_generic_optional_header
     Dwarf_Unsigned LoaderFlags;
     Dwarf_Unsigned NumberOfRvaAndSizes;
     Dwarf_Unsigned SizeOfDataDirEntry; /* size in object file */
-    struct dwarf_pe_generic_data_directory DataDirectory[DWARF_PE_IMAGE_NUMBER_OF_DIRECTORY_ENTRIES];
+    struct dwarf_pe_generic_data_directory DataDirectory[
+        DWARF_PE_IMAGE_NUMBER_OF_DIRECTORY_ENTRIES];
 };
 
 struct dwarf_pe_generic_image_section_header
@@ -160,7 +160,8 @@ int dwarf_construct_pe_access_path(const char *path,
     dwarf_pe_object_access_internals_t **pep,int *errcode);
 int dwarf_construct_pe_access(int fd, const char *path,
     dwarf_pe_object_access_internals_t **pep,int *errcode);
-void dwarf_destruct_pe_access(dwarf_pe_object_access_internals_t *pep);
+void dwarf_destruct_pe_access(
+    dwarf_pe_object_access_internals_t *pep);
 int dwarf_load_pe_sections( dwarf_pe_object_access_internals_t * pep,
     int *errcode);
 

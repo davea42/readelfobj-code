@@ -34,12 +34,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-
 struct dwarfstring_s {
-   char *        s_data;
-   unsigned long s_size;
-   unsigned long s_avail;
-   unsigned char s_malloc;
+    char *        s_data;
+    unsigned long s_size;
+    unsigned long s_avail;
+    unsigned char s_malloc;
 };
 
 typedef struct dwarfstring_s dwarfstring;
@@ -52,7 +51,6 @@ int dwarfstring_constructor_static(struct dwarfstring_s *g,
     unsigned long len);
 void dwarfstring_destructor(struct dwarfstring_s *g);
 int dwarfstring_reset(struct dwarfstring_s *g);
-
 
 int dwarfstring_append(struct dwarfstring_s *g,char *str);
 

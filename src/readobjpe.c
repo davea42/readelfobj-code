@@ -130,8 +130,6 @@ compare_by_secname(const void *lin,const void *rin)
 
 }
 
-
-
 static void
 pe_sections_display(dwarf_pe_object_access_internals_t *pep,
     sec_options *options)
@@ -356,7 +354,7 @@ main(int argc,char **argv)
                 P("%s",Usage);
                 exit(0);
             }
-           if ((strcmp(argv[0],"--sections-by-size") == 0) ||
+            if ((strcmp(argv[0],"--sections-by-size") == 0) ||
                 (strcmp(argv[0],"--section-by-size") == 0)) {
                 secoptionsdata.co_sort_section_by_size = TRUE;
                 secoptionsdata.co_sort_section_by_name = FALSE;
