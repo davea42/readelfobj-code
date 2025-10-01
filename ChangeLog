@@ -1,3 +1,75 @@
+2025-10-01:  David Anderson
+    commit baa807c27343901fd24c7e0503707957424caa3a
+
+    Fixing indents
+    Removing trailing whitespace.
+    various too-long lines adjusted.
+    All to meet the libdwarf codingstyle.
+            modified:   common_options.h
+            modified:   dwarf_64machoread.c
+            modified:   dwarf_debuglink.c
+            modified:   dwarf_debuglink.h
+            modified:   dwarf_macho_loader.h
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_object_detector.h
+            modified:   dwarf_object_read_common.h
+            modified:   dwarf_pe_descr.h
+            modified:   dwarf_peread.h
+            modified:   dwarf_reading.h
+            modified:   dwarf_safe_arithmetic.c
+            modified:   dwarf_types.h
+            modified:   dwarfstring.h
+            modified:   errormessages.c
+            modified:   readelfobj.h
+            modified:   readelfobj_version.h
+            modified:   readobjmacho.c
+            modified:   readobjpe.c
+            modified:   sanitized.h
+
+2025-10-01:  David Anderson
+    commit b7aed8756c9265ce40d13ce9c9a6aa08066be7aa
+
+    Taking advantage of a multiply checked for
+    overflow we simply some sanity checks.
+            modified:   dwarf_64machoread.c
+            modified:   dwarf_machoread.c
+
+2025-10-01:  David Anderson
+    commit 40e8556bff332986eb57c7cb4b398b62cd49d98c
+
+    Up to date
+            modified:   ChangeLog
+
+2025-10-01:  David Anderson
+    commit 1ef88816db8bb08b5be665143c9fcbfe6c5ce44c
+
+    Added an error for corrupt segment namre
+            modified:   dwarf_64machoread.c
+
+    Now with the new error,
+            modified:   dwarf_machoread.c
+
+    New error
+            modified:   dwarf_reading.h
+            modified:   errormessages.c
+
+    Avoids claiming
+    it changed names via dSYM when it did not do that.
+            modified:   readobjmacho.c
+
+    The corrected line in readobjmacho.c
+    changed the baselines.
+            modified:   ../test/test009m.base
+            modified:   ../test/test031m.base
+            modified:   ../test/test032m.base
+
+2025-09-30:  David Anderson
+    commit 918e7c8dfcd35816508486bb0125e4b77059ad50
+
+    Fully up to date.
+            modified:   ChangeLog
+
 2025-09-30:  David Anderson
     commit 961619145435f280b32d3ba2c9e79855d8eb5a35
 
