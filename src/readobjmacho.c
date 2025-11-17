@@ -282,6 +282,9 @@ main(int argc,char **argv)
             const char * filename = 0;
             FILE *fin = 0;
 
+            if (strcmp(argv[0],"--suppress-de-alloc-tree") == 0){
+                continue;
+            }
             if ((strcmp(argv[0],"--help") == 0) ||
                 (strcmp(argv[0],"-h") == 0)) {
                 P("%s",Usage);

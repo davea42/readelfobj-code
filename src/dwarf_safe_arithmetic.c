@@ -152,17 +152,17 @@ int
 _dwarf_uint64_add(
     Dwarf_Unsigned dw_lhs,
     Dwarf_Unsigned dw_rhs,
-    Dwarf_Unsigned *dw_result)
+    Dwarf_Unsigned *result)
 {
     Dwarf_Unsigned computed = dw_lhs + dw_rhs;
     Dwarf_Unsigned bigger = 0;
 
     if (!dw_lhs || !dw_rhs) {
-        *dw_result = computed;
+        *result = computed;
         return DW_DLV_OK;
     }
     bigger = (dw_lhs > dw_rhs)?dw_lhs:dw_rhs;
-    *dw_result = computed;
+    *result = computed;
     if (computed && computed < bigger)  {
         return DW_DLV_ERROR;
     }
@@ -175,7 +175,7 @@ https://stackoverflow.com/questions/3944505/
 detecting-signed-overflow-in-c-c
 */
 int _dwarf_int64_add(Dwarf_Signed l, Dwarf_Signed r,
-    Dwarf_Signed *sum, Dwarf_Debug dbg,
+    Dwarf_Signed *result, Dwarf_Debug dbg,
     Dwarf_Error *error)
 {
     if (l >= 0) {
@@ -196,9 +196,7 @@ int _dwarf_int64_add(Dwarf_Signed l, Dwarf_Signed r,
             return DW_DLV_ERROR;
         }
     }
-    if (sum) {
-        *sum = l + r;
-    }
+    *result = l + r;
     return DW_DLV_OK;
 }
 #endif /* 0 ignoring add check */

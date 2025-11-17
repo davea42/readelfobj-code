@@ -157,6 +157,9 @@ main(int argc,char **argv)
 
         argv++;
         for (i =1; i<argc; i++,argv++) {
+            if (strcmp(argv[0],"--suppress-de-alloc-tree") == 0){
+                continue;
+            }
             if ((strcmp(argv[0],"--help") == 0) ||
                 (strcmp(argv[0],"-h") == 0)) {
                 P("%s",Usage);
