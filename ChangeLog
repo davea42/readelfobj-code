@@ -1,3 +1,22 @@
+2025-11-17:  David Anderson
+    commit 4aed93046bd076ae2c4ead1e95313e1fc241421e
+
+    Minor renaming.
+            modified:   src/dwarf_safe_arithmetic.c
+    For use in regression tests, these all accept the
+    option
+    --suppress-de-alloc-tree
+    and ignore it (it does not apply to these).
+            modified:   src/readelfobj.c
+            modified:   src/readobjmacho.c
+            modified:   src/readobjpe.c
+
+2025-10-01:  David Anderson
+    commit 59ab0dc1f4dac04a4562b18a8aecc680ce0be668
+
+    Latest from git log prepended.
+            modified:   ChangeLog
+
 2025-10-01:  David Anderson
     commit baa807c27343901fd24c7e0503707957424caa3a
 
