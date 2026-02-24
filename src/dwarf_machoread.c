@@ -403,7 +403,6 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
     struct mach_header mh32;
     int res = 0;
     Dwarf_Unsigned inner = mfp->mo_inner_offset;
-    Dwarf_Unsigned totalcmds = 0;
 
     res = RRMOA(mfp->mo_fd,&mh32,inner,sizeof(mh32),
         inner+mfp->mo_filesize,errcode);
@@ -422,40 +421,31 @@ load_macho_header32(struct macho_filedata_s *mfp, int *errcode)
     ASNAR(mfp->mo_copy_word,mfp->mo_header.sizeofcmds,
         mh32.sizeofcmds);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh32.flags);
-    res  = _dwarf_uint64_mult(mfp->mo_header.ncmds,
-        mfp->mo_header.sizeofcmds,&totalcmds);
-    if (res == DW_DLV_ERROR) {
-        printf("ERROR: header 32 cmd count*cmdsize "
-            "overflows.Corrupt\n");
-        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
-        return DW_DLV_ERROR;
-    }
+    /*  We used to multiply mfp->mo_header.ncmds by
+        mfp->mo_header.sizeofcmds, but that seems to
+        not be correct. */
     printf("  Total Commands count      : %lu\n",
         (unsigned long)mfp->mo_header.ncmds);
-    printf("  Total Commands item size  : %lu\n",
+    printf("  Total Commands size  : %lu\n",
         (unsigned long)mfp->mo_header.sizeofcmds);
-    printf("  Total Commands space bytes: %lu\n",
-        (unsigned long)totalcmds);
-    if (totalcmds > MAX_COMMANDS_SIZE) {
+    if (mfp->mo_header.sizeofcmds > MAX_COMMANDS_SIZE) {
         printf("ERROR: header 32 cmd count*cmdsize "
             "(%lu)"
             " exceeds limit (%lu).Corrupt\n",
-            (unsigned long)totalcmds,
+            (unsigned long)mfp->mo_header.sizeofcmds,
             (unsigned long)MAX_COMMANDS_SIZE);
         *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
         return DW_DLV_ERROR;
     }
-    if (totalcmds >= mfp->mo_filesize)  {
+    if (mfp->mo_header.sizeofcmds >= mfp->mo_filesize)  {
         printf("ERROR: %s header32 size fields bogus "
             "filesize is %lu,"
             "number of commands is %lu,"
-            "size of commands is %lu. "
-            "size*number is %lu\n",
+            "size of commands is %lu. ",
             dwarf_get_errname(DW_DLE_MACHO_CORRUPT_HEADER),
             (unsigned long)mfp->mo_filesize,
             (unsigned long)mfp->mo_header.ncmds,
-            (unsigned long)mfp->mo_header.sizeofcmds,
-            (unsigned long)totalcmds);
+            (unsigned long)mfp->mo_header.sizeofcmds);
         *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
         return DW_DLV_ERROR;
     }

@@ -101,7 +101,6 @@ _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
     struct mach_header_64 mh64;
     int res = 0;
     Dwarf_Unsigned inner = mfp->mo_inner_offset;
-    Dwarf_Unsigned totalcmds = 0;
 
     res = RRMOA(mfp->mo_fd,&mh64,inner,sizeof(mh64),
         inner+mfp->mo_filesize,errcode);
@@ -121,31 +120,12 @@ _dwarf_load_macho_header64(struct macho_filedata_s *mfp,int *errcode)
         mh64.sizeofcmds);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.flags,mh64.flags);
     ASNAR(mfp->mo_copy_word,mfp->mo_header.reserved,mh64.reserved);
-    res  = _dwarf_uint64_mult(mfp->mo_header.ncmds,
-        mfp->mo_header.sizeofcmds,&totalcmds);
-    if (res == DW_DLV_ERROR) {
-        printf("ERROR: header 64 cmd count*cmdsize "
-            "overflows.Corrupt\n");
-        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
-        return DW_DLV_ERROR;
-    }
     printf("  Total Commands count      : %lu\n",
         (unsigned long)mfp->mo_header.ncmds);
-    printf("  Total Commands item size  : %lu\n",
+    printf("  Total Commands size  : %lu\n",
         (unsigned long)mfp->mo_header.sizeofcmds);
-    printf("  Total Commands space bytes: %lu\n",
-        (unsigned long)totalcmds);
-    if (totalcmds > MAX_COMMANDS_SIZE) {
-        printf("ERROR: header 64 cmd count*cmdsize "
-            "(%lu)"
-            " exceeds limit (%lu).Corrupt\n",
-            (unsigned long)totalcmds,
-            (unsigned long)MAX_COMMANDS_SIZE);
-        *errcode = DW_DLE_MACHO_CORRUPT_HEADER;
-        return DW_DLV_ERROR;
-    }
-    if (totalcmds > mfp->mo_filesize ) {
-        printf("ERROR: %s header32 size fields bogus "
+    if (mfp->mo_header.sizeofcmds > mfp->mo_filesize ) {
+        printf("ERROR: %s header64 size fields bogus "
             "filesize is %lu,"
             "number of commands is %lu,"
             "size of commands is %lu. \n",
