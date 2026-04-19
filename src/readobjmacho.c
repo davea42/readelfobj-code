@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2018, David Anderson
+Copyright (c) 2013-2026, David Anderson
 All rights reserved.
 
 Redistribution and use in source and binary forms, with
@@ -473,7 +473,8 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp,
 
     P(" Sections count: " LONGESTUFMT "  offset " LONGESTXFMT8 "\n",
         count,gsp->offset_of_sec_rec);
-    P("                         addr      offset     size \n");
+    P("                         addr      offset     size"
+        "       (segment)\n");
 
     for (i =0; i < count; ++i) {
         sort_section_element *sel = 0 ;
@@ -491,11 +492,13 @@ print_macho_dwarf_sections(struct macho_filedata_s *mfp,
             " " LONGESTXFMT8
             " " LONGESTXFMT8
             " " LONGESTXFMT8
+            " (%s)"
             "\n",
             origindex,namestr,
             addr,
             gsp->offset,
-            gsp->size);
+            gsp->size,
+            gsp->segname);
     }
     free(sort_el);
 }
