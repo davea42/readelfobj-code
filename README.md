@@ -1,6 +1,6 @@
 # README.md
-Last update: Sept 30, 2024.1
-Version now set to 2.2.0
+Last update: April 19, 2026
+Version now set to 2.3.0
 
 The distribution consists entirely of C
 source files (along with GNU configure scripts
@@ -18,6 +18,11 @@ apt-get install autoconf automake libtool m4 gcc python3
 If unsure what object format a file might be,
 the <strong>object_detector</strong> will tell you.
 (On linux and MacOs the 'file' command will do that too.)
+
+As of version 2.3.0 reading Elf objects with compressed
+section contents is supported, and one must have
+zlib and zstd installed to read object files with
+compressed sections. See REQUIREMENTS below.
 
 ## Contents
 #### object_detector
@@ -50,8 +55,10 @@ prints header information.
 The only library used is standard C libc.
 
 The code does not depend on any Elf, Mach-o, or Windows
-libraries or headers, it just depends on a basic
-POSIX/unix/Linux set of headers plus libc (or equivalent).
+libraries or headers, it depends on a basic
+POSIX/unix/Linux set of headers plus libc (or equivalent)
+and if you have some compressed object sections,
+decompression libraries.
 
 The test directory contains numerous examples of
 using the programs.
@@ -64,6 +71,18 @@ For Msys2 (Windows):
 The configure option --enable-nonstandardprintf
 may be required to avoid errors in certain printf.
 
+## REQUIREMENTS for decompression
+
+If the objects you work with do not have
+section content compressed
+with zlib(libz) or libzstd
+neither those libraries nor their header files
+are required for building/using readelfobj.
+Defaults to --enable-decompression=yes
+
+    Ubuntu:
+    sudo apt install pkgconf zlib1g zlib1g-dev libzstd1
+    sudo apt install libzstd-dev
 
 ## RUNNING MAKE CHECK from a release
 

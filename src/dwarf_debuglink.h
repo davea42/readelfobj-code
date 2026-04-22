@@ -56,7 +56,7 @@ int _dwarf_construct_linkedto_path(
 int
 dwarf_gnu_debuglink(elf_filedata ep,
     char          ** name_returned, /* static storage, do not free */
-    unsigned char **crc_returned,  /* 32bit crc , do not free */
+    Dwarf_Small    **crc_returned,  /* 32bit crc , do not free */
     Dwarf_Unsigned *buildidtype,
     char          **buildid_owner,
     Dwarf_Unsigned *buildid_length,

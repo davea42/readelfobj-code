@@ -36,7 +36,29 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     sections. See dwarf_elf_init() for decompressing all
     other sections. We need decompress to do relocations (if any
     relocations and if either of these sections compressed).  */
-static int
-dwarf_elf_do_decompress(dwarf_elf_object_access_internals_t *ep,
+int
+dwarf_elf_do_decompress(elf_filedata ep,
     struct generic_shdr *psh,
     int* error);
+#ifdef WORDS_BIGENDIAN
+#define ASNARLRAW(func,ec,t,s,l)                     \
+    do {                                  \
+        unsigned tbyte = sizeof(t) - (l); \
+        if (sizeof(t) < (l)) {            \
+            *ec = DW_DLE_ZLIB_UNCOMPRESS_ERROR; \
+        }                                 \
+        (t) = 0;                          \
+        func(((char *)&(t))+tbyte ,&(s)[0],(l));\
+    } while (0)
+#else /* LITTLE ENDIAN */
+#define ASNARLRAW(func,ec,t,s,l)                 \
+    do {                              \
+        (t) = 0;                      \
+        if (sizeof(t) < (l)) {        \
+            *ec = DW_DLE_ZLIB_UNCOMPRESS_ERROR; \
+        }                             \
+        func(&(t),&(s)[0],(l));  \
+    } while (0)
+#endif /* end LITTLE- BIG-ENDIAN */
+
+#endif /* ZLIB ZSTD */

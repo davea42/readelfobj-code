@@ -5,7 +5,7 @@
 # dnl defines the version name of the programs
 ### to match next libdwarf release
 m4_define([v_maj], [2])
-m4_define([v_min], [2])
+m4_define([v_min], [3])
 m4_define([v_mic], [0])
 m4_define([v_ver], [v_maj.v_min.v_mic])
 
@@ -66,6 +66,17 @@ AS_IF(
        cxx_compiler_flags=""
     ]
     )
+AC_ARG_ENABLE([decompression],
+   [AS_HELP_STRING([--enable-decompression],
+                   [enable decompressing sections  @<:@default=yes@:>@])],
+   [
+    AS_IF(
+        [test "x${enableval}" = "xno"],
+        [enable_decompression="no"],
+        [enable_decompression="yes"])
+   ],
+   [enable_decompression="yes"])
+
 
 
 AC_COMPILE_IFELSE(
@@ -160,6 +171,78 @@ AS_IF(
        c_compiler_flags="${c_compiler_flags} -Wno-pedantic-ms-format"
     ]
     )
+### Checks for libraries
+requirements_libdwarf_pc=
+AS_IF(
+    [test "x${enable_decompression}" = "xyes"],
+    [
+        PKG_CHECK_MODULES([ZLIB], [zlib],
+            [
+             have_zlib="yes"
+             have_pc_zlib="yes"
+             requirements_pc=zlib
+            ],
+            [
+             have_zlib="no"
+             have_pc_zlib="no"
+            ])
+        PKG_CHECK_MODULES([ZSTD], [libzstd],
+            [
+             have_zstd="yes"
+             have_pc_zstd="yes"
+             requirements_pc="${requirements_pc} libzstd"
+            ],
+            [
+             have_zstd="no"
+             have_pc_zstd="no"
+            ])
+    ],
+    [
+        have_zstd="no"
+        have_pc_zstd="no"
+        have_zlib="no"
+        have_pc_zlib="no"
+    ])
+
+AC_SUBST([requirements_pc])
+
+AS_IF(
+    [test "x${enable_decompression}" = "xyes"],
+    [
+        AS_IF(
+            echo "dadebug zstd ${have_pc_zstd} ${have_zstd}"
+            [test "x${have_pc_zstd}" = "xno"  -a "x${have_zstd}" = "xyes"],
+            [
+                AC_SEARCH_LIBS(
+                [ZSTD_decompress], [zstd],
+                [
+                 ZSTD_LIBS="-lzstd"
+                 echo "dadebug req set zstd"
+                 requirements_libdwarf_libs="${requirements_libdwarf_libs} -lzstd"
+                ],
+                [have_zstd="no"])
+            ])
+    ],
+    [
+        have_zstd="no"
+    ])
+
+AS_IF(
+    [test "x${have_zlib}" = "xyes"],
+    [
+     AC_DEFINE([HAVE_ZLIB], [1], [Set to 1 if zlib decompression is available.])
+     AC_DEFINE([HAVE_ZLIB_H], [1], [Set to 1 if zlib.h header file is available.])
+    ])
+
+AS_IF(
+    [test "x${have_zstd}" = "xyes"],
+    [
+     AC_DEFINE([HAVE_ZSTD], [1], [Set to 1 if zstd decompression is available.])
+     AC_DEFINE([HAVE_ZSTD_H], [1], [Set to 1 if zstd.h header file is available.])
+    ])
+AC_SUBST([requirements_libdwarf_libs])
+
+LIBS="$ZSTD_LIBS $ZLIB_LIBS"
 
 RO_CHECK_C_COMPILER_FLAGS([${c_compiler_flags}])
 
@@ -187,6 +270,8 @@ echo "  sizeof unsigned ll...: ${ac_cv_sizeof_unsigned_long_long}"
 echo "  Elf64_Sym............: ${have_elf64_sym}"
 echo "  Nonstandardprintf....: ${enable_nonstandardprintf}"
 echo "  BuildOS-BigEndian....: ${ac_cv_c_bigendian}"
+echo "  Elf zstd decompress..: ${have_zstd}"
+echo "  Elf zlib decompress..: ${have_zlib}"
 echo
 echo "  readelfobj,readobjpe, "
 echo "  readobjmacho, "

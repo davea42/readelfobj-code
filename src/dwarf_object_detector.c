@@ -1,4 +1,4 @@
-/* Copyright (c) 2018-2019, David Anderson
+/* Copyright (c) 2018-2026, David Anderson
 All rights reserved.
 
 Redistribution and use in source and binary forms, with
@@ -646,7 +646,8 @@ dwarf_object_detector_fd_a(int fd,
     }
     remaininglen = fsize - fileoffsetbase;
     if ((Dwarf_Unsigned)fsize <= fileoffsetbase) {
-        printf("FAIL: fsize <= offsetbase impossible\n");
+        printf("FAIL: fsize (%lu) <= offsetbase (%lu) impossible\n",
+            (unsigned long)fsize,(unsigned long)fileoffsetbase);
         *errcode = RO_ERR_SEEK;
         return DW_DLV_ERROR;
     }

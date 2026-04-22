@@ -648,23 +648,23 @@ int _dwarf_construct_linkedto_path(
 static int
 extract_debuglink(UNUSEDARG elf_filedata ep,
     struct generic_shdr* linkshdr,
-    char ** name_returned,  /* static storage, do not free */
-    unsigned char ** crc_returned,   /* 32bit crc , do not free */
-    int *errcode)
+    char        **name_returned,  /* static storage, do not free */
+    Dwarf_Small **crc_returned,   /* 32bit crc , do not free */
+    int          *errcode)
 {
-    char *ptr = 0;
-    char *endptr = 0;
+    Dwarf_Small *ptr = 0;
+    Dwarf_Small *endptr = 0;
     unsigned namelen = 0;
     unsigned m = 0;
     unsigned incr = 0;
-    unsigned char *crcptr = 0;
+    Dwarf_Small *crcptr = 0;
     int res = DW_DLV_ERROR;
     Dwarf_Unsigned secsize = 0;
     Dwarf_Unsigned secoffset = 0;
 
     secsize = linkshdr->gh_size;
     if (!linkshdr->gh_content) {
-        char *secdata = 0;
+        Dwarf_Small *secdata = 0;
 
         secdata = malloc(secsize+1);
         if (!secdata) {
@@ -707,7 +707,7 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
     if (m) {
         incr = 4 - m;
     }
-    crcptr = (unsigned char *)ptr +namelen +1 +incr;
+    crcptr = (Dwarf_Small*)ptr +namelen +1 +incr;
     if ((crcptr +4) != (unsigned char*)endptr) {
         P("ERROR: .gnu_debuglink is not the right length: "
             " expected end " LONGESTXFMT
@@ -717,7 +717,7 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
         *errcode = DW_DLE_CORRUPT_GNU_DEBUGLINK;
         return DW_DLV_ERROR;
     }
-    *name_returned = ptr;
+    *name_returned = (char *)ptr;
     *crc_returned = crcptr;
     return DW_DLV_OK;
 }
@@ -725,13 +725,13 @@ extract_debuglink(UNUSEDARG elf_filedata ep,
 int
 dwarf_gnu_debuglink(elf_filedata ep,
     char ** name_returned,  /* static storage, do not free */
-    unsigned char ** crc_returned,   /* 32bit crc , do not free */
+    Dwarf_Small ** crc_returned,   /* 32bit crc , do not free */
     Dwarf_Unsigned *buildidtype,
-    char **buildid_owner,
-    Dwarf_Unsigned  *buildid_length,
+    char        **buildid_owner,
+    Dwarf_Unsigned *buildid_length,
     unsigned char **buildid,
-    char ***  debuglink_paths_returned,
-    unsigned *debuglink_paths_count,
+    char         ***debuglink_paths_returned,
+    unsigned       *debuglink_paths_count,
     int*   errcode)
 {
     struct generic_shdr* shdr = ep->f_shdr;
@@ -828,17 +828,17 @@ struct buildid_s {
 static int
 extract_buildid(elf_filedata ep,
     struct generic_shdr* buildidshdr,
-    Dwarf_Unsigned * type_returned,
-    char     **owner_name_returned,
-    Dwarf_Unsigned * build_id_length_returned,
-    unsigned char  **build_id_returned,
-    int*   errcode)
+    Dwarf_Unsigned *type_returned,
+    char          **owner_name_returned,
+    Dwarf_Unsigned *build_id_length_returned,
+    unsigned char **build_id_returned,
+    int            *errcode)
 {
-    char * ptr = 0;
+    Dwarf_Small * ptr = 0;
     int res = DW_DLV_ERROR;
     struct buildid_s *bu = 0;
-    char *nameptr = 0;
-    char *nameend = 0;
+    char        *nameptr = 0;
+    char        *nameend = 0;
     Dwarf_Unsigned namesize = 0;
     Dwarf_Unsigned descrsize = 0;
     Dwarf_Unsigned type = 0;
@@ -848,11 +848,11 @@ extract_buildid(elf_filedata ep,
 
     secsize = buildidshdr->gh_size;
     if (!buildidshdr->gh_content) {
-        char *secdata = 0;
+        Dwarf_Small *secdata = 0;
 
         /*  Adding extra byte so we can force a NUL
             in the extra byte. */
-        secdata = (char *)malloc(secsize+1);
+        secdata = (Dwarf_Small *)malloc(secsize+1);
         if (!secdata) {
             P("Error  malloc fail:  size "
                 LONGESTXFMT " line %d %s\n",secsize,
@@ -934,7 +934,7 @@ extract_buildid(elf_filedata ep,
             " is unreasonable.\n",
             descrsize);
     }
-    nameptr = ptr + sizeof(struct buildid_s);
+    nameptr = (char *)ptr + sizeof(struct buildid_s);
     if (nameptr[namesize-1]) {
         P("ERROR section .note.gnu.build-id owner "
             "not null-terminated. "
@@ -952,7 +952,7 @@ extract_buildid(elf_filedata ep,
     if ( res != DW_DLV_OK) {
         return res;
     }
-    if ((strlen(nameptr) +1) != namesize) {
+    if ((strlen((char *)nameptr) +1) != namesize) {
         P("ERROR section .note.gnu.build-id owner "
             "string size wrong: "
             " size " LONGESTUFMT

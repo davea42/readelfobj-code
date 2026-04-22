@@ -151,6 +151,16 @@ extern "C" {
 #define DW_DLE_IMPROPER_SECTION_ZERO       53
 #define DW_DLE_UNIVERSAL_BINARY_ERROR      54
 #define DW_DLE_MACHO_CORRUPT_SEGMENT_NAME  55
+#define DW_DLE_ZDEBUG_REQUIRES_ZLIB            314
+#define DW_DLE_ZDEBUG_INPUT_FORMAT_ODD         315
+#define DW_DLE_ZLIB_BUF_ERROR                  316
+#define DW_DLE_ZLIB_DATA_ERROR                 317
+#define DW_DLE_ZLIB_SECTION_SHORT              338
+#define DW_DLE_ZLIB_UNCOMPRESS_ERROR           368
+#define DW_DLE_READ_LITTLEENDIAN_ERROR         331
+#define DW_DLE_READ_BIGENDIAN_ERROR            332
+#define DW_DLE_ELF_ENDIAN_BAD                  421
+
 
 const char *dwarf_get_errname(int i);
 #define P printf

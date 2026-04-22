@@ -80,6 +80,13 @@ extern int printfilenames;
 #define DW_GROUPNUMBER_DWO  2
 #endif
 
+#ifndef DW_END_little
+#define DW_END_little 2
+#endif
+#ifndef DW_END_big
+#define DW_END_big 4
+#endif
+
 #ifndef SHF_GROUP
 #define SHF_GROUP  (1 << 9)
 #endif /* SHF_GROUP */
@@ -1028,9 +1035,9 @@ struct generic_phdr {
 struct generic_shdr {
     Dwarf_Unsigned gh_secnum;
     Dwarf_Unsigned gh_name;
-    const char * gh_namestring;
+    const char   * gh_namestring;
     Dwarf_Unsigned gh_type;
-    const char * gh_typestring;
+    const char   * gh_typestring;
     Dwarf_Unsigned gh_flags;
     Dwarf_Unsigned gh_addr;
     Dwarf_Unsigned gh_offset;
@@ -1044,7 +1051,8 @@ struct generic_shdr {
     /*  Zero unless content read in. Malloc space
         of size gh_size,  in bytes. For dwarf
         and strings mainly. free() this if not null*/
-    char *       gh_content;
+    Dwarf_Small *       gh_content;
+    char gh_is_malloc;
 
     /*  If a .rel or .rela section this will point
         to generic relocation records if such
@@ -1072,6 +1080,7 @@ struct generic_shdr {
 
     /*   TRUE if .debug_info .eh_frame etc. */
     char  gh_is_dwarf;
+
 };
 
 struct generic_dynentry {
@@ -1134,8 +1143,8 @@ struct elf_filedata_s {
     int          f_destruct_close_fd;
 
     unsigned     f_endian;
-    unsigned     f_offsetsize; /* Elf offset size, not DWARF.
-        32 or 64 */
+    unsigned     f_pointersize;/* 32 or 64 bits*/
+    unsigned     f_offsetsize; /* Elf offset size 32 or 64 bits  */
     Dwarf_Unsigned f_filesize;
     Dwarf_Unsigned f_max_secdata_offset;
     Dwarf_Unsigned f_max_progdata_offset;
@@ -1163,6 +1172,7 @@ struct elf_filedata_s {
     struct location      f_loc_phdr;
     struct generic_phdr* f_phdr;
 
+    struct generic_shdr *f_shstrings_shdr;
     char *f_elf_shstrings_data; /* section name strings */
     /* length of currentsection.  Might be zero..*/
     Dwarf_Unsigned  f_elf_shstrings_length;

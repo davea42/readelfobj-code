@@ -1,5 +1,5 @@
 /*
-Copyright 2018 David Anderson. All rights reserved.
+Copyright 2018-2026 David Anderson. All rights reserved.
 
 Redistribution and use in source and binary forms, with
 or without modification, are permitted provided that the
@@ -56,6 +56,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_object_detector.h"
 #include "dwarf_object_read_common.h"
 #include "readelfobj.h"
+#include "dwarf_elf_decompress.h"
 #include "sanitized.h"
 #include "common_options.h"
 
@@ -98,6 +99,36 @@ static char buffer1[BUFFERSIZE];
         func(&t,&s[0],sizeof(s));               \
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
+
+#if 0
+/*  The following actually assumes (as used here)
+    that t is 8 bytes (integer) while s is 
+    l bytes.
+    Used only in dwarf_elf_load_headers.c for uncompressing.
+    Just slightly different from the ASNAR generally 
+    used in libdwarf.  */
+#ifdef WORDS_BIGENDIAN
+#define ASNARLRAW(func,ec,t,s,l)                     \
+    do {                                  \
+        unsigned tbyte = sizeof(t) - (l); \
+        if (sizeof(t) < (l)) {            \
+            ec = DW_DLE_ZLIB_UNCOMPRESS_ERROR; \
+        }                                 \
+        (t) = 0;                          \
+        func(((char *)&(t))+tbyte ,&(s)[0],(l));\
+    } while (0)
+#else /* LITTLE ENDIAN */
+#define ASNARLRAW(func,ec,t,s,l)                 \
+    do {                              \
+        (t) = 0;                      \
+        if (sizeof(t) < (l)) {        \
+            ec = DW_DLE_ZLIB_UNCOMPRESS_ERROR; \
+        }                             \
+        func(&(t),&(s)[0],(l));  \
+    } while (0)   
+#endif /* end LITTLE- BIG-ENDIAN */
+#endif /* 0 */
+
 
 static void
 check_size(const char *name,
@@ -331,6 +362,7 @@ generic_ehdr_from_32(elf_filedata ep,
         }
         ep->f_ehdr = ehdr;
         ep->f_machine = ehdr->ge_machine;
+        
         ep->f_loc_ehdr.g_name = "Elf File Header";
         ep->f_loc_ehdr.g_offset = 0;
         ep->f_loc_ehdr.g_count = 1;
@@ -578,9 +610,6 @@ generic_phdr_from_phdr32(elf_filedata ep,
 
     orig_pph = pph;
     orig_gphdr = gphdr;
-#if 0
-    ep->f_fdoffset = lseek(ep->f_fd,offset,SEEK_CUR);
-#endif
     res = RRMOA(ep->f_fd,pph,offset,count*entsize,
         ep->f_filesize,errcode);
     if (res != RO_OK) {
@@ -939,10 +968,10 @@ dwarf_generic_elf_load_symbols32(elf_filedata  ep,
     size2 = ecount * sizeof(dw_elf32_sym);
     if (size != size2) {
         P("ERROR: Bogus size of symbols. "
-            LONGESTUFMT " not divisible by %lu\n",
+            LONGESTUFMT " not divisible by %lu section"
+            " may be compressed. Ignore.\n",
             size,(unsigned long)sizeof(dw_elf32_sym));
-        *errcode = RO_ERR_SYMBOLSECTIONSIZE;
-        return RO_ERROR;
+        return RO_OK;
     }
     psym = calloc(ecount,sizeof(dw_elf32_sym));
     if (!psym) {
@@ -1016,10 +1045,10 @@ dwarf_generic_elf_load_symbols64(elf_filedata ep,
     size2 = ecount * sizeof(dw_elf64_sym);
     if (size != size2) {
         P("ERROR: Bogus size of symbols. "
-            LONGESTUFMT " not divisible by %lu\n",
+            LONGESTUFMT " not divisible by %lu"
+            " section may be compressed. Ignore.\n",
             size,(unsigned long)sizeof(dw_elf64_sym));
-        *errcode = RO_ERR_SYMBOLSECTIONSIZE;
-        return RO_ERROR;
+        return RO_OK;
     }
     psym = calloc(ecount,sizeof(dw_elf64_sym));
     if (!psym) {
@@ -1538,6 +1567,26 @@ elf_load_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection,
             "data failed\n",ep->f_elf_shstrings_length);
         ep->f_elf_shstrings_length = 0;
         return i;
+    }
+    psh->gh_content = (Dwarf_Small *)ep->f_elf_shstrings_data;
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        int res = 0;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh,
+            errcode);
+        if (res != DW_DLV_OK) {
+            return res;
+        }
+        free(ep->f_elf_shstrings_data);
+        ep->f_elf_shstrings_data = (char *)psh->gh_content;
+        ep->f_elf_shstrings_length = psh->gh_size;
+        ep->f_elf_shstrings_max  = psh->gh_size;
+#else
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif
     }
     return RO_OK;
 }
@@ -3013,6 +3062,32 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
         *errcode = RO_ERR_ELF_CLASS;
         return DW_DLV_ERROR;
     }
+    switch (ep->f_ident[EI_CLASS]) {
+    case ELFCLASS32:
+        ep->f_offsetsize = 32; 
+        ep->f_pointersize = 32;
+        break;
+    case ELFCLASS64:
+        ep->f_offsetsize = 64; 
+        ep->f_pointersize = 64; 
+        break;
+    default:
+        P(" Improper Elf header , EI_CLASS improper\n");
+        *errcode = DW_DLE_ELF_ENDIAN_BAD;
+        return DW_DLV_ERROR;
+    }
+    switch (ep->f_ident[EI_DATA]) {
+    case ELFDATA2LSB:
+        ep->f_endian = DW_END_little;
+        break;
+    case ELFDATA2MSB:
+        ep->f_endian = DW_END_big;
+        break;
+    default:
+        P(" Improper Elf header DW_DLE_ELF_ENDIAN_BAD \n");
+        *errcode = DW_DLE_ELF_ENDIAN_BAD;
+        return DW_DLV_ERROR;
+    }       
     return res;
 }
 

@@ -37,6 +37,8 @@ dwarf_elf_reloc_ppc64.c	 \
 dwarf_elf_reloc_ppc64.h	 \
 dwarf_elf_reloc_x86_64.c \
 dwarf_elf_reloc_x86_64.h \
+dwarf_elf_decompress.c \
+dwarf_elf_decompress.h \
 dwarf_load_elf_headers.c \
 errormessages.c \
 readelfobj.c \
@@ -50,14 +52,16 @@ readelfobj.h \
 sanitized.h \
 sanitized.c
 
-readelfobj_CFLAGS = $(RO_CFLAGS_WARN)
+readelfobj_CFLAGS = $(RO_CFLAGS_WARN) @ZSTD_LIBS@ @ZLIB_LIBS@ 
 readelfobj_CPPFLAGS = \
 -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src
+LIBS =  @ZSTD_LIBS@ @ZLIB_LIBS@ 
 
 readobjmacho_SOURCES =  readobjmacho.c \
 common_options.h \
 common_options.c \
 sanitized.h \
+dwarf_elf_decompress.h \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
 dwarf_reading.h \
