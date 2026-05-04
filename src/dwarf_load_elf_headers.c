@@ -1563,9 +1563,9 @@ elf_load_sectstrings(elf_filedata ep,struct generic_shdr*psh,
     }
 /*FIXME good example*/
     if (psh->gh_flags & SHF_COMPRESSED) {
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
         int res = 0;
         psh->gh_compressed_len = psh->gh_size;
-#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
         res = dwarf_elf_do_decompress(ep,psh,
             errcode);
         if (res != DW_DLV_OK) {
