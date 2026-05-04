@@ -34,6 +34,8 @@ ChangeLog2018 \
 ChangeLog2019 \
 ChangeLog2020 \
 ChangeLog2022 \
+ChangeLog2024 \
+ChangeLog2025 \
 NEWS \
 README \
 autogen.sh \
