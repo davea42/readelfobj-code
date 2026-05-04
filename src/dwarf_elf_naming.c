@@ -986,7 +986,8 @@ static struct em_values shn_vals[] = {
     /* FORTRAN COMMON or C external global variables */
 
     {"SHN_XINDEX",0xffff},
-    /* Mark that the index is >= SHN_LORESERVE */
+    /*  The actual index is too high, the actual value
+        is in section with section type SHT_SYTMTAB_SHNDX */
 
     {"SHN_HIRESERVE",0xffff},  /* Highest reserved index */
     {"SHN_HEXAGON_SCOMMON",0xff00},   /* Other access sizes */

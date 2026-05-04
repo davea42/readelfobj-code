@@ -38,7 +38,16 @@ TESTS = ./test001.sh \
 ./test031m.sh \
 ./test032m.sh \
 ./test033p.sh \
-./test034p.sh
+./test034p.sh \
+./test035comp.sh \
+./test036comp.sh \
+./test037comp.sh \
+./test038comp.sh \
+./test039comp.sh \
+./test040comp.sh \
+./test041comp.sh \
+./test042comp.sh \
+./test043comp.sh
 
 
 
@@ -193,6 +202,24 @@ CLEANFILES = \
   junk.test033p.out \
   junk.test034p.tmp \
   junk.test034p.out \
+  junk.test035comp.out \
+  junk.test035comp.tmp \
+  junk.test036comp.out \
+  junk.test036comp.tmp \
+  junk.test037comp.out \
+  junk.test037comp.tmp \
+  junk.test038comp.out \
+  junk.test038comp.tmp \
+  junk.test039comp.out \
+  junk.test039comp.tmp \
+  junk.test040comp.out \
+  junk.test040comp.tmp \
+  junk.test041comp.out \
+  junk.test041comp.tmp \
+  junk.test042comp.out \
+  junk.test042comp.tmp \
+  junk.test043comp.out \
+  junk.test043comp.tmp \
   object_detector \
   readobjmacho \
   readobjpe \
@@ -269,6 +296,17 @@ test029.base \
 test030.base \
 test031m.base \
 test032m.base \
+test033p.base \
+test034p.base \
+test035comp.base \
+test036comp.base \
+test037comp.base \
+test038comp.base \
+test039comp.base \
+test040comp.base \
+test041comp.base \
+test042comp.base \
+test043comp.base \
 dd-irix-n32 \
 libkrb5support.so.0.1.debug \
 mach-o-object32 \
@@ -286,6 +324,14 @@ libc.so.6   \
 stream.o    \
 testarch.a  \
 comdatex.example.o \
+comprelad.x \
+comprelaf.x \
+comprelal.x \
+comprelar.x \
+comprelat.x \
+compshstrtab.x \
+compstrtab.x \
+compsymtab.x \
 elfextended/elfextendedtestcase.c \
 elfextended/testobj64.baseobj \
 elfextended/testobj.extend    \

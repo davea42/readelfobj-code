@@ -55,7 +55,7 @@ String section data at 0x20f1b (134939) length 0x184 (388)
 Section count: 39
  [i] offset      size        name         addr     (flags)(type)(link,info,align)
 {
-[32] 0x0000f5ad 0x0000d177 .debug_loc     (0)(SHT_PROGBITS)(0,0x0,0x1)
+[32] 0x0000f5ad 0x0000d177                (0)(SHT_PROGBITS)(0,0x0,0x1)
 [28] 0x0000051c 0x000092f3 .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
 [12] 0x000001f0 0x0000696c .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_NOBITS)(0,0x0,0x10)
 [34] 0x0001d624 0x000038bd .gdb_index     (0)(SHT_PROGBITS)(0,0x0,0x1)
@@ -94,7 +94,7 @@ Section count: 39
 [17] 0x00000200 0x00000008 .init_array    (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x8)
 [19] 0x00000200 0x00000008 .jcr           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x8)
 [ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
-Summary: 141129 bytes for 9 debug sections
+Summary: 87506 bytes for 8 debug sections
 }
 GNU .gnu_debuglink and .note.gnu.buildid
 {

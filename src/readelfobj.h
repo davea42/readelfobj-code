@@ -1032,6 +1032,21 @@ struct generic_phdr {
     Dwarf_Unsigned gp_memsz;
     Dwarf_Unsigned gp_align;
 };
+
+struct location {
+    /*  section name string */
+    const char *g_name;
+    /*  The following are an on-disk
+        size, not very useful, except
+        g_count is always valid for
+        symbols. These are not really
+        very useful. */
+    Dwarf_Unsigned g_offset;
+    Dwarf_Unsigned g_count;
+    Dwarf_Unsigned g_entrysize;
+    Dwarf_Unsigned g_totalsize;
+};
+
 struct generic_shdr {
     Dwarf_Unsigned gh_secnum;
     Dwarf_Unsigned gh_name;
@@ -1041,6 +1056,8 @@ struct generic_shdr {
     Dwarf_Unsigned gh_flags;
     Dwarf_Unsigned gh_addr;
     Dwarf_Unsigned gh_offset;
+    /*  gh_size starts as on-disk size, but
+        decompressing updates the size to the new size. */
     Dwarf_Unsigned gh_size;
     Dwarf_Unsigned gh_link;
     Dwarf_Unsigned gh_info;
@@ -1048,11 +1065,11 @@ struct generic_shdr {
     Dwarf_Unsigned gh_entsize;
     Dwarf_Unsigned gh_fdoffset;
 
-    /*  Zero unless content read in. Malloc space
+    /*  gh_content zero unless content read in. Malloc space
         of size gh_size,  in bytes. For dwarf
         and strings mainly. free() this if not null*/
     Dwarf_Small *       gh_content;
-    char gh_is_malloc;
+    Dwarf_Unsigned gh_compressed_len; /*0 if was not compressed */
 
     /*  If a .rel or .rela section this will point
         to generic relocation records if such
@@ -1081,6 +1098,12 @@ struct generic_shdr {
     /*   TRUE if .debug_info .eh_frame etc. */
     char  gh_is_dwarf;
 
+    /* Used for dynsym symtab, dynamic sections.*/
+    struct location gh_location;
+    /* The following must be free()d. */
+    struct generic_dynentry * gh_dynamic; /* SHT_DYNAMIC */
+    struct generic_symentry * gh_sym; /* SHT_SYMTAB or SHT_DYNSYM */
+
 };
 
 struct generic_dynentry {
@@ -1089,7 +1112,10 @@ struct generic_dynentry {
         the union adds nothing in practice since
         we expect ptrsize <= ulongest. */
     Dwarf_Unsigned  gd_val;
+#if 0
+    meaningless if compressed section.
     Dwarf_Unsigned  gd_dyn_file_offset;
+#endif
 };
 
 struct generic_symentry {
@@ -1102,14 +1128,6 @@ struct generic_symentry {
     /* derived */
     Dwarf_Unsigned gs_bind;
     Dwarf_Unsigned gs_type;
-};
-
-struct location {
-    const char *g_name;
-    Dwarf_Unsigned g_offset;
-    Dwarf_Unsigned g_count;
-    Dwarf_Unsigned g_entrysize;
-    Dwarf_Unsigned g_totalsize;
 };
 
 struct in_use_s {
@@ -1127,7 +1145,7 @@ struct elf_filedata_s {
         Other means error/corruption of some kind.
         f_ident[1] is a version number.
         Only version 1 is defined. */
-    char         f_ident[8];
+    char         f_ident[EI_NIDENT];
     int          f_fd;
     /*  f_fdoffset is the file position of the start of
         some blob, such as section header or program header
@@ -1173,34 +1191,7 @@ struct elf_filedata_s {
     struct generic_phdr* f_phdr;
 
     struct generic_shdr *f_shstrings_shdr;
-    char *f_elf_shstrings_data; /* section name strings */
-    /* length of currentsection.  Might be zero..*/
-    Dwarf_Unsigned  f_elf_shstrings_length;
-    Dwarf_Unsigned  f_elf_shstrings_secnumber;
-    /* size of malloc-d space */
-    Dwarf_Unsigned  f_elf_shstrings_max;
-
-    /* This is the .dynamic section */
-    struct location      f_loc_dynamic;
-    struct generic_dynentry * f_dynamic;
-    Dwarf_Unsigned f_dynamic_sect_index;
-
-    /* .dynsym, .dynstr */
-    struct location      f_loc_dynsym;
-    struct generic_symentry* f_dynsym;
-    char  *f_dynsym_sect_strings;
-    Dwarf_Unsigned f_dynsym_sect_strings_max;
-    Dwarf_Unsigned f_dynsym_sect_strings_sect_index;
-    Dwarf_Unsigned f_dynsym_sect_index;
-
-    /* .symtab .strtab */
-    struct location      f_loc_symtab;
-    struct generic_symentry* f_symtab;
-    char * f_symtab_sect_strings;
-    Dwarf_Unsigned f_symtab_sect_strings_max;
-    Dwarf_Unsigned f_symtab_sect_strings_sect_index;
-    Dwarf_Unsigned f_symtab_sect_index;
-
+    Dwarf_Unsigned  f_elf_shstrings_sect_index;
     /* Starts at 3. 0,1,2 used specially. */
     Dwarf_Unsigned f_sg_next_group_number;
     /*  Both the following will be zero unless there
@@ -1208,7 +1199,6 @@ struct elf_filedata_s {
     Dwarf_Unsigned f_sht_group_type_section_count;
     Dwarf_Unsigned f_shf_group_flag_section_count;
     Dwarf_Unsigned f_dwo_group_section_count;
-
 };
 typedef struct elf_filedata_s * elf_filedata;
 
@@ -1221,11 +1211,16 @@ int dwarf_destruct_elf_access(elf_filedata ep,int *errcode);
 int dwarf_load_elf_header(elf_filedata ep,int *errcode);
 int dwarf_load_elf_sectheaders(elf_filedata ep,int *errcode);
 int dwarf_load_elf_progheaders(elf_filedata ep,int *errcode);
+int
+dwarf_load_elf_dynamic(elf_filedata ep,struct generic_shdr *psh, int *errcode);
 
-int dwarf_load_elf_dynamic(elf_filedata ep, int *errcode);
-int dwarf_load_elf_symstr(elf_filedata ep, int *errcode);
-int dwarf_load_elf_dynstr(elf_filedata ep, int *errcode);
-int dwarf_load_elf_symtab_symbols(elf_filedata ep,int *errcode);
+int dwarf_load_elf_symstr(elf_filedata ep,struct generic_shdr* shdr, int *errcode);
+int dwarf_load_elf_symtab(elf_filedata ep,struct generic_shdr* shdr, int *errcode);
+int dwarf_load_elf_symtab_symbols(elf_filedata ep,struct generic_shdr*psh,int *errcode);
+int dwarf_load_elf_symtab_symbols_all(elf_filedata ep,  int*errcode);
+int elf_setup_all_section_groups(elf_filedata ep, int *errcode);
+
+
 int dwarf_load_elf_dynsym_symbols(elf_filedata ep,int *errcode);
 int dwarf_load_elf_section_is_dwarf(const char *name);
 
@@ -1234,22 +1229,19 @@ int dwarf_load_elf_rela(elf_filedata ep,
 int dwarf_load_elf_rel(elf_filedata ep,
     Dwarf_Unsigned secnum, int *errcode);
 
-/*  Gets sh_strtab if is_symtab TRUE.
-    Gets sh_dynstr if is_symtab FALSE.
-    Returns pointer to the in-mem string
-    through strptr.
-*/
 int dwarf_get_elf_symstr_string(elf_filedata ep,
-    int is_symtab,
+    Dwarf_Unsigned linktostrings,
     Dwarf_Unsigned index,
-    const char **strptr,
-    int *errcode);
+    const char **str_out,
+    int*errcode);
 
 /*  The following for an elf checker/dumper. */
 const char * dwarf_get_elf_machine_name(unsigned value);
+
 const char * dwarf_get_elf_dynamic_table_name(
     Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
+
 const char * dwarf_get_elf_program_header_type_name(
     Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
@@ -1274,8 +1266,6 @@ const char * dwarf_get_elf_symbol_stt_type( Dwarf_Unsigned value,
 const char * dwarf_get_elf_osabi_name( Dwarf_Unsigned value,
     char *buffer, unsigned buflen);
 const char * dwarf_get_elf_machine_name(unsigned value);
-const char * dwarf_get_elf_dynamic_table_name(
-    Dwarf_Unsigned value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_flag_names(
     Dwarf_Unsigned value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_st_type_name(

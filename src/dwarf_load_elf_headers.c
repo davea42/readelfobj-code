@@ -66,7 +66,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define  UNUSEDARG
 #endif
 
-#if 0
+#if 0 /* dump bytes() */
 static void
 dump_bytes(char * msg,Dwarf_Small * start, long len)
 {
@@ -99,36 +99,6 @@ static char buffer1[BUFFERSIZE];
         func(&t,&s[0],sizeof(s));               \
     } while (0)
 #endif /* end LITTLE- BIG-ENDIAN */
-
-#if 0
-/*  The following actually assumes (as used here)
-    that t is 8 bytes (integer) while s is 
-    l bytes.
-    Used only in dwarf_elf_load_headers.c for uncompressing.
-    Just slightly different from the ASNAR generally 
-    used in libdwarf.  */
-#ifdef WORDS_BIGENDIAN
-#define ASNARLRAW(func,ec,t,s,l)                     \
-    do {                                  \
-        unsigned tbyte = sizeof(t) - (l); \
-        if (sizeof(t) < (l)) {            \
-            ec = DW_DLE_ZLIB_UNCOMPRESS_ERROR; \
-        }                                 \
-        (t) = 0;                          \
-        func(((char *)&(t))+tbyte ,&(s)[0],(l));\
-    } while (0)
-#else /* LITTLE ENDIAN */
-#define ASNARLRAW(func,ec,t,s,l)                 \
-    do {                              \
-        (t) = 0;                      \
-        if (sizeof(t) < (l)) {        \
-            ec = DW_DLE_ZLIB_UNCOMPRESS_ERROR; \
-        }                             \
-        func(&(t),&(s)[0],(l));  \
-    } while (0)   
-#endif /* end LITTLE- BIG-ENDIAN */
-#endif /* 0 */
-
 
 static void
 check_size(const char *name,
@@ -255,7 +225,8 @@ dwarf_construct_elf_access(int fd,
 
 /*  Caller must zero the passed in pointer
     after this returns to remind
-    the caller to avoid use of the pointer. */
+    the caller to avoid use of the pointer.
+    does free() on all allocated data. */
 int
 dwarf_destruct_elf_access(elf_filedata ep,
     int *errcode)
@@ -283,15 +254,15 @@ dwarf_destruct_elf_access(elf_filedata ep,
         free(shp->gh_sht_group_array);
         shp->gh_sht_group_array = 0;
         shp->gh_sht_group_array_count = 0;
+        free(shp->gh_sym);
+        shp->gh_sym = 0;
+        free(shp->gh_dynamic);
+        shp->gh_dynamic = 0;
     }
     free(ep->f_shdr);
     free(ep->f_phdr);
-    free(ep->f_elf_shstrings_data);
-    free(ep->f_dynamic);
-    free(ep->f_symtab_sect_strings);
-    free(ep->f_dynsym_sect_strings);
-    free(ep->f_symtab);
-    free(ep->f_dynsym);
+    ep->f_shdr = 0;
+    ep->f_phdr = 0;
 
     /* if TRUE close f_fd on destruct.*/
     if (ep->f_destruct_close_fd) {
@@ -299,6 +270,7 @@ dwarf_destruct_elf_access(elf_filedata ep,
     }
     ep->f_ident[0] = 'X';
     free(ep->f_path);
+    ep->f_path = 0;
     if (ep->f_in_use_count) {
         struct in_use_s * f =  ep->f_in_use;
         struct in_use_s *nxt = 0;
@@ -308,6 +280,7 @@ dwarf_destruct_elf_access(elf_filedata ep,
         }
     }
     free(ep);
+    ep = 0;
     return DW_DLV_OK;
 }
 
@@ -362,7 +335,7 @@ generic_ehdr_from_32(elf_filedata ep,
         }
         ep->f_ehdr = ehdr;
         ep->f_machine = ehdr->ge_machine;
-        
+
         ep->f_loc_ehdr.g_name = "Elf File Header";
         ep->f_loc_ehdr.g_offset = 0;
         ep->f_loc_ehdr.g_count = 1;
@@ -370,6 +343,12 @@ generic_ehdr_from_32(elf_filedata ep,
         ep->f_loc_ehdr.g_totalsize = sizeof(dw_elf32_ehdr);
         return RO_OK;
     }
+    for (i = 0; i < (int)sizeof(ep->f_ident); ++i) {
+        ep->f_ident[i] = ehdr->ge_ident[i];
+    }
+    /*  Now notice shstrndx and shnum special values
+        requiring we get the actual values from section header[0]
+        because the Elf header values have only 16 bits.*/
     if (ehdr->ge_shstrndx == SHN_XINDEX) {
         P("Ehdr32 string section index extended (e_shstrndx 0x"
             LONGESTXFMT "), "
@@ -511,6 +490,12 @@ generic_ehdr_from_64(elf_filedata ep,
         ep->f_loc_ehdr.g_totalsize = sizeof(dw_elf64_ehdr);
         return RO_OK;
     }
+    for (i = 0; i < (int)sizeof(ep->f_ident); ++i) {
+        ep->f_ident[i] = ehdr->ge_ident[i];
+    }
+    /*  Now notice shstrndx and shnum special values
+        requiring we get the actual values from section header[0]
+        because the Elf header values have only 16 bits.*/
     if (ehdr->ge_shstrndx == SHN_XINDEX) {
         P("Ehdr64 string section index extended (e_shstrndx 0x"
             LONGESTXFMT "), "
@@ -682,9 +667,6 @@ generic_phdr_from_phdr64(elf_filedata ep,
 
     orig_pph = pph;
     orig_gphdr = gphdr;
-#if 0
-    ep->f_fdoffset = lseek(ep->f_fd,offset,SEEK_CUR);
-#endif
     res = RRMOA(ep->f_fd,pph,offset,count*entsize,
         ep->f_filesize,errcode);
     if (res != RO_OK) {
@@ -866,7 +848,7 @@ generic_shdr_from_shdr64(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    gshdr = (struct generic_shdr *)calloc(count,sizeof(*gshdr));
+    gshdr = (struct generic_shdr *)calloc(count,sizeof(struct generic_shdr));
     if (gshdr == 0) {
         free(psh);
         P("malloc of " LONGESTUFMT
@@ -951,37 +933,69 @@ generic_shdr_from_shdr64(elf_filedata ep,
 static int
 dwarf_generic_elf_load_symbols32(elf_filedata  ep,
     int secnum,const char *secname,
+    struct generic_shdr *psh,
     struct generic_symentry **gsym_out,
-    Dwarf_Unsigned offset,Dwarf_Unsigned size,
+    Dwarf_Unsigned offset,Dwarf_Unsigned size_in,
     Dwarf_Unsigned *count_out,int *errcode)
 {
     Dwarf_Unsigned ecount = 0;
     Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned size = size_in;
     Dwarf_Unsigned i = 0;
     dw_elf32_sym *psym = 0;
-    dw_elf32_sym *orig_psym = 0;
     struct generic_symentry * gsym = 0;
     struct generic_symentry * orig_gsym = 0;
     int res = 0;
 
-    ecount = (long)(size/sizeof(dw_elf32_sym));
-    size2 = ecount * sizeof(dw_elf32_sym);
-    if (size != size2) {
-        P("ERROR: Bogus size of symbols. "
-            LONGESTUFMT " not divisible by %lu section"
-            " may be compressed. Ignore.\n",
-            size,(unsigned long)sizeof(dw_elf32_sym));
-        return RO_OK;
-    }
-    psym = calloc(ecount,sizeof(dw_elf32_sym));
+    size = psh->gh_size;
+    psym = calloc(1,size);
     if (!psym) {
-        P("ERROR:  Unable to malloc Elf32_Sym strings "
+        P("ERROR:  Unable to malloc Elf32_Sym data "
             "for section %d (%s) "
             "at offset " LONGESTXFMT "\n",
             secnum,sanitized(secname,buffer3,BUFFERSIZE),offset);
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
+    res = RRMOA(ep->f_fd,psym,offset,size,ep->f_filesize,errcode);
+    if (res!= RO_OK) {
+        free(psym);
+        P("ERROR: could not read whole symbol section of %s "
+            "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
+            sanitized(filename,buffer3,BUFFERSIZE),
+            offset,size);
+        return res;
+    }
+    psh->gh_content = (Dwarf_Small *)psym;
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh,
+            errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
+        }
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED symbol section "
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+    }
+
+    ecount = (long)(size/sizeof(dw_elf32_sym));
+    size2 = ecount * sizeof(dw_elf32_sym);
+    if (size2 != size) {
+        P("ERROR:  elf32 symbol table improper size or count\n");
+        P("ERROR: Bogus size of symbols. "
+            LONGESTUFMT " not divisible by %lu section"
+            " may be compressed. Ignore.\n",
+            size,(unsigned long)sizeof(dw_elf32_sym));
+        return RO_OK;
+    }
+
     gsym = calloc(ecount,sizeof(struct generic_symentry));
     if (!gsym) {
         free(psym);
@@ -992,17 +1006,7 @@ dwarf_generic_elf_load_symbols32(elf_filedata  ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,psym,offset,size,ep->f_filesize,errcode);
-    if (res!= RO_OK) {
-        free(psym);
-        free(gsym);
-        P("ERROR: could not read whole symbol section of %s "
-            "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
-            sanitized(filename,buffer3,BUFFERSIZE),
-            offset,size);
-        return res;
-    }
-    orig_psym = psym;
+    psym = (dw_elf32_sym*)psh->gh_content;
     orig_gsym = gsym;
     for ( i = 0; i < ecount; ++i,++psym,++gsym) {
         Dwarf_Unsigned bind = 0;
@@ -1021,43 +1025,77 @@ dwarf_generic_elf_load_symbols32(elf_filedata  ep,
     }
     *count_out = ecount;
     *gsym_out = orig_gsym;
-    free(orig_psym);
+    psh->gh_location.g_offset =offset;
+    psh->gh_location.g_count = ecount;
+    psh->gh_location.g_entrysize = sizeof(dw_elf32_sym);
+    psh->gh_location.g_totalsize = size2;
+    psh->gh_sym = orig_gsym;
     return RO_OK;
 }
 
 static int
 dwarf_generic_elf_load_symbols64(elf_filedata ep,
     int secnum,const char *secname,
+    struct generic_shdr *psh,
     struct generic_symentry **gsym_out,
-    Dwarf_Unsigned offset,Dwarf_Unsigned size,
+    Dwarf_Unsigned offset,Dwarf_Unsigned size_in,
     Dwarf_Unsigned *count_out,int *errcode)
 {
     Dwarf_Unsigned ecount = 0;
     Dwarf_Unsigned size2 = 0;
+    Dwarf_Unsigned size = size_in;
     Dwarf_Unsigned i = 0;
     dw_elf64_sym*psym = 0;
-    dw_elf64_sym *orig_psym = 0;
     struct generic_symentry * gsym = 0;
     struct generic_symentry * orig_gsym = 0;
     int res = 0;
 
-    ecount = (long)(size/sizeof(dw_elf64_sym));
-    size2 = ecount * sizeof(dw_elf64_sym);
-    if (size != size2) {
-        P("ERROR: Bogus size of symbols. "
-            LONGESTUFMT " not divisible by %lu"
-            " section may be compressed. Ignore.\n",
-            size,(unsigned long)sizeof(dw_elf64_sym));
-        return RO_OK;
-    }
-    psym = calloc(ecount,sizeof(dw_elf64_sym));
+    psym = calloc(1,size);
     if (!psym) {
-        P("ERROR:  Unable to malloc Elf64_Sym strings "
+        P("ERROR:  Unable to malloc Elf64_Sym data "
             "for section %d (%s) "
             "at offset " LONGESTXFMT "\n",
             secnum,sanitized(secname,buffer3,BUFFERSIZE),offset);
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
+    }
+    res = RRMOA(ep->f_fd,psym,offset,size,ep->f_filesize,errcode);
+    if (res!= RO_OK) {
+        free(psym);
+        P("ERROR: could not read whole symbol section of %s "
+            "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
+            sanitized(filename,buffer3,BUFFERSIZE),
+            offset,size);
+        return res;
+    }
+    psh->gh_content = (Dwarf_Small *)psym;
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh,
+            errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
+        }
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED symbol section "
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+    }
+    size = psh->gh_size;
+    ecount = (long)(size/sizeof(dw_elf64_sym));
+    size2 = ecount * sizeof(dw_elf64_sym);
+    if (size2 != size) {
+        P("ERROR:  elf64 symbol table improper size or count\n");
+        P("ERROR: Bogus size of symbols. "
+            LONGESTUFMT " not divisible by %lu section"
+            " may be compressed. Ignore.\n",
+            size,(unsigned long)sizeof(dw_elf64_sym));
+        return RO_OK;
     }
     gsym = calloc(ecount,sizeof(struct generic_symentry));
     if (!gsym) {
@@ -1070,18 +1108,7 @@ dwarf_generic_elf_load_symbols64(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,psym,offset,size,ep->f_filesize,errcode);
-    if (res!= RO_OK) {
-        free(psym);
-        free(gsym);
-        check_size("symbol section",offset,size,ep->f_filesize);
-        P("ERROR: Could not read whole symbol section of %s "
-            "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
-            sanitized(filename,buffer3,BUFFERSIZE),
-            offset,size);
-        return res;
-    }
-    orig_psym = psym;
+    psym = (dw_elf64_sym*)psh->gh_content;
     orig_gsym = gsym;
     for ( i = 0; i < ecount; ++i,++psym,++gsym) {
         Dwarf_Unsigned bind = 0;
@@ -1100,7 +1127,11 @@ dwarf_generic_elf_load_symbols64(elf_filedata ep,
     }
     *count_out = ecount;
     *gsym_out = orig_gsym;
-    free(orig_psym);
+    psh->gh_location.g_offset =offset;
+    psh->gh_location.g_count = ecount;
+    psh->gh_location.g_entrysize = sizeof(dw_elf64_sym);
+    psh->gh_location.g_totalsize = size2;
+    psh->gh_sym = orig_gsym;
     return RO_OK;
 }
 
@@ -1133,12 +1164,14 @@ dwarf_generic_elf_load_symbols(elf_filedata  ep,
     if (ep->f_offsetsize == 32) {
         res = dwarf_generic_elf_load_symbols32(ep,
             secnum,namestr,
+            psh,
             &gsym,
             psh->gh_offset,psh->gh_size,
             &count,errcode);
     } else if (ep->f_offsetsize == 64) {
         res = dwarf_generic_elf_load_symbols64(ep,
             secnum,namestr,
+            psh,
             &gsym,
             psh->gh_offset,psh->gh_size,
             &count,errcode);
@@ -1152,60 +1185,48 @@ dwarf_generic_elf_load_symbols(elf_filedata  ep,
     }
     return res;
 }
+/* for SHT_SYMTAB and SHT_DYNSYM */
 int
-dwarf_load_elf_dynsym_symbols(elf_filedata ep, int*errcode)
+dwarf_load_elf_symtab_symbols(elf_filedata ep,
+    struct generic_shdr*psh, int*errcode)
 {
     int res = 0;
     struct generic_symentry *gsym = 0;
     Dwarf_Unsigned count = 0;
-    Dwarf_Unsigned secnum = ep->f_dynsym_sect_index;
-    struct generic_shdr * psh = 0;
+    Dwarf_Unsigned secnum = psh->gh_secnum;
     const char *namestr = 0;
 
     if (!secnum) {
         return DW_DLV_NO_ENTRY;
     }
-    psh = ep->f_shdr + secnum;
     namestr = psh->gh_namestring;
     res = dwarf_generic_elf_load_symbols(ep,
         secnum,namestr,
         psh,
         &gsym,
         &count,errcode);
-    if (res == DW_DLV_OK) {
-        ep->f_dynsym = gsym;
-        ep->f_loc_dynsym.g_count = count;
-    }
     return res;
 }
 int
-dwarf_load_elf_symtab_symbols(elf_filedata ep, int*errcode)
+dwarf_load_elf_symtab_symbols_all(elf_filedata ep,  int*errcode)
 {
-    int res = 0;
-    struct generic_symentry *gsym = 0;
-    Dwarf_Unsigned count = 0;
-    Dwarf_Unsigned secnum = ep->f_symtab_sect_index;
-    struct generic_shdr * psh = 0;
-    const char *namestr = 0;
+    struct generic_shdr *psh = 0;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned count  =  0;
 
-    if (!secnum) {
-        return DW_DLV_NO_ENTRY;
+    count = ep->f_loc_shdr.g_count;
+    psh = ep->f_shdr;
+    for (i = 1; i < count; i++, ++psh) {
+        if (psh->gh_type == SHT_SYMTAB ||
+            psh->gh_type == SHT_DYNSYM) {
+            dwarf_load_elf_symtab_symbols(ep,psh,errcode);
+            /* If error, message already printed */
+        }
     }
-    psh = ep->f_shdr + secnum;
-    namestr = psh->gh_namestring;
-
-    res = dwarf_generic_elf_load_symbols(ep,
-        secnum,namestr,
-        psh,
-        &gsym,
-        &count,errcode);
-    if (res == DW_DLV_OK) {
-        ep->f_symtab = gsym;
-        ep->f_loc_symtab.g_count = count;
-    }
-    return res;
+    return DW_DLV_OK;
 }
 
+/* Copy from relp to grel appropriately */
 static int
 generic_rel_from_rela32(elf_filedata ep,
     struct generic_shdr * gsh,
@@ -1249,16 +1270,8 @@ generic_rel_from_rela32(elf_filedata ep,
     }
     return DW_DLV_OK;
 }
-#if 0
-/*  EM_MIPS where the file is littleendian ELF 64.
-    ELF64_MIPS_R_SSYM(i) (((i) >> 24) & 0xff)
-    ELF64_MIPS_R_TYPE3(i) (((i) >> 16) & 0xff)
-    ELF64_MIPS_R_TYPE2(i) (((i) >> 8) & 0xff)
-    ELF64_MIPS_R_TYPE(i) ((i) & 0xff)
-    EM_SPARCV9 is also special 64bit reloc type
-*/
-#endif
 
+/* Copy from relp to grel appropriately */
 static int
 generic_rel_from_rela64(elf_filedata ep,
     struct generic_shdr * gsh,
@@ -1322,6 +1335,7 @@ generic_rel_from_rela64(elf_filedata ep,
     return DW_DLV_OK;
 }
 
+/* Copy to grel from relp */
 static int
 generic_rel_from_rel32(elf_filedata ep,
     struct generic_shdr * gsh,
@@ -1363,6 +1377,7 @@ generic_rel_from_rel32(elf_filedata ep,
     return DW_DLV_OK;
 }
 
+/* Copy to grel from relp */
 static int
 generic_rel_from_rel64(elf_filedata ep,
     struct generic_shdr * gsh,
@@ -1420,173 +1435,150 @@ generic_rel_from_rel64(elf_filedata ep,
 }
 
 int
-dwarf_load_elf_dynstr(elf_filedata ep, int *errcode)
+dwarf_load_elf_symstr(elf_filedata ep,
+    struct generic_shdr *strpsh, int *errcode)
 {
-    struct generic_shdr *strpsh = 0;
     int res = 0;
-    Dwarf_Unsigned strsectindex  =0;
     Dwarf_Unsigned strsectlength = 0;
 
-        if (!ep->f_dynsym_sect_strings_sect_index) {
-            return DW_DLV_NO_ENTRY;
-        }
-        strsectindex = ep->f_dynsym_sect_strings_sect_index;
-        strsectlength = ep->f_dynsym_sect_strings_max;
-        strpsh = ep->f_shdr + strsectindex;
-        /*  Alloc an extra byte as a guaranteed NUL byte
-            at the end of the strings in case the section
-            is corrupted and lacks a NUL at end. */
-        ep->f_dynsym_sect_strings = calloc(1,strsectlength+1);
-        if (!ep->f_dynsym_sect_strings) {
-            P("ERROR: Unable to malloc " LONGESTXFMT " bytes for "
-                "dynsym strings table\n",strsectlength);
-            ep->f_dynsym_sect_strings = 0;
-            ep->f_dynsym_sect_strings_max = 0;
-            ep->f_dynsym_sect_strings_sect_index = 0;
-            return RO_ERROR;
-        }
-        res = RRMOA(ep->f_fd,ep->f_dynsym_sect_strings,
-            strpsh->gh_offset,
-            strsectlength,ep->f_filesize,errcode);
-        if (res != RO_OK) {
-            check_size("dynsym section strings",strpsh->gh_offset,
-                strsectlength,ep->f_filesize);
-            P("ERROR: Could not read dynsym section strings at "
-                LONGESTXFMT " (" LONGESTUFMT  ")\n",
-                strpsh->gh_offset,strpsh->gh_offset);
-            ep->f_dynsym_sect_strings = 0;
-            ep->f_dynsym_sect_strings_max = 0;
-            ep->f_dynsym_sect_strings_sect_index = 0;
-            return res;
-        }
-    return DW_DLV_OK;
-}
-int
-dwarf_load_elf_symstr(elf_filedata ep, int *errcode)
-{
-    struct generic_shdr *strpsh = 0;
-    int res = 0;
-    Dwarf_Unsigned strsectindex  =0;
-    Dwarf_Unsigned strsectlength = 0;
-
-    if (!ep->f_symtab_sect_strings_sect_index) {
-        return DW_DLV_NO_ENTRY;
-    }
-    strsectindex = ep->f_symtab_sect_strings_sect_index;
-    strsectlength = ep->f_symtab_sect_strings_max;
-    strpsh = ep->f_shdr + strsectindex;
+    strsectlength = strpsh->gh_size;
     /*  Alloc an extra byte as a guaranteed NUL byte
         at the end of the strings in case the section
         is corrupted and lacks a NUL at end. */
-    ep->f_symtab_sect_strings = calloc(1,strsectlength+1);
-    if (!ep->f_symtab_sect_strings) {
+    if (strpsh->gh_content) {
+        return DW_DLV_OK;
+    }
+    strpsh->gh_content = calloc(1,strsectlength+1);
+    if (!strpsh->gh_content) {
         P("ERROR: Unable to malloc " LONGESTXFMT " bytes for "
             "symtab strings table\n",strsectlength);
-        ep->f_symtab_sect_strings = 0;
-        ep->f_symtab_sect_strings_max = 0;
-        ep->f_symtab_sect_strings_sect_index = 0;
-        return res;
+        strpsh->gh_size = 0;
+        return DW_DLV_ERROR;
     }
-    res = RRMOA(ep->f_fd,ep->f_symtab_sect_strings,
+    res = RRMOA(ep->f_fd,strpsh->gh_content,
         strpsh->gh_offset,
         strsectlength,ep->f_filesize,errcode);
     if (res != RO_OK) {
-        check_size("symtab section strings",strpsh->gh_offset,
-            strsectlength,ep->f_filesize);
-        P("ERROR: Could not read symtab section strings at "
-            LONGESTXFMT " (" LONGESTUFMT  ")\n",
-            strpsh->gh_offset,strpsh->gh_offset);
-        ep->f_symtab_sect_strings = 0;
-        ep->f_symtab_sect_strings_max = 0;
-        ep->f_symtab_sect_strings_sect_index = 0;
+        P("Reading symstr data failed line %d %s\n",
+            __LINE__,__FILE__);
+        free(strpsh->gh_content);
+        strpsh->gh_content = 0;
         return res;
     }
+    if (strpsh->gh_flags & SHF_COMPRESSED) {
+        strpsh->gh_compressed_len = strpsh->gh_size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,strpsh,
+            errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)strpsh->gh_secnum,*errcode);
+            free(strpsh->gh_content);
+            strpsh->gh_content = 0;
+            return res;
+        }
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_OK;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+    }
+    check_size("symtab section strings",strpsh->gh_offset,
+        strsectlength,ep->f_filesize);
     return DW_DLV_OK;
 }
 
+/* for sym strings and dyamic strings */
 int
 dwarf_get_elf_symstr_string(elf_filedata ep,
-    int is_symtab,Dwarf_Unsigned index,
+    Dwarf_Unsigned linktostrings,
+    Dwarf_Unsigned index,
     const char **str_out,
     int*errcode)
 {
-    if (is_symtab) {
-        if (index >= ep->f_symtab_sect_strings_max) {
-            *errcode = RO_ERR_STRINGOFFSETBIG;
-            return DW_DLV_ERROR;
-        }
-        *str_out = ep->f_symtab_sect_strings + index;
-        return DW_DLV_OK;
-    }
-    if (index >= ep->f_dynsym_sect_strings_max) {
+    struct generic_shdr * psh = 0;
+
+    if (linktostrings >= ep->f_ehdr->ge_shnum) {
+        P("Symstr_string link %lu not valid section index\n",
+            (unsigned long)linktostrings);
         *errcode = RO_ERR_STRINGOFFSETBIG;
         return DW_DLV_ERROR;
     }
-    *str_out = ep->f_dynsym_sect_strings + index;
+    psh = ep->f_shdr + linktostrings;
+    if (psh->gh_type != SHT_STRTAB) {
+        P("Symstr_string link %lu does not lead to SHT_STRTAB\n",
+            (unsigned long)linktostrings);
+        *errcode = RO_ERR_STRINGOFFSETBIG;
+        return DW_DLV_ERROR;
+
+    }
+    if (index >= psh->gh_size) {
+        P("Symstr_string index %lu improper\n",(unsigned long)index);
+        *errcode = RO_ERR_STRINGOFFSETBIG;
+        return DW_DLV_ERROR;
+    }
+    *str_out = (const char *)psh->gh_content + index;
     return DW_DLV_OK;
 }
 
 static int
-elf_load_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection,
+elf_load_sectstrings(elf_filedata ep,struct generic_shdr*psh,
     int *errcode)
 {
     int i = 0;
-    struct generic_shdr *psh = 0;
     Dwarf_Unsigned secoffset = 0;
 
-    ep->f_elf_shstrings_length = 0;
-    if (stringsection >= ep->f_ehdr->ge_shnum) {
-        printf("String section " LONGESTUFMT " invalid. Ignored.",
-            stringsection);
-        return RO_ERROR;
-    }
-    psh = ep->f_shdr + stringsection;
     secoffset = psh->gh_offset;
     if (is_empty_section(psh->gh_type)) {
-        P("String section type SHT_NULL or SHT_NOBITS!!. "
-            "No section string section!\n");
+        P("String section type SHT_NULL or SHT_NOBITS!!. in sec %ld "
+            "No section string section!\n",
+            (unsigned long)psh->gh_secnum);
         return RO_ERROR;
     }
-    if (psh->gh_size > ep->f_elf_shstrings_max) {
-        free(ep->f_elf_shstrings_data);
-        ep->f_elf_shstrings_data = (char *)malloc(psh->gh_size);
-        ep->f_elf_shstrings_max = psh->gh_size;
-        if (!ep->f_elf_shstrings_data) {
-            ep->f_elf_shstrings_max = 0;
-            P("Unable to malloc %ld bytes for strings\n",
-                (long)psh->gh_size);
-            *errcode = RO_ERR_MALLOC;
-            return DW_DLV_ERROR;
-        }
+    if (psh->gh_content) {
+        P("ERROR non-null gh_content %p\n",(void *)psh->gh_content);
+        return DW_DLV_ERROR;
     }
-    ep->f_elf_shstrings_length = psh->gh_size;
-    i = RRMOA(ep->f_fd,ep->f_elf_shstrings_data,secoffset,
+    psh->gh_content = calloc(1,psh->gh_size);
+    if (!psh->gh_content) {
+        P("Alloc of  " LONGESTUFMT" bytes of "
+            "shstrings section string "
+            "data failed, secnum %lu\n",psh->gh_size,
+            (unsigned long)psh->gh_secnum);
+        psh->gh_size = 0;
+        return DW_DLV_ERROR;
+
+    }
+    i = RRMOA(ep->f_fd,psh->gh_content,secoffset,
         psh->gh_size,ep->f_filesize,errcode);
     if (i != RO_OK) {
         P("Read  " LONGESTUFMT" bytes of shstrings section string "
-            "data failed\n",ep->f_elf_shstrings_length);
-        ep->f_elf_shstrings_length = 0;
+            "data failed, secnum %lu\n",
+            psh->gh_size,(unsigned long)psh->gh_secnum);
+        free(psh->gh_content);
+        psh->gh_content = 0;
+        psh->gh_size = 0;
         return i;
     }
-    psh->gh_content = (Dwarf_Small *)ep->f_elf_shstrings_data;
+/*FIXME good example*/
     if (psh->gh_flags & SHF_COMPRESSED) {
         int res = 0;
+        psh->gh_compressed_len = psh->gh_size;
 #if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
         res = dwarf_elf_do_decompress(ep,psh,
             errcode);
         if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
             return res;
         }
-        free(ep->f_elf_shstrings_data);
-        ep->f_elf_shstrings_data = (char *)psh->gh_content;
-        ep->f_elf_shstrings_length = psh->gh_size;
-        ep->f_elf_shstrings_max  = psh->gh_size;
-#else
+#else /* HAVE_ZLIB HAVE_ZSTD */
         P("Cannot read SHF_COMPRESSED section strings"
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
-#endif
+#endif /* HAVE_ZLIB HAVE_ZSTD */
     }
     return RO_OK;
 }
@@ -1737,9 +1729,6 @@ get_counts_from_sec32_zero(
 
     shd32 =  shd32zero;
     shdg = shdgzero;
-#if 0
-    ep->f_fdoffset = lseek(ep->f_fd,offset,SEEK_CUR);
-#endif
     res = RRMOA(ep->f_fd,&shd32,offset,size,
         ep->f_filesize,errcode);
     if (res != DW_DLV_OK) {
@@ -1808,6 +1797,12 @@ elf_load_sectheaders32(elf_filedata ep,
             finalcount = shdr_count;
         }
     }
+    if (have_shstrndx_number) {
+        ep->f_elf_shstrings_sect_index = shstrndx_number;
+    } else {
+        ep->f_elf_shstrings_sect_index = ehp->ge_shstrndx;
+    }
+
     if (finalcount == 0) {
         P("No section headers\n");
         return DW_DLV_NO_ENTRY;
@@ -1852,14 +1847,16 @@ elf_load_sectheaders32(elf_filedata ep,
 }
 
 /*  Has a side effect of setting count, number
-    in the ehdr  ep points to. */
+    in the ehdr  ep points to.
+    If
+*/
 static int
 get_counts_from_sec64_zero(
-    elf_filedata   ep,
-    Dwarf_Unsigned offset,
-    unsigned char     *have_shdr_count,
+    elf_filedata    ep,
+    Dwarf_Unsigned  offset,
+    unsigned char  *have_shdr_count,
     Dwarf_Unsigned *shdr_count,
-    unsigned char     *have_shstrndx_number,
+    unsigned char  *have_shstrndx_number,
     Dwarf_Unsigned *shstrndx_number,
     int            *errcode)
 {
@@ -1887,6 +1884,7 @@ get_counts_from_sec64_zero(
             P(" ERROR: number of sections %llu "
                 " too small to be reasonable",geh->ge_shnum);
         }
+    } else {
     }
     *have_shdr_count = TRUE;
     *shdr_count = geh->ge_shnum;
@@ -1895,8 +1893,7 @@ get_counts_from_sec64_zero(
         geh->ge_strndx_in_strndx = TRUE;
         P(" Extracted actual section string index number %llu"
             " from section zero\n",geh->ge_shstrndx);
-        if (geh->ge_shstrndx >=
-            geh->ge_shnum) {
+        if (geh->ge_shstrndx >= geh->ge_shnum) {
             P(" ERROR: section string index %llu larger"
                 " than section count of %llu\n",
                 geh->ge_shstrndx,geh->ge_shnum);
@@ -1924,7 +1921,7 @@ elf_load_sectheaders64(elf_filedata ep,
     ehp = ep->f_ehdr;
     finalcount = ehp->ge_shnum;
     if (!ehp->ge_shnum_in_shnum || !ehp->ge_strndx_in_strndx ) {
-        /*  This updates ehp values when appropriate */
+        /*  This updates ep values when appropriate */
         res = get_counts_from_sec64_zero(ep,offset,
             &have_shdr_count,&shdr_count,
             &have_shstrndx_number,&shstrndx_number,
@@ -1938,7 +1935,11 @@ elf_load_sectheaders64(elf_filedata ep,
             finalcount = shdr_count;
         }
     }
-
+    if (have_shstrndx_number) {
+        ep->f_elf_shstrings_sect_index = shstrndx_number;
+    } else {
+        ep->f_elf_shstrings_sect_index = ehp->ge_shstrndx;
+    }
     if (finalcount == 0) {
         P("No section headers\n");
         return DW_DLV_NO_ENTRY;
@@ -1985,7 +1986,7 @@ elf_load_sectheaders64(elf_filedata ep,
 static int
 dwarf_elf_load_rela_32(elf_filedata ep,
     Dwarf_Unsigned secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    struct generic_shdr * psh,struct generic_rela ** grel_out,
     Dwarf_Unsigned *count_out, int *errcode)
 {
     Dwarf_Unsigned count = 0;
@@ -1998,8 +1999,8 @@ dwarf_elf_load_rela_32(elf_filedata ep,
     Dwarf_Unsigned object_reclen = sizeof(dw_elf32_rela);
     struct generic_rela *grel = 0;
 
-    offset = gsh->gh_offset;
-    size = gsh->gh_size;
+    offset = psh->gh_offset;
+    size = psh->gh_size;
     if (size == 0) {
         P("Warning: zero-size relocation section: " LONGESTUFMT
             ", offset "
@@ -2017,12 +2018,13 @@ dwarf_elf_load_rela_32(elf_filedata ep,
                 " offset " LONGESTUFMT
                 " size " LONGESTUFMT
                 "\n",
-                sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
+                sanitized(psh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
             *errcode = RO_ERR_FILEOFFSETBAD;
             return RO_ERROR;
     }
 
+#if 0
     count = (long)(size/object_reclen);
     size2 = count * object_reclen;
     if (size != size2) {
@@ -2034,6 +2036,7 @@ dwarf_elf_load_rela_32(elf_filedata ep,
         *errcode = RO_ERR_RELSECTIONSIZE;
         return RO_ERROR;
     }
+#endif
     relp = (dw_elf32_rela *)malloc(size);
     if (!relp) {
         P("ERROR: Could not malloc whole reloc section "
@@ -2057,6 +2060,37 @@ dwarf_elf_load_rela_32(elf_filedata ep,
             offset,size);
         return res;
     }
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = psh->gh_size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh, errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
+        }   
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+        relp = (dw_elf32_rela*)psh->gh_content;
+    }
+/*FIXME recalculate count as relcount*/
+    size = psh->gh_size;
+    count = size/object_reclen;
+    size2 = count * object_reclen;
+    if (size != size2) {
+        P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
+            ": " LONGESTUFMT
+            " not divisible by "
+            LONGESTUFMT "\n",
+            secnum, size,object_reclen);
+        *errcode = RO_ERR_RELSECTIONSIZE;
+        return RO_ERROR;
+    }
+
     sizeg = count*sizeof(struct generic_rela);
     grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
@@ -2070,11 +2104,11 @@ dwarf_elf_load_rela_32(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return RO_ERROR;
     }
-    res = generic_rel_from_rela32(ep,gsh,relp,grel,errcode);
-    free(relp);
+    res = generic_rel_from_rela32(ep,psh,relp,grel,errcode);
+    if (res == DW_DLV_ERROR) {
+        P("creating generic rel 32 bit failed, errcode %d\n",*errcode);
+    }
     if (res == DW_DLV_OK) {
-        gsh->gh_relcount = count;
-        gsh->gh_rels = grel;
         *count_out = count;
         *grel_out = grel;
         return RO_OK;
@@ -2088,7 +2122,7 @@ dwarf_elf_load_rela_32(elf_filedata ep,
 static int
 dwarf_elf_load_rel_32(elf_filedata ep,
     Dwarf_Unsigned secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    struct generic_shdr * psh,struct generic_rela ** grel_out,
     Dwarf_Unsigned *count_out,int *errcode)
 {
     Dwarf_Unsigned count = 0;
@@ -2101,8 +2135,8 @@ dwarf_elf_load_rel_32(elf_filedata ep,
     Dwarf_Unsigned object_reclen = sizeof(dw_elf32_rel);
     struct generic_rela *grel = 0;
 
-    offset = gsh->gh_offset;
-    size = gsh->gh_size;
+    offset = psh->gh_offset;
+    size = psh->gh_size;
     if (size == 0) {
         P("Warning: Empty relocation section: " LONGESTUFMT
             ", offset "
@@ -2120,11 +2154,12 @@ dwarf_elf_load_rel_32(elf_filedata ep,
                 " size " LONGESTUFMT
                 "\n",
                 secnum,
-                sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
+                sanitized(psh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
             return RO_ERROR;
     }
 
+#if 0
     count = size/object_reclen;
     size2 = count * object_reclen;
     if (size != size2) {
@@ -2135,6 +2170,7 @@ dwarf_elf_load_rel_32(elf_filedata ep,
             secnum, size,object_reclen);
         return RO_ERROR;
     }
+#endif
     relp = (dw_elf32_rel *)malloc(size);
     if (!relp) {
         P("ERROR: Could not malloc whole reloc section "
@@ -2157,7 +2193,38 @@ dwarf_elf_load_rel_32(elf_filedata ep,
             offset,size);
         return res;
     }
-    sizeg = count *sizeof(struct generic_rela);
+    psh->gh_content = (Dwarf_Small *)relp;
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = psh->gh_size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh, errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
+        }       
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+        relp = (dw_elf32_rel*)psh->gh_content;
+    }
+/*FIXME recalc count as relcount*/
+    size = psh->gh_size;
+    count = size/object_reclen;
+    size2 = count * object_reclen;
+    if (size != size2) {
+        P("Bogus size of relocations. Section " LONGESTUFMT
+            ": " LONGESTUFMT
+            " not divisible by "
+            LONGESTUFMT "\n",
+            secnum, size,object_reclen);
+        return RO_ERROR;
+    }
+
+    sizeg = count*sizeof(struct generic_rela);
     grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
         free(relp);
@@ -2170,8 +2237,7 @@ dwarf_elf_load_rel_32(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = generic_rel_from_rel32(ep,gsh,relp,grel,errcode);
-    free(relp);
+    res = generic_rel_from_rel32(ep,psh,relp,grel,errcode);
     if (res == DW_DLV_OK) {
         *count_out = count;
         *grel_out = grel;
@@ -2186,7 +2252,7 @@ dwarf_elf_load_rel_32(elf_filedata ep,
 static int
 dwarf_elf_load_rel_64(elf_filedata ep,
     Dwarf_Unsigned secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    struct generic_shdr * psh,struct generic_rela ** grel_out,
     Dwarf_Unsigned *count_out,int *errcode)
 {
     Dwarf_Unsigned count = 0;
@@ -2199,8 +2265,8 @@ dwarf_elf_load_rel_64(elf_filedata ep,
     Dwarf_Unsigned object_reclen = sizeof(dw_elf64_rel);
     struct generic_rela *grel = 0;
 
-    offset = gsh->gh_offset;
-    size = gsh->gh_size;
+    offset = psh->gh_offset;
+    size = psh->gh_size;
     if (size == 0) {
         P("Warning: Empty relocation section: " LONGESTUFMT
             ", offset "
@@ -2219,12 +2285,13 @@ dwarf_elf_load_rel_64(elf_filedata ep,
                 " size " LONGESTUFMT
                 "\n",
                 secnum,
-                sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
+                sanitized(psh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
             *errcode = RO_ERR_FILEOFFSETBAD;
             return RO_ERROR;
     }
 
+#if 0
     count = size/object_reclen;
     size2 = count * object_reclen;
     if (size != size2) {
@@ -2236,6 +2303,7 @@ dwarf_elf_load_rel_64(elf_filedata ep,
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
     }
+#endif
     relp = (dw_elf64_rel *)malloc(size);
     if (!relp) {
         P("ERROR: Could not malloc whole reloc section "
@@ -2259,6 +2327,37 @@ dwarf_elf_load_rel_64(elf_filedata ep,
             offset,size);
         return res;
     }
+    psh->gh_content = (Dwarf_Small *)relp;
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = psh->gh_size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh, errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
+        }
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+        relp = (dw_elf64_rel*)psh->gh_content;
+    }
+/*FIXME recalc count as relcount*/
+    size = psh->gh_size;
+    count = size/object_reclen;
+    size2 = count * object_reclen;
+    if (size != size2) {
+        P("Bogus size of relocations. Section " LONGESTUFMT
+            ": " LONGESTUFMT
+            " not divisible by "
+            LONGESTUFMT " RO_ERR_RELCOUNTMISMATCH\n",
+            secnum, size,object_reclen);
+        *errcode = RO_ERR_RELCOUNTMISMATCH;
+        return RO_ERROR;
+    }
     sizeg = count*sizeof(struct generic_rela);
     grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
@@ -2272,8 +2371,7 @@ dwarf_elf_load_rel_64(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    res = generic_rel_from_rel64(ep,gsh,relp,grel,errcode);
-    free(relp);
+    res = generic_rel_from_rel64(ep,psh,relp,grel,errcode);
     if (res == DW_DLV_OK) {
         *count_out = count;
         *grel_out = grel;
@@ -2287,7 +2385,7 @@ dwarf_elf_load_rel_64(elf_filedata ep,
 
 static int
 dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
-    struct generic_shdr * gsh,struct generic_rela ** grel_out,
+    struct generic_shdr * psh,struct generic_rela ** grel_out,
     Dwarf_Unsigned *count_out,int *errcode)
 {
     Dwarf_Unsigned count = 0;
@@ -2300,8 +2398,8 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
     Dwarf_Unsigned object_reclen = sizeof(dw_elf64_rela);
     struct generic_rela *grel = 0;
 
-    offset = gsh->gh_offset;
-    size = gsh->gh_size;
+    offset = psh->gh_offset;
+    size = psh->gh_size;
     if (size == 0) {
         P("Warning: zero-size relocation section: " LONGESTUFMT
             ", offset "
@@ -2322,11 +2420,12 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
                 " size " LONGESTUFMT
                 "\n",
                 secnum,
-                sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
+                sanitized(psh->gh_namestring,buffer1,BUFFERSIZE),
                 ep->f_filesize,offset,size);
             *errcode = RO_ERR_FILEOFFSETBAD;
             return RO_ERROR;
     }
+#if 0
     count = (long)(size/object_reclen);
     size2 = count * object_reclen;
     if (size != size2) {
@@ -2338,6 +2437,7 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
         *errcode = RO_ERR_RELCOUNTMISMATCH;
         return RO_ERROR;
     }
+#endif
     /* Here want native rela size from the file */
     relp = (dw_elf64_rela *)malloc(size);
     if (!relp) {
@@ -2362,8 +2462,39 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
             offset,size);
         return res;
     }
+    psh->gh_content = (Dwarf_Small *)relp;
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = psh->gh_size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh, errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
+        }   
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+        relp = (dw_elf64_rela *)psh->gh_content;
+    }
+/*FIXME recalc count as relcount*/
+    size = psh->gh_size;
+    count = size/object_reclen;
+    size2 = count * object_reclen;
+    if (size != size2) { 
+        P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
+            ": " LONGESTUFMT
+            " not divisible by "
+            LONGESTUFMT " RO_ERR_RELCOUNTMISMATCH\n",
+            secnum, size,object_reclen);
+        *errcode = RO_ERR_RELCOUNTMISMATCH;
+        return RO_ERROR;
+    }
+
     sizeg = count*sizeof(struct generic_rela);
-    /* Here want generic-record size from the file */
     grel = (struct generic_rela *)malloc(sizeg);
     if (!grel) {
         free(relp);
@@ -2376,8 +2507,10 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
         *errcode = RO_ERR_MALLOC;
         return RO_ERROR;
     }
-    res = generic_rel_from_rela64(ep,gsh,relp,grel,errcode);
-    free(relp);
+    res = generic_rel_from_rela64(ep,psh,relp,grel,errcode);
+    if (res == DW_DLV_ERROR) {
+        P("creating generic rel 64 bit failed, errcode %d\n",*errcode);
+    }
     if (res == DW_DLV_OK) {
         *count_out = count;
         *grel_out = grel;
@@ -2393,43 +2526,46 @@ int
 dwarf_load_elf_rela(elf_filedata ep,
     Dwarf_Unsigned secnum, int *errcode)
 {
-    struct generic_shdr *gshdr = 0;
+    struct generic_shdr *psh = 0;
     unsigned offsetsize = 0;
     struct generic_rela *grp = 0;
     Dwarf_Unsigned count_read = 0;
     int res = 0;
 
     if (!ep) {
+        P("ERROR: NULL elf_filedata pointer\n");
         *errcode = RO_ERR_NULL_ELF_POINTER;
         return DW_DLV_ERROR;
     }
     offsetsize = ep->f_offsetsize;
-    gshdr = ep->f_shdr +secnum;
-    if (is_empty_section(gshdr->gh_type)) {
+    psh = ep->f_shdr +secnum;
+    if (is_empty_section(psh->gh_type)) {
         return DW_DLV_NO_ENTRY;
     }
     if (offsetsize == 32) {
         res = dwarf_elf_load_rela_32(ep,
-            secnum,gshdr,&grp,&count_read,errcode);
+            secnum,psh,&grp,&count_read,errcode);
     } else if (offsetsize == 64) {
         res = dwarf_elf_load_rela_64(ep,
-            secnum,gshdr,&grp,&count_read,errcode);
+            secnum,psh,&grp,&count_read,errcode);
     } else {
+        P("ERROR: bad offset size, not 32 or 64: %lu\n",
+            (unsigned long)offsetsize);
         *errcode = RO_ERR_BADOFFSETSIZE;
         return RO_ERROR;
     }
     if (res != RO_OK) {
         return res;
     }
-    gshdr->gh_rels = grp;
-    gshdr->gh_relcount = count_read;
+    psh->gh_rels = grp;
+    psh->gh_relcount = count_read;
     return DW_DLV_OK;
 }
 int
 dwarf_load_elf_rel(elf_filedata ep,
     Dwarf_Unsigned secnum, int *errcode)
 {
-    struct generic_shdr *gshdr = 0;
+    struct generic_shdr *psh = 0;
     unsigned offsetsize = 0;
     struct generic_rela *grp = 0;
     Dwarf_Unsigned count_read = 0;
@@ -2440,16 +2576,16 @@ dwarf_load_elf_rel(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     offsetsize = ep->f_offsetsize;
-    gshdr = ep->f_shdr +secnum;
-    if (is_empty_section(gshdr->gh_type)) {
+    psh = ep->f_shdr +secnum;
+    if (is_empty_section(psh->gh_type)) {
         return DW_DLV_NO_ENTRY;
     }
     if (offsetsize == 32) {
         res = dwarf_elf_load_rel_32(ep,
-            secnum,gshdr,&grp,&count_read,errcode);
+            secnum,psh,&grp,&count_read,errcode);
     } else if (offsetsize == 64) {
         res = dwarf_elf_load_rel_64(ep,
-            secnum,gshdr,&grp,&count_read,errcode);
+            secnum,psh,&grp,&count_read,errcode);
     } else {
         *errcode = RO_ERR_BADOFFSETSIZE;
         return DW_DLV_ERROR;
@@ -2460,8 +2596,8 @@ dwarf_load_elf_rel(elf_filedata ep,
     if (res == DW_DLV_NO_ENTRY) {
         return res;
     }
-    gshdr->gh_rels = grp;
-    gshdr->gh_relcount = count_read;
+    psh->gh_rels = grp;
+    psh->gh_relcount = count_read;
     return DW_DLV_OK;
 }
 
@@ -2570,20 +2706,20 @@ elf_check_phdr_sizes(elf_filedata ep)
 static void
 elf_check_sect_sizes(elf_filedata ep)
 {
-    struct generic_shdr *gshdr = 0;
+    struct generic_shdr *psh = 0;
     Dwarf_Unsigned generic_count = 0;
     Dwarf_Unsigned i = 1;
     Dwarf_Unsigned filesize = ep->f_filesize;
 
-    gshdr = ep->f_shdr;
+    psh = ep->f_shdr;
     generic_count = ep->f_loc_shdr.g_count;
-    for (i = 0; i < generic_count; i++, ++gshdr) {
-        if (is_empty_section(gshdr->gh_type)) {
+    for (i = 0; i < generic_count; i++, ++psh) {
+        if (is_empty_section(psh->gh_type)) {
             continue;
         }
-        if (gshdr->gh_offset >= filesize ||
-            gshdr->gh_size >= filesize ||
-            (gshdr->gh_size+ gshdr->gh_offset) > filesize) {
+        if (psh->gh_offset >= filesize ||
+            psh->gh_size >= filesize ||
+            (psh->gh_size+ psh->gh_offset) > filesize) {
             P("ERROR: Section size error. "
                 " section " LONGESTUFMT " %s "
                 " offset " LONGESTUFMT
@@ -2591,91 +2727,14 @@ elf_check_sect_sizes(elf_filedata ep)
                 ", endpoint " LONGESTUFMT
                 ", filesize " LONGESTUFMT "\n",
                 i,
-                sanitized(gshdr->gh_namestring,
+                sanitized(psh->gh_namestring,
                     buffer1,BUFFERSIZE),
-                gshdr->gh_offset,
-                gshdr->gh_size,
-                gshdr->gh_size + gshdr->gh_offset,
+                psh->gh_offset,
+                psh->gh_size,
+                psh->gh_size + psh->gh_offset,
                 filesize);
         }
     }
-}
-
-static int
-validate_section_name_string(Dwarf_Unsigned section_length,
-    Dwarf_Unsigned section_number,
-    Dwarf_Unsigned string_loc_index,
-    const char * strings_start,
-    int  * errcode)
-{
-    const char *endpoint = strings_start + section_length;
-    const char *cur = 0;
-
-    if (section_length <= string_loc_index) {
-        P("ERROR: Section " LONGESTUFMT
-            ": section name offset "
-            LONGESTUFMT " in section strings is too large.",
-            section_number,string_loc_index);
-        *errcode = RO_ERR_STRINGOFFSETBIG;
-        return DW_DLV_ERROR;
-    }
-    cur = string_loc_index+strings_start;
-    for ( ; cur < endpoint;++cur) {
-        if (!*cur) {
-            return DW_DLV_OK;
-        }
-    }
-    P("ERROR: Section " LONGESTUFMT
-        ": section name offset "
-        LONGESTUFMT " in section strings"
-        " is not terminated properly.",
-        section_number,string_loc_index);
-    *errcode = RO_ERR_STRINGOFFSETBIG;
-    return DW_DLV_ERROR;
-}
-
-static int
-elf_load_sect_namestring(elf_filedata ep, int *errcode)
-{
-    struct generic_shdr *gshdr = 0;
-    Dwarf_Unsigned generic_count = 0;
-    Dwarf_Unsigned i = 1;
-    const char *stringsecbase = 0;
-
-    stringsecbase = ep->f_elf_shstrings_data;
-    gshdr = ep->f_shdr;
-    generic_count = ep->f_loc_shdr.g_count;
-    if (generic_count> ep->f_filesize) {
-        P("ERROR: Something badly wrong with "
-            "namestring section "
-            " %s "
-            " count " LONGESTUFMT
-            " filesize " LONGESTUFMT
-            "\n",
-            sanitized(gshdr->gh_namestring,buffer1,BUFFERSIZE),
-            generic_count,ep->f_filesize);
-        return RO_ERROR;
-    }
-    for (i = 0; i < generic_count; i++, ++gshdr) {
-        const char *namestr =
-            "<No valid Elf section strings exist>";
-        int res = 0;
-
-        if (!ep->f_ehdr->ge_shstrndx || !stringsecbase) {
-            gshdr->gh_namestring = namestr;
-            continue;
-        }
-        namestr = "<Invalid sh_name value. Corrupt Elf.>";
-        res = validate_section_name_string(ep->f_elf_shstrings_length,
-            i, gshdr->gh_name, stringsecbase,
-            errcode);
-        if (res != DW_DLV_OK) {
-            gshdr->gh_namestring = namestr;
-            return res;
-        }
-        gshdr->gh_namestring = stringsecbase + gshdr->gh_name;
-    }
-    return DW_DLV_OK;
 }
 
 static int
@@ -2735,6 +2794,7 @@ elf_load_elf_header64(elf_filedata ep,int *errcode)
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
+/* FIXME */
     res  = generic_ehdr_from_64(ep,ehdr,&ehdr64);
     if (res == RO_OK) {
         dwarf_insert_in_use_entry(ep,"Elf64_Ehdr",
@@ -2745,39 +2805,27 @@ elf_load_elf_header64(elf_filedata ep,int *errcode)
 
 static int
 generic_dyn_from_dyn32(elf_filedata ep,
-    struct generic_dynentry **gbuffer_io,
-    Dwarf_Unsigned *bufcount_out,
-    Dwarf_Unsigned offset,
-    Dwarf_Unsigned size,
-    Dwarf_Unsigned ecount, int *errcode)
+    struct generic_shdr *psh,
+    int *errcode)
 {
     dw_elf32_dyn *ebuf = 0;
-    dw_elf32_dyn *orig_ebuf = 0;
     struct generic_dynentry * gbuffer = 0;
     struct generic_dynentry * orig_gbuffer = 0;
     Dwarf_Unsigned i = 0;
     Dwarf_Unsigned trueoff = 0;
     int res = 0;
+    Dwarf_Unsigned offset = psh->gh_offset;
+    Dwarf_Unsigned size = psh->gh_size;
+    Dwarf_Unsigned ecount =  0;
+    Dwarf_Unsigned size2= 0;
 
     ebuf = malloc(size);
-    *bufcount_out = 0;
     if (!ebuf) {
         P("Out Of Memory, cannot malloc dynamic section space for "
             LONGESTUFMT " bytes\n",size);
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    orig_ebuf = ebuf;
-    gbuffer= malloc(sizeof(struct generic_dynentry)*ecount);
-    if (!gbuffer) {
-        free(ebuf);
-        P("Out Of Memory, cannot malloc generic dynamic space for "
-            LONGESTUFMT " bytes\n",
-            (sizeof(struct generic_dynentry)*ecount));
-        *errcode = RO_ERR_MALLOC;
-        return DW_DLV_ERROR;
-    }
-    orig_gbuffer = gbuffer;
     trueoff = offset;
     res = RRMOA(ep->f_fd,ebuf,offset,size,ep->f_filesize,errcode);
     if (res != RO_OK) {
@@ -2785,55 +2833,33 @@ generic_dyn_from_dyn32(elf_filedata ep,
         "at offset " LONGESTUFMT " size " LONGESTUFMT "\n",
         sanitized(filename,buffer6,BUFFERSIZE),
         offset,size);
-        free(gbuffer);
         free(ebuf);
         return res;
     }
-    for (i = 0; i < ecount;
-        ++i,++gbuffer,++ebuf,trueoff += sizeof(dw_elf32_dyn)) {
-        /* SIGNED VALUE */
-        ASNAR(ep->f_copy_word,gbuffer->gd_tag,ebuf->d_tag);
-        SIGN_EXTEND(gbuffer->gd_tag,sizeof(ebuf->d_tag));
-        ASNAR(ep->f_copy_word,gbuffer->gd_val,ebuf->d_val);
-        /* Assigning the file offset, not sec offset */
-        gbuffer->gd_dyn_file_offset =  trueoff;
-        if (gbuffer->gd_tag == 0) {
-            ep->f_wasted_dynamic_count++;
-            ep->f_wasted_dynamic_space += sizeof(dw_elf32_dyn);
+    psh->gh_content = (Dwarf_Small *)ebuf;
+/*FIXME good example*/
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = psh->gh_size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh,
+            errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
         }
-    }
-    *bufcount_out = ecount;
-    *gbuffer_io = orig_gbuffer;
-    free(orig_ebuf);
-    return RO_OK;
-}
-
-static int
-generic_dyn_from_dyn64(elf_filedata ep,
-    struct generic_dynentry **gbuffer_io,
-    Dwarf_Unsigned *bufcount_out,
-    Dwarf_Unsigned offset,
-    Dwarf_Unsigned size,
-    Dwarf_Unsigned ecount, int *errcode)
-{
-    dw_elf64_dyn *ebuf = 0;
-    dw_elf64_dyn *orig_ebuf = 0;
-    struct generic_dynentry * gbuffer = 0;
-    struct generic_dynentry * orig_gbuffer = 0;
-    Dwarf_Unsigned i = 0;
-    Dwarf_Unsigned trueoff = 0;
-    int res = 0;
-
-    ebuf = malloc(size);
-    *bufcount_out = 0;
-    if (!ebuf) {
-        P("Out Of Memory, cannot malloc dynamic section space for "
-            LONGESTUFMT " bytes\n",size);
-        *errcode = RO_ERR_MALLOC;
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+        ebuf = (dw_elf32_dyn *)psh->gh_content;
     }
-    orig_ebuf = ebuf;
-    gbuffer= malloc(sizeof(struct generic_dynentry)*ecount);
+    size = psh->gh_size;
+    ecount = size/sizeof(dw_elf32_dyn);
+    size2 = sizeof(struct generic_dynentry)*ecount;
+    gbuffer= malloc(size2);
     if (!gbuffer) {
         free(ebuf);
         P("Out Of Memory, cannot malloc generic dynamic space for "
@@ -2843,10 +2869,45 @@ generic_dyn_from_dyn64(elf_filedata ep,
         return DW_DLV_ERROR;
     }
     orig_gbuffer = gbuffer;
-    trueoff = offset;
-#if 0
-    ep->f_fdoffset = lseek(ep->f_fd,offset,SEEK_CUR);
-#endif
+    for (i = 0; i < ecount;
+        ++i,++gbuffer,++ebuf,trueoff += sizeof(dw_elf32_dyn)) {
+        /* SIGNED VALUE */
+        ASNAR(ep->f_copy_word,gbuffer->gd_tag,ebuf->d_tag);
+        SIGN_EXTEND(gbuffer->gd_tag,sizeof(ebuf->d_tag));
+        ASNAR(ep->f_copy_word,gbuffer->gd_val,ebuf->d_val);
+    }
+    psh->gh_dynamic = orig_gbuffer;
+    psh->gh_location.g_name = ".dynamic";
+    psh->gh_location.g_offset = offset;
+    psh->gh_location.g_entrysize = sizeof(dw_elf32_dyn);
+    psh->gh_location.g_count = ecount; /* for index checking */
+    psh->gh_location.g_totalsize = size2;
+    return RO_OK;
+}
+
+static int
+generic_dyn_from_dyn64(elf_filedata ep,
+    struct generic_shdr *psh,
+    int *errcode)
+{
+    dw_elf64_dyn *ebuf = 0;
+    struct generic_dynentry * gbuffer = 0;
+    struct generic_dynentry * orig_gbuffer = 0;
+    Dwarf_Unsigned i = 0;
+    Dwarf_Unsigned trueoff = 0;
+    int res = 0;
+    Dwarf_Unsigned offset = psh->gh_offset;
+    Dwarf_Unsigned size = psh->gh_size;
+    Dwarf_Unsigned ecount = 0;
+    Dwarf_Unsigned size2 = 0;
+
+    ebuf = malloc(size);
+    if (!ebuf) {
+        P("Out Of Memory, cannot malloc dynamic section space for "
+            LONGESTUFMT " bytes\n",size);
+        *errcode = RO_ERR_MALLOC;
+        return DW_DLV_ERROR;
+    }
     res = RRMOA(ep->f_fd,ebuf,offset,size,ep->f_filesize,errcode);
     if (res != RO_OK) {
         P("could not read whole dynamic section of %s "
@@ -2857,120 +2918,72 @@ generic_dyn_from_dyn64(elf_filedata ep,
         free(ebuf);
         return res;
     }
+    psh->gh_content = (Dwarf_Small *)ebuf;
+    psh->gh_size = size;
+/*FIXME good example*/
+    if (psh->gh_flags & SHF_COMPRESSED) {
+        psh->gh_compressed_len = psh->gh_size;
+#if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
+        res = dwarf_elf_do_decompress(ep,psh,
+            errcode);
+        if (res != DW_DLV_OK) {
+            P("Decompression failed for section %ld, errcode %d\n",
+                (unsigned long)psh->gh_secnum,*errcode);
+            return res;
+        }
+#else /* HAVE_ZLIB HAVE_ZSTD */
+        P("Cannot read SHF_COMPRESSED section strings"
+            "as we do not have zlib/zstd");
+        *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
+        return DW_DLV_ERROR;
+#endif /* HAVE_ZLIB HAVE_ZSTD */
+        ebuf = (dw_elf64_dyn *)psh->gh_content;
+    }
+    size = psh->gh_size;
+    ecount = size/sizeof(dw_elf64_dyn);
+    size2 = sizeof(struct generic_dynentry)*ecount;
+    trueoff = offset;
+    gbuffer= malloc(size2);
+    orig_gbuffer = gbuffer;
     for (i = 0; i < ecount;
         ++i,++gbuffer,++ebuf,trueoff += sizeof(dw_elf64_dyn)) {
         /* SIGNED VALUE */
         ASNAR(ep->f_copy_word,gbuffer->gd_tag,ebuf->d_tag);
         SIGN_EXTEND(gbuffer->gd_tag,sizeof(ebuf->d_tag));
         ASNAR(ep->f_copy_word,gbuffer->gd_val,ebuf->d_val);
-        /* Assigning the file offset, not sec offset */
-        gbuffer->gd_dyn_file_offset = trueoff;
-        if (gbuffer->gd_tag == 0) {
-            ep->f_wasted_dynamic_count++;
-            ep->f_wasted_dynamic_space += sizeof(dw_elf64_dyn);
-        }
     }
-    *bufcount_out = ecount;
-    *gbuffer_io = orig_gbuffer;
-    free(orig_ebuf);
+    psh->gh_dynamic = orig_gbuffer;
+    psh->gh_location.g_name = ".dynamic";
+    psh->gh_location.g_offset = offset;
+    psh->gh_location.g_entrysize = sizeof(dw_elf64_dyn);
+    psh->gh_location.g_count = ecount; /* for index checking */
+    psh->gh_location.g_totalsize = size2; /* size in memory */
     return RO_OK;
 }
 
 static int
 elf_load_dynamic32(elf_filedata ep,
-    Dwarf_Unsigned offset,Dwarf_Unsigned size, int*errcode)
+    struct generic_shdr *psh, int*errcode)
 {
-    Dwarf_Unsigned ecount = 0;
-    Dwarf_Unsigned size2 = 0;
-    struct generic_dynentry *gbuffer;
-    Dwarf_Unsigned bufcount = 0;
     int res = 0;
 
-    if ((offset > ep->f_filesize)||
-        (size > ep->f_filesize) ) {
-        P("ERROR: Something badly wrong with dynamic section "
-            " filesize " LONGESTUFMT
-            " section content size " LONGESTUFMT
-            "\n", ep->f_filesize,size);
-        *errcode = RO_ERR_FILEOFFSETBAD;
-        return DW_DLV_ERROR;
-    }
-
-    ecount = size/(Dwarf_Unsigned)sizeof(dw_elf32_dyn);
-    size2 = ecount * sizeof(dw_elf32_dyn);
-    if (size != size2) {
-        P("Bogus size of dynamic. "
-            LONGESTUFMT " not divisible by %lu\n",
-            size,(unsigned long)sizeof(dw_elf32_dyn));
-        *errcode = RO_ERR_DYNAMICSECTIONSIZE;
-        return DW_DLV_ERROR;
-    }
-    res = generic_dyn_from_dyn32(ep,
-        &gbuffer,&bufcount,offset,size,ecount,errcode);
+    res = generic_dyn_from_dyn32(ep,psh,errcode);
     if (res != RO_OK) {
         return res;
     }
-    if (!bufcount) {
-        /* impossible? */
-        free(gbuffer);
-        *errcode = RO_ERR_UNEXPECTEDZERO;
-        return RO_ERROR;
-    }
-    ep->f_dynamic = gbuffer;
-    ep->f_loc_dynamic.g_name = ".dynamic";
-    ep->f_loc_dynamic.g_offset = offset;
-    ep->f_loc_dynamic.g_entrysize = sizeof(dw_elf32_dyn);
-    ep->f_loc_dynamic.g_count = ecount;
-    ep->f_loc_dynamic.g_totalsize = ecount *sizeof(dw_elf32_dyn);
     return RO_OK;
 }
 
 static int
-elf_load_dynamic64(elf_filedata ep,
-    Dwarf_Unsigned offset,Dwarf_Unsigned size,int *errcode)
+elf_load_dynamic64(elf_filedata ep,struct generic_shdr*psh,
+    int *errcode)
 {
-    Dwarf_Unsigned ecount = 0;
-    Dwarf_Unsigned size2 = 0;
-    struct generic_dynentry *gbuffer;
-    Dwarf_Unsigned bufcount = 0;
     int res = 0;
 
-    if ((offset > ep->f_filesize)||
-        (size > ep->f_filesize) ) {
-        P("ERROR: Something badly wrong with dynamic section "
-            " filesize " LONGESTUFMT
-            " section content size " LONGESTUFMT
-            "\n", ep->f_filesize,size);
-        *errcode = RO_ERR_FILEOFFSETBAD;
-        return DW_DLV_ERROR;
-    }
-
-    ecount = size/(Dwarf_Unsigned)sizeof(dw_elf64_dyn);
-    size2 = ecount * sizeof(dw_elf64_dyn);
-    if (size != size2) {
-        P("Bogus size of dynamic. "
-            LONGESTUFMT " not divisible by %lu\n",
-            size,(unsigned long)sizeof(dw_elf64_dyn));
-        *errcode = RO_ERR_DYNAMICSECTIONSIZE;
-        return DW_DLV_ERROR;
-    }
-    res = generic_dyn_from_dyn64(ep,
-        &gbuffer,&bufcount,offset,size,ecount,errcode);
+    res = generic_dyn_from_dyn64(ep, psh,errcode);
     if (res != RO_OK) {
         return res;
     }
-    if (!bufcount) {
-        /* impossible? */
-        free(gbuffer);
-        *errcode = RO_ERR_UNEXPECTEDZERO;
-        return RO_ERROR;
-    }
-    ep->f_dynamic = gbuffer;
-    ep->f_loc_dynamic.g_name = ".dynamic";
-    ep->f_loc_dynamic.g_offset = offset;
-    ep->f_loc_dynamic.g_entrysize = sizeof(dw_elf64_dyn);
-    ep->f_loc_dynamic.g_count = ecount;
-    ep->f_loc_dynamic.g_totalsize = ecount *sizeof(dw_elf64_dyn);
     return RO_OK;
 }
 
@@ -3064,15 +3077,20 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
     }
     switch (ep->f_ident[EI_CLASS]) {
     case ELFCLASS32:
-        ep->f_offsetsize = 32; 
+        ep->f_offsetsize = 32;
         ep->f_pointersize = 32;
         break;
     case ELFCLASS64:
-        ep->f_offsetsize = 64; 
-        ep->f_pointersize = 64; 
+        ep->f_offsetsize = 64;
+        ep->f_pointersize = 64;
+        break;
+    case  0:
+        P(" Odd Elf header , EI_CLASS of zero improper"
+            "Ignoring this error.\n");
         break;
     default:
-        P(" Improper Elf header , EI_CLASS improper\n");
+        P(" Improper Elf header , EI_CLASS of 0x%lx improper\n",
+            (unsigned long)ep->f_ident[EI_CLASS]);
         *errcode = DW_DLE_ELF_ENDIAN_BAD;
         return DW_DLV_ERROR;
     }
@@ -3083,65 +3101,17 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
     case ELFDATA2MSB:
         ep->f_endian = DW_END_big;
         break;
+    case  0:
+        P(" Odd Elf header , EI_DATA of zero improper"
+            "Ignoring this error.\n");
+        break;
     default:
-        P(" Improper Elf header DW_DLE_ELF_ENDIAN_BAD \n");
+        P(" Improper Elf header EI_DATA of 0x%lx improper\n",
+            (unsigned long)ep->f_ident[EI_DATA]);
         *errcode = DW_DLE_ELF_ENDIAN_BAD;
         return DW_DLV_ERROR;
-    }       
+    }
     return res;
-}
-
-/*  We assume that  the sect numbers are valid,
-    if non-zero: we set them!  */
-static int
-validate_links(const char * area,
-    elf_filedata ep,
-    Dwarf_Unsigned knownsect,
-    Dwarf_Unsigned string_sect,
-    int *errcode)
-{
-    struct generic_shdr* pshk = 0;
-    struct generic_shdr* pshs = 0;
-
-    if (string_sect) {
-        pshs = ep->f_shdr + string_sect;
-    }
-    if (!knownsect) {
-        if (string_sect) {
-            P("Warning: Links %s: Have string sect " LONGESTUFMT
-                " %s but the apppropriate symbol table"
-                " section missing. \n",
-                area,string_sect,
-                sanitized(pshs->gh_namestring,
-                    buffer1,BUFFERSIZE));
-        }
-        return DW_DLV_OK;
-    }
-    pshk = ep->f_shdr + knownsect;
-    if (!string_sect) {
-        P("Warning: Links %s: Have (sec " LONGESTUFMT
-            " %s) but no string section found. \n",
-            area,knownsect,
-            sanitized(pshk->gh_namestring,
-                buffer1,BUFFERSIZE));
-        *errcode = RO_ERR_ELF_STRING_SECT;
-        return DW_DLV_ERROR;
-    }
-    if (string_sect != pshk->gh_link) {
-        P("Warning: Links  %s: (" LONGESTUFMT
-            " %s) expected to have link "
-            LONGESTUFMT "(%s) but has link "
-            LONGESTUFMT " instead \n",
-            area,
-            knownsect,
-            sanitized(pshk->gh_namestring, buffer3,BUFFERSIZE),
-            string_sect,
-            sanitized(pshs->gh_namestring, buffer3,BUFFERSIZE),
-            pshk->gh_link);
-        *errcode =  RO_ERR_ELF_STRING_LINK_ERROR;
-        return DW_DLV_ERROR;
-    }
-    return DW_DLV_OK;
 }
 
 static int
@@ -3169,7 +3139,7 @@ elf_sht_groupsec(Dwarf_Unsigned type, const char *sname)
 {
     /*  ARM compilers name SHT group "__ARM_grp<long name here>"
         not .group */
-    if ((type == SHT_GROUP) || (!strcmp(sname,".group"))){
+    if ((type == SHT_GROUP) || (!strcmp(sname,".group"))) {
         return TRUE;
     }
     return FALSE;
@@ -3377,7 +3347,7 @@ read_gs_section_group(elf_filedata ep,
     It seems(?) impossible for an object to have both
     dwo sections and (SHF_GROUP or SHT_GROUP), but
     we do not rule that out here.  */
-static int
+int
 elf_setup_all_section_groups(elf_filedata ep,
     int *errcode)
 {
@@ -3390,7 +3360,7 @@ elf_setup_all_section_groups(elf_filedata ep,
     psh = ep->f_shdr;
 
     /* Does step A and step B */
-    for (i = 0; i < count; ++psh,++i) {
+    for (i = 1; i < count; ++psh,++i) {
         const char *name = psh->gh_namestring;
         if (is_empty_section(psh->gh_type)) {
             /*  No data here. */
@@ -3413,7 +3383,7 @@ elf_setup_all_section_groups(elf_filedata ep,
         grep DW_GROUPNUMBER_BASE (1).
         Section C. */
     psh = ep->f_shdr;
-    for (i = 0; i < count; ++psh,++i) {
+    for (i = 1; i < count; ++psh,++i) {
         const char *name = psh->gh_namestring;
 
         if (is_empty_section(psh->gh_type)) {
@@ -3459,65 +3429,11 @@ elf_setup_all_section_groups(elf_filedata ep,
     return DW_DLV_OK;
 }
 
-static int
-elf_find_sym_sections(elf_filedata ep,
-    int *errcode)
-{
-    struct generic_shdr* psh = 0;
-    Dwarf_Unsigned i = 0;
-    Dwarf_Unsigned count = 0;
-    int res = 0;
-
-    count = ep->f_loc_shdr.g_count;
-    psh = ep->f_shdr;
-    for (i = 0; i < count; ++psh,++i) {
-        const char *name = psh->gh_namestring;
-        if (is_empty_section(psh->gh_type)) {
-            /*  No data here.  With a corrupted object
-                the name could be important, like .symtab,
-                but with no content we ignore the empty. */
-            continue;
-        }
-        if (!strcmp(name,".dynsym")) {
-            ep->f_dynsym_sect_index = i;
-            ep->f_loc_dynsym.g_offset = psh->gh_offset;
-        } else if (!strcmp(name,".dynstr")) {
-            ep->f_dynsym_sect_strings_sect_index = i;
-            ep->f_dynsym_sect_strings_max = psh->gh_size;
-        } else if (!strcmp(name,".symtab")) {
-            ep->f_symtab_sect_index = i;
-            ep->f_loc_symtab.g_offset = psh->gh_offset;
-        } else if (!strcmp(name,".strtab")) {
-            ep->f_symtab_sect_strings_sect_index = i;
-            ep->f_symtab_sect_strings_max = psh->gh_size;
-        } else if (!strcmp(name,".dynamic")) {
-            ep->f_dynamic_sect_index = i;
-            ep->f_loc_dynamic.g_offset = psh->gh_offset;
-        }
-    }
-
-    res = validate_links(".dynsym",ep,ep->f_dynsym_sect_index,
-        ep->f_dynsym_sect_strings_sect_index,errcode);
-    if (res!= DW_DLV_OK) {
-        return res;
-    }
-    res = validate_links(".symtab",ep,ep->f_symtab_sect_index,
-        ep->f_symtab_sect_strings_sect_index,errcode);
-    if (res!= DW_DLV_OK) {
-        return res;
-    }
-    res = validate_links(".dynamic",ep,ep->f_dynamic_sect_index,
-        ep->f_dynsym_sect_strings_sect_index,errcode);
-    if (res!= DW_DLV_OK) {
-        return res;
-    }
-    return DW_DLV_OK;
-}
-
 int
 dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
 {
     int res = 0;
+    struct generic_shdr *psh = 0;
 
     if (ep->f_offsetsize == 32) {
         res  = elf_load_sectheaders32(ep,ep->f_ehdr->ge_shoff,
@@ -3531,21 +3447,18 @@ dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
     if (res != DW_DLV_OK) {
         return res;
     }
-    res  = elf_load_sectstrings(ep,ep->f_ehdr->ge_shstrndx,errcode);
-    if (res != DW_DLV_OK) {
-        return res;
+    /*  Load the SHT_STRTAB from the Elf header */
+    if (ep->f_elf_shstrings_sect_index >= ep->f_loc_shdr.g_count) {
+        P("ERROR. f_elf_shstrings_sect_index high at %lu\n",
+            (unsigned long)ep->f_elf_shstrings_sect_index);
+        return DW_DLV_ERROR;
     }
-    res  = elf_load_sect_namestring(ep,errcode);
+    psh = ep->f_shdr + ep->f_elf_shstrings_sect_index;
+    res  = elf_load_sectstrings(ep,psh,errcode);
     if (res != DW_DLV_OK) {
         return res;
     }
     elf_check_sect_sizes(ep);
-    res  = elf_find_sym_sections(ep,errcode);
-    if (res != DW_DLV_OK) {
-        return res;
-    }
-    res = elf_setup_all_section_groups(ep,errcode);
-
     return res;
 }
 int
@@ -3573,22 +3486,16 @@ dwarf_load_elf_progheaders(elf_filedata ep,int*errcode)
 }
 
 int
-dwarf_load_elf_dynamic(elf_filedata ep, int *errcode)
+dwarf_load_elf_dynamic(elf_filedata ep,
+    struct generic_shdr *psh, int *errcode)
 {
-    struct generic_shdr *sp = 0;
-    int res = 0;
     unsigned offsetsize = ep->f_offsetsize;
+    int res = 0;
 
-    if (!ep->f_dynamic_sect_index) {
-        return DW_DLV_NO_ENTRY;
-    }
-    sp = ep->f_shdr + ep->f_dynamic_sect_index;
     if (offsetsize == 32) {
-        res = elf_load_dynamic32(ep,sp->gh_offset,
-            sp->gh_size,errcode);
+        res = elf_load_dynamic32(ep,psh,errcode);
     } else {
-        res = elf_load_dynamic64(ep,sp->gh_offset,
-            sp->gh_size,errcode);
+        res = elf_load_dynamic64(ep,psh,errcode);
     }
     return res;
 }

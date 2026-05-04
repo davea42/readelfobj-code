@@ -49,10 +49,10 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_ELF_H
 #include <elf.h>
 #endif /* HAVE_ELF_H */
-#ifdef HAVE_ZLIB_H 
+#ifdef HAVE_ZLIB_H
 #include "zlib.h"
 #endif /* ZLIB */
-#ifdef HAVE_ZSTD_H 
+#ifdef HAVE_ZSTD_H
 #include "zstd.h"
 #endif /* ZSTD */
 #include "dwarf_types.h"
@@ -72,11 +72,37 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define  UNUSEDARG
 #endif
 
+#if 0 /* dump_bytes */
+static void
+dump_bytes(char * msg,Dwarf_Small * start, long len)
+{
+    Dwarf_Small *end = start + len;
+    Dwarf_Small *cur = start;
+
+    printf("%s ",msg);
+    for (; cur < end; cur++) {
+        printf("%02x ", *cur);
+    }
+    printf("\n");
+}
+#endif /* 0 */
+
 #if defined(HAVE_ZLIB) && defined(HAVE_ZSTD)
-/*  This is exclusively for reading .symtab and .symstr
-    sections. See dwarf_elf_init() for decompressing all
-    other sections. We need decompress to do relocations (if any
-    relocations and if either of these sections compressed).  */
+/*  For decompressing any section.
+    Knows nothing about what the compressed bytes
+    mean.
+
+    PRECONDITION:
+    This assumes 
+    psh->gh_content has the compressed  bytes,
+    psh->gh_size is the size of the compressed section, and
+    psh->gh_flags has the SHF_COMPRESSED bit set.
+
+    POSTCONDITION:
+    The original psh->gh_content was freed and replaced by
+    new malloc space which now contains the decompressed data.
+    psh->gh_size is set to the size of the decompressed data.
+*/
 int
 dwarf_elf_do_decompress(elf_filedata ep,
     struct generic_shdr *psh,
@@ -95,12 +121,14 @@ dwarf_elf_do_decompress(elf_filedata ep,
     int is_shstrings = FALSE;
     const char *namestring = psh->gh_namestring;
 #endif
+    printf("Decompress section %ld\n",
+        (unsigned long)psh->gh_secnum);F;
 
     endsection = src + srclen;
     if ((src + 12) > endsection) {
         *error = DW_DLE_ZLIB_SECTION_SHORT;
         P(" DW_DLE_ZLIB_SECTION_SHORT"
-           "The section is too short to be zlib or zstd related");
+            "The section is too short to be zlib or zstd related");
 #if 0
         /*_dwarf_error_string(dbg, error,DW_DLE_ZLIB_SECTION_SHORT,
             "DW_DLE_ZLIB_SECTION_SHORT"
@@ -113,12 +141,18 @@ dwarf_elf_do_decompress(elf_filedata ep,
         is_shstrings = TRUE;
     }
 #endif
+#if 0
+dump_bytes("Looking for ZLIB ",src,4);F;
+#endif
     if (!strncmp("ZLIB",(const char *)src,4)) {
-        /*  Checking if section content (not 
+        /*  Checking if section content (not
         section name) starts with ZLIB */
         unsigned i = 0;
         unsigned l = 8;
         unsigned char *c = src+4;
+#if 0
+printf("dadebug entry ZLIB\n"); F;
+#endif
         for ( ; i < l; ++i,c++) {
             uncompressed_len <<= 8;
             uncompressed_len += *c;
@@ -138,9 +172,13 @@ dwarf_elf_do_decompress(elf_filedata ep,
         Dwarf_Unsigned type = 0;
         Dwarf_Unsigned size = 0;
         /* Dwarf_Unsigned addralign = 0; */
-        unsigned fldsize    = ep->f_pointersize;
+        unsigned fldsize    = ep->f_pointersize/8;
         unsigned structsize = 3* fldsize;
 
+#if 0
+printf("dadebug entry SHF_COMPRESSED fldsize %u\n",fldsize); F;
+dump_bytes("SHF_COMPRESSED bytes",ptr,24);
+#endif
         ASNARLRAW(ep->f_copy_word,error,type,ptr,DWARF_32BIT_SIZE);
         if (*error) {
             return DW_DLV_ERROR;
@@ -162,8 +200,8 @@ dwarf_elf_do_decompress(elf_filedata ep,
             break;
         default: {
             P("DW_DLE_ZDEBUG_INPUT_FORMAT_ODD "
-               "  The SHF_COMPRESSED type field is 0x%lx, neither"
-                " zlib (1) or zstd(2). Corrupt dwarf.", 
+                "  The SHF_COMPRESSED type field is 0x%lx, neither"
+                " zlib (1) or zstd(2). Corrupt dwarf.",
                 (unsigned long)type);
             *error = DW_DLE_ZDEBUG_INPUT_FORMAT_ODD;
             return DW_DLV_ERROR;
@@ -184,7 +222,8 @@ dwarf_elf_do_decompress(elf_filedata ep,
 #endif
         }
         }
-        
+        uncompressed_len = size;
+
 #if 0
         section->dss_uncompressed_length = uncompressed_len;
 #endif
@@ -205,34 +244,32 @@ dwarf_elf_do_decompress(elf_filedata ep,
             " The compressed section is not properly formatted");
 #endif
     }
-    /* Dropped heuristic of excess compress inflation. Not reliable. */
+    /*  Dropped heuristic of excess compress inflation.
+        Not reliable. */
     if ((src +srclen) > endsection) {
         P("DW_DLE_ZLIB_SECTION_SHORT "
             " The zstd or zlib compressed section  is"
             " longer than the section"
-            " length. So corrupt dwarf");
+            " length. So corrupt Elf");
 #if 0
         _dwarf_error_string(dbg, error,
             DW_DLE_ZLIB_SECTION_SHORT,
             "DW_DLE_ZDEBUG_ZLIB_SECTION_SHORT"
             " The zstd or zlib compressed section  is"
             " longer than the section"
-            " length. So corrupt dwarf");
+            " length. So corrupt Elf");
 #endif
         return DW_DLV_ERROR;
     }
     destlen = uncompressed_len;
     dest = malloc(destlen);
+#if 0
+    printf("dadebug uncompressed len 0x%lx\n",
+    (unsigned long)destlen); F;
+#endif
     if (!dest) {
         P("DW_DLE_ALLOC_FAIL in allocating %lu bytes for"
             "decompressing a section\n",(unsigned long)destlen);
-#if 0
-        _dwarf_error_string(dbg, error,
-            DW_DLE_ALLOC_FAIL,
-            "DW_DLE_ALLOC_FAIL"
-            " The zstd or zlib uncompressed space"
-            " malloc failed: out of memory");
-#endif
         return DW_DLV_ERROR;
     }
     /*  uncompress is a zlib function. */
@@ -240,6 +277,9 @@ dwarf_elf_do_decompress(elf_filedata ep,
         int res = 0;
         uLongf dlen = destlen;
 
+#if 0
+printf("dadebug uncompress (zlib) now\n"); F;
+#endif
         res = uncompress(dest,&dlen,src,srclen);
         if (res == Z_BUF_ERROR) {
             free(dest);
@@ -258,19 +298,15 @@ dwarf_elf_do_decompress(elf_filedata ep,
             *error = DW_DLE_ZLIB_DATA_ERROR;
             return DW_DLV_ERROR;
         }
-    }
-    if (zstdcompress) {
-        size_t zsize =
-            ZSTD_decompress(dest,destlen,src,srclen);
+    } else {
+        size_t zsize = 0;
+#if 0
+printf("dadebug uncompress (zstd) now\n"); F;
+#endif
+        zsize = ZSTD_decompress(dest,destlen,src,srclen);
         if (zsize != destlen) {
             free(dest);
             *error = DW_DLE_ZLIB_DATA_ERROR;
-#if 0           
-            _dwarf_error_string(dbg, error,
-                DW_DLE_ZLIB_DATA_ERROR,
-                "DW_DLE_ZLIB_DATA_ERROR"
-                " The zstd ZSTD_decompress() failed.");
-#endif
             return DW_DLV_ERROR;
         }
     }
@@ -278,7 +314,11 @@ dwarf_elf_do_decompress(elf_filedata ep,
     free(psh->gh_content);
     psh->gh_content = dest;
     psh->gh_size = destlen;
+    psh->gh_compressed_len = srclen;
+#if 0
     psh->gh_is_malloc = TRUE;
+printf("dadebug done decompress\n"); F;
+#endif
 #if 0
     _dwarf_malloc_section_free(section);
     section->dss_data = dest;
@@ -290,4 +330,3 @@ dwarf_elf_do_decompress(elf_filedata ep,
     return DW_DLV_OK;
 }
 #endif /*defined(HAVE_ZLIB) && defined(HAVE_ZSTD)*/
-

@@ -102,9 +102,8 @@ static int elf_print_gnu_debuglink(elf_filedata ep);
 static int elf_print_sg_groups(elf_filedata ep);
 static int elf_print_relocation_details(elf_filedata ep,int isrela,
     struct generic_shdr * gsh);
-static int elf_print_symbols(elf_filedata ep,int is_symtab,
-    struct generic_symentry * gsym,
-    Dwarf_Unsigned ecount,
+static int elf_print_symbols(elf_filedata ep,
+    struct generic_shdr *shdr,
     const char *secname);
 
 static void report_wasted_space(elf_filedata ep,sec_options*options);
@@ -362,7 +361,7 @@ check_dynamic_section(elf_filedata ep)
     }
 
     gshdr = ep->f_shdr;
-    for (i = 0; i < scount; i++, ++gshdr) {
+    for (i = 1; i < scount; i++, ++gshdr) {
         const char *namestr = sanitized(gshdr->gh_namestring,
             buffer1,BUFFERSIZE);
         if (!strcmp(namestr,".dynamic")) {
@@ -462,42 +461,27 @@ print_requested(elf_filedata ep,sec_options *options)
         elf_print_dynamic(ep);
     }
     if (print_symtab_sections ) {
-        if (ep->f_symtab_sect_index) {
-            struct generic_shdr * psh = ep->f_shdr +
-                ep->f_symtab_sect_index;
-            const char *namestr = psh->gh_namestring;
-            Dwarf_Unsigned link = psh->gh_link;
-            if ( link != ep->f_symtab_sect_strings_sect_index){
-                P("ERROR: symtab link section " LONGESTUFMT
-                    " mismatch with "
-                    LONGESTUFMT " section\n",
-                    link,
-                    ep->f_symtab_sect_strings_sect_index);
-                return;
+        struct generic_shdr *psh = ep->f_shdr+1;
+        struct generic_shdr *linktarg = 0;
+        Dwarf_Unsigned i = 0;
+        for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+            if (psh->gh_type != SHT_SYMTAB &&
+                psh->gh_type != SHT_DYNSYM) {
+                continue;
             }
-            elf_print_symbols(ep,TRUE,ep->f_symtab,
-                ep->f_loc_symtab.g_count,namestr);
-        }
-        if (ep->f_dynsym_sect_index) {
-            struct generic_shdr * psh = ep->f_shdr +
-                ep->f_dynsym_sect_index;
-            const char *namestr = psh->gh_namestring;
-            Dwarf_Unsigned link = psh->gh_link;
-            if ( link != ep->f_dynsym_sect_strings_sect_index){
-                P("ERROR: dynsym link section " LONGESTUFMT
-                    " mismatch with "
-                    LONGESTUFMT " section\n",
-                    link,
-                    ep->f_dynsym_sect_strings_sect_index);
-                return;
+            if (psh->gh_type == SHT_SYMTAB ||
+                psh->gh_type == SHT_DYNSYM) {
+                const char *namestr = psh->gh_namestring;
+                Dwarf_Unsigned link = psh->gh_link;
+                linktarg = ep->f_shdr + link;
+                if (linktarg->gh_type != SHT_STRTAB){
+                    P("ERROR: symtab link section " LONGESTUFMT
+                        " mismatch section not SHT_STRTAB\n",
+                        link);
+                    return;
+                }
+                elf_print_symbols(ep,psh,namestr);
             }
-            elf_print_symbols(ep,FALSE,ep->f_dynsym,
-                ep->f_loc_dynsym.g_count,namestr);
-        }
-        if (!ep->f_dynsym_sect_index  &&
-            !ep->f_symtab_sect_index) {
-            P("No .symtab or .dynsym section in %s.\n",
-                sanitized(filename,buffer1,BUFFERSIZE));
         }
     }
     if (print_reloc_sections) {
@@ -507,8 +491,8 @@ print_requested(elf_filedata ep,sec_options *options)
 
         P("Relocation Sections\n");
         P("{\n");
-        psh = ep->f_shdr;
-        for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+        psh = ep->f_shdr+1;
+        for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++psh) {
             const char *namestr = psh->gh_namestring;
             if (!strncmp(namestr,".rel.",5)) {
                 ++reloc_count;
@@ -524,24 +508,6 @@ print_requested(elf_filedata ep,sec_options *options)
         }
         P("}\n");
     }
-    if (ep->f_dynamic_sect_index &&
-        ep->f_wasted_dynamic_space) {
-        const char *p = "";
-        if (options->co_printfilenames) {
-            p = sanitized(filename,buffer1,BUFFERSIZE);
-        }
-        P("Warning %s: Wasted .dynamic section entries: "
-            LONGESTXFMT " (" LONGESTUFMT ")\n",
-            p,
-            ep->f_wasted_dynamic_count,
-            ep->f_wasted_dynamic_count);
-
-        P("Warning %s: Wasted .dynamic section space  : "
-            LONGESTXFMT " (" LONGESTUFMT ")\n",
-            p,
-            ep->f_wasted_dynamic_space,
-            ep->f_wasted_dynamic_space);
-    }
     check_dynamic_section(ep);
     report_wasted_space(ep,options);
 }
@@ -551,12 +517,14 @@ static void
 do_one_file(const char *s,sec_options *options)
 {
     int res = 0;
+    Dwarf_Unsigned i = 0;
     unsigned ftype = 0;
     unsigned endian = 0;
     unsigned offsetsize = 0;
     Dwarf_Unsigned filesize = 0;
     int errcode = 0;
     elf_filedata ep = 0;
+    struct generic_shdr *shdr = 0;
 
     res = dwarf_object_detector_path(s,
         namebuffer,BUFFERSIZE*4, &ftype,
@@ -632,7 +600,10 @@ do_one_file(const char *s,sec_options *options)
         return;
     }
 
-    res = dwarf_load_elf_symstr(ep,&errcode);
+    /* Load strings naming sections (an SH_STRTAB) */
+    shdr = ep->f_shdr + ep->f_elf_shstrings_sect_index;
+    ep->f_shstrings_shdr = shdr;
+    res = dwarf_load_elf_symstr(ep,shdr,&errcode);
     if (res == DW_DLV_ERROR) {
         print_minimum(ep,options);
         P("ERROR: unable to load symbol table strings."
@@ -641,46 +612,93 @@ do_one_file(const char *s,sec_options *options)
         dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
-    res = dwarf_load_elf_dynstr(ep,&errcode);
+    shdr = ep->f_shdr;
+    /* Assign section names to sections now we have the namestrings
+        (for all sections) */
+    /* For section zero */
+    shdr->gh_namestring = ""; 
+    ++ shdr;
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
+        shdr->gh_namestring =
+            (const char *)ep->f_shstrings_shdr->gh_content +
+            shdr->gh_name;
+    }
+    shdr = ep->f_shdr+1;
+    /* Finish loading all SHT_STRTAB not loaded already. */
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
+        if (shdr->gh_type != SHT_STRTAB) {
+            continue;
+        }
+        if (shdr->gh_content) {
+            /* Already loaded (ie, ep->f_shstrings_shdr) */
+            continue;
+        }
+        res = dwarf_load_elf_symstr(ep,shdr,&errcode);
+        if (res == DW_DLV_ERROR) {
+            print_minimum(ep,options);
+            P("ERROR: unable to load strings from."
+                "section %lu  errnum %d\n",(unsigned long)i,
+                errcode);
+            dwarf_destruct_elf_access(ep,&errcode);
+            return;
+        }
+        /* Done, we have section names. */
+    }
+    errcode = 0;
+    res = elf_setup_all_section_groups(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep,options);
-        P("ERROR: unable to load dynamic section strings."
-            " errcode %d (%s)\n",
-            errcode,dwarf_get_errname(errcode));
-        dwarf_destruct_elf_access(ep,&errcode);
-        return;
+        P("Error setting up section groups. error number %lu\n",
+            (unsigned long)errcode);
+    }
+    shdr = ep->f_shdr+1;
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
+        if (shdr->gh_content) {
+            continue;
+        };
+        errcode = 0;
+        switch(shdr->gh_type) {
+        case SHT_SYMTAB:
+        case SHT_DYNSYM:
+            res = dwarf_load_elf_symtab_symbols(ep,shdr,&errcode);
+            if (res == DW_DLV_ERROR) {
+                print_minimum(ep,options);
+                P("ERROR: unable to load symbol table strings."
+                    " errcode %d section %lu \n",errcode,
+                    (unsigned long)i);
+                dwarf_destruct_elf_access(ep,&errcode);
+                return;
+            }
+            break;
+        case SHT_DYNAMIC:
+        res = dwarf_load_elf_dynamic(ep,shdr,&errcode);
+        if (res == DW_DLV_ERROR) {
+            print_minimum(ep,options);
+            P("ERROR: unable to load strings from."
+                "section %lu  errnum %d\n",(unsigned long)i,
+                errcode);
+            dwarf_destruct_elf_access(ep,&errcode);
+            return;
+        }
+        case 0:
+        default:
+            continue;
+        }
     }
     if (print_groups) {
         elf_print_sg_groups(ep);
     }
-    res = dwarf_load_elf_dynamic(ep,&errcode);
-    if (res == DW_DLV_ERROR) {
-        print_minimum(ep,options);
-        P("ERROR: Unable to load dynamic section,"
-            " errcode %d (%s)\n",
-            errcode,dwarf_get_errname(errcode));
-    }
-    res = dwarf_load_elf_dynsym_symbols(ep,&errcode);
-    if (res == DW_DLV_ERROR) {
-        print_minimum(ep,options);
-        P("ERROR: Unable to load .dynsym section."
-            " errcode %d (%s)\n",
-            errcode,dwarf_get_errname(errcode));
-    }
-    res  =dwarf_load_elf_symtab_symbols(ep,&errcode);
-    if (res == DW_DLV_ERROR) {
-        print_minimum(ep,options);
-        P("ERROR: Unable to load .symtab section."
-            " errcode %d (%s)\n",
-            errcode,dwarf_get_errname(errcode));
-    }
+    errcode = 0;
     {
-        Dwarf_Unsigned i = 0;
-        struct generic_shdr *psh = ep->f_shdr;
+        struct generic_shdr *psh = ep->f_shdr+1;
 
-        for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
-            const char *namestr = psh->gh_namestring;
-            if (!strncmp(namestr,".rel.",5)) {
+        for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+            const char *namestr = 0;
+
+            if (psh->gh_content) {
+                continue;
+            }
+            namestr = psh->gh_namestring;
+            if (psh->gh_type == SHT_REL) {
                 res = dwarf_load_elf_rel(ep,i,&errcode);
                 if (res == DW_DLV_ERROR) {
                     print_minimum(ep,options);
@@ -692,7 +710,7 @@ do_one_file(const char *s,sec_options *options)
                     dwarf_destruct_elf_access(ep,&errcode);
                     return;
                 }
-            } else if (!strncmp(namestr,".rela.",6)) {
+            } else if (psh->gh_type == SHT_RELA) {
                 res = dwarf_load_elf_rela(ep,i,&errcode);
                 if (res == DW_DLV_ERROR) {
                     print_minimum(ep,options);
@@ -893,15 +911,17 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
             compare_by_secname);
     } /* else no sort, print as is */
     for (i = 0; i < generic_count; i++) {
-        const char *namestr = 0;
+        const char *namestr = "";
         sort_section_element *sel = 0 ;
         Dwarf_Unsigned origindex = 0;
 
         sel = &sort_el[i];
         gshdr = (struct generic_shdr *)sel->od_sec_desc;
         origindex = sel->od_originalindex;
-        namestr = sanitized(gshdr->gh_namestring,
-            buffer1,BUFFERSIZE);
+        if (i) {
+            namestr = sanitized(gshdr->gh_namestring,
+                buffer1,BUFFERSIZE);
+        }
         if (dwarf_load_elf_section_is_dwarf(namestr)) {
             debug_sect_count++;
             debug_sect_size += gshdr->gh_size;
@@ -928,6 +948,11 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
             P("," LONGESTXFMT ")" ,gshdr->gh_addralign);
         }
         P("\n");
+        if (gshdr->gh_compressed_len) {
+            P("     Compressed length: " LONGESTXFMT8 ,
+                gshdr->gh_compressed_len);
+            P("\n");
+        }
         if (print_sec_extra) {
             P("    Hdroffset: " LONGESTXFMT8,gshdr->gh_fdoffset);
             P("\n");
@@ -988,13 +1013,6 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
                 }
             }
         }
-        if (gshdr->gh_relcount && !ep->f_symtab_sect_index) {
-            P("Warning: Section " LONGESTUFMT " %s is a "
-                "relocation section"
-                " but there is no .symtab. "
-                "Possibly invalid relocations.\n",
-                i,namestr);
-        }
     }
     P("Summary: " LONGESTUFMT " bytes for "
         LONGESTUFMT " debug sections\n",
@@ -1006,29 +1024,27 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
 
 static int
 elf_print_symbols(elf_filedata ep,
-    int is_symtab,
-    struct generic_symentry * gsym,
-    Dwarf_Unsigned ecount,
+    struct generic_shdr *psh,
     const char *secname)
 {
     Dwarf_Unsigned i = 0;
     struct location *locp = 0;
+    Dwarf_Unsigned ecount = 0;
+    struct generic_symentry *gsym;
 
-    if (is_symtab) {
-        locp = &ep->f_loc_symtab;
-    } else {
-        locp = &ep->f_loc_dynsym;
-    }
+    locp = &psh->gh_location;
     if (!locp) {
         P("ERROR: the %s symbols section missing, not printable\n",
             secname);
         return DW_DLV_OK;
     }
+    gsym = psh->gh_sym;
+    ecount = locp->g_count;
     P("\n");
     P("Symbols from %s: " LONGESTUFMT
         " at offset " LONGESTXFMT "\n",
-        sanitized(secname,buffer1,BUFFERSIZE),ecount,
-        locp->g_offset);
+        sanitized(secname,buffer1,BUFFERSIZE),
+        ecount, locp->g_offset);
     P("{\n");
     if (ecount > 0) {
         P("[Index] Value    Size    Type              "
@@ -1077,26 +1093,31 @@ elf_print_symbols(elf_filedata ep,
             gsym->gs_other,
             dwarf_get_elf_symbol_sto_type(gsym->gs_other,
                 buffer2, BUFFERSIZE));
-        P(", st_shndx " LONGESTUFMT, gsym->gs_shndx);
-        if (gsym->gs_shndx < ep->f_loc_shdr.g_count) {
+        P(", st_shndx " LONGESTUFMT , gsym->gs_shndx);
+        if (!gsym->gs_shndx) {
+            targetsecname = "SHN_UNDEF (no section)";
+        } else if (gsym->gs_shndx < ep->f_loc_shdr.g_count) {
             shp = ep->f_shdr + gsym->gs_shndx;
             targetsecname = shp->gh_namestring;
         } else {
+            P(" (" LONGESTXFMT ")" ,gsym->gs_shndx);
+            if (gsym->gs_shndx == SHN_XINDEX) {
+                P("(Data is in section SHT_SYMTAB_SHNDX)");
+            }
             targetsecname = dwarf_get_elf_symbol_shn_type(
                 gsym->gs_shndx,buffer2,BUFFERSIZE);
         }
-        P(" %s",targetsecname?targetsecname:"<no-name!>");
+        P(" %s",targetsecname?targetsecname:"");
         P("\n");
-        res = dwarf_get_elf_symstr_string(ep,
-            is_symtab,gsym->gs_name,
+        res = dwarf_get_elf_symstr_string(ep,psh->gh_link,
+            gsym->gs_name,
             &localstr,&errcode);
         if (res != DW_DLV_OK ) {
-            P("  ERROR: st_name access %s "
+            P("  ERROR: st_name access "
                 " entry " LONGESTUFMT
                 " with index " LONGESTUFMT
                 " (" LONGESTXFMT ")"
                 " fails with err code %d\n",
-                is_symtab?".symtab":".dynsym",
                 i, gsym->gs_name, gsym->gs_name,
                 errcode);
         } else {
@@ -1117,20 +1138,27 @@ elf_print_symbols(elf_filedata ep,
     return DW_DLV_OK;
 }
 
+/*
+    psh passed in must be a symtab section-pointer.
+*/
 static int
 get_elf_symtab_symbol_name( elf_filedata ep,
+    struct generic_shdr *psh,
     unsigned long symnum,
     const char **localstr_out,
     int *errcode)
 {
-    int is_symtab = TRUE;
     int res = 0;
-
     struct generic_symentry *gsym = 0;
-    if (symnum >= ep->f_loc_symtab.g_count) {
+    Dwarf_Unsigned linktostringsec = 0;
+    Dwarf_Unsigned indextostring = 0;
+
+    (void)errcode;
+    if (symnum >= psh->gh_location.g_count) {
+        P("Symtab sym %lu not in symtab\n",(unsigned long)symnum);
         return DW_DLV_NO_ENTRY;
     }
-    gsym = ep->f_symtab + symnum;
+    gsym = psh->gh_sym + symnum;
     if (gsym->gs_type == STT_SECTION) {
         Dwarf_Unsigned secnum = gsym->gs_shndx;
         struct generic_shdr *shdr = 0;
@@ -1140,8 +1168,11 @@ get_elf_symtab_symbol_name( elf_filedata ep,
             return DW_DLV_OK;
         }
     }
+    linktostringsec = psh->gh_link;
+    indextostring = gsym->gs_name;
     res = dwarf_get_elf_symstr_string(ep,
-        is_symtab,gsym->gs_name,
+        linktostringsec,
+        indextostring,
         localstr_out,errcode);
     return res;
 }
@@ -1201,15 +1232,26 @@ elf_print_relocation_content(
     Dwarf_Unsigned i = 0;
     int is64bit = (ep->f_offsetsize == 64);
     int ismips = (ep->f_machine == EM_MIPS);
+    struct generic_shdr *gsymtabp = 0;
 
+    if (gsh->gh_link >= ep->f_loc_shdr.g_count) {
+        P("ERROR relocation section link to its symtab"
+            "too high. %lu Invalid\n",
+            (unsigned long)gsh->gh_link);
+        return;
+    }
+    gsymtabp =  gsh->gh_link + ep->f_shdr;
     P("\n");
     P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT
         " links-sec: " LONGESTUFMT
-        " symtabsec: " LONGESTUFMT "\n",
+        " symtabsec: " LONGESTUFMT
+        " %s"
+        "\n",
         gsh->gh_secnum,
         sanitized(gsh->gh_namestring,buffer1,BUFFERSIZE),
         count,gsh->gh_info,
-        gsh->gh_link);
+        gsh->gh_link,
+        gsymtabp->gh_namestring);
 
     P(" [i]   offset   info           type.              "
         "symbol %s\n",isrela?
@@ -1222,6 +1264,7 @@ elf_print_relocation_content(
         if (grela->gr_sym != STN_UNDEF) {
             get_elf_symtab_symbol_name(
                 ep,
+                gsymtabp,
                 grela->gr_sym,
                 &symname,
                 &errcode);
@@ -1518,7 +1561,7 @@ report_wasted_space(elf_filedata  ep,sec_options *options)
     for (i = 0  ; i < iucount; iupa++, iupl = nxt,++i) {
         nxt = iupl->u_next;
         *iupa = *iupl;
-        if (iupa->u_lastbyte > highoffset) {
+        if(iupa->u_lastbyte > highoffset) {
             highoffset = iupa->u_lastbyte;
         }
         free(iupl);
@@ -1726,44 +1769,35 @@ report_wasted_space(elf_filedata  ep,sec_options *options)
 
 static char buffer6[BUFFERSIZE];
 static int
-elf_print_dynamic(elf_filedata ep)
+elf_print_dynamic_inner(elf_filedata ep,struct generic_shdr *psh)
 {
     Dwarf_Unsigned bufcount = 0;
     Dwarf_Unsigned i = 0;
     struct generic_dynentry *gbuffer = 0;
-    struct generic_shdr *dynamicsect = 0;
+    struct generic_shdr *dynamicsect = psh;
+    Dwarf_Unsigned linktostringsec = 0;
     int errcode = 0;
 
-    if (!ep->f_dynamic_sect_index) {
-        P("No .dynamic section exists in %s\n",
-            sanitized(filename,buffer6,BUFFERSIZE));
-        return RO_OK;
-    }
-    if (ep->f_dynamic_sect_index >= ep->f_ehdr->ge_shnum) {
-        P("Section Number of .dynamic section is bogus in %s\n",
-            sanitized(filename,buffer6,BUFFERSIZE));
-        return RO_ERROR;
-    }
-    dynamicsect = ep->f_shdr + ep->f_dynamic_sect_index;
-    bufcount = ep->f_loc_dynamic.g_count;
+    bufcount = psh->gh_location.g_count;
     if (bufcount) {
         const char *name = sanitized(dynamicsect->gh_namestring,
             buffer6,BUFFERSIZE);
 
         P("\n");
         P("Section %s (" LONGESTUFMT "):"
-            " Entries:" LONGESTUFMT " Offset:"
-            LONGESTXFMT8  "\n",
+            " Entries:" LONGESTUFMT " Offset:" LONGESTXFMT8
+            "\n",
             name,
-            ep->f_dynamic_sect_index,
+            psh->gh_secnum,
             bufcount,
-            ep->f_loc_dynamic.g_offset);
+            psh->gh_offset);
     } else {
         P("No content exists in %s\n",
             sanitized(dynamicsect->gh_namestring,buffer6,BUFFERSIZE));
         return RO_ERROR;
     }
-    gbuffer = ep->f_dynamic;
+    gbuffer = psh->gh_dynamic;
+    linktostringsec = psh->gh_link;
     printf(" Tag          Name             Value\n");
     for (i = 0; i < bufcount; ++i,++gbuffer) {
         const char *name = 0;
@@ -1771,7 +1805,6 @@ elf_print_dynamic(elf_filedata ep)
 
         name = dwarf_get_elf_dynamic_table_name(gbuffer->gd_tag,
             buffer6,BUFFERSIZE);
-
         switch(gbuffer->gd_tag) {
         case DT_NULL:
             break;
@@ -1779,7 +1812,8 @@ elf_print_dynamic(elf_filedata ep)
             int res = 0;
 
             res = dwarf_get_elf_symstr_string(ep,
-                FALSE,gbuffer->gd_val,
+                linktostringsec,
+                gbuffer->gd_val,
                 &targname,&errcode);
             if (res != DW_DLV_OK) {
                 targname = "Cannot access string";
@@ -1797,8 +1831,7 @@ elf_print_dynamic(elf_filedata ep)
             /* offset of string table */
         {
             struct generic_shdr *hstr = 0;
-            hstr = ep->f_shdr +
-                ep->f_dynsym_sect_strings_sect_index;
+            hstr = ep->f_shdr + psh->gh_link;
             if (gbuffer->gd_val != hstr->gh_offset) {
                 targname = "Does not match section header offset";
             }
@@ -1824,7 +1857,8 @@ elf_print_dynamic(elf_filedata ep)
             int res = 0;
 
             res = dwarf_get_elf_symstr_string(ep,
-                FALSE,gbuffer->gd_val,&targname,&errcode);
+                linktostringsec,
+                gbuffer->gd_val,&targname,&errcode);
             if (res != DW_DLV_OK) {
                 targname = "Cannot access string";
             }
@@ -1834,7 +1868,8 @@ elf_print_dynamic(elf_filedata ep)
             int res = 0;
 
             res = dwarf_get_elf_symstr_string(ep,
-                FALSE,gbuffer->gd_val,&targname,&errcode);
+                linktostringsec,
+                gbuffer->gd_val,&targname,&errcode);
             if (res != DW_DLV_OK) {
                 targname = "Cannot access string";
             }
@@ -1870,6 +1905,28 @@ elf_print_dynamic(elf_filedata ep)
     return RO_OK;
 }
 
+/*  It seems impossible to have more than one
+    SHT_DYNAMIC, but let us not assume that. */
+static int
+elf_print_dynamic(elf_filedata ep)
+{
+    Dwarf_Unsigned i = 0;
+    struct generic_shdr *psh = ep->f_shdr;
+    int found = FALSE;
+
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+        if (psh->gh_type == SHT_DYNAMIC) {
+            elf_print_dynamic_inner(ep,psh);
+            found = TRUE;
+        }
+    }
+    if (!found) {
+        P("No .dynamic section exists in %s\n",
+            sanitized(filename,buffer1,BUFFERSIZE));
+    }
+    return DW_DLV_OK;
+}
+
 static int
 elf_print_sg_groups(elf_filedata ep)
 {
@@ -1885,7 +1942,7 @@ elf_print_sg_groups(elf_filedata ep)
     }
     P("Section Group arrays\n");
     P(" section  name      groupsections\n");
-    for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++psh) {
         const char *namestr = psh->gh_namestring;
         Dwarf_Unsigned a = 1;
         Dwarf_Unsigned count = psh->gh_sht_group_array_count;
@@ -1900,10 +1957,10 @@ elf_print_sg_groups(elf_filedata ep)
         P("\n");
     }
     P("\n");
-    psh = ep->f_shdr;
+    psh = ep->f_shdr+1;
     P("Section Group by dwarf section\n");
     P("  section          groupnumber  sectionnumber\n");
-    for (i = 0;i < ep->f_loc_shdr.g_count; ++i,++psh) {
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++psh) {
         const char *namestr = psh->gh_namestring;
         int isdw = FALSE;
 

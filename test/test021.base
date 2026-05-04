@@ -79,12 +79,12 @@ Symbols from .symtab: 13 at offset 0x560
 [  0]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
   st_name  (0) name-length  0: <no-name>
 [  1]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (0xfff1) (SHN_ABS)
   st_name  (1) name-length  5: tls.c
 [  2]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
@@ -145,7 +145,7 @@ Symbols from .symtab: 13 at offset 0x560
 Relocation Sections
 {
 
-Section 6: .rela.debug_info reloccount: 8 links-sec: 5 symtabsec: 13
+Section 6: .rela.debug_info reloccount: 8 links-sec: 5 symtabsec: 13 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000006 0x700000017 R_SPARC_UA32   23. 7 .debug_abbrev +0
 [1]  0x0000000c 0x900000017 R_SPARC_UA32   23. 9 .debug_str +12

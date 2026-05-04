@@ -734,15 +734,15 @@ dwarf_gnu_debuglink(elf_filedata ep,
     unsigned       *debuglink_paths_count,
     int*   errcode)
 {
-    struct generic_shdr* shdr = ep->f_shdr;
     Dwarf_Unsigned seccount = ep->f_loc_shdr.g_count;
     char * pathname = ep->f_path;
     struct generic_shdr* linkshdr = 0;
     struct generic_shdr* buildidshdr = 0;
     int buildidres = 0;
+    struct generic_shdr* shdr = ep->f_shdr+1;
     Dwarf_Unsigned i = 0;
 
-    for (i = 0;i < seccount; ++i,shdr++) {
+    for (i = 1;i < seccount; ++i,shdr++) {
         if (!shdr->gh_namestring) {
             /*  something is badly wrong!  Corrupt object. */
             P("ERROR For section " LONGESTUFMT

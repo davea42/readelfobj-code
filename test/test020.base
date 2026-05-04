@@ -121,12 +121,12 @@ Symbols from .symtab: 38 at offset 0x30a8
 [  0]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
   st_name  (0) name-length  0: <no-name>
 [  1]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (SHN_ABS)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (0xfff1) (SHN_ABS)
   st_name  (1) name-length 19: /home/phil/stream.c
 [  2]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
@@ -261,12 +261,12 @@ Symbols from .symtab: 38 at offset 0x30a8
 [ 28]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
   st_name  (68) name-length  4: puts
 [ 29]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
   st_name  (73) name-length  6: printf
 [ 30]  st_value 0xb04 (2820)
   st_size  0x16c (364), st_info 0x12 (18)
@@ -286,7 +286,7 @@ Symbols from .symtab: 38 at offset 0x30a8
 [ 33]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
   st_name  (118) name-length 12: gettimeofday
 [ 34]  st_value 0x1108 (4360)
   st_size  0x8c (140), st_info 0x12 (18)
@@ -312,7 +312,7 @@ Symbols from .symtab: 38 at offset 0x30a8
 Relocation Sections
 {
 
-Section 2: .rela.text reloccount: 266 links-sec: 1 symtabsec: 27
+Section 2: .rela.text reloccount: 266 links-sec: 1 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000018 0x71805000000001b R_MIPS_GPREL16 7. 27 main +0
          Type2: 24 R_MIPS_SUB
@@ -613,7 +613,7 @@ Section 2: .rela.text reloccount: 266 links-sec: 1 symtabsec: 27
 [264]  0x0000133c 0x1400000000000004 R_MIPS_GOT_PAGE 20. 4 .bss +64
 [265]  0x00001344 0x1500000000000004 R_MIPS_GOT_OFST 21. 4 .bss +64
 
-Section 7: .rela.pdr reloccount: 8 links-sec: 6 symtabsec: 27
+Section 7: .rela.pdr reloccount: 8 links-sec: 6 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000000 0x20000000000001b R_MIPS_32      2. 27 main +0
 [1]  0x00000020 0x20000000000001e R_MIPS_32      2. 30 checktick +0
@@ -624,7 +624,7 @@ Section 7: .rela.pdr reloccount: 8 links-sec: 6 symtabsec: 27
 [6]  0x000000c0 0x200000000000024 R_MIPS_32      2. 36 tuned_STREAM_Add +0
 [7]  0x000000e0 0x200000000000025 R_MIPS_32      2. 37 tuned_STREAM_Triad +0
 
-Section 11: .rela.debug_info reloccount: 50 links-sec: 10 symtabsec: 27
+Section 11: .rela.debug_info reloccount: 50 links-sec: 10 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000006 0x200000000000006 R_MIPS_32      2. 6 .debug_abbrev +0
 [1]  0x0000000c 0x200000000000008 R_MIPS_32      2. 8 .debug_line +0
@@ -677,18 +677,18 @@ Section 11: .rela.debug_info reloccount: 50 links-sec: 10 symtabsec: 27
 [48]  0x000005f7 0x120000000000000c R_MIPS_64      18. 12 .data.rel.local +0
 [49]  0x0000060e 0x1200000000000003 R_MIPS_64      18. 3 .data +32
 
-Section 13: .rela.debug_line reloccount: 1 links-sec: 12 symtabsec: 27
+Section 13: .rela.debug_line reloccount: 1 links-sec: 12 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x000000ad 0x1200000000000002 R_MIPS_64      18. 2 .text +0
 
-Section 16: .rela.data.rel.local reloccount: 4 links-sec: 15 symtabsec: 27
+Section 16: .rela.data.rel.local reloccount: 4 links-sec: 15 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000000 0x1200000000000017 R_MIPS_64      18. 23 .rodata +0
 [1]  0x00000008 0x1200000000000017 R_MIPS_64      18. 23 .rodata +16
 [2]  0x00000010 0x1200000000000017 R_MIPS_64      18. 23 .rodata +32
 [3]  0x00000018 0x1200000000000017 R_MIPS_64      18. 23 .rodata +48
 
-Section 18: .rela.debug_frame reloccount: 16 links-sec: 17 symtabsec: 27
+Section 18: .rela.debug_frame reloccount: 16 links-sec: 17 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000014 0x200000000000012 R_MIPS_32      2. 18 .debug_frame +0
 [1]  0x00000018 0x1200000000000002 R_MIPS_64      18. 2 .text +0
@@ -707,11 +707,11 @@ Section 18: .rela.debug_frame reloccount: 16 links-sec: 17 symtabsec: 27
 [14]  0x00000134 0x200000000000012 R_MIPS_32      2. 18 .debug_frame +0
 [15]  0x00000138 0x1200000000000002 R_MIPS_64      18. 2 .text +4820
 
-Section 21: .rela.debug_pubnames reloccount: 1 links-sec: 20 symtabsec: 27
+Section 21: .rela.debug_pubnames reloccount: 1 links-sec: 20 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000006 0x200000000000007 R_MIPS_32      2. 7 .debug_info +0
 
-Section 23: .rela.debug_aranges reloccount: 2 links-sec: 22 symtabsec: 27
+Section 23: .rela.debug_aranges reloccount: 2 links-sec: 22 symtabsec: 27 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000006 0x200000000000007 R_MIPS_32      2. 7 .debug_info +0
 [1]  0x00000010 0x1200000000000002 R_MIPS_64      18. 2 .text +0

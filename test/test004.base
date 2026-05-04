@@ -107,10 +107,10 @@ GNU .gnu_debuglink and .note.gnu.buildid
 Relocation Sections
 {
 
-Section 8: .rela.dyn reloccount: 0 links-sec: 0 symtabsec: 3
+Section 8: .rela.dyn reloccount: 0 links-sec: 0 symtabsec: 3 .dynsym
  [i]   offset   info           type.              symbol  addend
 
-Section 9: .rela.plt reloccount: 0 links-sec: 11 symtabsec: 3
+Section 9: .rela.plt reloccount: 0 links-sec: 11 symtabsec: 3 .dynsym
  [i]   offset   info           type.              symbol  addend
 }
 Warning: Odd overlap of  0x00000000...0x0000c53c Phdr target  with 0x0000c112...0x0000e8c4 Shdr target
