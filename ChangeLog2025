@@ -1,0 +1,237 @@
+2025-11-17:  David Anderson
+    commit 4b839f71ae2da7d4128f2707c7053de84a0b8dc1
+
+    Up to date now.
+            modified:   ChangeLog
+
+2025-11-17:  David Anderson
+    commit 4aed93046bd076ae2c4ead1e95313e1fc241421e
+
+    Minor renaming.
+            modified:   src/dwarf_safe_arithmetic.c
+    For use in regression tests, these all accept the
+    option
+    --suppress-de-alloc-tree
+    and ignore it (it does not apply to these).
+            modified:   src/readelfobj.c
+            modified:   src/readobjmacho.c
+            modified:   src/readobjpe.c
+
+2025-10-01:  David Anderson
+    commit 59ab0dc1f4dac04a4562b18a8aecc680ce0be668
+
+    Latest from git log prepended.
+            modified:   ChangeLog
+
+2025-10-01:  David Anderson
+    commit baa807c27343901fd24c7e0503707957424caa3a
+
+    Fixing indents
+    Removing trailing whitespace.
+    various too-long lines adjusted.
+    All to meet the libdwarf codingstyle.
+            modified:   common_options.h
+            modified:   dwarf_64machoread.c
+            modified:   dwarf_debuglink.c
+            modified:   dwarf_debuglink.h
+            modified:   dwarf_macho_loader.h
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_object_detector.h
+            modified:   dwarf_object_read_common.h
+            modified:   dwarf_pe_descr.h
+            modified:   dwarf_peread.h
+            modified:   dwarf_reading.h
+            modified:   dwarf_safe_arithmetic.c
+            modified:   dwarf_types.h
+            modified:   dwarfstring.h
+            modified:   errormessages.c
+            modified:   readelfobj.h
+            modified:   readelfobj_version.h
+            modified:   readobjmacho.c
+            modified:   readobjpe.c
+            modified:   sanitized.h
+
+2025-10-01:  David Anderson
+    commit b7aed8756c9265ce40d13ce9c9a6aa08066be7aa
+
+    Taking advantage of a multiply checked for
+    overflow we simply some sanity checks.
+            modified:   dwarf_64machoread.c
+            modified:   dwarf_machoread.c
+
+2025-10-01:  David Anderson
+    commit 40e8556bff332986eb57c7cb4b398b62cd49d98c
+
+    Up to date
+            modified:   ChangeLog
+
+2025-10-01:  David Anderson
+    commit 1ef88816db8bb08b5be665143c9fcbfe6c5ce44c
+
+    Added an error for corrupt segment namre
+            modified:   dwarf_64machoread.c
+
+    Now with the new error,
+            modified:   dwarf_machoread.c
+
+    New error
+            modified:   dwarf_reading.h
+            modified:   errormessages.c
+
+    Avoids claiming
+    it changed names via dSYM when it did not do that.
+            modified:   readobjmacho.c
+
+    The corrected line in readobjmacho.c
+    changed the baselines.
+            modified:   ../test/test009m.base
+            modified:   ../test/test031m.base
+            modified:   ../test/test032m.base
+
+2025-09-30:  David Anderson
+    commit 918e7c8dfcd35816508486bb0125e4b77059ad50
+
+    Fully up to date.
+            modified:   ChangeLog
+
+2025-09-30:  David Anderson
+    commit 961619145435f280b32d3ba2c9e79855d8eb5a35
+
+    Updated from git
+            modified:   ChangeLog
+
+    Updated date, removed a couple of blank lines.
+            modified:   README.md
+
+    Set version 2.2.0
+            modified:   configure.ac
+
+    Updated MAX_COMMANDS_SIZE: 20000 -> 30000
+            modified:   src/dwarf_machoread.h
+
+2025-09-29:  David Anderson
+    commit 3d46dcc8225ef2adb77b2ce62a4a06ed33729b6d
+
+    Added 3 lines of output about mach-o commands.
+            modified:   src/dwarf_64machoread.c
+            modified:   src/dwarf_machoread.c
+    Update baseline to match.
+            modified:   test/test009m.base
+            modified:   test/test031m.base
+            modified:   test/test032m.base
+
+2025-09-29:  David Anderson
+    commit edd7de5e590c35a89caf08de6b2754dd7d85dcd8
+
+    Up to date with git log
+            modified:   ChangeLog
+
+2025-09-29:  David Anderson
+    commit 809f3283fad73d2f0a7bd7d8f4104ad51290d4e2
+
+    Now split readobjmacho into a base and a
+    64 piece. Easier to get 32 and 64 working alike.
+            modified:   Makefile.am
+            modified:   dwarf_64machoread.c
+            modified:   dwarf_debuglink.c
+            modified:   dwarf_machoread.c
+            modified:   dwarf_machoread.h
+            modified:   dwarf_object_detector.c
+
+2025-09-29:  David Anderson
+    commit 2e76e37ef66a359cfe25ca265d65f45e66142738
+
+    autogen.sh changed these.
+            modified:   m4/libtool.m4
+            modified:   m4/ltoptions.m4
+            modified:   m4/ltsugar.m4
+            modified:   m4/ltversion.m4
+            modified:   m4/lt~obsolete.m4
+
+    Expected baseline changes
+            modified:   test/test009m.base
+            modified:   test/test031m.base
+            modified:   test/test032m.base
+
+2025-09-29:  David Anderson
+    commit 5c659f9c59d3c282a9dd8746378a6322395120b9
+
+    Do not use this commit! Work in progress.
+    Splitting off dwarf_64machoread.c
+            modified:   src/Makefile.am
+            new file:   src/dwarf_64machoread.c
+            modified:   src/dwarf_machoread.c
+            modified:   src/dwarf_machoread.h
+            new file:   src/dwarf_safe_arithmetic.c
+            new file:   src/dwarf_safe_arithmetic.h
+            modified:   src/dwarf_universal.h
+
+2025-09-23:  David Anderson
+    commit fb7c4c59dd42068b4a4a9cbe17306c4a3b0168fe
+
+    Modified printf to add newline and wording changes.
+            modified:   src/dwarf_machoread.c
+
+2025-09-23:  David Anderson
+    commit 298777705dc0b99a7fbab70457c23a68f21a094e
+
+    Now lists all segment names in use.
+            modified:   src/dwarf_macho_loader.h
+    Now cheks segment names against known names
+    and checks that section names are plain ascii
+    (users do not get to choose section names...)
+            modified:   src/dwarf_machoread.c
+
+2025-09-21:  David Anderson
+    commit 7c362998307c85e16e16e17748bc8f1e070034c7
+
+    Now up to date
+            modified:   ChangeLog
+
+2025-09-21:  David Anderson
+    commit 8000b30b70173ffd777b8498ab7c8277d00447d5
+
+    When a Macos segment has no sections we
+    now simply go on to the next segment.
+    And we change a garbage segment name to <no name>
+    Directly related to ossfuzz446356422
+    which found errors before (corrupted Mach-o object)
+    Was a bug in the code for a few days.
+            modified:   src/dwarf_machoread.c
+
+2025-09-14:  David Anderson
+    commit bb8afe9f4a93dd2a357667821b682aba8650ecce
+
+    Getting just the right content in each.
+            new 2025 file:   ChangeLog
+            modified:   ChangeLog2024
+
+2025-09-14:  David Anderson
+    commit 80693339e2d74d043ebe0b005a09bb96e58bd78f
+
+    Last change was 2024, so now we have that ChangeLog
+            renamed:    ChangeLog -> ChangeLog2024
+
+2025-09-14:  David Anderson
+    commit 5cb071ad3e52ca5657aa8e7eb3705cc58f50c7df
+
+    Now we show the diff itself, not just pass/fail.
+            modified:   test/test009m.sh
+
+    New baselines to match latest Macho object file
+    reporting (prints more detail).
+            modified:   test/test009m.base
+            modified:   test/test031m.base
+            modified:   test/test032m.base
+
+2025-09-14:  David Anderson
+    commit f0c6040734a29c25b15fc6964a2ef462b82db5b6
+
+    Now do more sections in detail.
+    Now we can also see text section details .
+            modified:   src/dwarf_machoread.c
+            modified:   src/readobjmacho.c
+    Commentary: tiny change.
+            modified:   src/dwarf_machoread.h
+

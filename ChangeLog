@@ -1,231 +1,238 @@
-2025-11-17:  David Anderson
-    commit 4aed93046bd076ae2c4ead1e95313e1fc241421e
+2026-05-04:  David Anderson
+    commit 0f4df40767a9437f74c69f5399fc1ee14c066f3d
 
-    Minor renaming.
-            modified:   src/dwarf_safe_arithmetic.c
-    For use in regression tests, these all accept the
-    option
-    --suppress-de-alloc-tree
-    and ignore it (it does not apply to these).
+    Squashed commit of the following:
+    Implementing support for compressed section contents
+    of all sections of interest (we ignore some sections).
+
+    commit 15286116c55f4655c5060057d8a0b943475f9b9b
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Mon May 4 10:27:43 2026 -0700
+
+        The .o names fall foul of a .gitignore rule, so renaming
+            modified:   Makefile.am
+            new file:   comprelad.x
+            new file:   comprelaf.x
+            new file:   comprelal.x
+            new file:   comprelar.x
+            new file:   comprelat.x
+            new file:   compshstrtab.x
+            new file:   compstrtab.x
+            new file:   compsymtab.x
+        Updated per the name changes.
+            modified:   test036comp.sh
+            modified:   test037comp.sh
+            modified:   test038comp.sh
+            modified:   test039comp.sh
+            modified:   test040comp.sh
+            modified:   test041comp.sh
+            modified:   test042comp.sh
+            modified:   test043comp.sh
+
+    commit 8310268cfd98b6b3eefab2a810dfffd02d43fc86
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Mon May 4 10:17:12 2026 -0700
+
+        test cases (new)
+            modified:   test/Makefile.am
+            new file:   test/comphello
+            new file:   test/test035comp.base
+            new file:   test/test035comp.sh
+            new file:   test/test036comp.base
+            new file:   test/test036comp.sh
+            new file:   test/test037comp.base
+            new file:   test/test037comp.sh
+            new file:   test/test038comp.base
+            new file:   test/test038comp.sh
+            new file:   test/test039comp.base
+            new file:   test/test039comp.sh
+            new file:   test/test040comp.base
+            new file:   test/test040comp.sh
+            new file:   test/test041comp.base
+            new file:   test/test041comp.sh
+            new file:   test/test042comp.base
+            new file:   test/test042comp.sh
+            new file:   test/test043comp.base
+            new file:   test/test043comp.sh
+
+    commit e50e0b32a1011fe90a8e28483dda5fbed9fca3b7
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Mon May 4 09:37:34 2026 -0700
+
+        The test for relations section to be a multiple of the size
+        of one record are now moved to after the decompression.
+        Works right now.
+            modified:   dwarf_load_elf_headers.c
+
+    commit b7833a524d7b7cb0e8bd7f46aec0541e7450004b
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Sun May 3 10:46:00 2026 -0700
+
+        Some naming revised (of pointers).
+        Completed setup of dynamic section setup
+        Fixed a failure to free some data.
+        Avoid duplicate setup of the section strings section.
+            modified:   dwarf_load_elf_headers.c
+            modified:   readelfobj.c
+
+    commit a17fc36498a38eb74b92c639305dfc94c41b2342
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Sat May 2 11:56:04 2026 -0700
+
+        efining the data printed about symtab st_shndx for
+        completeness and clarity.
+        src/readelfobj.c
+
+        Correct the handling of symboltable entries.
+        src/dwarf_load_elf_headers.c
+
+        Correct a comment.
+        src/dwarf_elf_naming.c
+
+        Add PCONDITION comment and
+        POSTCONDITION comment for code clarity.
+        src/dwarf_elf_decompress.c
+            modified:   src/dwarf_elf_decompress.c
+            modified:   src/dwarf_elf_naming.c
+            modified:   src/dwarf_load_elf_headers.c
             modified:   src/readelfobj.c
-            modified:   src/readobjmacho.c
-            modified:   src/readobjpe.c
 
-2025-10-01:  David Anderson
-    commit 59ab0dc1f4dac04a4562b18a8aecc680ce0be668
+        Baseline updates to match improvements above.
+            modified:   test/test005.base
+            modified:   test/test017.base
+            modified:   test/test019.base
+            modified:   test/test020.base
+            modified:   test/test021.base
 
-    Latest from git log prepended.
-            modified:   ChangeLog
+    commit c12b0eb2ff9605a1af7bf17d2255e1649fc3c4bf
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Fri May 1 15:46:24 2026 -0700
 
-2025-10-01:  David Anderson
-    commit baa807c27343901fd24c7e0503707957424caa3a
+        Removed #if 0 leftovers from debugging.
+            modified:   dwarf_load_elf_headers.c
+            modified:   readelfobj.c
 
-    Fixing indents
-    Removing trailing whitespace.
-    various too-long lines adjusted.
-    All to meet the libdwarf codingstyle.
-            modified:   common_options.h
-            modified:   dwarf_64machoread.c
+    commit 0c53396c90c6902305e6a7baf148224297a39224
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Fri May 1 14:32:56 2026 -0700
+
+        Updating to current output.
+            modified:   ../test/test017.base
+            modified:   ../test/test019.base
+            modified:   ../test/test020.base
+            modified:   ../test/test021.base
+            modified:   ../test/test026.base
+            modified:   ../test/test027.base
+            modified:   ../test/test028.base
+            modified:   ../test/test029.base
+
+    commit ef14464bf38e2a6dbff75e0d6c2fb30b4d99d3bd
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Fri May 1 14:32:29 2026 -0700
+
+        Provide a default section namestring of ""
+        for Elf section zero.
+            modified:   readelfobj.c
+
+    commit c6155edad63ef81e9716b89f10181da830062527
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Fri May 1 14:17:23 2026 -0700
+
+        Fixed mistake in secnum iteration. Starting from one.
+            modified:   readelfobj.c
+
+    commit f1be7106c1ade967a5469062ed250ab0d5704e72
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Fri May 1 13:58:47 2026 -0700
+
+        Does more sections properly (including relocs)
+            modified:   dwarf_elf_decompress.c
+            modified:   dwarf_load_elf_headers.c
+            modified:   readelfobj.c
+        Better data and ordering difference of reports.
+        And more complete.
+            modified:   ../test/test004.base
+
+    commit 86ecb06136165576c712a3e20afb5b902d2e1ba3
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Thu Apr 30 15:49:05 2026 -0700
+
+        Now basic things work properly.
+        More needed.
+            modified:   dwarf_debuglink.c
+            modified:   dwarf_load_elf_headers.c
+            modified:   readelfobj.c
+            modified:   readelfobj.h
+
+    commit 0652e02748995ea961f7ffe1cc092570064a5f4c
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Tue Apr 28 15:07:50 2026 -0700
+
+        Not yet working Major revamp to handle more
+        valid Elf
+            modified:   dwarf_elf_decompress.c
+            modified:   dwarf_load_elf_headers.c
+            modified:   readelfobj.c
+            modified:   readelfobj.h
+
+    commit eb049dd78cdb5fc0c0dea3d7910c72e2edb0e88d
+    Author: David Anderson <davea42@linuxmail.org>
+    Date:   Fri Apr 24 10:58:32 2026 -0700
+
+        Does at least one compressed string section properly.
+            modified:   dwarf_elf_decompress.c
+            modified:   dwarf_load_elf_headers.c
+            modified:   readelfobj.c
+            modified:   readelfobj.h
+            modified:   ../test/test028.base
+
+2026-04-22:  David Anderson
+    commit 8457822afe0cc1aa38ddcde2d9b9ad483641fede
+
+    Compiles now. DO NOT USE THIS COMMIT
+    not complete.
+    Decompressing sh strings section.
+            modified:   ../README.md
+            modified:   ../configure.ac
+            modified:   Makefile.am
             modified:   dwarf_debuglink.c
             modified:   dwarf_debuglink.h
-            modified:   dwarf_macho_loader.h
-            modified:   dwarf_machoread.c
-            modified:   dwarf_machoread.h
-            modified:   dwarf_object_detector.h
-            modified:   dwarf_object_read_common.h
-            modified:   dwarf_pe_descr.h
-            modified:   dwarf_peread.h
+            modified:   dwarf_elf_decompress.c
+            modified:   dwarf_elf_decompress.h
+            modified:   dwarf_load_elf_headers.c
+            modified:   dwarf_object_detector.c
             modified:   dwarf_reading.h
-            modified:   dwarf_safe_arithmetic.c
-            modified:   dwarf_types.h
-            modified:   dwarfstring.h
-            modified:   errormessages.c
             modified:   readelfobj.h
-            modified:   readelfobj_version.h
+
+2026-04-19:  David Anderson
+    commit 318b20b661095e9d7d6ec6d0b324706b11a367bb
+
+    Beginning support for decompression
+            new file:   src/dwarf_elf_decompress.c
+            new file:   src/dwarf_elf_decompress.h
+
+2026-04-19:  David Anderson
+    commit 6605d342bd2b912f1c5d468b44027e209b9b4e9f
+
+    Adding segment name to sections reports
             modified:   readobjmacho.c
-            modified:   readobjpe.c
-            modified:   sanitized.h
-
-2025-10-01:  David Anderson
-    commit b7aed8756c9265ce40d13ce9c9a6aa08066be7aa
-
-    Taking advantage of a multiply checked for
-    overflow we simply some sanity checks.
-            modified:   dwarf_64machoread.c
-            modified:   dwarf_machoread.c
-
-2025-10-01:  David Anderson
-    commit 40e8556bff332986eb57c7cb4b398b62cd49d98c
-
-    Up to date
-            modified:   ChangeLog
-
-2025-10-01:  David Anderson
-    commit 1ef88816db8bb08b5be665143c9fcbfe6c5ce44c
-
-    Added an error for corrupt segment namre
-            modified:   dwarf_64machoread.c
-
-    Now with the new error,
-            modified:   dwarf_machoread.c
-
-    New error
-            modified:   dwarf_reading.h
-            modified:   errormessages.c
-
-    Avoids claiming
-    it changed names via dSYM when it did not do that.
-            modified:   readobjmacho.c
-
-    The corrected line in readobjmacho.c
-    changed the baselines.
+    Updated expected result to match the output format change
             modified:   ../test/test009m.base
             modified:   ../test/test031m.base
             modified:   ../test/test032m.base
 
-2025-09-30:  David Anderson
-    commit 918e7c8dfcd35816508486bb0125e4b77059ad50
+2026-02-24:  David Anderson
+    commit d91633864630e3faf871fd370e0115d748ca3bc7
 
-    Fully up to date.
-            modified:   ChangeLog
+    We were incorrectly multiplying
+    sizeofcmds by number of commands.
+    Apple's header was unclear, but
+    it is now clearer that sizeofcmds
+    stands alone.
 
-2025-09-30:  David Anderson
-    commit 961619145435f280b32d3ba2c9e79855d8eb5a35
-
-    Updated from git
-            modified:   ChangeLog
-
-    Updated date, removed a couple of blank lines.
-            modified:   README.md
-
-    Set version 2.2.0
-            modified:   configure.ac
-
-    Updated MAX_COMMANDS_SIZE: 20000 -> 30000
-            modified:   src/dwarf_machoread.h
-
-2025-09-29:  David Anderson
-    commit 3d46dcc8225ef2adb77b2ce62a4a06ed33729b6d
-
-    Added 3 lines of output about mach-o commands.
-            modified:   src/dwarf_64machoread.c
-            modified:   src/dwarf_machoread.c
-    Update baseline to match.
-            modified:   test/test009m.base
-            modified:   test/test031m.base
-            modified:   test/test032m.base
-
-2025-09-29:  David Anderson
-    commit edd7de5e590c35a89caf08de6b2754dd7d85dcd8
-
-    Up to date with git log
-            modified:   ChangeLog
-
-2025-09-29:  David Anderson
-    commit 809f3283fad73d2f0a7bd7d8f4104ad51290d4e2
-
-    Now split readobjmacho into a base and a
-    64 piece. Easier to get 32 and 64 working alike.
-            modified:   Makefile.am
             modified:   dwarf_64machoread.c
-            modified:   dwarf_debuglink.c
             modified:   dwarf_machoread.c
-            modified:   dwarf_machoread.h
-            modified:   dwarf_object_detector.c
-
-2025-09-29:  David Anderson
-    commit 2e76e37ef66a359cfe25ca265d65f45e66142738
-
-    autogen.sh changed these.
-            modified:   m4/libtool.m4
-            modified:   m4/ltoptions.m4
-            modified:   m4/ltsugar.m4
-            modified:   m4/ltversion.m4
-            modified:   m4/lt~obsolete.m4
-
-    Expected baseline changes
-            modified:   test/test009m.base
-            modified:   test/test031m.base
-            modified:   test/test032m.base
-
-2025-09-29:  David Anderson
-    commit 5c659f9c59d3c282a9dd8746378a6322395120b9
-
-    Do not use this commit! Work in progress.
-    Splitting off dwarf_64machoread.c
-            modified:   src/Makefile.am
-            new file:   src/dwarf_64machoread.c
-            modified:   src/dwarf_machoread.c
-            modified:   src/dwarf_machoread.h
-            new file:   src/dwarf_safe_arithmetic.c
-            new file:   src/dwarf_safe_arithmetic.h
-            modified:   src/dwarf_universal.h
-
-2025-09-23:  David Anderson
-    commit fb7c4c59dd42068b4a4a9cbe17306c4a3b0168fe
-
-    Modified printf to add newline and wording changes.
-            modified:   src/dwarf_machoread.c
-
-2025-09-23:  David Anderson
-    commit 298777705dc0b99a7fbab70457c23a68f21a094e
-
-    Now lists all segment names in use.
-            modified:   src/dwarf_macho_loader.h
-    Now cheks segment names against known names
-    and checks that section names are plain ascii
-    (users do not get to choose section names...)
-            modified:   src/dwarf_machoread.c
-
-2025-09-21:  David Anderson
-    commit 7c362998307c85e16e16e17748bc8f1e070034c7
-
-    Now up to date
-            modified:   ChangeLog
-
-2025-09-21:  David Anderson
-    commit 8000b30b70173ffd777b8498ab7c8277d00447d5
-
-    When a Macos segment has no sections we
-    now simply go on to the next segment.
-    And we change a garbage segment name to <no name>
-    Directly related to ossfuzz446356422
-    which found errors before (corrupted Mach-o object)
-    Was a bug in the code for a few days.
-            modified:   src/dwarf_machoread.c
-
-2025-09-14:  David Anderson
-    commit bb8afe9f4a93dd2a357667821b682aba8650ecce
-
-    Getting just the right content in each.
-            new 2025 file:   ChangeLog
-            modified:   ChangeLog2024
-
-2025-09-14:  David Anderson
-    commit 80693339e2d74d043ebe0b005a09bb96e58bd78f
-
-    Last change was 2024, so now we have that ChangeLog
-            renamed:    ChangeLog -> ChangeLog2024
-
-2025-09-14:  David Anderson
-    commit 5cb071ad3e52ca5657aa8e7eb3705cc58f50c7df
-
-    Now we show the diff itself, not just pass/fail.
-            modified:   test/test009m.sh
-
-    New baselines to match latest Macho object file
-    reporting (prints more detail).
-            modified:   test/test009m.base
-            modified:   test/test031m.base
-            modified:   test/test032m.base
-
-2025-09-14:  David Anderson
-    commit f0c6040734a29c25b15fc6964a2ef462b82db5b6
-
-    Now do more sections in detail.
-    Now we can also see text section details .
-            modified:   src/dwarf_machoread.c
-            modified:   src/readobjmacho.c
-    Commentary: tiny change.
-            modified:   src/dwarf_machoread.h
+            modified:   ../test/test009m.base
+            modified:   ../test/test031m.base
+            modified:   ../test/test032m.base
 
