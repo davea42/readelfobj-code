@@ -1,3 +1,86 @@
+2026-05-09:  David Anderson
+    commit dece0b08efcd5079f07a903da3ead195d693f6b8
+
+    Version 2.3.1
+    We mention the new regressiontesting of 32 and 64bit
+    section compression in NEWS and README.md.
+            modified:   NEWS
+            modified:   README.md
+            modified:   configure.ac
+
+2026-05-09:  David Anderson
+    commit 7aff17f44254e2283f2af4864090f7ece7547f38
+
+    Now cleans and creates release appropriately.
+            modified:   test/Makefile.am
+
+2026-05-09:  David Anderson
+    commit 1ceb43e755c1008fd354694ccf69927e52c079ba
+
+    For the new tests: object files with various sections
+    compressed
+            new file:   comprelad32.x
+            new file:   comprelaf32.x
+            new file:   comprelal32.x
+            new file:   comprelar32.x
+            new file:   comprelat32.x
+            new file:   compshstrtab32.x
+            new file:   compsymtab32.x
+
+2026-05-09:  David Anderson
+    commit 24892aba0d987e4b7b275fe95c3297a7736887a4
+
+    Fixed bug introduced in removing #if 0
+            modified:   ../src/dwarf_elf_decompress.c
+    For all the new compression tests
+            modified:   Makefile.am
+
+            new file:   comprelad.x.base
+            new file:   comprelad32.x.base
+            new file:   comprelaf.x.base
+            new file:   comprelaf32.x.base
+            new file:   comprelal.x.base
+            new file:   comprelal32.x.base
+            new file:   comprelar.x.base
+            new file:   comprelar32.x.base
+            new file:   comprelat.x.base
+            new file:   comprelat32.x.base
+            new file:   compshstrtab.x.base
+            new file:   compshstrtab32.x.base
+            new file:   compsymtab.x.base
+            new file:   compsymtab32.x.base
+            deleted:    test035comp.base
+            modified:   test035comp.sh
+
+2026-05-04:  David Anderson
+    commit a86cc5be73e5a0e002990a1fe966702cd1d7abc1
+
+    Fixed mention of email for libdwarf, the name
+    changed slightly a couple years ago.
+            modified:   configure.ac
+
+2026-05-04:  David Anderson
+    commit b76f42cd3f732a610209c6be341541eb109c0d64
+
+    Tiny change so a build with --enable-decompression=no
+    succeeds.
+            modified:   src/dwarf_load_elf_headers.c
+
+2026-05-04:  David Anderson
+    commit 0bb8c82508a2f139364ff742adada810da07a357
+
+    Adding exiting ChangeLog2024 and 2025 to the files
+    to put in a release.
+            modified:   Makefile.am
+
+2026-05-04:  David Anderson
+    commit 1c3e8f69002560f88119e0438e493f9aa2802054
+
+    Now just 2026.
+            modified:   ChangeLog
+    Earlier changes now here.
+            new file:   ChangeLog2025
+
 2026-05-04:  David Anderson
     commit 0f4df40767a9437f74c69f5399fc1ee14c066f3d
 
