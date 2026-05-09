@@ -1,3 +1,7 @@
+2026-05-9 v2.3.1
+  Now with regression tests of the decompression code.
+2026-05-01 v2.3.0
+  Now processes compressed Elf sections as well as non-compressed.
 2021-11-25 
   Revised version to be semantic versioning instead
   of date versioning.

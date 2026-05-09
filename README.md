@@ -1,6 +1,6 @@
 # README.md
-Last update: April 19, 2026
-Version now set to 2.3.0
+Last update: May 9, 2026
+Version now set to 2.3.1
 
 The distribution consists entirely of C
 source files (along with GNU configure scripts
@@ -23,6 +23,8 @@ As of version 2.3.0 reading Elf objects with compressed
 section contents is supported, and one must have
 zlib and zstd installed to read object files with
 compressed sections. See REQUIREMENTS below.
+As of 2.3.1 we have tests of the decompression
+code on 64 and 32 bit objects.
 
 ## Contents
 #### object_detector
