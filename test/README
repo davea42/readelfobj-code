@@ -4,6 +4,58 @@ All tests assume readelfobj (version to test)
 is copied to this directlry by PICKUP
 or something else
 
+test objects named
+comprelad32.x  comprelal32.x  comprelat32.x	compstrtab.x
+comprelad.x    comprelal.x    comprelat.x	compsymtab32.x
+comprelaf32.x  comprelar32.x  compshstrtab32.x	compsymtab.x
+comprelaf.x    comprelar.x    compshstrtab.x	hello32.x
+hello.x
+were built by 
+cc -c hello.c -o hello.x
+or
+cc -c -m32 hello.c -o hello32.x
+
+The other tests were created from these objects
+
+changeone() {
+    sec=$1
+    oname=$2
+    echo "======== $1 $2"
+    eu-elfcompress -f -o $2 -n $1 hello.x
+    echo "$rotest $2 "
+    $rotest $2 | grep $1
+}
+changeoneb() {
+    sec=$1
+    oname=$2
+    echo "======== $1 $2"
+    eu-elfcompress -f -o $2 -n $1 hello32.x
+    echo "$rotest $2 "
+    $rotest $2 | grep $1
+}
+
+changeone .strtab   compstrtab.o
+changeone .symtab   compsymtab.x
+changeone .shstrtab compshstrtab.x
+changeone .rela.text comprelat.x
+changeone .rela.debug_info    comprelad.x
+changeone .rela.debug_aranges comprelar.x
+changeone .rela.debug_line    comprelal.x
+changeone .rela.eh_frame      comprelaf.x
+
+changeoneb .strtab   compstrtab32.o
+changeoneb .symtab   compsymtab32.x
+changeoneb .shstrtab compshstrtab32.x
+changeoneb .rela.text comprelat32.x
+changeoneb .rela.debug_info    comprelad32.x
+changeoneb .rela.debug_aranges comprelar32.x
+changeoneb .rela.debug_line    comprelal32.x
+changeoneb .rela.eh_frame      comprelaf32.x
+
+
+
+
+
 =======
 Testobject
 libkrb5support.so.0.1.debug is from libdwarf regressiontests

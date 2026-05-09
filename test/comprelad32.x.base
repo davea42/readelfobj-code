@@ -1,106 +1,136 @@
-Ehdr64 e_phoff zero, there are no program headers
-Section Groups: No section groups or .dwo sections present. Decompress section 7
- ELFCOMPRESS_ZLIB: uncompressed size 384
+Ehdr32 e_phoff zero, there are no program headers
+Section Group arrays
+ section  name      groupsections
+[1]  .group               7
+
+Section Group by dwarf section
+  section          groupnumber  sectionnumber
+  .debug_info          1          8
+  .debug_abbrev        1          10
+  .debug_aranges       1          11
+  .debug_line          1          13
+  .debug_str           1          15
+  .debug_line_str      1          16
+  .eh_frame            1          19
+  SHT_GROUP count  : 1
+  SHF_GROUP count  : 1
 Elf object file.
- Elf Header ident bytes:  7f454c46 02010100 00000000 00000000
-  File class    = 0x2 (ELFCLASS64
+ Elf Header ident bytes:  7f454c46 01010100 00000000 00000000
+  File class    = 0x1 (ELFCLASS32)
   Data encoding = 0x1 (ELFDATA2LSB)
   file version  = 0x1 (EV_CURRENT)
   OS ABI        = 0x0 (ELFOSABI_NONE)
   ABI version   = 0x0
   e_type     : 0x1 (ET_REL Relocatable file)
-  e_machine  : 0x3e (EM_X86_64)
+  e_machine  : 0x3 (EM_386)
   e_version  : 0x1
   e_entry    : 0x00000000
   e_phoff    : 0x00000000
-  e_shoff    : 0x00000700
+  e_shoff    : 0x000006d4
   e_flags    : 0x0
-  e_ehsize   : 0x40
+  e_ehsize   : 0x34
   e_phentsize: 0x0
   e_phnum    : 0x0
-  e_shentsize: 0x40
-  e_shnum    : 0x17 (23) Number of sections
-  e_shstrndx : 0x16 (22) Section strings section
-String section data at 0x62b (1579) length 0xd3 (211)
+  e_shentsize: 0x28
+  e_shnum    : 0x18 (24) Number of sections
+  e_shstrndx : 0x17 (23) Section strings section
+String section data at 0x5f3 (1523) length 0xde (222)
 
-Section count: 23
+Section count: 24
  [i] offset      size        name         addr     (flags)(type)(link,info,align)
 {
 [ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
-    Hdroffset: 0x00000740
+    Hdroffset: 0x00000708
     Addr     : 0x00000000
-[ 1] 0x00000040 0x0000001e .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
+[ 1] 0x00000034 0x00000008 .group         (0)(SHT_GROUP)(21,0xb,0x4)
+    Hdroffset: 0x00000730
+    Addr     : 0x00000000
+[ 2] 0x0000003c 0x0000003c .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000758
+    Addr     : 0x00000000
+[ 3] 0x00000078 0x00000020 .rel.text      (SHF_INFO_LINK)(SHT_REL)(21,0x2,0x4)
     Hdroffset: 0x00000780
     Addr     : 0x00000000
-[ 2] 0x00000060 0x00000030 .rela.text     (SHF_INFO_LINK)(SHT_RELA)(20,0x1,0x8)
-    Hdroffset: 0x000007c0
+[ 4] 0x00000098 0x00000000 .data          (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000007a8
     Addr     : 0x00000000
-[ 3] 0x00000090 0x00000000 .data          (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000800
+[ 5] 0x00000098 0x00000000 .bss           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
+    Hdroffset: 0x000007d0
     Addr     : 0x00000000
-[ 4] 0x00000090 0x00000000 .bss           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000840
+[ 6] 0x00000098 0x0000000c .rodata        (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000007f8
     Addr     : 0x00000000
-[ 5] 0x00000090 0x0000000c .rodata        (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000880
+[ 7] 0x000000a4 0x00000004 .text.__x86.get_pc_thunk.ax (SHF_ALLOC SHF_EXECINSTR SHF_GROUP)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000820
     Addr     : 0x00000000
-[ 6] 0x0000009c 0x0000008c .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 8] 0x000000a8 0x0000008a .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000848
+    Addr     : 0x00000000
+[ 9] 0x00000134 0x00000090 .rel.debug_info (SHF_INFO_LINK)(SHT_REL)(21,0x8,0x4)
+    Hdroffset: 0x00000870
+    Addr     : 0x00000000
+[10] 0x000001c4 0x00000045 .debug_abbrev  (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000898
+    Addr     : 0x00000000
+[11] 0x00000209 0x00000020 .debug_aranges (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000008c0
     Addr     : 0x00000000
-[ 7] 0x00000128 0x00000180 .rela.debug_info (SHF_INFO_LINK SHF_COMPRESSED)(SHT_RELA)(20,0x6,0x8)
-     Compressed length: 0x0000006b
-    Hdroffset: 0x00000900
+[12] 0x0000022c 0x00000010 .rel.debug_aranges (SHF_INFO_LINK)(SHT_REL)(21,0xb,0x4)
+    Hdroffset: 0x000008e8
     Addr     : 0x00000000
-[ 8] 0x000001ab 0x00000045 .debug_abbrev  (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000940
+[13] 0x0000023c 0x0000004d .debug_line    (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000910
     Addr     : 0x00000000
-[ 9] 0x000001f0 0x00000030 .debug_aranges (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000980
+[14] 0x0000028c 0x00000020 .rel.debug_line (SHF_INFO_LINK)(SHT_REL)(21,0xd,0x4)
+    Hdroffset: 0x00000938
     Addr     : 0x00000000
-[10] 0x00000220 0x00000030 .rela.debug_aranges (SHF_INFO_LINK)(SHT_RELA)(20,0x9,0x8)
-    Hdroffset: 0x000009c0
+[15] 0x000002ac 0x0000010f .debug_str     (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000960
     Addr     : 0x00000000
-[11] 0x00000250 0x00000050 .debug_line    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[16] 0x000003bb 0x0000007a .debug_line_str (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000988
+    Addr     : 0x00000000
+[17] 0x00000435 0x0000002e .comment       (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000009b0
+    Addr     : 0x00000000
+[18] 0x00000463 0x00000000 .note.GNU-stack (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000009d8
+    Addr     : 0x00000000
+[19] 0x00000464 0x00000060 .eh_frame      (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x4)
     Hdroffset: 0x00000a00
     Addr     : 0x00000000
-[12] 0x000002a0 0x00000060 .rela.debug_line (SHF_INFO_LINK)(SHT_RELA)(20,0xb,0x8)
-    Hdroffset: 0x00000a40
+[20] 0x000004c4 0x00000010 .rel.eh_frame  (SHF_INFO_LINK)(SHT_REL)(21,0x13,0x4)
+    Hdroffset: 0x00000a28
     Addr     : 0x00000000
-[13] 0x00000300 0x000000f7 .debug_str     (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000a80
+[21] 0x000004d4 0x000000e0 .symtab        (0)(SHT_SYMTAB)(22,0xa,0x4)
+    Hdroffset: 0x00000a50
     Addr     : 0x00000000
-[14] 0x000003f7 0x0000007a .debug_line_str (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000ac0
+[22] 0x000005b4 0x0000003f .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
+    Hdroffset: 0x00000a78
     Addr     : 0x00000000
-[15] 0x00000471 0x0000002e .comment       (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000b00
+[23] 0x000005f3 0x000000de .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
+    Hdroffset: 0x00000aa0
     Addr     : 0x00000000
-[16] 0x0000049f 0x00000000 .note.GNU-stack (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00000b40
-    Addr     : 0x00000000
-[17] 0x000004a0 0x00000020 .note.gnu.property (SHF_ALLOC)(SHT_NOTE)(0,0x0,0x8)
-    Hdroffset: 0x00000b80
-    Addr     : 0x00000000
-[18] 0x000004c0 0x00000038 .eh_frame      (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x8)
-    Hdroffset: 0x00000bc0
-    Addr     : 0x00000000
-[19] 0x000004f8 0x00000018 .rela.eh_frame (SHF_INFO_LINK)(SHT_RELA)(20,0x12,0x8)
-    Hdroffset: 0x00000c00
-    Addr     : 0x00000000
-[20] 0x00000510 0x00000108 .symtab        (0)(SHT_SYMTAB)(21,0x9,0x8)
-    Hdroffset: 0x00000c40
-    Addr     : 0x00000000
-[21] 0x00000618 0x00000013 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
-    Hdroffset: 0x00000c80
-    Addr     : 0x00000000
-[22] 0x0000062b 0x000000d3 .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
-    Hdroffset: 0x00000cc0
-    Addr     : 0x00000000
-Summary: 762 bytes for 7 debug sections
+Summary: 805 bytes for 7 debug sections
 }
-Section Groups: No section groups or .dwo sections present. No .dynamic section exists in /home/davea/dwarf/readelfobj-code/test/comprelad32.x
+Section Group arrays
+ section  name      groupsections
+[1]  .group               7
 
-Symbols from .symtab: 11 at offset 0x510
+Section Group by dwarf section
+  section          groupnumber  sectionnumber
+  .debug_info          1          8
+  .debug_abbrev        1          10
+  .debug_aranges       1          11
+  .debug_line          1          13
+  .debug_str           1          15
+  .debug_line_str      1          16
+  .eh_frame            1          19
+  SHT_GROUP count  : 1
+  SHF_GROUP count  : 1
+No .dynamic section exists in /home/davea/dwarf/readelfobj-code/test/comprelad32.x
+
+Symbols from .symtab: 14 at offset 0x4d4
 {
 [Index] Value    Size    Type              Bind       Other          Shndx   Name
 [  0]  st_value 0x0 (0)
@@ -116,118 +146,141 @@ Symbols from .symtab: 11 at offset 0x510
 [  2]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .text
   st_name  (0) name-length  0: <no-name>
 [  3]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .rodata
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 6 .rodata
   st_name  (0) name-length  0: <no-name>
 [  4]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 6 .debug_info
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 7 .text.__x86.get_pc_thunk.ax
   st_name  (0) name-length  0: <no-name>
 [  5]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .debug_abbrev
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .debug_info
   st_name  (0) name-length  0: <no-name>
 [  6]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 .debug_line
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 .debug_abbrev
   st_name  (0) name-length  0: <no-name>
 [  7]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 13 .debug_str
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 13 .debug_line
   st_name  (0) name-length  0: <no-name>
 [  8]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .debug_line_str
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 15 .debug_str
   st_name  (0) name-length  0: <no-name>
 [  9]  st_value 0x0 (0)
-  st_size  0x1e (30), st_info 0x12 (18)
-  type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (9) name-length  4: main
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 16 .debug_line_str
+  st_name  (0) name-length  0: <no-name>
 [ 10]  st_value 0x0 (0)
+  st_size  0x3c (60), st_info 0x12 (18)
+  type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .text
+  st_name  (9) name-length  4: main
+[ 11]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x12 (18)
+  type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
+  st_other 0x2 (2) (STV_HIDDEN), st_shndx 7 .text.__x86.get_pc_thunk.ax
+  st_name  (14) name-length 21: __x86.get_pc_thunk.ax
+[ 12]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x10 (16)
   type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
   st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
-  st_name  (14) name-length  4: puts
+  st_name  (36) name-length 21: _GLOBAL_OFFSET_TABLE_
+[ 13]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x10 (16)
+  type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
+  st_name  (58) name-length  4: puts
 }
 Relocation Sections
 {
 
-Section 2: .rela.text reloccount: 2 links-sec: 1 symtabsec: 20 .symtab
- [i]   offset   info           type.              symbol  addend
-[0]  0x0000000b 0x300000002 R_X86_64_PC32  2. 3 .rodata -4
-[1]  0x00000013 0xa00000004 R_X86_64_PLT32 4. 10 puts -4
+Section 3: .rel.text reloccount: 4 links-sec: 2 symtabsec: 21 .symtab
+ [i]   offset   info           type.              symbol 
+[0]  0x00000010 0x00000b02 R_386_PC32     2. 11 __x86.get_pc_thunk.ax
+[1]  0x00000015 0x00000c0a R_386_GOTPC    10. 12 _GLOBAL_OFFSET_TABLE_
+[2]  0x0000001e 0x00000309 R_386_GOTOFF   9. 3 .rodata
+[3]  0x00000026 0x00000d04 R_386_PLT32    4. 13 puts
 
-Section 7: .rela.debug_info reloccount: 16 links-sec: 6 symtabsec: 20 .symtab
- [i]   offset   info           type.              symbol  addend
-[0]  0x00000008 0x50000000a R_X86_64_32    10. 5 .debug_abbrev +0
-[1]  0x0000000d 0x70000000a R_X86_64_32    10. 7 .debug_str +72
-[2]  0x00000012 0x80000000a R_X86_64_32    10. 8 .debug_line_str +49
-[3]  0x00000016 0x80000000a R_X86_64_32    10. 8 .debug_line_str +0
-[4]  0x0000001a 0x200000001 R_X86_64_64    1. 2 .text +0
-[5]  0x0000002a 0x60000000a R_X86_64_32    10. 6 .debug_line +0
-[6]  0x00000031 0x70000000a R_X86_64_32    10. 7 .debug_str +13
-[7]  0x00000038 0x70000000a R_X86_64_32    10. 7 .debug_str +0
-[8]  0x0000003f 0x70000000a R_X86_64_32    10. 7 .debug_str +214
-[9]  0x00000046 0x70000000a R_X86_64_32    10. 7 .debug_str +43
-[10]  0x0000004d 0x70000000a R_X86_64_32    10. 7 .debug_str +31
-[11]  0x00000054 0x70000000a R_X86_64_32    10. 7 .debug_str +62
-[12]  0x00000062 0x70000000a R_X86_64_32    10. 7 .debug_str +228
-[13]  0x00000069 0x70000000a R_X86_64_32    10. 7 .debug_str +242
-[14]  0x0000006e 0x70000000a R_X86_64_32    10. 7 .debug_str +237
-[15]  0x00000079 0x200000001 R_X86_64_64    1. 2 .text +0
+Section 9: .rel.debug_info reloccount: 18 links-sec: 8 symtabsec: 21 .symtab
+ [i]   offset   info           type.              symbol 
+[0]  0x00000008 0x00000601 R_386_32       1. 6 .debug_abbrev
+[1]  0x0000000d 0x00000801 R_386_32       1. 8 .debug_str
+[2]  0x00000012 0x00000901 R_386_32       1. 9 .debug_line_str
+[3]  0x00000016 0x00000901 R_386_32       1. 9 .debug_line_str
+[4]  0x0000001a 0x00000201 R_386_32       1. 2 .text
+[5]  0x00000022 0x00000701 R_386_32       1. 7 .debug_line
+[6]  0x00000029 0x00000801 R_386_32       1. 8 .debug_str
+[7]  0x00000030 0x00000801 R_386_32       1. 8 .debug_str
+[8]  0x00000037 0x00000801 R_386_32       1. 8 .debug_str
+[9]  0x0000003e 0x00000801 R_386_32       1. 8 .debug_str
+[10]  0x00000045 0x00000801 R_386_32       1. 8 .debug_str
+[11]  0x0000004c 0x00000801 R_386_32       1. 8 .debug_str
+[12]  0x00000053 0x00000801 R_386_32       1. 8 .debug_str
+[13]  0x00000061 0x00000801 R_386_32       1. 8 .debug_str
+[14]  0x00000068 0x00000801 R_386_32       1. 8 .debug_str
+[15]  0x0000006f 0x00000801 R_386_32       1. 8 .debug_str
+[16]  0x00000074 0x00000801 R_386_32       1. 8 .debug_str
+[17]  0x0000007f 0x00000201 R_386_32       1. 2 .text
 
-Section 10: .rela.debug_aranges reloccount: 2 links-sec: 9 symtabsec: 20 .symtab
- [i]   offset   info           type.              symbol  addend
-[0]  0x00000006 0x40000000a R_X86_64_32    10. 4 .debug_info +0
-[1]  0x00000010 0x200000001 R_X86_64_64    1. 2 .text +0
+Section 12: .rel.debug_aranges reloccount: 2 links-sec: 11 symtabsec: 21 .symtab
+ [i]   offset   info           type.              symbol 
+[0]  0x00000006 0x00000501 R_386_32       1. 5 .debug_info
+[1]  0x00000010 0x00000201 R_386_32       1. 2 .text
 
-Section 12: .rela.debug_line reloccount: 4 links-sec: 11 symtabsec: 20 .symtab
- [i]   offset   info           type.              symbol  addend
-[0]  0x00000022 0x80000000a R_X86_64_32    10. 8 .debug_line_str +57
-[1]  0x0000002c 0x80000000a R_X86_64_32    10. 8 .debug_line_str +106
-[2]  0x00000031 0x80000000a R_X86_64_32    10. 8 .debug_line_str +114
-[3]  0x0000003b 0x200000001 R_X86_64_64    1. 2 .text +0
+Section 14: .rel.debug_line reloccount: 4 links-sec: 13 symtabsec: 21 .symtab
+ [i]   offset   info           type.              symbol 
+[0]  0x00000022 0x00000901 R_386_32       1. 9 .debug_line_str
+[1]  0x0000002c 0x00000901 R_386_32       1. 9 .debug_line_str
+[2]  0x00000031 0x00000901 R_386_32       1. 9 .debug_line_str
+[3]  0x0000003b 0x00000201 R_386_32       1. 2 .text
 
-Section 19: .rela.eh_frame reloccount: 1 links-sec: 18 symtabsec: 20 .symtab
- [i]   offset   info           type.              symbol  addend
-[0]  0x00000020 0x200000002 R_X86_64_PC32  2. 2 .text +0
+Section 20: .rel.eh_frame reloccount: 2 links-sec: 19 symtabsec: 21 .symtab
+ [i]   offset   info           type.              symbol 
+[0]  0x00000020 0x00000202 R_386_PC32     2. 2 .text
+[1]  0x00000054 0x00000402 R_386_PC32     2. 4 .text.__x86.get_pc_thunk.ax
 }
 Listing Used Areas
 []        offset       length  finaloffset    name
-[  0] 0x00000000 0x00000040 0x00000040 Elf64_Ehdr
-[  1] 0x00000040 0x0000001e 0x0000005e Shdr target
-[  2] 0x00000060 0x00000030 0x00000090 Shdr target
-Warning: A gap of 2 forced by alignment 8 from 0x0000005e to 0x00000060
-[  3] 0x00000090 0x00000000 0x00000090 Shdr target
-[  4] 0x00000090 0x0000000c 0x0000009c Shdr target
-[  5] 0x0000009c 0x0000008c 0x00000128 Shdr target
-[  6] 0x00000128 0x00000083 0x000001ab Shdr target
-[  7] 0x000001ab 0x00000045 0x000001f0 Shdr target
-[  8] 0x000001f0 0x00000030 0x00000220 Shdr target
-[  9] 0x00000220 0x00000030 0x00000250 Shdr target
-[ 10] 0x00000250 0x00000050 0x000002a0 Shdr target
-[ 11] 0x000002a0 0x00000060 0x00000300 Shdr target
-[ 12] 0x00000300 0x000000f7 0x000003f7 Shdr target
-[ 13] 0x000003f7 0x0000007a 0x00000471 Shdr target
-[ 14] 0x00000471 0x0000002e 0x0000049f Shdr target
-[ 15] 0x0000049f 0x00000000 0x0000049f Shdr target
-[ 16] 0x000004a0 0x00000020 0x000004c0 Shdr target
-Warning: A gap of 1 forced by alignment 8 from 0x0000049f to 0x000004a0
-[ 17] 0x000004c0 0x00000038 0x000004f8 Shdr target
-[ 18] 0x000004f8 0x00000018 0x00000510 Shdr target
-[ 19] 0x00000510 0x00000108 0x00000618 Shdr target
-[ 20] 0x00000618 0x00000013 0x0000062b Shdr target
-[ 21] 0x0000062b 0x000000d3 0x000006fe Shdr target
-[ 22] 0x00000700 0x000005c0 0x00000cc0 Elf64_Shdr block
-Warning: A gap of 2 forced by alignment 8 from 0x000006fe to 0x00000700
-Warning : 3 instances of unused alignment space exist and total 5 bytes of alignment.
+[  0] 0x00000000 0x00000034 0x00000034 Elf32_Ehdr
+[  1] 0x00000034 0x00000008 0x0000003c Shdr target
+[  2] 0x0000003c 0x0000003c 0x00000078 Shdr target
+[  3] 0x00000078 0x00000020 0x00000098 Shdr target
+[  4] 0x00000098 0x00000000 0x00000098 Shdr target
+[  5] 0x00000098 0x0000000c 0x000000a4 Shdr target
+[  6] 0x000000a4 0x00000004 0x000000a8 Shdr target
+[  7] 0x000000a8 0x0000008a 0x00000132 Shdr target
+[  8] 0x00000134 0x00000090 0x000001c4 Shdr target
+Warning: A gap of 2 forced by alignment 4 from 0x00000132 to 0x00000134
+[  9] 0x000001c4 0x00000045 0x00000209 Shdr target
+[ 10] 0x00000209 0x00000020 0x00000229 Shdr target
+[ 11] 0x0000022c 0x00000010 0x0000023c Shdr target
+Warning: A gap of 3 forced by alignment 4 from 0x00000229 to 0x0000022c
+[ 12] 0x0000023c 0x0000004d 0x00000289 Shdr target
+[ 13] 0x0000028c 0x00000020 0x000002ac Shdr target
+Warning: A gap of 3 forced by alignment 4 from 0x00000289 to 0x0000028c
+[ 14] 0x000002ac 0x0000010f 0x000003bb Shdr target
+[ 15] 0x000003bb 0x0000007a 0x00000435 Shdr target
+[ 16] 0x00000435 0x0000002e 0x00000463 Shdr target
+[ 17] 0x00000463 0x00000000 0x00000463 Shdr target
+[ 18] 0x00000464 0x00000060 0x000004c4 Shdr target
+Warning: A gap of 1 forced by alignment 4 from 0x00000463 to 0x00000464
+[ 19] 0x000004c4 0x00000010 0x000004d4 Shdr target
+[ 20] 0x000004d4 0x000000e0 0x000005b4 Shdr target
+[ 21] 0x000005b4 0x0000003f 0x000005f3 Shdr target
+[ 22] 0x000005f3 0x000000de 0x000006d1 Shdr target
+[ 23] 0x000006d4 0x000003c0 0x00000a94 Elf32_Shdr block
+Warning: A gap of 3 forced by alignment 4 from 0x000006d1 to 0x000006d4
+Warning : 5 instances of unused alignment space exist and total 12 bytes of alignment.
