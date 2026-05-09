@@ -1,0 +1,235 @@
+Ehdr64 e_phoff zero, there are no program headers
+Decompress section 22
+ ELFCOMPRESS_ZLIB: uncompressed size 211
+Section Groups: No section groups or .dwo sections present. Elf object file.
+ Elf Header ident bytes:  7f454c46 02010100 00000000 00000000
+  File class    = 0x2 (ELFCLASS64
+  Data encoding = 0x1 (ELFDATA2LSB)
+  file version  = 0x1 (EV_CURRENT)
+  OS ABI        = 0x0 (ELFOSABI_NONE)
+  ABI version   = 0x0
+  e_type     : 0x1 (ET_REL Relocatable file)
+  e_machine  : 0x3e (EM_X86_64)
+  e_version  : 0x1
+  e_entry    : 0x00000000
+  e_phoff    : 0x00000000
+  e_shoff    : 0x000007c8
+  e_flags    : 0x0
+  e_ehsize   : 0x40
+  e_phentsize: 0x0
+  e_phnum    : 0x0
+  e_shentsize: 0x40
+  e_shnum    : 0x17 (23) Number of sections
+  e_shstrndx : 0x16 (22) Section strings section
+String section data at 0x730 (1840) length 0xd3 (211)
+
+Section count: 23
+ [i] offset      size        name         addr     (flags)(type)(link,info,align)
+{
+[ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
+    Hdroffset: 0x00000808
+    Addr     : 0x00000000
+[ 1] 0x00000040 0x0000001e .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000848
+    Addr     : 0x00000000
+[ 2] 0x00000060 0x00000030 .rela.text     (SHF_INFO_LINK)(SHT_RELA)(20,0x1,0x8)
+    Hdroffset: 0x00000888
+    Addr     : 0x00000000
+[ 3] 0x00000090 0x00000000 .data          (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x000008c8
+    Addr     : 0x00000000
+[ 4] 0x00000090 0x00000000 .bss           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000908
+    Addr     : 0x00000000
+[ 5] 0x00000090 0x0000000c .rodata        (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000948
+    Addr     : 0x00000000
+[ 6] 0x0000009c 0x0000008c .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000988
+    Addr     : 0x00000000
+[ 7] 0x00000128 0x00000180 .rela.debug_info (SHF_INFO_LINK)(SHT_RELA)(20,0x6,0x8)
+    Hdroffset: 0x000009c8
+    Addr     : 0x00000000
+[ 8] 0x000002a8 0x00000045 .debug_abbrev  (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000a08
+    Addr     : 0x00000000
+[ 9] 0x000002ed 0x00000030 .debug_aranges (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000a48
+    Addr     : 0x00000000
+[10] 0x00000320 0x00000030 .rela.debug_aranges (SHF_INFO_LINK)(SHT_RELA)(20,0x9,0x8)
+    Hdroffset: 0x00000a88
+    Addr     : 0x00000000
+[11] 0x00000350 0x00000050 .debug_line    (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000ac8
+    Addr     : 0x00000000
+[12] 0x000003a0 0x00000060 .rela.debug_line (SHF_INFO_LINK)(SHT_RELA)(20,0xb,0x8)
+    Hdroffset: 0x00000b08
+    Addr     : 0x00000000
+[13] 0x00000400 0x000000f7 .debug_str     (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000b48
+    Addr     : 0x00000000
+[14] 0x000004f7 0x0000007a .debug_line_str (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000b88
+    Addr     : 0x00000000
+[15] 0x00000571 0x0000002e .comment       (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000bc8
+    Addr     : 0x00000000
+[16] 0x0000059f 0x00000000 .note.GNU-stack (0)(SHT_PROGBITS)(0,0x0,0x1)
+    Hdroffset: 0x00000c08
+    Addr     : 0x00000000
+[17] 0x000005a0 0x00000020 .note.gnu.property (SHF_ALLOC)(SHT_NOTE)(0,0x0,0x8)
+    Hdroffset: 0x00000c48
+    Addr     : 0x00000000
+[18] 0x000005c0 0x00000038 .eh_frame      (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x8)
+    Hdroffset: 0x00000c88
+    Addr     : 0x00000000
+[19] 0x000005f8 0x00000018 .rela.eh_frame (SHF_INFO_LINK)(SHT_RELA)(20,0x12,0x8)
+    Hdroffset: 0x00000cc8
+    Addr     : 0x00000000
+[20] 0x00000610 0x00000108 .symtab        (0)(SHT_SYMTAB)(21,0x9,0x8)
+    Hdroffset: 0x00000d08
+    Addr     : 0x00000000
+[21] 0x00000718 0x00000013 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
+    Hdroffset: 0x00000d48
+    Addr     : 0x00000000
+[22] 0x00000730 0x000000d3 .shstrtab      (SHF_COMPRESSED)(SHT_STRTAB)(0,0x0,0x8)
+     Compressed length: 0x0000007e
+    Hdroffset: 0x00000d88
+    Addr     : 0x00000000
+Summary: 762 bytes for 7 debug sections
+}
+Section Groups: No section groups or .dwo sections present. No .dynamic section exists in /home/davea/dwarf/readelfobj-code/test/compshstrtab.x
+
+Symbols from .symtab: 11 at offset 0x610
+{
+[Index] Value    Size    Type              Bind       Other          Shndx   Name
+[  0]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x0 (0)
+  type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
+  st_name  (0) name-length  0: <no-name>
+[  1]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x4 (4)
+  type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (0xfff1) (SHN_ABS)
+  st_name  (1) name-length  7: hello.c
+[  2]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
+  st_name  (0) name-length  0: <no-name>
+[  3]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .rodata
+  st_name  (0) name-length  0: <no-name>
+[  4]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 6 .debug_info
+  st_name  (0) name-length  0: <no-name>
+[  5]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .debug_abbrev
+  st_name  (0) name-length  0: <no-name>
+[  6]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 .debug_line
+  st_name  (0) name-length  0: <no-name>
+[  7]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 13 .debug_str
+  st_name  (0) name-length  0: <no-name>
+[  8]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x3 (3)
+  type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 14 .debug_line_str
+  st_name  (0) name-length  0: <no-name>
+[  9]  st_value 0x0 (0)
+  st_size  0x1e (30), st_info 0x12 (18)
+  type 0x2 (2) (STT_FUNC), bind 0x1 (1) (STB_GLOBAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
+  st_name  (9) name-length  4: main
+[ 10]  st_value 0x0 (0)
+  st_size  0x0 (0), st_info 0x10 (16)
+  type 0x0 (0) (STT_NOTYPE), bind 0x1 (1) (STB_GLOBAL)
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
+  st_name  (14) name-length  4: puts
+}
+Relocation Sections
+{
+
+Section 2: .rela.text reloccount: 2 links-sec: 1 symtabsec: 20 .symtab
+ [i]   offset   info           type.              symbol  addend
+[0]  0x0000000b 0x300000002 R_X86_64_PC32  2. 3 .rodata -4
+[1]  0x00000013 0xa00000004 R_X86_64_PLT32 4. 10 puts -4
+
+Section 7: .rela.debug_info reloccount: 16 links-sec: 6 symtabsec: 20 .symtab
+ [i]   offset   info           type.              symbol  addend
+[0]  0x00000008 0x50000000a R_X86_64_32    10. 5 .debug_abbrev +0
+[1]  0x0000000d 0x70000000a R_X86_64_32    10. 7 .debug_str +72
+[2]  0x00000012 0x80000000a R_X86_64_32    10. 8 .debug_line_str +49
+[3]  0x00000016 0x80000000a R_X86_64_32    10. 8 .debug_line_str +0
+[4]  0x0000001a 0x200000001 R_X86_64_64    1. 2 .text +0
+[5]  0x0000002a 0x60000000a R_X86_64_32    10. 6 .debug_line +0
+[6]  0x00000031 0x70000000a R_X86_64_32    10. 7 .debug_str +13
+[7]  0x00000038 0x70000000a R_X86_64_32    10. 7 .debug_str +0
+[8]  0x0000003f 0x70000000a R_X86_64_32    10. 7 .debug_str +214
+[9]  0x00000046 0x70000000a R_X86_64_32    10. 7 .debug_str +43
+[10]  0x0000004d 0x70000000a R_X86_64_32    10. 7 .debug_str +31
+[11]  0x00000054 0x70000000a R_X86_64_32    10. 7 .debug_str +62
+[12]  0x00000062 0x70000000a R_X86_64_32    10. 7 .debug_str +228
+[13]  0x00000069 0x70000000a R_X86_64_32    10. 7 .debug_str +242
+[14]  0x0000006e 0x70000000a R_X86_64_32    10. 7 .debug_str +237
+[15]  0x00000079 0x200000001 R_X86_64_64    1. 2 .text +0
+
+Section 10: .rela.debug_aranges reloccount: 2 links-sec: 9 symtabsec: 20 .symtab
+ [i]   offset   info           type.              symbol  addend
+[0]  0x00000006 0x40000000a R_X86_64_32    10. 4 .debug_info +0
+[1]  0x00000010 0x200000001 R_X86_64_64    1. 2 .text +0
+
+Section 12: .rela.debug_line reloccount: 4 links-sec: 11 symtabsec: 20 .symtab
+ [i]   offset   info           type.              symbol  addend
+[0]  0x00000022 0x80000000a R_X86_64_32    10. 8 .debug_line_str +57
+[1]  0x0000002c 0x80000000a R_X86_64_32    10. 8 .debug_line_str +106
+[2]  0x00000031 0x80000000a R_X86_64_32    10. 8 .debug_line_str +114
+[3]  0x0000003b 0x200000001 R_X86_64_64    1. 2 .text +0
+
+Section 19: .rela.eh_frame reloccount: 1 links-sec: 18 symtabsec: 20 .symtab
+ [i]   offset   info           type.              symbol  addend
+[0]  0x00000020 0x200000002 R_X86_64_PC32  2. 2 .text +0
+}
+Listing Used Areas
+[]        offset       length  finaloffset    name
+[  0] 0x00000000 0x00000040 0x00000040 Elf64_Ehdr
+[  1] 0x00000040 0x0000001e 0x0000005e Shdr target
+[  2] 0x00000060 0x00000030 0x00000090 Shdr target
+Warning: A gap of 2 forced by alignment 8 from 0x0000005e to 0x00000060
+[  3] 0x00000090 0x00000000 0x00000090 Shdr target
+[  4] 0x00000090 0x0000000c 0x0000009c Shdr target
+[  5] 0x0000009c 0x0000008c 0x00000128 Shdr target
+[  6] 0x00000128 0x00000180 0x000002a8 Shdr target
+[  7] 0x000002a8 0x00000045 0x000002ed Shdr target
+[  8] 0x000002ed 0x00000030 0x0000031d Shdr target
+[  9] 0x00000320 0x00000030 0x00000350 Shdr target
+Warning: A gap of 3 forced by alignment 8 from 0x0000031d to 0x00000320
+[ 10] 0x00000350 0x00000050 0x000003a0 Shdr target
+[ 11] 0x000003a0 0x00000060 0x00000400 Shdr target
+[ 12] 0x00000400 0x000000f7 0x000004f7 Shdr target
+[ 13] 0x000004f7 0x0000007a 0x00000571 Shdr target
+[ 14] 0x00000571 0x0000002e 0x0000059f Shdr target
+[ 15] 0x0000059f 0x00000000 0x0000059f Shdr target
+[ 16] 0x000005a0 0x00000020 0x000005c0 Shdr target
+Warning: A gap of 1 forced by alignment 8 from 0x0000059f to 0x000005a0
+[ 17] 0x000005c0 0x00000038 0x000005f8 Shdr target
+[ 18] 0x000005f8 0x00000018 0x00000610 Shdr target
+[ 19] 0x00000610 0x00000108 0x00000718 Shdr target
+[ 20] 0x00000718 0x00000013 0x0000072b Shdr target
+[ 21] 0x00000730 0x00000096 0x000007c6 Shdr target
+Warning: A gap of 5 forced by alignment 8 from 0x0000072b to 0x00000730
+[ 22] 0x000007c8 0x000005c0 0x00000d88 Elf64_Shdr block
+Warning: A gap of 2 forced by alignment 8 from 0x000007c6 to 0x000007c8
+Warning : 5 instances of unused alignment space exist and total 13 bytes of alignment.
