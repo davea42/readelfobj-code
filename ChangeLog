@@ -1,4 +1,55 @@
 2026-05-09:  David Anderson
+    commit 6c9511cdbac2a9f3d5a8b30de0f69aad48a218e2
+
+
+    Another now 32bit
+            new file:   compstrtab32.x
+
+2026-05-09:  David Anderson
+    commit fe5be2dcbc27ef4d68d9bb417425a2e8b3304b62
+
+            modified:   README
+    Now really 32bit.
+            modified:   comprelad32.x
+            modified:   comprelad32.x.base
+            modified:   comprelaf32.x
+            modified:   comprelaf32.x.base
+            modified:   comprelal32.x
+            modified:   comprelal32.x.base
+            modified:   comprelar32.x
+            modified:   comprelar32.x.base
+            modified:   comprelat32.x
+            modified:   comprelat32.x.base
+            modified:   compshstrtab32.x
+            modified:   compshstrtab32.x.base
+            modified:   compsymtab32.x
+            modified:   compsymtab32.x.base
+            new file:   hello32.x
+
+            new file:   hello.x
+    Obsolete baselines
+            deleted:    test036comp.base
+            deleted:    test036comp.sh
+            deleted:    test037comp.base
+            deleted:    test037comp.sh
+            deleted:    test038comp.base
+            deleted:    test038comp.sh
+            deleted:    test039comp.base
+            deleted:    test039comp.sh
+            deleted:    test040comp.base
+            deleted:    test040comp.sh
+            deleted:    test041comp.base
+            deleted:    test041comp.sh
+            deleted:    test042comp.base
+            deleted:    test042comp.sh
+
+2026-05-09:  David Anderson
+    commit 350b32b26c90afb1cd92ae0cf62356246d574912
+
+    Up to date with git log
+            modified:   ChangeLog
+
+2026-05-09:  David Anderson
     commit dece0b08efcd5079f07a903da3ead195d693f6b8
 
     Version 2.3.1
