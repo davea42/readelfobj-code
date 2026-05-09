@@ -192,6 +192,51 @@ CLEANFILES = \
   junk.test033p.out \
   junk.test034p.tmp \
   junk.test034p.out \
+  junk.comprelad32.x.out \
+  junk.comprelad32.x.tmp \
+  junk.comprelad32.x.tmpforbase \
+  junk.comprelad.x.out \
+  junk.comprelad.x.tmp \
+  junk.comprelad.x.tmpforbase \
+  junk.comprelaf32.x.out \
+  junk.comprelaf32.x.tmp \
+  junk.comprelaf32.x.tmpforbase \
+  junk.comprelaf.x.out \
+  junk.comprelaf.x.tmp \
+  junk.comprelaf.x.tmpforbase \
+  junk.comprelal32.x.out \
+  junk.comprelal32.x.tmp \
+  junk.comprelal32.x.tmpforbase \
+  junk.comprelal.x.out \
+  junk.comprelal.x.tmp \
+  junk.comprelal.x.tmpforbase \
+  junk.comprelar32.x.out \
+  junk.comprelar32.x.tmp \
+  junk.comprelar32.x.tmpforbase \
+  junk.comprelar.x.out \
+  junk.comprelar.x.tmp \
+  junk.comprelar.x.tmpforbase \
+  junk.comprelat32.x.out \
+  junk.comprelat32.x.tmp \
+  junk.comprelat32.x.tmpforbase \
+  junk.comprelat.x.out \
+  junk.comprelat.x.tmp \
+  junk.comprelat.x.tmpforbase \
+  junk.compshstrtab32.x.out \
+  junk.compshstrtab32.x.tmp \
+  junk.compshstrtab32.x.tmpforbase \
+  junk.compshstrtab.x.out \
+  junk.compshstrtab.x.tmp \
+  junk.compshstrtab.x.tmpforbase \
+  junk.compsymtab32.x.out \
+  junk.compsymtab32.x.tmp \
+  junk.compsymtab32.x.tmpforbase \
+  junk.compsymtab.x.out \
+  junk.compsymtab.x.tmp \
+  junk.compsymtab.x.tmpforbase \
+  test035comp.sh.log \
+  test035comp.sh.trs \
+  test-suite.log \
   object_detector \
   readobjmacho \
   readobjpe \
@@ -295,6 +340,14 @@ comprelat.x \
 compshstrtab.x \
 compstrtab.x \
 compsymtab.x \
+comprelad32.x \
+comprelaf32.x \
+comprelal32.x \
+comprelar32.x \
+comprelat32.x \
+compshstrtab32.x \
+compstrtab32.x \
+compsymtab32.x \
 elfextended/elfextendedtestcase.c \
 elfextended/testobj64.baseobj \
 elfextended/testobj.extend    \
