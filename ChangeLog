@@ -1,3 +1,19 @@
+2026-05-10:  David Anderson
+    commit c72fb9f88a4384d8e8f4cc00eb73ce3db4cd1199
+
+    Now counts good/fail.
+            modified:   test035comp.sh
+
+    No longer needed, folded into  test035comp.sh
+            deleted:    test043comp.base
+            deleted:    test043comp.sh
+
+2026-05-09:  David Anderson
+    commit cb87f076359ea4ae58647301ae2ca72f707e1f51
+
+    Up to date with fixes to tests
+            modified:   ChangeLog
+
 2026-05-09:  David Anderson
     commit 6c9511cdbac2a9f3d5a8b30de0f69aad48a218e2
 
