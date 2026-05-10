@@ -37,7 +37,7 @@ do
     good=`expr $good + 1`
   fi
 done
-echo "compress tests counts good $good, fail $fail"
+echo "compress tests counts good= $good, fail= $fail"
 if [ $fail -gt 0 ]
 then
   echo "Had a FAIL. in decompression"
