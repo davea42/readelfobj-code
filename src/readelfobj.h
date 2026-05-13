@@ -975,6 +975,17 @@ extern int printfilenames;
 #define ELFOSABI_STANDALONE 255
 #endif
 
+#ifndef  SHF_COMPRESSED
+#define SHF_COMPRESSED (1 << 11)
+#endif /* SHF_COMPRESSED */
+#ifndef ELFCOMPRESS_ZLIB
+#define ELFCOMPRESS_ZLIB        1
+#endif /*ELFCOMPRESS_ZLIB*/
+#ifndef ELFCOMPRESS_ZSTD
+#define ELFCOMPRESS_ZSTD        2
+#endif /*ELFCOMPRESS_ZSTD*/
+
+
 /*  Use this for rel too. */
 struct generic_rela {
     int          gr_isrela; /* 0 means rel, non-zero means rela */

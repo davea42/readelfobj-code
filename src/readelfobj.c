@@ -1921,8 +1921,12 @@ elf_print_dynamic(elf_filedata ep)
         }
     }
     if (!found) {
-        P("No .dynamic section exists in %s\n",
-            sanitized(filename,buffer1,BUFFERSIZE));
+        P("No .dynamic section exists");
+#ifdef TESTING
+        P("\n");
+#else
+        P(" in %s\n", sanitized(filename,buffer1,BUFFERSIZE));
+#endif
     }
     return DW_DLV_OK;
 }
