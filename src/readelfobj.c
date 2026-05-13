@@ -616,7 +616,7 @@ do_one_file(const char *s,sec_options *options)
     /* Assign section names to sections now we have the namestrings
         (for all sections) */
     /* For section zero */
-    shdr->gh_namestring = ""; 
+    shdr->gh_namestring = "";
     ++ shdr;
     for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
         shdr->gh_namestring =
@@ -1561,7 +1561,7 @@ report_wasted_space(elf_filedata  ep,sec_options *options)
     for (i = 0  ; i < iucount; iupa++, iupl = nxt,++i) {
         nxt = iupl->u_next;
         *iupa = *iupl;
-        if(iupa->u_lastbyte > highoffset) {
+        if (iupa->u_lastbyte > highoffset) {
             highoffset = iupa->u_lastbyte;
         }
         free(iupl);

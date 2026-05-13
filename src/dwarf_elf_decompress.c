@@ -93,7 +93,7 @@ dump_bytes(char * msg,Dwarf_Small * start, long len)
     mean.
 
     PRECONDITION:
-    This assumes 
+    This assumes
     psh->gh_content has the compressed  bytes,
     psh->gh_size is the size of the compressed section, and
     psh->gh_flags has the SHF_COMPRESSED bit set.
@@ -147,7 +147,7 @@ dump_bytes("Looking for ZLIB ",src,4);F;
             size-of-target-address size
             size-of-target-address
         */
-       
+
         Dwarf_Small *ptr    = (Dwarf_Small *)src;
         Dwarf_Unsigned type = 0;
         Dwarf_Unsigned size = 0;

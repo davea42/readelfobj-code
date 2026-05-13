@@ -3,10 +3,10 @@ Ehdr64 e_shnum shows count 4 (0x4) but e_shoff is incorrect Corrupt Elf.
  Odd Elf header , EI_CLASS of zero improperIgnoring this error.
  Odd Elf header , EI_DATA of zero improperIgnoring this error.
 ERROR: Section 0 must be empty, but it is not empty. See Elf ABI.
-ERROR: section header sh_flags 0xe11800274f2d5b00 has too many flag bits on (25) to be real
-ERROR: section header sh_flags 0xffffffffff00005b has too many flag bits on (45) to be real
-ERROR: Section Size64 > filesize. Corrupt object Section number 2, Section size 0x0, File size 0x7a9
-ERROR: Section Size64 > filesize. Corrupt object Section number 3, Section size 0x100, File size 0x7a9
+ERROR: section header sh_flags 0xe11800274f2d5b00 In section 0  has too many flag bits on (25) to be real
+ERROR: section header sh_flags 0xffffffffff00005b In section 1  has too many flag bits on (45) to be real
+ERROR: Section Size64+offset > filesize. Corrupt object Section number 2, Section size 0xdeff00000000, Section offset 0x0, File size 0x7a9
+ERROR: Section Size64+offset > filesize. Corrupt object Section number 3, Section size 0x7f00000000000000, Section offset 0x100, File size 0x7a9
 Decompress section 0
 DW_DLE_ZDEBUG_INPUT_FORMAT_ODD   The SHF_COMPRESSED type field is 0x4c460202, neither zlib (1) or zstd(2). Corrupt dwarf.Decompression failed for section 0, errcode 315
 Elf object file.

@@ -778,7 +778,8 @@ generic_shdr_from_shdr32(elf_filedata ep,
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
-            P("ERROR: Section Size32  (_offset > filesize. Corrupt object "
+            P("ERROR: Section Size32+offset > filesize. "
+                "Corrupt object "
                 "Section number %lu, "
                 "Section size 0x%lx, "
                 "Section offset 0x%lx, "
@@ -805,9 +806,13 @@ generic_shdr_from_shdr32(elf_filedata ep,
         bitsoncount = getbitsoncount(gshdr->gh_flags);
         if (bitsoncount > 8) {
             printf("ERROR: section header sh_flags "
-                LONGESTXFMT " has too"
+                LONGESTXFMT
+                " In section %lu "
+                " has too"
                 " many flag bits on (%d) to be real\n",
-                gshdr->gh_flags,bitsoncount);
+                gshdr->gh_flags,
+                (unsigned long)i,
+                bitsoncount);
         }
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
@@ -850,7 +855,8 @@ generic_shdr_from_shdr64(elf_filedata ep,
         *errcode = RO_ERR_MALLOC;
         return DW_DLV_ERROR;
     }
-    gshdr = (struct generic_shdr *)calloc(count,sizeof(struct generic_shdr));
+    gshdr = (struct generic_shdr *)calloc(count,
+        sizeof(struct generic_shdr));
     if (gshdr == 0) {
         free(psh);
         P("malloc of " LONGESTUFMT
@@ -886,7 +892,8 @@ generic_shdr_from_shdr64(elf_filedata ep,
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
-            printf("ERROR: Section Size64 > filesize. Corrupt object "
+            printf("ERROR: Section Size64+offset > filesize. "
+                "Corrupt object "
                 "Section number %lu, "
                 "Section size 0x%lx, "
                 "Section offset 0x%lx, "
@@ -913,9 +920,13 @@ generic_shdr_from_shdr64(elf_filedata ep,
         bitsoncount = getbitsoncount(gshdr->gh_flags);
         if (bitsoncount > 8) {
             printf("ERROR: section header sh_flags "
-                LONGESTXFMT " has too"
+                LONGESTXFMT
+                " In section %lu "
+                " has too"
                 " many flag bits on (%d) to be real\n",
-                gshdr->gh_flags,bitsoncount);
+                gshdr->gh_flags,
+                (unsigned long)i,
+                bitsoncount);
         }
         if (!is_empty_section(gshdr->gh_type)) {
             dwarf_insert_in_use_entry(ep,"Shdr target",
@@ -1482,7 +1493,7 @@ dwarf_load_elf_symstr(elf_filedata ep,
             return res;
         }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_OK;
@@ -1578,7 +1589,7 @@ elf_load_sectstrings(elf_filedata ep,struct generic_shdr*psh,
             return res;
         }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
@@ -2072,9 +2083,9 @@ dwarf_elf_load_rela_32(elf_filedata ep,
             P("Decompression failed for section %ld, errcode %d\n",
                 (unsigned long)psh->gh_secnum,*errcode);
             return res;
-        }   
+        }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
@@ -2110,7 +2121,8 @@ dwarf_elf_load_rela_32(elf_filedata ep,
     }
     res = generic_rel_from_rela32(ep,psh,relp,grel,errcode);
     if (res == DW_DLV_ERROR) {
-        P("creating generic rel 32 bit failed, errcode %d\n",*errcode);
+        P("creating generic rel 32 bit failed, errcode %d\n",
+            *errcode);
     }
     if (res == DW_DLV_OK) {
         *count_out = count;
@@ -2206,9 +2218,9 @@ dwarf_elf_load_rel_32(elf_filedata ep,
             P("Decompression failed for section %ld, errcode %d\n",
                 (unsigned long)psh->gh_secnum,*errcode);
             return res;
-        }       
+        }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
@@ -2342,7 +2354,7 @@ dwarf_elf_load_rel_64(elf_filedata ep,
             return res;
         }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
@@ -2475,9 +2487,9 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
             P("Decompression failed for section %ld, errcode %d\n",
                 (unsigned long)psh->gh_secnum,*errcode);
             return res;
-        }   
+        }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
@@ -2488,7 +2500,7 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
     size = psh->gh_size;
     count = size/object_reclen;
     size2 = count * object_reclen;
-    if (size != size2) { 
+    if (size != size2) {
         P("ERROR: Bogus size of relocations. Section " LONGESTUFMT
             ": " LONGESTUFMT
             " not divisible by "
@@ -2513,7 +2525,8 @@ dwarf_elf_load_rela_64(elf_filedata ep,Dwarf_Unsigned secnum,
     }
     res = generic_rel_from_rela64(ep,psh,relp,grel,errcode);
     if (res == DW_DLV_ERROR) {
-        P("creating generic rel 64 bit failed, errcode %d\n",*errcode);
+        P("creating generic rel 64 bit failed, errcode %d\n",
+            *errcode);
     }
     if (res == DW_DLV_OK) {
         *count_out = count;
@@ -2853,7 +2866,7 @@ generic_dyn_from_dyn32(elf_filedata ep,
             return res;
         }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
@@ -2936,7 +2949,7 @@ generic_dyn_from_dyn64(elf_filedata ep,
             return res;
         }
 #else /* HAVE_ZLIB HAVE_ZSTD */
-        P("Cannot read SHF_COMPRESSED section strings"
+        P("Cannot read SHF_COMPRESSED section strings "
             "as we do not have zlib/zstd");
         *errcode = DW_DLE_ZDEBUG_REQUIRES_ZLIB;
         return DW_DLV_ERROR;
