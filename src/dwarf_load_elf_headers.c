@@ -778,11 +778,13 @@ generic_shdr_from_shdr32(elf_filedata ep,
         if ((gshdr->gh_size >= ep->f_filesize ||
             (gshdr->gh_size+gshdr->gh_offset) > ep->f_filesize)
             && gshdr->gh_type != SHT_NOBITS) {
-            P("ERROR: Section Size32 > filesize. Corrupt object "
+            P("ERROR: Section Size32  (_offset > filesize. Corrupt object "
                 "Section number %lu, "
                 "Section size 0x%lx, "
+                "Section offset 0x%lx, "
                 "File size 0x%lx\n",
                 (unsigned long)i,
+                (unsigned long)gshdr->gh_offset,
                 (unsigned long)gshdr->gh_size,
                 (unsigned long)ep->f_filesize);
         }
@@ -887,8 +889,10 @@ generic_shdr_from_shdr64(elf_filedata ep,
             printf("ERROR: Section Size64 > filesize. Corrupt object "
                 "Section number %lu, "
                 "Section size 0x%lx, "
+                "Section offset 0x%lx, "
                 "File size 0x%lx\n",
                 (unsigned long)i,
+                (unsigned long)gshdr->gh_offset,
                 (unsigned long)gshdr->gh_size,
                 (unsigned long)ep->f_filesize);
         }
