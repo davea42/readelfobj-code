@@ -26,12 +26,12 @@ do
   then
      echo junk >$base
   fi
-  $df  $base junk.$t.tmp "$srcdif" > junk.$t.out
+  nout="junk.$t.tmpforbase"
+  $df  $base junk.$t.tmp "$srcdir" > junk.$t.out
   if [ $? -ne 0 ]
   then
-    cat junk.$t.out
-    echo "FAIL test on $n $o :  results differ $t.base vs junk.$t.tmp"
-    echo "To update, cp $curdir/junk.$t.tmp $base"
+    echo "FAIL test on $nout $o : results differ $t.base vs $nout"
+    echo "To update, cp $curdir/junk.$t.tmpforbase $base"
     fail=`expr $fail + 1`
   else
     good=`expr $good + 1`

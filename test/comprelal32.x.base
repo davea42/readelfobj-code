@@ -128,7 +128,7 @@ Section Group by dwarf section
   .eh_frame            1          19
   SHT_GROUP count  : 1
   SHF_GROUP count  : 1
-No .dynamic section exists in /home/davea/dwarf/readelfobj-code/test/comprelal32.x
+No .dynamic section exists in yyy/comprelal32.x
 
 Symbols from .symtab: 14 at offset 0x4d4
 {
@@ -208,14 +208,14 @@ Relocation Sections
 {
 
 Section 3: .rel.text reloccount: 4 links-sec: 2 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 [0]  0x00000010 0x00000b02 R_386_PC32     2. 11 __x86.get_pc_thunk.ax
 [1]  0x00000015 0x00000c0a R_386_GOTPC    10. 12 _GLOBAL_OFFSET_TABLE_
 [2]  0x0000001e 0x00000309 R_386_GOTOFF   9. 3 .rodata
 [3]  0x00000026 0x00000d04 R_386_PLT32    4. 13 puts
 
 Section 9: .rel.debug_info reloccount: 18 links-sec: 8 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 [0]  0x00000008 0x00000601 R_386_32       1. 6 .debug_abbrev
 [1]  0x0000000d 0x00000801 R_386_32       1. 8 .debug_str
 [2]  0x00000012 0x00000901 R_386_32       1. 9 .debug_line_str
@@ -236,19 +236,19 @@ Section 9: .rel.debug_info reloccount: 18 links-sec: 8 symtabsec: 21 .symtab
 [17]  0x0000007f 0x00000201 R_386_32       1. 2 .text
 
 Section 12: .rel.debug_aranges reloccount: 2 links-sec: 11 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 [0]  0x00000006 0x00000501 R_386_32       1. 5 .debug_info
 [1]  0x00000010 0x00000201 R_386_32       1. 2 .text
 
 Section 14: .rel.debug_line reloccount: 4 links-sec: 13 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 [0]  0x00000022 0x00000901 R_386_32       1. 9 .debug_line_str
 [1]  0x0000002c 0x00000901 R_386_32       1. 9 .debug_line_str
 [2]  0x00000031 0x00000901 R_386_32       1. 9 .debug_line_str
 [3]  0x0000003b 0x00000201 R_386_32       1. 2 .text
 
 Section 20: .rel.eh_frame reloccount: 2 links-sec: 19 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 [0]  0x00000020 0x00000202 R_386_PC32     2. 2 .text
 [1]  0x00000054 0x00000402 R_386_PC32     2. 4 .text.__x86.get_pc_thunk.ax
 }

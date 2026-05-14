@@ -133,7 +133,7 @@ Section Group by dwarf section
   .eh_frame            1          19
   SHT_GROUP count  : 1
   SHF_GROUP count  : 1
-No .dynamic section exists in /home/davea/dwarf/readelfobj-code/test/compsymtab32.x
+No .dynamic section exists in yyy/compsymtab32.x
 
 Symbols from .symtab: 0 at offset 0x0
 {
@@ -142,79 +142,79 @@ Relocation Sections
 {
 
 Section 3: .rel.text reloccount: 4 links-sec: 2 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 Symtab sym 11 not in symtab
-[0]  0x00000010 0x00000b02 R_386_PC32     2. 11 
+[0]  0x00000010 0x00000b02 R_386_PC32     2. 11
 Symtab sym 12 not in symtab
-[1]  0x00000015 0x00000c0a R_386_GOTPC    10. 12 
+[1]  0x00000015 0x00000c0a R_386_GOTPC    10. 12
 Symtab sym 3 not in symtab
-[2]  0x0000001e 0x00000309 R_386_GOTOFF   9. 3 
+[2]  0x0000001e 0x00000309 R_386_GOTOFF   9. 3
 Symtab sym 13 not in symtab
-[3]  0x00000026 0x00000d04 R_386_PLT32    4. 13 
+[3]  0x00000026 0x00000d04 R_386_PLT32    4. 13
 
 Section 9: .rel.debug_info reloccount: 18 links-sec: 8 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 Symtab sym 6 not in symtab
-[0]  0x00000008 0x00000601 R_386_32       1. 6 
+[0]  0x00000008 0x00000601 R_386_32       1. 6
 Symtab sym 8 not in symtab
-[1]  0x0000000d 0x00000801 R_386_32       1. 8 
+[1]  0x0000000d 0x00000801 R_386_32       1. 8
 Symtab sym 9 not in symtab
-[2]  0x00000012 0x00000901 R_386_32       1. 9 
+[2]  0x00000012 0x00000901 R_386_32       1. 9
 Symtab sym 9 not in symtab
-[3]  0x00000016 0x00000901 R_386_32       1. 9 
+[3]  0x00000016 0x00000901 R_386_32       1. 9
 Symtab sym 2 not in symtab
-[4]  0x0000001a 0x00000201 R_386_32       1. 2 
+[4]  0x0000001a 0x00000201 R_386_32       1. 2
 Symtab sym 7 not in symtab
-[5]  0x00000022 0x00000701 R_386_32       1. 7 
+[5]  0x00000022 0x00000701 R_386_32       1. 7
 Symtab sym 8 not in symtab
-[6]  0x00000029 0x00000801 R_386_32       1. 8 
+[6]  0x00000029 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[7]  0x00000030 0x00000801 R_386_32       1. 8 
+[7]  0x00000030 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[8]  0x00000037 0x00000801 R_386_32       1. 8 
+[8]  0x00000037 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[9]  0x0000003e 0x00000801 R_386_32       1. 8 
+[9]  0x0000003e 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[10]  0x00000045 0x00000801 R_386_32       1. 8 
+[10]  0x00000045 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[11]  0x0000004c 0x00000801 R_386_32       1. 8 
+[11]  0x0000004c 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[12]  0x00000053 0x00000801 R_386_32       1. 8 
+[12]  0x00000053 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[13]  0x00000061 0x00000801 R_386_32       1. 8 
+[13]  0x00000061 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[14]  0x00000068 0x00000801 R_386_32       1. 8 
+[14]  0x00000068 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[15]  0x0000006f 0x00000801 R_386_32       1. 8 
+[15]  0x0000006f 0x00000801 R_386_32       1. 8
 Symtab sym 8 not in symtab
-[16]  0x00000074 0x00000801 R_386_32       1. 8 
+[16]  0x00000074 0x00000801 R_386_32       1. 8
 Symtab sym 2 not in symtab
-[17]  0x0000007f 0x00000201 R_386_32       1. 2 
+[17]  0x0000007f 0x00000201 R_386_32       1. 2
 
 Section 12: .rel.debug_aranges reloccount: 2 links-sec: 11 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 Symtab sym 5 not in symtab
-[0]  0x00000006 0x00000501 R_386_32       1. 5 
+[0]  0x00000006 0x00000501 R_386_32       1. 5
 Symtab sym 2 not in symtab
-[1]  0x00000010 0x00000201 R_386_32       1. 2 
+[1]  0x00000010 0x00000201 R_386_32       1. 2
 
 Section 14: .rel.debug_line reloccount: 4 links-sec: 13 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 Symtab sym 9 not in symtab
-[0]  0x00000022 0x00000901 R_386_32       1. 9 
+[0]  0x00000022 0x00000901 R_386_32       1. 9
 Symtab sym 9 not in symtab
-[1]  0x0000002c 0x00000901 R_386_32       1. 9 
+[1]  0x0000002c 0x00000901 R_386_32       1. 9
 Symtab sym 9 not in symtab
-[2]  0x00000031 0x00000901 R_386_32       1. 9 
+[2]  0x00000031 0x00000901 R_386_32       1. 9
 Symtab sym 2 not in symtab
-[3]  0x0000003b 0x00000201 R_386_32       1. 2 
+[3]  0x0000003b 0x00000201 R_386_32       1. 2
 
 Section 20: .rel.eh_frame reloccount: 2 links-sec: 19 symtabsec: 21 .symtab
- [i]   offset   info           type.              symbol 
+ [i]   offset   info           type.              symbol
 Symtab sym 2 not in symtab
-[0]  0x00000020 0x00000202 R_386_PC32     2. 2 
+[0]  0x00000020 0x00000202 R_386_PC32     2. 2
 Symtab sym 4 not in symtab
-[1]  0x00000054 0x00000402 R_386_PC32     2. 4 
+[1]  0x00000054 0x00000402 R_386_PC32     2. 4
 }
 Listing Used Areas
 []        offset       length  finaloffset    name

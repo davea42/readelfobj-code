@@ -1,7 +1,25 @@
 #!/usr/bin/env python3
 
 # Run as:
-# dwdiff.py baseline newfile testsrcdir
+# testdiff.py baseline newfile testsrcdir
+#  baseline is the pathname of an existing good output
+#    or on initial run a pathname to a file containing
+#    just "junk" before calling here
+#    so baseline will never be absent. 
+#  newfile is the pathname of a new temporary file
+#    created by the program we are testing.
+#    We expect in many cases that the newfile and baseline
+#    are identical in content.
+#    testdiff.py will write changed content into 
+#      newfile (with forbase appended to the name)
+#  testsrcdir is a directory naming the base for the test
+#    srcdir. For example: /home/davea/dwarf/libdwarf-code
+#    Replacing these characters with 'yyy' makes the new file be
+#    directly comparable on different machines or different
+#    sourcfiles.
+#  The program writes the 'diff' output to stdout.
+
+
 
 import os
 import sys
@@ -14,6 +32,9 @@ def removeccolon(linein,srcdir):
     # and replace with the simple "yyy"
     l3= l2.replace(srcdir,"yyy")
     return l3
+
+
+#Writing to a new name, not changing the content of 'newfile'
 def writebackfile(text,name):
     newn =  ''.join([name,"forbase"])
     try:
@@ -62,18 +83,22 @@ if __name__ == "__main__":
         exit(1)
     #  The origfile should have yyy instances, not full paths.
     hasdos, olines = readin(origfile,False)
+    # newfile is expected to have full paths embedded
+    # the strings here the 'srcdir' content are replaced
+    # by "yyy"
+      
     hasdos, nlines = readin(newfile,srcdir)
     # diffs = difflib.unified_diff(olines,nlines,lineterm='')
     diffs = difflib.context_diff(
         olines, nlines, lineterm="", fromfile=origfile, tofile=newfile
     )
-    used = False
+    haddiffs = False;
     for s in diffs:
         print("There are differences origfile:", origfile)
         print("                              :", newfile)
-        used = True
+        haddiffs = True
         break
-    if used:
+    if haddiffs:
         print(
             "Line Count Base=",
             len(olines),
@@ -82,6 +107,8 @@ if __name__ == "__main__":
         )
         for s in diffs:
             print(s)
+        # Writes, to a new file  with 'forbase' appended
+        # to create the file name written to.
         writebackfile(nlines,newfile)
         sys.exit(1)
     sys.exit(0)

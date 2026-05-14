@@ -98,7 +98,7 @@ Section count: 23
     Addr     : 0x00000000
 Summary: 762 bytes for 7 debug sections
 }
-Section Groups: No section groups or .dwo sections present. No .dynamic section exists in /home/davea/dwarf/readelfobj-code/test/comprelaf.x
+Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/comprelaf.x
 
 Symbols from .symtab: 11 at offset 0x620
 {
