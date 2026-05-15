@@ -1,3 +1,77 @@
+2026-05-15:  David Anderson
+    commit b2cea17386db3099a2ac6bd0cdde7e5369b9ce87
+
+    Added extra for zstd library checking.
+            modified:   configure.ac
+
+2026-05-14:  David Anderson
+    commit ee0caebbcf0270635b4ac3efec8cd50cf8ae0dff
+
+    Now has "yyy" instead of the true sourcedir
+    of the tests, making it possible to verify
+    machines/systems with very different base directory
+    paths.
+            modified:   test/comprelad.x.base
+            modified:   test/comprelad32.x.base
+            modified:   test/comprelaf.x.base
+            modified:   test/comprelaf32.x.base
+            modified:   test/comprelal.x.base
+            modified:   test/comprelal32.x.base
+            modified:   test/comprelar.x.base
+            modified:   test/comprelar32.x.base
+            modified:   test/comprelat.x.base
+            modified:   test/comprelat32.x.base
+            modified:   test/compshstrtab.x.base
+            modified:   test/compshstrtab32.x.base
+            modified:   test/compsymtab.x.base
+            modified:   test/compsymtab32.x.base
+
+    Corrrected the script to work properly.
+            modified:   test/test035comp.sh
+
+    Added comments  on how this works.
+            modified:   test/testdiff.py
+
+2026-05-13:  David Anderson
+    commit e16a86c53c5343b23fca26df0aa33788680c5deb
+
+    For Macos need to provide Elf SHF_COMPRESS and
+    ELFCOMPRESS_ZLIB and ELFCOMPRESS_ZSTD
+    (if missing) to avoid unnecessary difficulty.
+            modified:   ../src/readelfobj.c
+            modified:   ../src/readelfobj.h
+
+2026-05-13:  David Anderson
+    commit 3f56840f96a73c9e9bd1308e303b139914433fd9
+
+    Up to date with git log.
+            modified:   ChangeLog
+
+2026-05-13:  David Anderson
+    commit 9dc667fd59997e7299e5f8dad80bd2bf449943af
+
+    Alter some error warning messages for spelling,
+    completeness, and clarity.
+            modified:   dwarf_load_elf_headers.c
+    Remove trailing spaces, fix too-long lines.
+            modified:   dwarf_elf_decompress.c
+            modified:   readelfobj.c
+    New baseline given messages changes.
+            modified:   ../test/test028.base
+
+2026-05-13:  David Anderson
+    commit 10f922822efa111147f93eb5488e4740bf429323
+
+    Printf had a missing format for section number, 32bit
+    Elf. Compile failed.
+            modified:   dwarf_load_elf_headers.c
+
+2026-05-10:  David Anderson
+    commit 7804aa8fe481c57e8faa93ba2df89500dec678e2
+
+    Up to date.
+            modified:   ChangeLog
+
 2026-05-10:  David Anderson
     commit c72fb9f88a4384d8e8f4cc00eb73ce3db4cd1199
 
