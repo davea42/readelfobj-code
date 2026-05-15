@@ -210,6 +210,28 @@ AS_IF(
     [test "x${enable_decompression}" = "xyes"],
     [
         AS_IF(
+            [test "x${have_zlib}" = "xno"],
+            [AC_CHECK_HEADERS([zlib.h],
+                [have_zlib="yes"],
+                [have_zlib="no"])])
+        AS_IF(
+            [test "x${have_zstd}" = "xno"],
+            [AC_CHECK_HEADERS([zstd.h],
+                [have_zstd="yes"],
+                [have_zstd="no"])])
+    ],
+    [
+        have_zstd="no"
+        have_pc_zstd="no"
+        have_zlib="no"
+        have_pc_zlib="no"
+    ])
+
+
+AS_IF(
+    [test "x${enable_decompression}" = "xyes"],
+    [
+        AS_IF(
             echo "dadebug zstd ${have_pc_zstd} ${have_zstd}"
             [test "x${have_pc_zstd}" = "xno"  -a "x${have_zstd}" = "xyes"],
             [
@@ -225,6 +247,27 @@ AS_IF(
     ],
     [
         have_zstd="no"
+    ])
+
+AS_IF(
+    [test "x${enable_decompression}" = "xyes"],
+    [
+        AS_IF(
+            echo "dadebug zlib ${have_pc_zlib} ${have_zlib}"
+            [test "x${have_pc_zlib}" = "xno"  -a "x${have_zlib}" = "xyes"],
+            [
+                AC_SEARCH_LIBS(
+                [uncompress], [z],
+                [
+                 ZLIB_LIBS="-lz"
+                 requirements_libdwarf_libs="-lz"
+                 echo "dadebug req set lz"
+                ],
+                [have_zlib="no"])
+            ])
+    ],
+    [
+        have_zlib="no"
     ])
 
 AS_IF(
@@ -280,6 +323,8 @@ echo
 echo "Compilation............: make (or gmake)"
 echo "  CPPFLAGS.............: $CPPFLAGS"
 echo "  CFLAGS...............: $CFLAGS ${c_compiler_flags}"
+echo "  ZLIB_LIBS............: $ZLIB_LIBS"
+echo "  ZSTD_LIBS............: $ZSTD_LIBS"
 echo "  LDFLAGS..............: $LDFLAGS"
 echo "  LIBS.................: $LIBS"
 echo
