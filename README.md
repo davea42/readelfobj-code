@@ -1,5 +1,5 @@
 # README.md
-Last update: May 9, 2026
+Last update: May 17, 2026
 Version now set to 2.3.1
 
 The distribution consists entirely of C
@@ -25,6 +25,7 @@ zlib and zstd installed to read object files with
 compressed sections. See REQUIREMENTS below.
 As of 2.3.1 we have tests of the decompression
 code on 64 and 32 bit objects.
+
 
 ## Contents
 #### object_detector
@@ -85,6 +86,16 @@ Defaults to --enable-decompression=yes
     Ubuntu:
     sudo apt install pkgconf zlib1g zlib1g-dev libzstd1
     sudo apt install libzstd-dev
+
+On some OS's (Freebsd 15.0, MacOS) one of these
+libraries and headers may be installed in a
+different place, such as /usr/local/ or /opt/local/
+For Freebsd, export before building, such as
+```
+export CPPFLAGS="-I/usr/local/include"
+export LDFLAGS="-L/usr/local/lib"
+```
+may suffice.
 
 ## RUNNING MAKE CHECK from a release
 
