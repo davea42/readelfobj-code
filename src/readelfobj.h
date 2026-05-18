@@ -741,6 +741,72 @@ extern int printfilenames;
 #ifndef EM_BPF
 #define EM_BPF           247
 #endif
+#ifndef EM_GRAPHCORE_IPU
+#define EM_GRAPHCORE_IPU 248
+#endif
+#ifndef EM_IMG1
+#define EM_IMG1 249
+#endif
+#ifndef EM_NFP
+#define EM_NFP 250
+#endif
+#ifndef EM_VE
+#define EM_VE 251
+#endif
+#ifndef EM_CSKY
+#define EM_CSKY 252
+#endif
+#ifndef EM_ARC_COMPACT3_64
+#define EM_ARC_COMPACT3_64 253
+#endif
+#ifndef EM_MCS6502
+#define EM_MCS6502 254
+#endif
+#ifndef EM_ARC_COMPACT3
+#define EM_ARC_COMPACT3 255
+#endif
+#ifndef EM_KVX
+#define EM_KVX 256
+#endif
+#ifndef EM_65816
+#define EM_65816 257
+#endif
+#ifndef EM_LOONGARCH
+#define EM_LOONGARCH 258
+#endif
+#ifndef EM_KF32
+#define EM_KF32 259
+#endif
+#ifndef EM_U16_U8CORE
+#define EM_U16_U8CORE 260
+#endif
+#ifndef EM_TACHYUM
+#define EM_TACHYUM 261
+#endif
+#ifndef EM_56800EF
+#define EM_56800EF 262
+#endif
+#ifndef EM_SBF
+#define EM_SBF 263
+#endif
+#ifndef EM_AIENGINE
+#define EM_AIENGINE 264
+#endif
+#ifndef EM_SIMA_MLA
+#define EM_SIMA_MLA 265
+#endif
+#ifndef EM_BANG
+#define EM_BANG 266
+#endif
+#ifndef EM_LOONGGPU
+#define EM_LOONGGPU 267
+#endif
+#ifndef EM_SW64
+#define EM_SW64 268
+#endif
+#ifndef EM_AIECTRLCODE
+#define EM_AIECTRLCODE 269
+#endif
 
 /* Standard Elf dynamic tags. */
 #ifndef DT_NULL
@@ -882,17 +948,18 @@ extern int printfilenames;
 #ifndef EI_VERSION
 #define EI_VERSION       6
 #endif
-#ifndef EI_PAD
-#define EI_PAD           7
-#endif
 #ifndef EI_OSABI
 #define EI_OSABI         7
 #endif
+#ifndef EI_ABIVERSION
+#define EI_ABIVERSION    8
+#endif
+#ifndef EI_PAD
+#define EI_PAD           9
+#endif
+
 #ifndef EI_NIDENT
 #define EI_NIDENT        16
-#endif
-#ifndef EI_ABIVERSION
-#define EI_ABIVERSION       8
 #endif
 
 #ifndef ELFMAG0
