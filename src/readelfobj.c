@@ -978,6 +978,48 @@ elf_print_progheaders(elf_filedata ep)
     return DW_DLV_OK;
 }
 
+static void
+print_sec_long_format(struct generic_shdr * gshdr,
+    Dwarf_Unsigned origindex,
+    const char *namestr)
+{
+    P("Section " LONGESTUFMT " %s\n",origindex,namestr);
+    P("  sh_name     : "LONGESTXFMT " (" LONGESTUFMT ")\n",
+        gshdr->gh_name,
+        gshdr->gh_name);
+    P("  sh_type     : " LONGESTXFMT ,gshdr->gh_type);
+    P(" %s\n", dwarf_get_elf_section_header_st_type(
+            gshdr->gh_type,
+            buffer3,BUFFERSIZE));
+    P("  sh_flags    : " LONGESTXFMT ,gshdr->gh_flags);
+    if (gshdr->gh_flags) {
+        P(" %s",dwarf_get_elf_section_header_flag_names(
+            gshdr->gh_flags,
+            buffer2,BUFFERSIZE));
+    }
+    P("\n");
+    P("  sh_addr     : " LONGESTXFMT "\n",gshdr->gh_addr);
+    P("  sh_offset   : " LONGESTXFMT " (" LONGESTUFMT ")\n",
+        gshdr->gh_offset,
+        gshdr->gh_offset);
+    P("  sh_size     : " LONGESTXFMT " (" LONGESTUFMT ")\n",
+        gshdr->gh_size,
+        gshdr->gh_size);
+    P("  sh_link     : " LONGESTXFMT "\n",gshdr->gh_link);
+    P("  sh_info     : " LONGESTXFMT "\n",gshdr->gh_info);
+    P("  sh_addralign: " LONGESTXFMT " (" LONGESTUFMT ")\n",
+        gshdr->gh_addralign,
+        gshdr->gh_addralign);
+    P("  sh_entsize  : " LONGESTXFMT " (" LONGESTUFMT ")\n",
+        gshdr->gh_entsize,
+        gshdr->gh_entsize);
+    P("  Relocations count : " LONGESTUFMT "\n",gshdr->gh_relcount);
+    P("  Group number      : " LONGESTUFMT "\n",
+        gshdr->gh_section_group_number);
+    P("  Group count       : " LONGESTUFMT "\n",
+        gshdr->gh_sht_group_array_count);
+}
+
 static int
 elf_print_sectheaders(elf_filedata ep,sec_options *options)
 {
@@ -999,9 +1041,11 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         P("\n");
         return DW_DLV_OK;
     }
-    P(" [i] offset      size        name         "
-        "   (flags)(type)(link,info,align)\n");
-    P("{\n");
+    if (!print_elf_sections_detail) {
+        P(" [i] offset      size        name         "
+            "   (flags)(type)(link,info,align)\n");
+        P("{\n");
+    }
     sort_el = calloc(generic_count,sizeof(sort_section_element));
     if (!sort_el) {
         P("ERROR: unable to allocate " LONGESTUFMT
@@ -1026,6 +1070,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         const char *namestr = "";
         sort_section_element *sel = 0 ;
         Dwarf_Unsigned origindex = 0;
+        sel = &sort_el[i];
 
         sel = &sort_el[i];
         gshdr = (struct generic_shdr *)sel->od_sec_desc;
@@ -1036,6 +1081,11 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
             debug_sect_count++;
             debug_sect_size += gshdr->gh_size;
         }
+        if (print_elf_sections_detail) {
+            print_sec_long_format(gshdr,origindex,namestr);
+            continue;
+        }
+
         P("[" LONGESTUFMT2 "]", origindex);
         P(" " LONGESTXFMT8,gshdr->gh_offset);
         P(" " LONGESTXFMT8,gshdr->gh_size);
@@ -1510,9 +1560,15 @@ elf_print_elf_header(elf_filedata ep)
     P("  e_phoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_phoff);
     P("  e_shoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_shoff);
     P("  e_flags    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_flags);
-    P("  e_ehsize   : " LONGESTXFMT  "\n", ep->f_ehdr->ge_ehsize);
-    P("  e_phentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_phentsize);
-    P("  e_phnum    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_phnum);
+    P("  e_ehsize   : " LONGESTXFMT  " (" LONGESTUFMT ")\n",
+        ep->f_ehdr->ge_ehsize,
+        ep->f_ehdr->ge_ehsize);
+    P("  e_phentsize: " LONGESTXFMT  " (" LONGESTUFMT ")\n",
+         ep->f_ehdr->ge_phentsize,
+         ep->f_ehdr->ge_phentsize);
+    P("  e_phnum    : " LONGESTXFMT  " (" LONGESTUFMT ")\n", 
+        ep->f_ehdr->ge_phnum,
+        ep->f_ehdr->ge_phnum);
     P("  e_shentsize: " LONGESTXFMT  "\n", ep->f_ehdr->ge_shentsize);
     if (ep->f_ehdr->ge_shnum_extended) {
         P("  e_shnum    :  is in extended form, value from "
