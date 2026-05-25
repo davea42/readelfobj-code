@@ -215,9 +215,30 @@ no_questionable_chars(const char *s) {
     return TRUE;
 }
 
+/*  name here is the index from a section entry
+    to a name string. */
+#if 0
+const char *
+sanitizedx(const char *s,unsigned name,
+    char *outbuf, unsigned outbuf_len)
+{
+    char buf[50];
+
+    buf[0] = 0;
+    if (!s) {
+        snprintf(buf,24,"<sh_name: %u>",name);
+        do_sanity_insert(buf,outbuf,outbuf_len);
+        return outbuf;
+    }
+    sanitized(s,outbuf,outbuf_len);
+    return outbuf;
+}
+#endif
+
 const char *
 sanitized(const char *s,char *outbuf, unsigned outbuf_len)
 {
+    outbuf[0] = 0;
     if (!s) {
         do_sanity_insert("<no-name!>",outbuf,outbuf_len);
         return outbuf;

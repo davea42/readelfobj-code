@@ -116,9 +116,13 @@ int print_wasted  = 0; /* prints space use details */
 int only_wasted_summary = 0; /* suppress standard printing */
 int print_groups = 0; /* print group information. */
 int print_sec_extra = 0; /* print address, inputfile offset */
+int print_elf_stringtables_dumpformat = 0; /* --vs */
+int print_elf_sections_detail = 0;/* --v */
 
 static char buffer1[BUFFERSIZE];
 static char buffer2[BUFFERSIZE];
+static char buffer3[BUFFERSIZE];
+static char buffer4[BUFFERSIZE];
 
 char *filename;
 FILE *fin;
@@ -137,9 +141,11 @@ char *Usage = "Usage: readelfobj <options> file ...\n"
     "--sections-by-size sort sections by section size\n"
     "--sections-by-name sort_sections by name\n"
     "--only-wasted-summary  Skip printing section/segment data.\n"
-    "--all           Enables all the above options\n"
-    "--help          print this message\n"
-    "--version       print version string\n";
+    "--v       Print Elf section headers in full detail (long form)\n"
+    "--vs      Print Elf string sections like old memory dumps did\n"
+    "--all     Enables all the above options\n"
+    "--help    print this message\n"
+    "--version print version string\n";
 
 int
 main(int argc,char **argv)
@@ -163,6 +169,14 @@ main(int argc,char **argv)
                 (strcmp(argv[0],"-h") == 0)) {
                 P("%s",Usage);
                 exit(0);
+            }
+            if (strcmp(argv[0],"--v") == 0)  {
+                print_elf_sections_detail = 1;
+                continue;
+            }
+            if (strcmp(argv[0],"--vs") == 0)  {
+                print_elf_stringtables_dumpformat = 1;
+                continue;
             }
             if (strcmp(argv[0],"--all") == 0) {
                 print_symtab_sections= 1;
@@ -255,6 +269,31 @@ main(int argc,char **argv)
     return RO_OK;
 }
 
+#if 1
+/*  Do not use this twice in a single printf.
+    It will not really work then.
+    Meant only for section name strings where
+    lining up with headers might matter. 
+    Not nice, really. */
+static char *
+expand_to_n(const char *str,int n,char *buffer)
+{
+    int l = 0;
+
+    buffer[0] = 0;
+    snprintf(buffer,200,"\"%s\"",str);
+    l = strlen(buffer);
+    if (l > n) {
+        return &buffer[0];
+    }
+    for (  ;l < n; ++l) {
+        buffer[l] = ' ';
+        buffer[l+1] = 0;
+    }
+    return &buffer[0];
+}
+#endif
+
 static int
 compare_by_secsize(const void *lin,const void *rin)
 {
@@ -300,7 +339,6 @@ compare_by_secname(const void *lin,const void *rin)
     struct generic_shdr *rgshdr =
         (struct generic_shdr *)rsel->od_sec_desc;
     const char *rname = rgshdr->gh_namestring;
-
     int res = 0;
 
     res = strcmp(lname,rname);
@@ -582,6 +620,8 @@ do_one_file(const char *s,sec_options *options)
         return;
     }
 
+    /*  Loads sectheaders and
+        the elf section strings themselves. */
     res = dwarf_load_elf_sectheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         print_minimum(ep,options);
@@ -593,25 +633,21 @@ do_one_file(const char *s,sec_options *options)
 
     res = dwarf_load_elf_progheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep,options);
         P("ERROR: unable to load program headers. errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
-        dwarf_destruct_elf_access(ep,&errcode);
-        return;
     }
-
+#if 0
     /* Load strings naming sections (an SH_STRTAB) */
     shdr = ep->f_shdr + ep->f_elf_shstrings_sect_index;
     ep->f_shstrings_shdr = shdr;
     res = dwarf_load_elf_symstr(ep,shdr,&errcode);
     if (res == DW_DLV_ERROR) {
-        print_minimum(ep,options);
         P("ERROR: unable to load symbol table strings."
             " errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
-        dwarf_destruct_elf_access(ep,&errcode);
-        return;
+        print_minimum(ep,options);
     }
+#endif
     shdr = ep->f_shdr;
     /* Assign section names to sections now we have the namestrings
         (for all sections) */
@@ -619,9 +655,13 @@ do_one_file(const char *s,sec_options *options)
     shdr->gh_namestring = "";
     ++ shdr;
     for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
-        shdr->gh_namestring =
-            (const char *)ep->f_shstrings_shdr->gh_content +
-            shdr->gh_name;
+        if (shdr->gh_name >= ep->f_shstrings_shdr->gh_size){
+            shdr->gh_namestring = "<name index invalid>";
+        } else {
+            shdr->gh_namestring =
+                (const char *)ep->f_shstrings_shdr->gh_content +
+                shdr->gh_name;
+        }
     }
     shdr = ep->f_shdr+1;
     /* Finish loading all SHT_STRTAB not loaded already. */
@@ -716,7 +756,7 @@ do_one_file(const char *s,sec_options *options)
                     print_minimum(ep,options);
                     P("ERROR reading .rela section "
                         LONGESTUFMT
-                        " %s Error code %d (%s) file:%s \n",
+                        " \"%s\" Error code %d (%s) file:%s \n",
                         i,
                         sanitized(namestr,buffer2,BUFFERSIZE),
                         errcode,dwarf_get_errname(errcode),
@@ -730,6 +770,75 @@ do_one_file(const char *s,sec_options *options)
     print_requested(ep,options);
     dwarf_destruct_elf_access(ep,&errcode);
 }
+
+/*  Showing the bytes of a string table (or anything else)
+    as starting at zero. */
+static void
+dumpcontent(unsigned long offset,
+    unsigned long size,
+    unsigned char *content)
+{
+    int shownooffsets = 0;
+    char buf[100];
+    int c;
+    int i;
+    int j;
+    char *bp;
+    int stop = 0;
+    unsigned long endoffset = offset+size;
+    char *curloc = (char *)content;
+
+    while(0 == stop)
+    {
+        if (shownooffsets) {
+            printf("       ");
+        } else {
+            printf("%7lx",offset);
+        }
+        /* Filling in a buffer line */
+        bp = buf;
+        *bp = 0;
+        for ( i = 0; i < 4 && stop == 0; i++)
+        {
+            printf(" ");
+            for (j = 0; j < 4; j++,offset++,curloc++)
+            {
+                if (offset >= endoffset) {
+                    printf("  ");
+                    stop = 1;
+                    break;
+                } else {
+                    c = *curloc;
+                    printf("%02x",c);
+                    if (c < ' ' || c > '~')
+                        *bp = '.';
+                    else
+                        *bp = c;
+                    bp++;
+                    *bp = 0;
+                }
+            }
+        }
+        printf("  %s\n",buf);
+    }
+    printf("   \n");
+}
+
+/* print string table in old memory dump format */
+static void
+print_elf_stringtable(struct generic_shdr *psh)
+{
+    P("\n");
+    P("Elf stringtable. Offset 0x%lx length 0x%lx\n",
+        (unsigned long)psh->gh_offset,
+        (unsigned long)psh->gh_size);
+    if (!psh->gh_content) {
+        P("  string content not loaded.\n");
+        return;
+    }
+    dumpcontent(0,psh->gh_size,psh->gh_content);
+}
+
 static int
 elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
 {
@@ -755,6 +864,9 @@ elf_print_sectstrings(elf_filedata ep,Dwarf_Unsigned stringsection)
         " length " LONGESTXFMT " (" LONGESTUFMT ")" "\n",
         psh->gh_offset, psh->gh_offset,
         psh->gh_size,psh->gh_size);
+    if (print_elf_stringtables_dumpformat) {
+        print_elf_stringtable(psh);
+    }
     return DW_DLV_OK;
 }
 
@@ -888,7 +1000,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         return DW_DLV_OK;
     }
     P(" [i] offset      size        name         "
-        "addr     (flags)(type)(link,info,align)\n");
+        "   (flags)(type)(link,info,align)\n");
     P("{\n");
     sort_el = calloc(generic_count,sizeof(sort_section_element));
     if (!sort_el) {
@@ -918,10 +1030,8 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         sel = &sort_el[i];
         gshdr = (struct generic_shdr *)sel->od_sec_desc;
         origindex = sel->od_originalindex;
-        if (i) {
-            namestr = sanitized(gshdr->gh_namestring,
-                buffer1,BUFFERSIZE);
-        }
+        namestr = sanitized(gshdr->gh_namestring,
+            buffer1,BUFFERSIZE);
         if (dwarf_load_elf_section_is_dwarf(namestr)) {
             debug_sect_count++;
             debug_sect_size += gshdr->gh_size;
@@ -929,9 +1039,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         P("[" LONGESTUFMT2 "]", origindex);
         P(" " LONGESTXFMT8,gshdr->gh_offset);
         P(" " LONGESTXFMT8,gshdr->gh_size);
-        /*P(" (" LONGESTUFMT8 ") ",gshdr->gh_size); */
-        P(" %-14s",namestr);
-        /*P(" "  LONGESTXFMT,gshdr->gh_flags); */
+        P(" %s ",expand_to_n(namestr,16,buffer4));
         if (!gshdr->gh_flags) {
             P(" (0)");
         } else {
@@ -941,7 +1049,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
                     buffer2,BUFFERSIZE));
         }
         P("%s",dwarf_get_elf_section_header_st_type(gshdr->gh_type,
-            buffer2,BUFFERSIZE));
+            buffer3,BUFFERSIZE));
         if (gshdr->gh_link || gshdr->gh_info || gshdr->gh_addralign) {
             P("(" LONGESTUFMT ,gshdr->gh_link);
             P("," LONGESTXFMT ,gshdr->gh_info);
@@ -964,19 +1072,19 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
 
             if ( gshdr->gh_type == SHT_REL &&
                 strncmp(namestr,".rel.",5) ) {
-                P("Warning: Section " LONGESTUFMT " %s"
+                P("Warning: Section " LONGESTUFMT " \"%s\""
                     " is an SHT_REL relocation section but its name "
                     " does not start with \".rel.\"\n",i,namestr);
 
             } else if ( gshdr->gh_type == SHT_RELA &&
                 strncmp(namestr,".rela.",6) ) {
-                P("Warning: Section " LONGESTUFMT " %s"
+                P("Warning: Section " LONGESTUFMT " \"%s\""
                     " is an SHT_RELA relocation section but its name "
                     " does not start with \".rela.\"\n",i,namestr);
             }
 
             if (gshdr->gh_link >= generic_count) {
-                P("Warning: Section " LONGESTUFMT " %s"
+                P("Warning: Section " LONGESTUFMT " \"%s\""
                     " is a relocation section but sh_link"
                     " is not a valid section index\n",i,namestr);
             } else {
@@ -984,13 +1092,13 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
                 tshdr = ep->f_shdr + gshdr->gh_link;
                 if (tshdr->gh_type != SHT_SYMTAB &&
                     tshdr->gh_type != SHT_DYNSYM ) {
-                    P("Warning: Section " LONGESTUFMT " %s"
+                    P("Warning: Section " LONGESTUFMT " \"%s\""
                         " is a relocation section but sh_link"
                         " does not index a symtab\n",i,namestr);
                 }
             }
             if (gshdr->gh_info >= generic_count) {
-                P("Warning: Section " LONGESTUFMT " %s"
+                P("Warning: Section " LONGESTUFMT " \"%s\""
                     " is a relocation section but sh_info"
                     " is not a valid section index\n",i,namestr);
             }
@@ -998,7 +1106,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
             gshdr->gh_type == SHT_DYNSYM ) {
 
             if (gshdr->gh_link >= generic_count) {
-                P("Warning: Section " LONGESTUFMT " %s"
+                P("Warning: Section " LONGESTUFMT " \"%s\""
                     " is a symtab/dynsym section but sh_link"
                     " is not a valid string table index\n",i,namestr);
             } else {
@@ -1006,7 +1114,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
 
                 tshdr = ep->f_shdr + gshdr->gh_link;
                 if (tshdr->gh_type != SHT_STRTAB) {
-                    P("Warning: Section " LONGESTUFMT " %s"
+                    P("Warning: Section " LONGESTUFMT " \"%s\""
                         " is a symtab/dynsym section but sh_info"
                         " is not a valid string table index\n",
                         i,namestr);
@@ -1041,7 +1149,7 @@ elf_print_symbols(elf_filedata ep,
     gsym = psh->gh_sym;
     ecount = locp->g_count;
     P("\n");
-    P("Symbols from %s: " LONGESTUFMT
+    P("Symbols from \"%s\": " LONGESTUFMT
         " at offset " LONGESTXFMT "\n",
         sanitized(secname,buffer1,BUFFERSIZE),
         ecount, locp->g_offset);
@@ -1107,7 +1215,7 @@ elf_print_symbols(elf_filedata ep,
             targetsecname = dwarf_get_elf_symbol_shn_type(
                 gsym->gs_shndx,buffer2,BUFFERSIZE);
         }
-        P(" %s",targetsecname?targetsecname:"");
+        P(" \"%s\"",targetsecname?targetsecname:"");
         P("\n");
         res = dwarf_get_elf_symstr_string(ep,psh->gh_link,
             gsym->gs_name,
@@ -1127,7 +1235,7 @@ elf_print_symbols(elf_filedata ep,
             } else {
                 slen = (unsigned long)strlen(localstr);
             }
-            P("  st_name  (" LONGESTUFMT ") name-length %2lu: %s",
+            P("  st_name  (" LONGESTUFMT ") name-length %2lu: \"%s\"",
                 gsym->gs_name,
                 slen,
                 sanitized(localstr,buffer1,BUFFERSIZE));
@@ -1242,7 +1350,7 @@ elf_print_relocation_content(
     }
     gsymtabp =  gsh->gh_link + ep->f_shdr;
     P("\n");
-    P("Section " LONGESTUFMT ": %s reloccount: " LONGESTUFMT
+    P("Section " LONGESTUFMT ": \"%s\" reloccount: " LONGESTUFMT
         " links-sec: " LONGESTUFMT
         " symtabsec: " LONGESTUFMT
         " %s"
@@ -1252,7 +1360,6 @@ elf_print_relocation_content(
         count,gsh->gh_info,
         gsh->gh_link,
         gsymtabp->gh_namestring);
-
     P(" [i]   offset   info           type.              "
         "symbol %s\n",isrela?
         " addend":"");
@@ -1784,7 +1891,7 @@ elf_print_dynamic_inner(elf_filedata ep,struct generic_shdr *psh)
             buffer6,BUFFERSIZE);
 
         P("\n");
-        P("Section %s (" LONGESTUFMT "):"
+        P("Section \"%s\" (" LONGESTUFMT "):"
             " Entries:" LONGESTUFMT " Offset:" LONGESTXFMT8
             "\n",
             name,
@@ -1792,7 +1899,7 @@ elf_print_dynamic_inner(elf_filedata ep,struct generic_shdr *psh)
             bufcount,
             psh->gh_offset);
     } else {
-        P("No content exists in %s\n",
+        P("No content exists in \"%s\"\n",
             sanitized(dynamicsect->gh_namestring,buffer6,BUFFERSIZE));
         return RO_ERROR;
     }

@@ -3475,6 +3475,7 @@ dwarf_load_elf_sectheaders(elf_filedata ep,int*errcode)
     if (res != DW_DLV_OK) {
         return res;
     }
+    ep->f_shstrings_shdr = psh;
     elf_check_sect_sizes(ep);
     return res;
 }

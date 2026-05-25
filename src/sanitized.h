@@ -42,6 +42,8 @@ extern "C" {
     leaving the input unchanged. Return pointer to
     the passed-in buffer. */
 const char * sanitized(const char *s, char *buf,unsigned buflen);
+const char * sanitizedx(const char *s,unsigned name,
+    char *outbuf, unsigned outbuf_len);
 
 #ifdef __cplusplus
 }

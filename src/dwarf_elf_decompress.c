@@ -155,10 +155,6 @@ dump_bytes("Looking for ZLIB ",src,4);F;
         unsigned fldsize    = ep->f_pointersize/8;
         unsigned structsize = 3* fldsize;
 
-#if 0
-printf("dadebug entry SHF_COMPRESSED fldsize %u\n",fldsize); F;
-dump_bytes("SHF_COMPRESSED bytes",ptr,24);
-#endif
         /*  Reading from compressed section content, not section
             header. */
         *error = 0;
