@@ -23,9 +23,9 @@ Elf object file.
   e_phoff    : 0x00000002
   e_shoff    : 0x00000029
   e_flags    : 0xe11800
-  e_ehsize   : 0x274f
-  e_phentsize: 0x2d5b
-  e_phnum    : 0x0
+  e_ehsize   : 0x274f (10063)
+  e_phentsize: 0x2d5b (11611)
+  e_phnum    : 0x0 (0)
   e_shentsize: 0x58
 ERROR:  e_shnum    : never set properly
 ERROR  e_shstrndx : never set properly

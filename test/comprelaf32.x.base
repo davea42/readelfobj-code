@@ -28,9 +28,9 @@ Elf object file.
   e_phoff    : 0x00000000
   e_shoff    : 0x000006d4
   e_flags    : 0x0
-  e_ehsize   : 0x34
-  e_phentsize: 0x0
-  e_phnum    : 0x0
+  e_ehsize   : 0x34 (52)
+  e_phentsize: 0x0 (0)
+  e_phnum    : 0x0 (0)
   e_shentsize: 0x28
   e_shnum    : 0x18 (24) Number of sections
   e_shstrndx : 0x17 (23) Section strings section

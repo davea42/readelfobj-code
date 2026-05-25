@@ -13,9 +13,9 @@ Section Groups: No section groups or .dwo sections present. Elf object file.
   e_phoff    : 0x00000000
   e_shoff    : 0x000001a0
   e_flags    : 0x2
-  e_ehsize   : 0x40
-  e_phentsize: 0x0
-  e_phnum    : 0x0
+  e_ehsize   : 0x40 (64)
+  e_phentsize: 0x0 (0)
+  e_phnum    : 0x0 (0)
   e_shentsize: 0x40
   e_shnum    : 0xf (15) Number of sections
   e_shstrndx : 0xc (12) Section strings section
