@@ -12,6 +12,8 @@ Options:
 --sections-by-size sort sections by section size
 --sections-by-name sort_sections by name
 --only-wasted-summary  Skip printing section/segment data.
---all           Enables all the above options
---help          print this message
---version       print version string
+--v       Print Elf section headers in full detail (long form)
+--vs      Print Elf string sections like old memory dumps did
+--all     Enables all the above options
+--help    print this message
+--version print version string

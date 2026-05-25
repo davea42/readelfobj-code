@@ -41,79 +41,79 @@ Elf object file.
 String section data at 0x564 (1380) length 0xde (222)
 
 Section count: 24
- [i] offset      size        name         addr     (flags)(type)(link,info,align)
+ [i] offset      size        name            (flags)(type)(link,info,align)
 {
-[ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
+[ 0] 0x00000000 0x00000000 ""                (0)(SHT_NULL)
     Hdroffset: 0x00000678
     Addr     : 0x00000000
-[ 1] 0x00000034 0x00000008 .group         (0)(SHT_GROUP)(21,0xb,0x4)
+[ 1] 0x00000034 0x00000008 ".group"          (0)(SHT_GROUP)(21,0xb,0x4)
     Hdroffset: 0x000006a0
     Addr     : 0x00000000
-[ 2] 0x0000003c 0x0000003c .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
+[ 2] 0x0000003c 0x0000003c ".text"           (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000006c8
     Addr     : 0x00000000
-[ 3] 0x00000078 0x00000020 .rel.text      (SHF_INFO_LINK)(SHT_REL)(21,0x2,0x4)
+[ 3] 0x00000078 0x00000020 ".rel.text"       (SHF_INFO_LINK)(SHT_REL)(21,0x2,0x4)
     Hdroffset: 0x000006f0
     Addr     : 0x00000000
-[ 4] 0x00000098 0x00000000 .data          (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+[ 4] 0x00000098 0x00000000 ".data"           (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000718
     Addr     : 0x00000000
-[ 5] 0x00000098 0x00000000 .bss           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
+[ 5] 0x00000098 0x00000000 ".bss"            (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
     Hdroffset: 0x00000740
     Addr     : 0x00000000
-[ 6] 0x00000098 0x0000000c .rodata        (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+[ 6] 0x00000098 0x0000000c ".rodata"         (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000768
     Addr     : 0x00000000
-[ 7] 0x000000a4 0x00000004 .text.__x86.get_pc_thunk.ax (SHF_ALLOC SHF_EXECINSTR SHF_GROUP)(SHT_PROGBITS)(0,0x0,0x1)
+[ 7] 0x000000a4 0x00000004 ".text.__x86.get_pc_thunk.ax"  (SHF_ALLOC SHF_EXECINSTR SHF_GROUP)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000790
     Addr     : 0x00000000
-[ 8] 0x000000a8 0x0000008a .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 8] 0x000000a8 0x0000008a ".debug_info"     (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000007b8
     Addr     : 0x00000000
-[ 9] 0x00000134 0x00000090 .rel.debug_info (SHF_INFO_LINK)(SHT_REL)(21,0x8,0x4)
+[ 9] 0x00000134 0x00000090 ".rel.debug_info"  (SHF_INFO_LINK)(SHT_REL)(21,0x8,0x4)
     Hdroffset: 0x000007e0
     Addr     : 0x00000000
-[10] 0x000001c4 0x00000045 .debug_abbrev  (0)(SHT_PROGBITS)(0,0x0,0x1)
+[10] 0x000001c4 0x00000045 ".debug_abbrev"   (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000808
     Addr     : 0x00000000
-[11] 0x00000209 0x00000020 .debug_aranges (0)(SHT_PROGBITS)(0,0x0,0x1)
+[11] 0x00000209 0x00000020 ".debug_aranges"  (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000830
     Addr     : 0x00000000
-[12] 0x0000022c 0x00000010 .rel.debug_aranges (SHF_INFO_LINK)(SHT_REL)(21,0xb,0x4)
+[12] 0x0000022c 0x00000010 ".rel.debug_aranges"  (SHF_INFO_LINK)(SHT_REL)(21,0xb,0x4)
     Hdroffset: 0x00000858
     Addr     : 0x00000000
-[13] 0x0000023c 0x0000004d .debug_line    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[13] 0x0000023c 0x0000004d ".debug_line"     (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000880
     Addr     : 0x00000000
-[14] 0x0000028c 0x00000020 .rel.debug_line (SHF_INFO_LINK)(SHT_REL)(21,0xd,0x4)
+[14] 0x0000028c 0x00000020 ".rel.debug_line"  (SHF_INFO_LINK)(SHT_REL)(21,0xd,0x4)
     Hdroffset: 0x000008a8
     Addr     : 0x00000000
-[15] 0x000002ac 0x0000010f .debug_str     (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+[15] 0x000002ac 0x0000010f ".debug_str"      (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000008d0
     Addr     : 0x00000000
-[16] 0x000003bb 0x0000007a .debug_line_str (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+[16] 0x000003bb 0x0000007a ".debug_line_str"  (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000008f8
     Addr     : 0x00000000
-[17] 0x00000435 0x0000002e .comment       (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+[17] 0x00000435 0x0000002e ".comment"        (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000920
     Addr     : 0x00000000
-[18] 0x00000463 0x00000000 .note.GNU-stack (0)(SHT_PROGBITS)(0,0x0,0x1)
+[18] 0x00000463 0x00000000 ".note.GNU-stack"  (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000948
     Addr     : 0x00000000
-[19] 0x00000464 0x00000060 .eh_frame      (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x4)
+[19] 0x00000464 0x00000060 ".eh_frame"       (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x4)
     Hdroffset: 0x00000970
     Addr     : 0x00000000
-[20] 0x000004c4 0x00000010 .rel.eh_frame  (SHF_INFO_LINK)(SHT_REL)(21,0x13,0x4)
+[20] 0x000004c4 0x00000010 ".rel.eh_frame"   (SHF_INFO_LINK)(SHT_REL)(21,0x13,0x4)
     Hdroffset: 0x00000998
     Addr     : 0x00000000
-[21] 0x000004d4 0x000000e0 .symtab        (SHF_COMPRESSED)(SHT_SYMTAB)(22,0xa,0x4)
+[21] 0x000004d4 0x000000e0 ".symtab"         (SHF_COMPRESSED)(SHT_SYMTAB)(22,0xa,0x4)
      Compressed length: 0x00000045
     Hdroffset: 0x000009c0
     Addr     : 0x00000000
-[22] 0x00000525 0x0000003f .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
+[22] 0x00000525 0x0000003f ".strtab"         (0)(SHT_STRTAB)(0,0x0,0x1)
     Hdroffset: 0x000009e8
     Addr     : 0x00000000
-[23] 0x00000564 0x000000de .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
+[23] 0x00000564 0x000000de ".shstrtab"       (0)(SHT_STRTAB)(0,0x0,0x1)
     Hdroffset: 0x00000a10
     Addr     : 0x00000000
 Summary: 805 bytes for 7 debug sections
@@ -135,13 +135,13 @@ Section Group by dwarf section
   SHF_GROUP count  : 1
 No .dynamic section exists in yyy/compsymtab32.x
 
-Symbols from .symtab: 0 at offset 0x0
+Symbols from ".symtab": 0 at offset 0x0
 {
 }
 Relocation Sections
 {
 
-Section 3: .rel.text reloccount: 4 links-sec: 2 symtabsec: 21 .symtab
+Section 3: ".rel.text" reloccount: 4 links-sec: 2 symtabsec: 21 .symtab
  [i]   offset   info           type.              symbol
 Symtab sym 11 not in symtab
 [0]  0x00000010 0x00000b02 R_386_PC32     2. 11
@@ -152,7 +152,7 @@ Symtab sym 3 not in symtab
 Symtab sym 13 not in symtab
 [3]  0x00000026 0x00000d04 R_386_PLT32    4. 13
 
-Section 9: .rel.debug_info reloccount: 18 links-sec: 8 symtabsec: 21 .symtab
+Section 9: ".rel.debug_info" reloccount: 18 links-sec: 8 symtabsec: 21 .symtab
  [i]   offset   info           type.              symbol
 Symtab sym 6 not in symtab
 [0]  0x00000008 0x00000601 R_386_32       1. 6
@@ -191,14 +191,14 @@ Symtab sym 8 not in symtab
 Symtab sym 2 not in symtab
 [17]  0x0000007f 0x00000201 R_386_32       1. 2
 
-Section 12: .rel.debug_aranges reloccount: 2 links-sec: 11 symtabsec: 21 .symtab
+Section 12: ".rel.debug_aranges" reloccount: 2 links-sec: 11 symtabsec: 21 .symtab
  [i]   offset   info           type.              symbol
 Symtab sym 5 not in symtab
 [0]  0x00000006 0x00000501 R_386_32       1. 5
 Symtab sym 2 not in symtab
 [1]  0x00000010 0x00000201 R_386_32       1. 2
 
-Section 14: .rel.debug_line reloccount: 4 links-sec: 13 symtabsec: 21 .symtab
+Section 14: ".rel.debug_line" reloccount: 4 links-sec: 13 symtabsec: 21 .symtab
  [i]   offset   info           type.              symbol
 Symtab sym 9 not in symtab
 [0]  0x00000022 0x00000901 R_386_32       1. 9
@@ -209,7 +209,7 @@ Symtab sym 9 not in symtab
 Symtab sym 2 not in symtab
 [3]  0x0000003b 0x00000201 R_386_32       1. 2
 
-Section 20: .rel.eh_frame reloccount: 2 links-sec: 19 symtabsec: 21 .symtab
+Section 20: ".rel.eh_frame" reloccount: 2 links-sec: 19 symtabsec: 21 .symtab
  [i]   offset   info           type.              symbol
 Symtab sym 2 not in symtab
 [0]  0x00000020 0x00000202 R_386_PC32     2. 2

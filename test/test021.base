@@ -22,130 +22,130 @@ Section Groups: No section groups or .dwo sections present. Elf object file.
 String section data at 0x11b (283) length 0x81 (129)
 
 Section count: 15
- [i] offset      size        name         addr     (flags)(type)(link,info,align)
+ [i] offset      size        name            (flags)(type)(link,info,align)
 {
-[ 0] 0x00000000 0x00000000                (0)(SHT_NULL)
+[ 0] 0x00000000 0x00000000 ""                (0)(SHT_NULL)
     Hdroffset: 0x000001e0
     Addr     : 0x00000000
-[ 1] 0x00000040 0x00000000 .text          (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
+[ 1] 0x00000040 0x00000000 ".text"           (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000220
     Addr     : 0x00000000
-[ 2] 0x00000040 0x00000000 .data          (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
+[ 2] 0x00000040 0x00000000 ".data"           (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000260
     Addr     : 0x00000000
-[ 3] 0x00000040 0x00000000 .bss           (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
+[ 3] 0x00000040 0x00000000 ".bss"            (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x1)
     Hdroffset: 0x000002a0
     Addr     : 0x00000000
-[ 4] 0x00000040 0x00000004 .tbss          (SHF_WRITE SHF_ALLOC SHF_TLS)(SHT_NOBITS)(0,0x0,0x4)
+[ 4] 0x00000040 0x00000004 ".tbss"           (SHF_WRITE SHF_ALLOC SHF_TLS)(SHT_NOBITS)(0,0x0,0x4)
     Hdroffset: 0x000002e0
     Addr     : 0x00000000
-[ 5] 0x00000040 0x0000004a .debug_info    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 5] 0x00000040 0x0000004a ".debug_info"     (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000320
     Addr     : 0x00000000
-[ 6] 0x000006a8 0x000000c0 .rela.debug_info (0)(SHT_RELA)(13,0x5,0x8)
+[ 6] 0x000006a8 0x000000c0 ".rela.debug_info"  (0)(SHT_RELA)(13,0x5,0x8)
     Hdroffset: 0x00000360
     Addr     : 0x00000000
-[ 7] 0x0000008a 0x00000030 .debug_abbrev  (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 7] 0x0000008a 0x00000030 ".debug_abbrev"   (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000003a0
     Addr     : 0x00000000
-[ 8] 0x000000ba 0x00000026 .debug_line    (0)(SHT_PROGBITS)(0,0x0,0x1)
+[ 8] 0x000000ba 0x00000026 ".debug_line"     (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000003e0
     Addr     : 0x00000000
-[ 9] 0x000000e0 0x0000001e .debug_str     (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+[ 9] 0x000000e0 0x0000001e ".debug_str"      (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000420
     Addr     : 0x00000000
-[10] 0x000000fe 0x0000001d .comment       (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
+[10] 0x000000fe 0x0000001d ".comment"        (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x00000460
     Addr     : 0x00000000
-[11] 0x0000011b 0x00000000 .note.GNU-stack (0)(SHT_PROGBITS)(0,0x0,0x1)
+[11] 0x0000011b 0x00000000 ".note.GNU-stack"  (0)(SHT_PROGBITS)(0,0x0,0x1)
     Hdroffset: 0x000004a0
     Addr     : 0x00000000
-[12] 0x0000011b 0x00000081 .shstrtab      (0)(SHT_STRTAB)(0,0x0,0x1)
+[12] 0x0000011b 0x00000081 ".shstrtab"       (0)(SHT_STRTAB)(0,0x0,0x1)
     Hdroffset: 0x000004e0
     Addr     : 0x00000000
-[13] 0x00000560 0x00000138 .symtab        (0)(SHT_SYMTAB)(14,0xc,0x8)
+[13] 0x00000560 0x00000138 ".symtab"         (0)(SHT_SYMTAB)(14,0xc,0x8)
     Hdroffset: 0x00000520
     Addr     : 0x00000000
-[14] 0x00000698 0x00000009 .strtab        (0)(SHT_STRTAB)(0,0x0,0x1)
+[14] 0x00000698 0x00000009 ".strtab"         (0)(SHT_STRTAB)(0,0x0,0x1)
     Hdroffset: 0x00000560
     Addr     : 0x00000000
 Summary: 190 bytes for 4 debug sections
 }
 Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/sparc64-64-tls.o
 
-Symbols from .symtab: 13 at offset 0x560
+Symbols from ".symtab": 13 at offset 0x560
 {
 [Index] Value    Size    Type              Bind       Other          Shndx   Name
 [  0]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x0 (0)
   type 0x0 (0) (STT_NOTYPE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 SHN_UNDEF (no section)
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 0 "SHN_UNDEF (no section)"
+  st_name  (0) name-length  0: "<no-name>"
 [  1]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x4 (4)
   type 0x4 (4) (STT_FILE), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (0xfff1) (SHN_ABS)
-  st_name  (1) name-length  5: tls.c
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 65521 (0xfff1) "(SHN_ABS)"
+  st_name  (1) name-length  5: "tls.c"
 [  2]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 .text
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 1 ".text"
+  st_name  (0) name-length  0: "<no-name>"
 [  3]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 .data
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 2 ".data"
+  st_name  (0) name-length  0: "<no-name>"
 [  4]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 .bss
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 3 ".bss"
+  st_name  (0) name-length  0: "<no-name>"
 [  5]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .tbss
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 ".tbss"
+  st_name  (0) name-length  0: "<no-name>"
 [  6]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 .debug_info
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 5 ".debug_info"
+  st_name  (0) name-length  0: "<no-name>"
 [  7]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 7 .debug_abbrev
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 7 ".debug_abbrev"
+  st_name  (0) name-length  0: "<no-name>"
 [  8]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 .debug_line
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 8 ".debug_line"
+  st_name  (0) name-length  0: "<no-name>"
 [  9]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 9 .debug_str
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 9 ".debug_str"
+  st_name  (0) name-length  0: "<no-name>"
 [ 10]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 .note.GNU-stack
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 11 ".note.GNU-stack"
+  st_name  (0) name-length  0: "<no-name>"
 [ 11]  st_value 0x0 (0)
   st_size  0x0 (0), st_info 0x3 (3)
   type 0x3 (3) (STT_SECTION), bind 0x0 (0) (STB_LOCAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 .comment
-  st_name  (0) name-length  0: <no-name>
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 10 ".comment"
+  st_name  (0) name-length  0: "<no-name>"
 [ 12]  st_value 0x0 (0)
   st_size  0x4 (4), st_info 0x16 (22)
   type 0x6 (6) (STT_TLS), bind 0x1 (1) (STB_GLOBAL)
-  st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 .tbss
-  st_name  (7) name-length  1: a
+  st_other 0x0 (0) (STV_DEFAULT), st_shndx 4 ".tbss"
+  st_name  (7) name-length  1: "a"
 }
 Relocation Sections
 {
 
-Section 6: .rela.debug_info reloccount: 8 links-sec: 5 symtabsec: 13 .symtab
+Section 6: ".rela.debug_info" reloccount: 8 links-sec: 5 symtabsec: 13 .symtab
  [i]   offset   info           type.              symbol  addend
 [0]  0x00000006 0x700000017 R_SPARC_UA32   23. 7 .debug_abbrev +0
 [1]  0x0000000c 0x900000017 R_SPARC_UA32   23. 9 .debug_str +12
