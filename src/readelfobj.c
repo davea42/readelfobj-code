@@ -513,7 +513,7 @@ print_requested(elf_filedata ep,sec_options *options)
                 Dwarf_Unsigned link = psh->gh_link;
                 linktarg = ep->f_shdr + link;
                 if (linktarg->gh_type != SHT_STRTAB){
-                    P("ERROR: symtab link section " LONGESTUFMT
+                    P("ERROR: Symtab link section " LONGESTUFMT
                         " mismatch section not SHT_STRTAB\n",
                         link);
                     return;
@@ -548,6 +548,69 @@ print_requested(elf_filedata ep,sec_options *options)
     }
     check_dynamic_section(ep);
     report_wasted_space(ep,options);
+}
+
+struct validcombo_s {
+    int   v_type;
+    char *v_name;
+};
+struct validcombo_s combo[] = {
+    {SHT_STRTAB, ".strtab"}, 
+    {SHT_STRTAB, ".shstrtab"}, 
+    {SHT_SYMTAB, ".symtab"},
+    {SHT_GROUP,  ".group"},
+    {0,0}
+};
+
+#define TBUFSIZE 2000
+static char tbuf1[TBUFSIZE];
+static char tbuf2[TBUFSIZE];
+
+static int
+check_valid_combo(const char *namestr,
+    Dwarf_Unsigned type)
+{
+    int i = 0;
+    for(i = 0; combo[i].v_name; ++i) {
+        if (!strcmp(namestr,combo[i].v_name)) {
+            if (type == (unsigned long)combo[i].v_type) {
+                return DW_DLV_OK;
+            } else {
+                const char *nt = 
+                    dwarf_get_elf_section_header_st_type(
+                        combo[i].v_type, tbuf1,
+                        TBUFSIZE);
+                const char *nt2 = 
+                    dwarf_get_elf_section_header_st_type(
+                        type, tbuf2,
+                        TBUFSIZE);
+                P("ERROR: Section %s does not have "
+                    "The expected type of %s (%lu), "
+                    "but has %s (%lu) instead.\n",
+                    namestr,
+                    nt,(unsigned long)combo[i].v_type,
+                    nt2,(unsigned long)type);
+                return DW_DLV_ERROR;
+            }
+        }
+    }
+    return DW_DLV_OK;
+}
+
+static int
+validate_name_type_combinations(elf_filedata ep)
+{
+    struct generic_shdr * shdr = 0;
+    Dwarf_Unsigned i = 0;
+    int            res = 0;
+
+    shdr = ep->f_shdr;
+    ++ shdr;
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
+         check_valid_combo(shdr->gh_namestring,
+             shdr->gh_type);
+    }
+    return res;
 }
 
 char namebuffer[BUFFERSIZE*4];
@@ -608,14 +671,14 @@ do_one_file(const char *s,sec_options *options)
 
     res = dwarf_load_elf_header(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        P("ERROR: unable to load elf header. errcode %d (%s)\n",
+        P("ERROR: Unable to load elf header. errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
         dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
     if (res == DW_DLV_NO_ENTRY) {
         print_minimum(ep,options);
-        P("ERROR: unable to find elf header.\n");
+        P("ERROR: Unable to find elf header.\n");
         dwarf_destruct_elf_access(ep,&errcode);
         return;
     }
@@ -625,7 +688,7 @@ do_one_file(const char *s,sec_options *options)
     res = dwarf_load_elf_sectheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
         print_minimum(ep,options);
-        P("ERROR: unable to load section headers, errcode %d (%s)\n",
+        P("ERROR: Unable to load section headers, errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
         dwarf_destruct_elf_access(ep,&errcode);
         return;
@@ -633,21 +696,9 @@ do_one_file(const char *s,sec_options *options)
 
     res = dwarf_load_elf_progheaders(ep,&errcode);
     if (res == DW_DLV_ERROR) {
-        P("ERROR: unable to load program headers. errcode %d (%s)\n",
+        P("ERROR: Unable to load program headers. errcode %d (%s)\n",
             errcode,dwarf_get_errname(errcode));
     }
-#if 0
-    /* Load strings naming sections (an SH_STRTAB) */
-    shdr = ep->f_shdr + ep->f_elf_shstrings_sect_index;
-    ep->f_shstrings_shdr = shdr;
-    res = dwarf_load_elf_symstr(ep,shdr,&errcode);
-    if (res == DW_DLV_ERROR) {
-        P("ERROR: unable to load symbol table strings."
-            " errcode %d (%s)\n",
-            errcode,dwarf_get_errname(errcode));
-        print_minimum(ep,options);
-    }
-#endif
     shdr = ep->f_shdr;
     /* Assign section names to sections now we have the namestrings
         (for all sections) */
@@ -663,6 +714,27 @@ do_one_file(const char *s,sec_options *options)
                 shdr->gh_name;
         }
     }
+    validate_name_type_combinations(ep);
+    if (ep->f_elf_shstrings_sect_index < 1 ||
+        ep->f_elf_shstrings_sect_index >= ep->f_loc_shdr.g_count) {
+        P("ERROR Section number of section strings from "
+            "the Elf header is %lu which is outside the"
+            " valid range of 1 to (%lu-1)\n",
+            (unsigned long)ep->f_elf_shstrings_sect_index,
+            (unsigned long)ep->f_loc_shdr.g_count);
+    } else {
+        shdr = ep->f_shdr + ep->f_elf_shstrings_sect_index;
+        if (shdr->gh_type != SHT_STRTAB) {
+            const char *nt2 =
+                dwarf_get_elf_section_header_st_type(
+                        shdr->gh_type, tbuf2,
+                        TBUFSIZE);
+             P("ERROR: Section with section strings type is wrong:"
+                 " %s (%lu) but should be SHT_STRTAB\n",
+                 nt2,(unsigned long)shdr->gh_type);
+        }
+    }
+
     shdr = ep->f_shdr+1;
     /* Finish loading all SHT_STRTAB not loaded already. */
     for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
@@ -676,7 +748,7 @@ do_one_file(const char *s,sec_options *options)
         res = dwarf_load_elf_symstr(ep,shdr,&errcode);
         if (res == DW_DLV_ERROR) {
             print_minimum(ep,options);
-            P("ERROR: unable to load strings from."
+            P("ERROR: Unable to load strings from."
                 "section %lu  errnum %d\n",(unsigned long)i,
                 errcode);
             dwarf_destruct_elf_access(ep,&errcode);
@@ -702,7 +774,7 @@ do_one_file(const char *s,sec_options *options)
             res = dwarf_load_elf_symtab_symbols(ep,shdr,&errcode);
             if (res == DW_DLV_ERROR) {
                 print_minimum(ep,options);
-                P("ERROR: unable to load symbol table strings."
+                P("ERROR: Unable to load symbol table strings."
                     " errcode %d section %lu \n",errcode,
                     (unsigned long)i);
                 dwarf_destruct_elf_access(ep,&errcode);
@@ -713,7 +785,7 @@ do_one_file(const char *s,sec_options *options)
         res = dwarf_load_elf_dynamic(ep,shdr,&errcode);
         if (res == DW_DLV_ERROR) {
             print_minimum(ep,options);
-            P("ERROR: unable to load strings from."
+            P("ERROR: Unable to load strings from."
                 "section %lu  errnum %d\n",(unsigned long)i,
                 errcode);
             dwarf_destruct_elf_access(ep,&errcode);
@@ -728,42 +800,40 @@ do_one_file(const char *s,sec_options *options)
         elf_print_sg_groups(ep);
     }
     errcode = 0;
-    {
-        struct generic_shdr *psh = ep->f_shdr+1;
+    shdr = ep->f_shdr+1;
 
-        for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++psh) {
-            const char *namestr = 0;
+    for (i = 1;i < ep->f_loc_shdr.g_count; ++i,++shdr) {
+        const char *namestr = 0;
 
-            if (psh->gh_content) {
-                continue;
+        if (shdr->gh_content) {
+            continue;
+        }
+        namestr = shdr->gh_namestring;
+        if (shdr->gh_type == SHT_REL) {
+            res = dwarf_load_elf_rel(ep,i,&errcode);
+            if (res == DW_DLV_ERROR) {
+                print_minimum(ep,options);
+                P("ERROR reading .rel section "
+                    LONGESTUFMT " Error code %d (%s) file:%s \n",
+                    i,errcode,dwarf_get_errname(errcode),
+                    sanitized(filename,buffer1,BUFFERSIZE));
+                P("ERROR attempting to continue\n");
+                dwarf_destruct_elf_access(ep,&errcode);
+                return;
             }
-            namestr = psh->gh_namestring;
-            if (psh->gh_type == SHT_REL) {
-                res = dwarf_load_elf_rel(ep,i,&errcode);
-                if (res == DW_DLV_ERROR) {
-                    print_minimum(ep,options);
-                    P("ERROR reading .rel section "
-                        LONGESTUFMT " Error code %d (%s) file:%s \n",
-                        i,errcode,dwarf_get_errname(errcode),
-                        sanitized(filename,buffer1,BUFFERSIZE));
-                    P("ERROR attempting to continue\n");
-                    dwarf_destruct_elf_access(ep,&errcode);
-                    return;
-                }
-            } else if (psh->gh_type == SHT_RELA) {
-                res = dwarf_load_elf_rela(ep,i,&errcode);
-                if (res == DW_DLV_ERROR) {
-                    print_minimum(ep,options);
-                    P("ERROR reading .rela section "
-                        LONGESTUFMT
-                        " \"%s\" Error code %d (%s) file:%s \n",
-                        i,
-                        sanitized(namestr,buffer2,BUFFERSIZE),
-                        errcode,dwarf_get_errname(errcode),
-                        sanitized(filename,buffer1,BUFFERSIZE));
-                    dwarf_destruct_elf_access(ep,&errcode);
-                    return;
-                }
+        } else if (shdr->gh_type == SHT_RELA) {
+            res = dwarf_load_elf_rela(ep,i,&errcode);
+            if (res == DW_DLV_ERROR) {
+                print_minimum(ep,options);
+                P("ERROR reading .rela section "
+                    LONGESTUFMT
+                    " \"%s\" Error code %d (%s) file:%s \n",
+                    i,
+                    sanitized(namestr,buffer2,BUFFERSIZE),
+                    errcode,dwarf_get_errname(errcode),
+                    sanitized(filename,buffer1,BUFFERSIZE));
+                dwarf_destruct_elf_access(ep,&errcode);
+                return;
             }
         }
     }
@@ -1048,7 +1118,7 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
     }
     sort_el = calloc(generic_count,sizeof(sort_section_element));
     if (!sort_el) {
-        P("ERROR: unable to allocate " LONGESTUFMT
+        P("ERROR: Unable to allocate " LONGESTUFMT
             " section elements, cannot print section\n",
             generic_count);
             return DW_DLV_OK;

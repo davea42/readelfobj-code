@@ -24,4 +24,4 @@ Elf object file.
   e_shstrndx : is in extended form, value from section zero
   e_shstrndx : 0x22 (34) Section strings section
 Section strings never found. String section number 34
-ERROR: unable to load section headers, errcode 8 (RO_ERR_FILEOFFSETBAD)
+ERROR: Unable to load section headers, errcode 8 (RO_ERR_FILEOFFSETBAD)

@@ -45,4 +45,4 @@ Summary: 0 bytes for 0 debug sections
 ERROR For section 1 the namestring field is a null-pointer
 ERROR For section 2 the namestring field is a null-pointer
 ERROR For section 3 the namestring field is a null-pointer
-ERROR: unable to load section headers, errcode 315 (<unknown>)
+ERROR: Unable to load section headers, errcode 315 (<unknown>)
