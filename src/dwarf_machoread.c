@@ -121,7 +121,7 @@ _dwarf_not_ascii(const char *s)
 {
     unsigned char *cp = (unsigned char *)s;
     if (! *cp) {
-        return TRUE;
+        return FALSE;
     }
     for (  ; *cp ; ++cp) {
         if (*cp < 0x20 || *cp > 0x7e) {
@@ -752,7 +752,7 @@ dwarf_macho_load_dwarf_section_details32(struct macho_filedata_s *mfp,
             printf("A section name (%s) is not simple"
                 " ascii characters. Corrupt Dwarf\n",
                 secs->sectname);
-            *errcode = RO_ERR_FILEOFFSETBAD;
+            *errcode = DW_DLE_MACHO_CORRUPT_SECTIONDETAILS;
             return DW_DLV_ERROR;
         }
         strncpy(secs->segname,mosec.segname,16);

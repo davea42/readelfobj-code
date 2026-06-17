@@ -160,6 +160,7 @@ extern "C" {
 #define DW_DLE_READ_LITTLEENDIAN_ERROR         331
 #define DW_DLE_READ_BIGENDIAN_ERROR            332
 #define DW_DLE_ELF_ENDIAN_BAD                  421
+#define DW_DLE_MACHO_CORRUPT_SECTIONDETAILS    488
 
 
 const char *dwarf_get_errname(int i);

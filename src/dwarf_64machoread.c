@@ -356,7 +356,7 @@ _dwarf_macho_load_dwarf_section_details64(
             printf("A section name (%s) is not simple"
                 " ascii characters. Corrupt DWARF.\n",
                 secs->sectname);
-            *errcode = RO_ERR_FILEOFFSETBAD;
+            *errcode = DW_DLE_MACHO_CORRUPT_SECTIONDETAILS;
             return DW_DLV_ERROR;
         }
         strncpy(secs->segname,mosec.segname,16);
