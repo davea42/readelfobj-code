@@ -1,3 +1,18 @@
+2026-06-17:  David Anderson
+    commit 101d560cb66dfc7dae80eb2021d3608374d7f1a0
+
+    Revised the error code to DW_DLE_MACHO_CORRUPT_SECTIONDETAILS
+    to match libdwarf.
+            modified:   dwarf_64machoread.c
+            modified:   dwarf_machoread.c
+            modified:   dwarf_reading.h
+
+2026-05-26:  David Anderson
+    commit 16cc6605a33835ef7d23babf0750952c5df625a2
+
+    Up to date with git log
+            modified:   ChangeLog
+
 2026-05-26:  David Anderson
     commit 01a2760633967a3d60fe3570ff5f088264f22ccf
 
