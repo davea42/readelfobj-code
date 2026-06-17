@@ -120,9 +120,6 @@ int
 _dwarf_not_ascii(const char *s)
 {
     unsigned char *cp = (unsigned char *)s;
-    if (! *cp) {
-        return FALSE;
-    }
     for (  ; *cp ; ++cp) {
         if (*cp < 0x20 || *cp > 0x7e) {
             return TRUE;
