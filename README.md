@@ -1,6 +1,6 @@
 # README.md
-Last update: May 17, 2026
-Version now set to 2.3.1
+Last update: September 27, 2026
+Version now set to 2.3.2
 
 The distribution consists entirely of C
 source files (along with GNU configure scripts
@@ -42,6 +42,9 @@ prints the header information.  It also checks for certain
 errors including wasted space in the object files.  It also
 dumps Elf relocation sections, Elf symtab sections, and the
 Elf dynamic section.
+For reporting on Elf objects in 2.3.2 we recommend
+using --v for more readable section information.
+Now --all includes --v automatically.
 
 #### readobjpe
 
