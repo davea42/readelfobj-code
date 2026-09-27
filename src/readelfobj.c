@@ -70,7 +70,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "dwarf_elf_reloc_ppc64.h"
 #include "dwarf_elf_reloc_sparc.h"
 #include "dwarf_elf_reloc_x86_64.h"
-#include "dwarfstring.h"
+#include "dwarf_string.h"
+#include "dwarf_elf_naming.h"
 #include "dwarf_debuglink.h"
 #include "common_options.h"
 
@@ -121,7 +122,6 @@ int print_elf_sections_detail = 0;/* --v */
 
 static char buffer1[BUFFERSIZE];
 static char buffer2[BUFFERSIZE];
-static char buffer3[BUFFERSIZE];
 static char buffer4[BUFFERSIZE];
 
 char *filename;
@@ -129,6 +129,8 @@ FILE *fin;
 
 char *Usage = "Usage: readelfobj <options> file ...\n"
     "Options:\n"
+    " We suggest adding the --v option when"
+        " printing section details\n"
     "--print-dynamic print the .dynamic section (DT_ stuff)\n"
     "--print-groups  print the section group of each DWARF section\n"
     "--print-relocs  print relocation entries (.rela & .rel)\n"
@@ -185,6 +187,7 @@ main(int argc,char **argv)
                 print_dynamic_sections= 1;
                 print_groups= 1;
                 print_sec_extra = 1;
+                print_elf_sections_detail = 1;
                 continue;
             }
             if (strcmp(argv[0],"--print-sec-extra") == 0) {
@@ -372,6 +375,7 @@ check_dynamic_section(elf_filedata ep)
     Dwarf_Unsigned dynamic_s_snum = 0;
     int foundp = FALSE;
     int founds = FALSE;
+    dwarfstring m;
 
     if (!pcount) {
         /* nothing to do. */
@@ -382,12 +386,15 @@ check_dynamic_section(elf_filedata ep)
         return DW_DLV_NO_ENTRY;
     }
 
+    dwarfstring_constructor(&m);
     /*  In case of error reading headers count might now be zero */
     for ( i = 0; i < pcount; ++i,  gphdr++) {
-        const char *typename =
-            dwarf_get_elf_program_header_type_name(
-            gphdr->gp_type, buffer1,BUFFERSIZE);
+        const char *typename = 0;
 
+        dwarf_get_elf_program_header_type_name(
+            gphdr->gp_type, &m);
+
+        typename = dwarfstring_string(&m);
         /* The type name returned is in ( ) */
         if (!strcmp(typename, "(PT_DYNAMIC )")) {
             dynamic_p_offset = gphdr->gp_offset;
@@ -410,6 +417,7 @@ check_dynamic_section(elf_filedata ep)
             break;
         }
     }
+    dwarfstring_destructor(&m);
     if (!foundp || !founds) {
         /* Nothing to do */
         return DW_DLV_NO_ENTRY;
@@ -562,34 +570,37 @@ struct validcombo_s combo[] = {
     {0,0}
 };
 
-#define TBUFSIZE 2000
-static char tbuf1[TBUFSIZE];
-static char tbuf2[TBUFSIZE];
 
 static int
 check_valid_combo(const char *namestr,
     Dwarf_Unsigned type)
 {
     int i = 0;
+
     for(i = 0; combo[i].v_name; ++i) {
         if (!strcmp(namestr,combo[i].v_name)) {
             if (type == (unsigned long)combo[i].v_type) {
                 return DW_DLV_OK;
             } else {
-                const char *nt = 
-                    dwarf_get_elf_section_header_st_type(
-                        combo[i].v_type, tbuf1,
-                        TBUFSIZE);
-                const char *nt2 = 
-                    dwarf_get_elf_section_header_st_type(
-                        type, tbuf2,
-                        TBUFSIZE);
+                dwarfstring m;
+                dwarfstring m2;
+
+                dwarfstring_constructor(&m);
+                dwarfstring_constructor(&m2);
+                dwarf_get_elf_section_header_st_type(
+                        combo[i].v_type, &m);
+                dwarf_get_elf_section_header_st_type(
+                        type, &m2);
                 P("ERROR: Section %s does not have "
                     "The expected type of %s (%lu), "
                     "but has %s (%lu) instead.\n",
                     namestr,
-                    nt,(unsigned long)combo[i].v_type,
-                    nt2,(unsigned long)type);
+                    dwarfstring_string(&m),
+                    (unsigned long)combo[i].v_type,
+                    dwarfstring_string(&m2),
+                    (unsigned long)type);
+                dwarfstring_destructor(&m);
+                dwarfstring_destructor(&m2);
                 return DW_DLV_ERROR;
             }
         }
@@ -725,13 +736,16 @@ do_one_file(const char *s,sec_options *options)
     } else {
         shdr = ep->f_shdr + ep->f_elf_shstrings_sect_index;
         if (shdr->gh_type != SHT_STRTAB) {
-            const char *nt2 =
-                dwarf_get_elf_section_header_st_type(
-                        shdr->gh_type, tbuf2,
-                        TBUFSIZE);
+            dwarfstring m;
+            char *typename = 0;
+
+            dwarf_get_elf_section_header_st_type(shdr->gh_type,
+                &m);
+            typename = dwarfstring_string(&m);
              P("ERROR: Section with section strings type is wrong:"
                  " %s (%lu) but should be SHT_STRTAB\n",
-                 nt2,(unsigned long)shdr->gh_type);
+                 typename,(unsigned long)shdr->gh_type);
+            dwarfstring_destructor(&m);
         }
     }
 
@@ -994,6 +1008,7 @@ elf_print_progheaders(elf_filedata ep)
     Dwarf_Unsigned count = ep->f_loc_phdr.g_count;
     struct generic_phdr *gphdr = ep->f_phdr;
     Dwarf_Unsigned i = 0;
+    dwarfstring m;
 
     if (!ep->f_phdr) {
         return DW_DLV_OK;
@@ -1006,12 +1021,14 @@ elf_print_progheaders(elf_filedata ep)
         return DW_DLV_OK;
     }
     P("{\n");
+    dwarfstring_constructor(&m);
     for ( i = 0; i < count; ++i,  gphdr++) {
+        dwarfstring_reset(&m);
         P("Program header " LONGESTUFMT ,i);
+        dwarf_get_elf_program_header_type_name(gphdr->gp_type,
+            &m);
         P("  type %s " LONGESTXFMT,
-            dwarf_get_elf_program_header_type_name(gphdr->gp_type,
-                buffer1,BUFFERSIZE),
-            gphdr->gp_type);
+            dwarfstring_string(&m),gphdr->gp_type);
         P("\n");
         P("  offset " LONGESTXFMT " (" LONGESTUFMT ")",
             gphdr->gp_offset,gphdr->gp_offset);
@@ -1044,6 +1061,7 @@ elf_print_progheaders(elf_filedata ep)
                 gphdr->gp_filesz);
         }
     }
+    dwarfstring_destructor(&m);
     P("}\n");
     return DW_DLV_OK;
 }
@@ -1053,19 +1071,26 @@ print_sec_long_format(struct generic_shdr * gshdr,
     Dwarf_Unsigned origindex,
     const char *namestr)
 {
+    dwarfstring m;
+    dwarfstring m2;
+
+    dwarfstring_constructor(&m);
+    dwarfstring_constructor(&m2);
     P("Section " LONGESTUFMT " %s\n",origindex,namestr);
     P("  sh_name     : "LONGESTXFMT " (" LONGESTUFMT ")\n",
         gshdr->gh_name,
         gshdr->gh_name);
+
+    dwarf_get_elf_section_header_st_type(gshdr->gh_type,
+        &m);
     P("  sh_type     : " LONGESTXFMT ,gshdr->gh_type);
-    P(" %s\n", dwarf_get_elf_section_header_st_type(
-            gshdr->gh_type,
-            buffer3,BUFFERSIZE));
+    P(" %s\n", dwarfstring_string(&m));
+
     P("  sh_flags    : " LONGESTXFMT ,gshdr->gh_flags);
     if (gshdr->gh_flags) {
-        P(" %s",dwarf_get_elf_section_header_flag_names(
-            gshdr->gh_flags,
-            buffer2,BUFFERSIZE));
+        dwarf_get_elf_section_header_flag_names(gshdr->gh_flags,
+            &m2);
+        P(" %s", dwarfstring_string(&m2));
     }
     P("\n");
     P("  sh_addr     : " LONGESTXFMT "\n",gshdr->gh_addr);
@@ -1088,6 +1113,8 @@ print_sec_long_format(struct generic_shdr * gshdr,
         gshdr->gh_section_group_number);
     P("  Group count       : " LONGESTUFMT "\n",
         gshdr->gh_sht_group_array_count);
+    dwarfstring_destructor(&m);
+    dwarfstring_destructor(&m2);
 }
 
 static int
@@ -1140,7 +1167,8 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
         const char *namestr = "";
         sort_section_element *sel = 0 ;
         Dwarf_Unsigned origindex = 0;
-        sel = &sort_el[i];
+        dwarfstring m;
+        dwarfstring m2;
 
         sel = &sort_el[i];
         gshdr = (struct generic_shdr *)sel->od_sec_desc;
@@ -1155,21 +1183,22 @@ elf_print_sectheaders(elf_filedata ep,sec_options *options)
             print_sec_long_format(gshdr,origindex,namestr);
             continue;
         }
-
         P("[" LONGESTUFMT2 "]", origindex);
         P(" " LONGESTXFMT8,gshdr->gh_offset);
         P(" " LONGESTXFMT8,gshdr->gh_size);
         P(" %s ",expand_to_n(namestr,16,buffer4));
+        dwarfstring_constructor(&m);
         if (!gshdr->gh_flags) {
             P(" (0)");
         } else {
-            P(" %s",
-                dwarf_get_elf_section_header_flag_names(
-                    gshdr->gh_flags,
-                    buffer2,BUFFERSIZE));
+            dwarf_get_elf_section_header_flag_names(gshdr->gh_flags,
+                &m);
+            P(" %s", dwarfstring_string(&m));
         }
-        P("%s",dwarf_get_elf_section_header_st_type(gshdr->gh_type,
-            buffer3,BUFFERSIZE));
+        dwarfstring_constructor(&m2);
+        dwarf_get_elf_section_header_st_type(gshdr->gh_type,
+            &m2);
+        P("%s",dwarfstring_string(&m2));
         if (gshdr->gh_link || gshdr->gh_info || gshdr->gh_addralign) {
             P("(" LONGESTUFMT ,gshdr->gh_link);
             P("," LONGESTXFMT ,gshdr->gh_info);
@@ -1285,6 +1314,10 @@ elf_print_symbols(elf_filedata ep,
         const char *localstr = 0;
         struct generic_shdr *shp = 0;
         const char *targetsecname = "";
+        dwarfstring m;
+        dwarfstring m2;
+        dwarfstring m3;
+        dwarfstring m4;
 
         P("[%3d]",(int)i);
         P("  st_value "
@@ -1303,24 +1336,30 @@ elf_print_symbols(elf_filedata ep,
             gsym->gs_info);
         P("\n");
 
+        dwarfstring_constructor(&m);
+        dwarfstring_constructor(&m2);
+        dwarfstring_constructor(&m3);
+        dwarfstring_constructor(&m4);
+        dwarf_get_elf_symbol_stt_type(gsym->gs_type,&m);
         P("  type "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
-            gsym->gs_type,gsym->gs_type,
-            dwarf_get_elf_symbol_stt_type(gsym->gs_type,
-                buffer2, BUFFERSIZE));
+             gsym->gs_type,gsym->gs_type,
+            dwarfstring_string(&m));
+        dwarf_get_elf_symbol_stb_string(gsym->gs_bind,
+            &m2);
         P(", bind "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_bind,gsym->gs_bind,
-            dwarf_get_elf_symbol_stb_string(gsym->gs_bind,
-                buffer2,BUFFERSIZE));
+            dwarfstring_string(&m2));
         P("\n");
 
+        dwarf_get_elf_symbol_sto_type(gsym->gs_other,
+            &m4);
         P("  st_other "
             LONGESTXFMT " (" LONGESTUFMT ") %s",
             gsym->gs_other,
             gsym->gs_other,
-            dwarf_get_elf_symbol_sto_type(gsym->gs_other,
-                buffer2, BUFFERSIZE));
+            dwarfstring_string(&m4));
         P(", st_shndx " LONGESTUFMT , gsym->gs_shndx);
         if (!gsym->gs_shndx) {
             targetsecname = "SHN_UNDEF (no section)";
@@ -1332,8 +1371,8 @@ elf_print_symbols(elf_filedata ep,
             if (gsym->gs_shndx == SHN_XINDEX) {
                 P("(Data is in section SHT_SYMTAB_SHNDX)");
             }
-            targetsecname = dwarf_get_elf_symbol_shn_type(
-                gsym->gs_shndx,buffer2,BUFFERSIZE);
+            dwarf_get_elf_symbol_shn_type(gsym->gs_shndx,&m3);
+            targetsecname = dwarfstring_string(&m3);
         }
         P(" \"%s\"",targetsecname?targetsecname:"");
         P("\n");
@@ -1361,6 +1400,10 @@ elf_print_symbols(elf_filedata ep,
                 sanitized(localstr,buffer1,BUFFERSIZE));
             P("\n");
         }
+        dwarfstring_destructor(&m);
+        dwarfstring_destructor(&m2);
+        dwarfstring_destructor(&m3);
+        dwarfstring_destructor(&m4);
     }
     P("}\n");
     return DW_DLV_OK;
@@ -1569,6 +1612,8 @@ elf_print_elf_header(elf_filedata ep)
 {
     Dwarf_Unsigned i = 0;
     int c = 0;
+    dwarfstring m;
+   
 
     if (secoptionsdata.co_printfilenames) {
         P("Elf object file %s\n",
@@ -1589,6 +1634,7 @@ elf_print_elf_header(elf_filedata ep)
         P("%02x",c);
     }
     P("\n");
+    dwarfstring_constructor(&m);
     i = ep->f_ehdr->ge_ident[EI_CLASS];
     P("  File class    = " LONGESTXFMT " %s\n",i,
         (i == ELFCLASSNONE)? "(ELFCLASSNONE)":
@@ -1606,10 +1652,9 @@ elf_print_elf_header(elf_filedata ep)
         (i == EV_CURRENT)? "(EV_CURRENT)":
         "(unknown)");
     i = ep->f_ehdr->ge_ident[EI_OSABI];
+        dwarf_get_elf_osabi_name(i,&m);
     P("  OS ABI        = " LONGESTXFMT " %s\n",
-        i,
-        dwarf_get_elf_osabi_name(i,buffer1,BUFFERSIZE));
-
+        i, dwarfstring_string(&m));
     i = ep->f_ehdr->ge_ident[EI_ABIVERSION];
     P("  ABI version   = " LONGESTXFMT "\n",i);
     i = ep->f_ehdr->ge_type;
@@ -1623,12 +1668,16 @@ elf_print_elf_header(elf_filedata ep)
         "unknown");
     /*  See http://www.uxsglobal.com/developers/gabi/latest/
         ch4.eheader.html  */
+    dwarfstring_reset(&m);
+    dwarf_get_elf_machine_name(ep->f_ehdr->ge_machine,&m);
     P("  e_machine  : " LONGESTXFMT" (%s)\n",ep->f_ehdr->ge_machine,
-        dwarf_get_elf_machine_name(ep->f_ehdr->ge_machine));
+        dwarfstring_string(&m));
     P("  e_version  : " LONGESTXFMT  "\n", ep->f_ehdr->ge_version);
     P("  e_entry    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_entry);
     P("  e_phoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_phoff);
     P("  e_shoff    : " LONGESTXFMT8 "\n", ep->f_ehdr->ge_shoff);
+
+    dwarfstring_reset(&m);
     P("  e_flags    : " LONGESTXFMT  "\n", ep->f_ehdr->ge_flags);
     P("  e_ehsize   : " LONGESTXFMT  " (" LONGESTUFMT ")\n",
         ep->f_ehdr->ge_ehsize,
@@ -1677,6 +1726,7 @@ elf_print_elf_header(elf_filedata ep)
             ep->f_ehdr->ge_shnum);
         ep->f_ehdr->ge_shstrndx = 0;
     }
+    dwarfstring_destructor(&m);
     return DW_DLV_OK;
 }
 
@@ -2010,6 +2060,7 @@ elf_print_dynamic_inner(elf_filedata ep,struct generic_shdr *psh)
     struct generic_shdr *dynamicsect = psh;
     Dwarf_Unsigned linktostringsec = 0;
     int errcode = 0;
+    dwarfstring m;
 
     bufcount = psh->gh_location.g_count;
     if (bufcount) {
@@ -2029,15 +2080,17 @@ elf_print_dynamic_inner(elf_filedata ep,struct generic_shdr *psh)
             sanitized(dynamicsect->gh_namestring,buffer6,BUFFERSIZE));
         return RO_ERROR;
     }
+    dwarfstring_constructor(&m);
     gbuffer = psh->gh_dynamic;
     linktostringsec = psh->gh_link;
     printf(" Tag          Name             Value\n");
     for (i = 0; i < bufcount; ++i,++gbuffer) {
-        const char *name = 0;
         const char *targname = "";
 
-        name = dwarf_get_elf_dynamic_table_name(gbuffer->gd_tag,
-            buffer6,BUFFERSIZE);
+        dwarfstring_reset(&m);
+        
+        dwarf_get_elf_dynamic_table_name(gbuffer->gd_tag,
+            &m);
         switch(gbuffer->gd_tag) {
         case DT_NULL:
             break;
@@ -2130,11 +2183,12 @@ elf_print_dynamic_inner(elf_filedata ep,struct generic_shdr *psh)
             LONGESTXFMT8 " %-16s "
             LONGESTXFMT8 " (" LONGESTUFMT ") %s\n",
             gbuffer->gd_tag,
-            name,
+            dwarfstring_string(&m),
             gbuffer->gd_val,
             gbuffer->gd_val,
             targname);
     }
+    dwarfstring_destructor(&m);
     return RO_OK;
 }
 

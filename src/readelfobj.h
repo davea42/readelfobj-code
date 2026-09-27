@@ -1313,6 +1313,7 @@ int dwarf_get_elf_symstr_string(elf_filedata ep,
     const char **str_out,
     int*errcode);
 
+#if 0
 /*  The following for an elf checker/dumper. */
 const char * dwarf_get_elf_machine_name(unsigned value);
 
@@ -1348,6 +1349,7 @@ const char * dwarf_get_elf_section_header_flag_names(
     Dwarf_Unsigned value, char *buffer, unsigned buflen);
 const char * dwarf_get_elf_section_header_st_type_name(
     Dwarf_Unsigned value, char *buffer, unsigned buflen);
+#endif
 
 #ifndef EI_NIDENT
 #define EI_NIDENT 16

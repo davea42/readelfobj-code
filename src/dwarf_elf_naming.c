@@ -56,101 +56,72 @@ THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
 #endif /* HAVE_ELF_H */
 #include "dwarf_types.h"
 #include "dwarf_reading.h"
+#include "dwarf_string.h"
+#include "dwarf_elf_naming.h"
 #include "readelfobj.h"
 
-/*  Used for all sorts of tables, not just e_machine */
-struct em_values {
-    const char *em_name;
-    Dwarf_Unsigned em_number;
-};
-
-static const char *
+/*  struct em_values used for all sorts of tables, 
+    not just e_machine */
+static void
 standard_bitmap_table_name(struct em_values *em,
     Dwarf_Unsigned value,
-    char *buffer,
-    unsigned buflen)
+    dwarfstring *out)
 {
     struct em_values *ev = em;
-    unsigned next = 0;
-    unsigned remaining = buflen - 30;
+    unsigned set_leading_space = 0;
 
-    if (buflen < 60) {
-        return "(ERROR:  buffer len too short).";
-    }
-    buffer[next++] = '(';
-    buffer[next] = 0;
+    dwarfstring_append(out,"(");
     for (;  ev->em_name; ev++) {
-        unsigned curslen = 0;
         Dwarf_Unsigned mval = value&ev->em_number;
         if (mval != ev->em_number) {
             continue;
         }
-        curslen = strlen(ev->em_name);
-        if (curslen < remaining) {
-            if (next > 1) {
-                buffer[next++] = ' ';
-            }
-            strcpy(buffer+next,ev->em_name);
-            next += curslen;
-            remaining -= curslen;
-            buffer[next] = 0;
+        if (set_leading_space) {
+            dwarfstring_append(out," ");
         } else {
-            /* no more room, should never happen */
-            break;
+            set_leading_space = 1;
         }
+        dwarfstring_append(out,(char *)ev->em_name);
     }
-    if (buffer[1] == 0) {
-        /*  Found no matches. Bogus number or incomplete table. */
-        strcpy(buffer,"(Unknown)");
+
+    if (!set_leading_space) {
+        dwarfstring_append_printf_u(out,"(Unknown %u",
+            ev->em_number);
+        dwarfstring_append_printf_u(out," 0x%x)",
+            ev->em_number);
     } else {
-        buffer[next++] = ')';
-        buffer[next] = 0;
+        dwarfstring_append(out,")");
     }
-    return buffer;
 }
 
-static const char *
+static void
 standard_table_name(struct em_values *em,
     Dwarf_Unsigned value,
-    char *buffer,
-    unsigned buflen)
+    dwarfstring *out)
 {
     struct em_values *ev = em;
-    unsigned next = 0;
-    unsigned remaining = buflen - 30;
+    unsigned set_leading_space = 0;
 
-    if (buflen < 60) {
-        return "(ERROR:  buffer len too short).";
-    }
-    buffer[next++] = '(';
-    buffer[next] = 0;
+    dwarfstring_append(out,"(");
     for (;  ev->em_name; ev++) {
-        unsigned curslen = 0;
         if (value != ev->em_number) {
             continue;
         }
-        curslen = strlen(ev->em_name);
-        if (curslen < remaining) {
-            if (next > 1) {
-                buffer[next++] = ' ';
-            }
-            strcpy(buffer+next,ev->em_name);
-            next += curslen;
-            remaining -= curslen;
-            buffer[next] = 0;
+        if (set_leading_space) {
+            dwarfstring_append(out," ");
         } else {
-            /* no more room, should never happen */
-            break;
+            set_leading_space = 1;
         }
+        dwarfstring_append(out,(char *)ev->em_name);
     }
-    if (buffer[1] == 0) {
-        /*  Found no matches. Bogus number or incomplete table. */
-        strcpy(buffer,"(Unknown)");
+    if (!set_leading_space) {
+        dwarfstring_append_printf_u(out,"(Unknown %u",
+            value);
+        dwarfstring_append_printf_u(out," 0x%x)",
+            value);
     } else {
-        buffer[next++] = ')';
-        buffer[next] = 0;
+        dwarfstring_append(out,")");
     }
-    return buffer;
 }
 
 static struct em_values emvals[] = {
@@ -400,13 +371,15 @@ static struct em_values emvals[] = {
     {"EM_RISCV",243}, /* RISC-V */
     {"EM_LANAI",244}, /* Lanai 32-bit processor */
     {"EM_BPF",247}, /* Linux kernel bpf virtual machine */
+    {"EM_CSKY",252}, /* C-SKY */
+    {"EM_LOONGARCH",258}, /* LoongArch */
     {"EM_WEBASSEMBLY",0x4157}, /* WebAssembly architecture */
     {0,0}
 };
 
-/* ASSERT: table values sorted by em_number */
-const char *
-dwarf_get_elf_machine_name(unsigned value)
+void
+dwarf_get_elf_machine_name(Dwarf_Unsigned value,
+    dwarfstring *out)
 {
     struct em_values *ev = &emvals[0];
 
@@ -417,10 +390,15 @@ dwarf_get_elf_machine_name(unsigned value)
         if (value < ev->em_number) {
             break;
         }
-        return ev->em_name;
+        dwarfstring_append(out,(char *)ev->em_name);
+        return;
     }
-    return "Unknown em_machine";
+    dwarfstring_append_printf_u(out,"Unknown em_machine %u",
+        ev->em_number);
+    dwarfstring_append_printf_u(out," (0x%x)",
+        ev->em_number);
 }
+
 
 static struct em_values dtvals[] = {
     {"DT_NULL",0},         /* Marks end of dynamic array.*/
@@ -650,15 +628,14 @@ static struct em_values dtvals[] = {
 
 /*  Table values not sorted by em_number,
     will have dups */
-const char *
-dwarf_get_elf_dynamic_table_name(Dwarf_Unsigned value,char *buffer,
-    unsigned buflen)
+void
+dwarf_get_elf_dynamic_table_name(Dwarf_Unsigned value,
+    dwarfstring *out)
 {
     struct em_values *ev = &dtvals[0];
-    const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
+    return;
 }
 
 static struct em_values pt_vals[] = {
@@ -719,15 +696,13 @@ static struct em_values pt_vals[] = {
 };
 
 /*  There are duplicates here and not all in order.  */
-const char *
+void
 dwarf_get_elf_program_header_type_name(Dwarf_Unsigned value,
-    char *buffer, unsigned buflen)
+    dwarfstring *out)
 {
     struct em_values *ev = &pt_vals[0];
-    const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
 }
 
 static struct em_values shf_vals[] = {
@@ -834,17 +809,15 @@ static struct em_values shf_vals[] = {
     {0,0}
 };
 /*  There are duplicates here and not all in order.  */
-const char *
+void
 dwarf_get_elf_section_header_flag_names(Dwarf_Unsigned value,
-    char *buffer,
-    unsigned buflen)
+    dwarfstring *out)
 {
     struct em_values *ev = &shf_vals[0];
-    const char *out = 0;
 
-    out = standard_bitmap_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_bitmap_table_name(ev, value,out);
 }
+
 
 static struct em_values sht_vals[] = {
     {"SHT_NULL",0},  /* No associated section (inactive entry). */
@@ -919,17 +892,14 @@ static struct em_values sht_vals[] = {
 };
 
 /* Not fully in order. Few duplicates. */
-
-const char *
+void
 dwarf_get_elf_section_header_st_type(Dwarf_Unsigned value,
-    char *buffer,
-    unsigned buflen)
+    dwarfstring *out)
 {
     struct em_values *ev = &sht_vals[0];
-    const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
+    return;
 }
 
 static struct em_values sto_vals[] = {
@@ -951,15 +921,14 @@ static struct em_values sto_vals[] = {
     {0,0}
 
 };
-const char *
-dwarf_get_elf_symbol_sto_type(Dwarf_Unsigned value, char *buffer,
-    unsigned buflen)
+void
+dwarf_get_elf_symbol_sto_type(Dwarf_Unsigned value,
+    dwarfstring *out)
 {
     struct em_values *ev = &sto_vals[0];
-    const char *out = 0;
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
 }
+
 static struct em_values shn_vals[] = {
     /* Undefined, missing, irrelevant, or meaningless */
     {"SHN_UNDEF",0},
@@ -998,15 +967,13 @@ static struct em_values shn_vals[] = {
     {0,0}
 };
 
-const char *
-dwarf_get_elf_symbol_shn_type(Dwarf_Unsigned value, char *buffer,
-    unsigned buflen)
+void
+dwarf_get_elf_symbol_shn_type(Dwarf_Unsigned value,
+    dwarfstring *out)
 {
     struct em_values *ev = &shn_vals[0];
-    const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
 }
 
 static struct em_values stb_vals[] = {
@@ -1033,16 +1000,15 @@ static struct em_values stb_vals[] = {
     {0,0}
 };
 
-const char *
+void
 dwarf_get_elf_symbol_stb_string(Dwarf_Unsigned value,
-    char * buffer,unsigned buflen)
+    dwarfstring *out)
 {
     struct em_values *ev = &stb_vals[0];
-    const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
 }
+
 
 static struct em_values stt_vals[] = {
     {"STT_NOTYPE",0},     /* Symbol's type is not specified */
@@ -1073,15 +1039,13 @@ static struct em_values stt_vals[] = {
     {0,0}
 };
 
-const char *
-dwarf_get_elf_symbol_stt_type(Dwarf_Unsigned value, char *buffer,
-    unsigned buflen)
+void
+dwarf_get_elf_symbol_stt_type(Dwarf_Unsigned value,
+    dwarfstring *out)
 {
     struct em_values *ev = &stt_vals[0];
-    const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
 }
 
 static struct em_values osabi_vals[] = {
@@ -1122,13 +1086,11 @@ static struct em_values osabi_vals[] = {
     {0,0}
 };
 
-const char *
+void
 dwarf_get_elf_osabi_name(Dwarf_Unsigned value,
-    char * buffer,unsigned buflen)
+    dwarfstring *out)
 {
     struct em_values *ev = &osabi_vals[0];
-    const char *out = 0;
 
-    out = standard_table_name(ev, value,buffer,buflen);
-    return out;
+    standard_table_name(ev, value,out);
 }

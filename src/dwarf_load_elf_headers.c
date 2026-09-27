@@ -559,6 +559,37 @@ generic_ehdr_from_64(elf_filedata ep,
     return RO_OK;
 }
 
+/*  Used in object checkers. */
+static void
+dwarf_insert_in_use_entry(elf_filedata ep,
+    const char *description,Dwarf_Unsigned offset,
+    Dwarf_Unsigned length,Dwarf_Unsigned align)
+{   
+    struct in_use_s *e = 0;
+    
+    e = (struct in_use_s *)calloc(1,sizeof(struct in_use_s));
+    if (!e) {
+        P("ERROR: Out of memory creating in-use entry " LONGESTUFMT
+            " Giving up.\n",ep->f_in_use_count);
+        exit(1);
+    }   
+    e->u_next = 0;
+    e->u_name = description;
+    e->u_offset = offset;
+    e->u_align = align;
+    e->u_length = length;
+    e->u_lastbyte = offset+length;
+    ++ep->f_in_use_count;
+    if (ep->f_in_use) {
+        ep->f_in_use_tail->u_next = e;
+        ep->f_in_use_tail = e;
+        return;
+    }
+    ep->f_in_use = e;
+    ep->f_in_use_tail = e;
+}
+
+
 static int
 generic_phdr_from_phdr32(elf_filedata ep,
     struct generic_phdr **phdr_out,
@@ -3102,7 +3133,7 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
         ep->f_pointersize = 64;
         break;
     case  0:
-        P(" Odd Elf header , EI_CLASS of zero improper"
+        P(" Odd Elf header , EI_CLASS of zero improper. "
             "Ignoring this error.\n");
         break;
     default:
@@ -3119,7 +3150,7 @@ dwarf_load_elf_header(elf_filedata ep,int*errcode)
         ep->f_endian = DW_END_big;
         break;
     case  0:
-        P(" Odd Elf header , EI_DATA of zero improper"
+        P(" Odd Elf header , EI_DATA of zero improper. "
             "Ignoring this error.\n");
         break;
     default:
@@ -3537,34 +3568,4 @@ dwarf_load_elf_section_is_dwarf(const char *sname)
         return TRUE;
     }
     return FALSE;
-}
-
-/*  Used in object checkers. */
-void
-dwarf_insert_in_use_entry(elf_filedata ep,
-    const char *description,Dwarf_Unsigned offset,
-    Dwarf_Unsigned length,Dwarf_Unsigned align)
-{
-    struct in_use_s *e = 0;
-
-    e = (struct in_use_s *)calloc(1,sizeof(struct in_use_s));
-    if (!e) {
-        P("ERROR: Out of memory creating in-use entry " LONGESTUFMT
-            " Giving up.\n",ep->f_in_use_count);
-        exit(1);
-    }
-    e->u_next = 0;
-    e->u_name = description;
-    e->u_offset = offset;
-    e->u_align = align;
-    e->u_length = length;
-    e->u_lastbyte = offset+length;
-    ++ep->f_in_use_count;
-    if (ep->f_in_use) {
-        ep->f_in_use_tail->u_next = e;
-        ep->f_in_use_tail = e;
-        return;
-    }
-    ep->f_in_use = e;
-    ep->f_in_use_tail = e;
 }

@@ -9,21 +9,22 @@ bin_PROGRAMS = readelfobj readobjmacho readobjpe object_detector
 
 TESTS = $(check_PROGRAMS) $(check_TESTS)
 
-readelfobj_SOURCES = \
-common_options.h \
-common_options.c \
+readelfobj_SOURCES =  \
+common_options.h      \
+common_options.c      \
 dwarf_debuglink.c     \
 dwarf_debuglink.h     \
-dwarfstring.c         \
-dwarfstring.h         \
-dwarf_object_detector.h  \
+dwarf_string.c         \
+dwarf_string.h         \
 dwarf_object_detector.c   \
+dwarf_object_detector.h  \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h  \
-dwarf_elf_naming.c   \
-dwarf_elf_reloc_386.c \
-dwarf_elf_reloc_386.h  \
-dwarf_elf_reloc_mips.c	\
+dwarf_elf_naming.c       \
+dwarf_elf_naming.h       \
+dwarf_elf_reloc_386.c    \
+dwarf_elf_reloc_386.h    \
+dwarf_elf_reloc_mips.c	 \
 dwarf_elf_reloc_mips.h	 \
 dwarf_elf_reloc_ppc.c    \
 dwarf_elf_reloc_ppc.h    \
@@ -37,19 +38,19 @@ dwarf_elf_reloc_ppc64.c	 \
 dwarf_elf_reloc_ppc64.h	 \
 dwarf_elf_reloc_x86_64.c \
 dwarf_elf_reloc_x86_64.h \
-dwarf_elf_decompress.c \
-dwarf_elf_decompress.h \
+dwarf_elf_decompress.c   \
+dwarf_elf_decompress.h   \
 dwarf_load_elf_headers.c \
-errormessages.c \
-readelfobj.c \
-dwarf_reading.h \
-dwarf_safe_arithmetic.c \
-dwarf_safe_arithmetic.h \
-dwarf_types.h \
-dwarf_universal.h \
-dw_elfstructs.h \
-readelfobj.h \
-sanitized.h \
+errormessages.c          \
+readelfobj.c             \
+dwarf_reading.h          \
+dwarf_safe_arithmetic.c  \
+dwarf_safe_arithmetic.h  \
+dwarf_types.h            \
+dwarf_universal.h        \
+dw_elfstructs.h          \
+readelfobj.h             \
+sanitized.h              \
 sanitized.c
 
 readelfobj_CFLAGS = $(RO_CFLAGS_WARN) @ZSTD_LIBS@ @ZLIB_LIBS@ 
@@ -60,11 +61,11 @@ LIBS =  @ZSTD_LIBS@ @ZLIB_LIBS@
 readobjmacho_SOURCES =  readobjmacho.c \
 common_options.h \
 common_options.c \
-sanitized.h \
+sanitized.h      \
 dwarf_elf_decompress.h \
 dwarf_object_read_common.c \
 dwarf_object_read_common.h \
-dwarf_reading.h \
+dwarf_reading.h  \
 dwarf_object_detector.c \
 dwarf_object_detector.h \
 dwarf_machoread.h \
