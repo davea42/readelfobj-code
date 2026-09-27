@@ -1,7 +1,7 @@
 Ehdr64 e_shoff offset points inside Ehdr (ehdr len 0x40). Corrupt Elf
 Ehdr64 e_shnum shows count 4 (0x4) but e_shoff is incorrect Corrupt Elf.
- Odd Elf header , EI_CLASS of zero improperIgnoring this error.
- Odd Elf header , EI_DATA of zero improperIgnoring this error.
+ Odd Elf header , EI_CLASS of zero improper. Ignoring this error.
+ Odd Elf header , EI_DATA of zero improper. Ignoring this error.
 ERROR: Section 0 must be empty, but it is not empty. See Elf ABI.
 ERROR: section header sh_flags 0xe11800274f2d5b00 In section 0  has too many flag bits on (25) to be real
 ERROR: section header sh_flags 0xffffffffff00005b In section 1  has too many flag bits on (45) to be real
@@ -14,7 +14,7 @@ Elf object file.
   File class    = 0x2 (ELFCLASS64
   Data encoding = 0x2 (ELFDATA2MSB)
   file version  = 0x1 (EV_CURRENT)
-  OS ABI        = 0x7f (Unknown)
+  OS ABI        = 0x7f ((Unknown 127 0x7f)
   ABI version   = 0x3f
   e_type     : 0xc000 (unknown)
   e_machine  : 0x0 (EM_NONE)
@@ -35,11 +35,11 @@ Section strings missing String section number 0
 Section count: 4
  [i] offset      size        name            (flags)(type)(link,info,align)
 {
-[ 0] 0x00000002 0x00000029 "<no-name!>"      (SHF_OS_NONCONFORMING SHF_GROUP SHF_COMPRESSED SHF_MIPS_NODUPES SHF_MIPS_NAMES SHF_MIPS_LOCAL SHF_MIPS_NOSTRIP SHF_MIPS_ADDR)(Unknown)(0,0x27272727,0xfe00005700ff0000)
+[ 0] 0x00000002 0x00000029 "<no-name!>"      (SHF_OS_NONCONFORMING SHF_GROUP SHF_COMPRESSED SHF_MIPS_NODUPES SHF_MIPS_NAMES SHF_MIPS_LOCAL SHF_MIPS_NOSTRIP SHF_MIPS_ADDR)((Unknown 10496 0x2900)(0,0x27272727,0xfe00005700ff0000)
      Compressed length: 0x00000029
 [ 1] 0x00000064 0x0000000f "<no-name!>"      (SHF_WRITE SHF_ALLOC SHF_MERGE SHF_INFO_LINK SHF_EXCLUDE SHF_MASKPROC XCORE_SHF_DP_SECTION XCORE_SHF_CP_SECTION SHF_X86_64_LARGE SHF_HEX_GPREL SHF_MIPS_NODUPES SHF_MIPS_NAMES SHF_MIPS_LOCAL SHF_MIPS_NOSTRIP SHF_MIPS_GPREL SHF_MIPS_MERGE SHF_MIPS_ADDR SHF_MIPS_STRING SHF_ARM_PURECODE)(SHT_GROUP)(43433,0x0,0x0)
 [ 2] 0xdeff00000000 0x00000000 "<no-name!>"      (0)(SHT_NULL)
-[ 3] 0x7f00000000000000 0x00000100 "<no-name!>"      (Unknown)(SHT_NULL)(0,0xec,0xff00000000000000)
+[ 3] 0x7f00000000000000 0x00000100 "<no-name!>"      ((Unknown 0 0x0)(SHT_NULL)(0,0xec,0xff00000000000000)
 Summary: 0 bytes for 0 debug sections
 }
 ERROR For section 1 the namestring field is a null-pointer

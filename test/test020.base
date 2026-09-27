@@ -22,95 +22,412 @@ Section Groups: No section groups or .dwo sections present. Elf object file.
 String section data at 0x2868 (10344) length 0xfe (254)
 
 Section count: 29
- [i] offset      size        name            (flags)(type)(link,info,align)
-{
-[ 0] 0x00000000 0x00000000 ""                (0)(SHT_NULL)
-    Hdroffset: 0x000029a8
-    Addr     : 0x00000000
-[ 1] 0x00000040 0x00001390 ".text"           (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x10)
-    Hdroffset: 0x000029e8
-    Addr     : 0x00000000
-[ 2] 0x00003508 0x000018f0 ".rela.text"      (0)(SHT_RELA)(27,0x1,0x8)
-    Hdroffset: 0x00002a28
-    Addr     : 0x00000000
-[ 3] 0x000013d0 0x00000040 ".data"           (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x10)
-    Hdroffset: 0x00002a68
-    Addr     : 0x00000000
-[ 4] 0x00001410 0x02dc6c40 ".bss"            (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x10)
-    Hdroffset: 0x00002aa8
-    Addr     : 0x00000000
-[ 5] 0x00001410 0x00000028 ".MIPS.options"   (SHF_ALLOC SHF_MIPS_NOSTRIP)(SHT_MIPS_OPTIONS)(0,0x0,0x8)
-    Hdroffset: 0x00002ae8
-    Addr     : 0x00000000
-[ 6] 0x00001438 0x00000100 ".pdr"            (0)(SHT_PROGBITS)(0,0x0,0x4)
-    Hdroffset: 0x00002b28
-    Addr     : 0x00000000
-[ 7] 0x00004df8 0x000000c0 ".rela.pdr"       (0)(SHT_RELA)(27,0x6,0x8)
-    Hdroffset: 0x00002b68
-    Addr     : 0x00000000
-[ 8] 0x00001538 0x00000000 ".mdebug.abi64"   (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00002ba8
-    Addr     : 0x00000000
-[ 9] 0x00001538 0x00000128 ".debug_abbrev"   (0)(SHT_MIPS_DWARF)(0,0x0,0x1)
-    Hdroffset: 0x00002be8
-    Addr     : 0x00000000
-[10] 0x00001660 0x00000617 ".debug_info"     (0)(SHT_MIPS_DWARF)(0,0x0,0x1)
-    Hdroffset: 0x00002c28
-    Addr     : 0x00000000
-[11] 0x00004eb8 0x000004b0 ".rela.debug_info"  (0)(SHT_RELA)(27,0xa,0x8)
-    Hdroffset: 0x00002c68
-    Addr     : 0x00000000
-[12] 0x00001c77 0x00000204 ".debug_line"     (0)(SHT_MIPS_DWARF)(0,0x0,0x1)
-    Hdroffset: 0x00002ca8
-    Addr     : 0x00000000
-[13] 0x00005368 0x00000018 ".rela.debug_line"  (0)(SHT_RELA)(27,0xc,0x8)
-    Hdroffset: 0x00002ce8
-    Addr     : 0x00000000
-[14] 0x00001e80 0x00000500 ".rodata"         (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x10)
-    Hdroffset: 0x00002d28
-    Addr     : 0x00000000
-[15] 0x00002380 0x00000020 ".data.rel.local"  (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x8)
-    Hdroffset: 0x00002d68
-    Addr     : 0x00000000
-[16] 0x00005380 0x00000060 ".rela.data.rel.local"  (0)(SHT_RELA)(27,0xf,0x8)
-    Hdroffset: 0x00002da8
-    Addr     : 0x00000000
-[17] 0x000023a0 0x00000158 ".debug_frame"    (0)(SHT_MIPS_DWARF)(0,0x0,0x8)
-    Hdroffset: 0x00002de8
-    Addr     : 0x00000000
-[18] 0x000053e0 0x00000180 ".rela.debug_frame"  (0)(SHT_RELA)(27,0x11,0x8)
-    Hdroffset: 0x00002e28
-    Addr     : 0x00000000
-[19] 0x000024f8 0x00000260 ".debug_loc"      (0)(SHT_MIPS_DWARF)(0,0x0,0x1)
-    Hdroffset: 0x00002e68
-    Addr     : 0x00000000
-[20] 0x00002758 0x000000a6 ".debug_pubnames"  (0)(SHT_MIPS_DWARF)(0,0x0,0x1)
-    Hdroffset: 0x00002ea8
-    Addr     : 0x00000000
-[21] 0x00005560 0x00000018 ".rela.debug_pubnames"  (0)(SHT_RELA)(27,0x14,0x8)
-    Hdroffset: 0x00002ee8
-    Addr     : 0x00000000
-[22] 0x000027fe 0x00000030 ".debug_aranges"  (0)(SHT_MIPS_DWARF)(0,0x0,0x1)
-    Hdroffset: 0x00002f28
-    Addr     : 0x00000000
-[23] 0x00005578 0x00000030 ".rela.debug_aranges"  (0)(SHT_RELA)(27,0x16,0x8)
-    Hdroffset: 0x00002f68
-    Addr     : 0x00000000
-[24] 0x0000282e 0x00000019 ".debug_str"      (0)(SHT_MIPS_DWARF)(0,0x0,0x1)
-    Hdroffset: 0x00002fa8
-    Addr     : 0x00000000
-[25] 0x00002847 0x00000021 ".comment"        (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x00002fe8
-    Addr     : 0x00000000
-[26] 0x00002868 0x000000fe ".shstrtab"       (0)(SHT_STRTAB)(0,0x0,0x1)
-    Hdroffset: 0x00003028
-    Addr     : 0x00000000
-[27] 0x000030a8 0x00000390 ".symtab"         (0)(SHT_SYMTAB)(28,0x1b,0x8)
-    Hdroffset: 0x00003068
-    Addr     : 0x00000000
-[28] 0x00003438 0x000000cc ".strtab"         (0)(SHT_STRTAB)(0,0x0,0x1)
-    Hdroffset: 0x000030a8
-    Addr     : 0x00000000
+Section 0
+  sh_name     : 0x0 (0)
+  sh_type     : 0x0 (SHT_NULL)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x0 (0)
+  sh_size     : 0x0 (0)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x0 (0)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 1 .text
+  sh_name     : 0x20 (32)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x6 (SHF_ALLOC SHF_EXECINSTR)
+  sh_addr     : 0x0
+  sh_offset   : 0x40 (64)
+  sh_size     : 0x1390 (5008)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x10 (16)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 2 .rela.text
+  sh_name     : 0x1b (27)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x3508 (13576)
+  sh_size     : 0x18f0 (6384)
+  sh_link     : 0x1b
+  sh_info     : 0x1
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 266
+  Group number      : 0
+  Group count       : 0
+Section 3 .data
+  sh_name     : 0x26 (38)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x0
+  sh_offset   : 0x13d0 (5072)
+  sh_size     : 0x40 (64)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x10 (16)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 4 .bss
+  sh_name     : 0x2c (44)
+  sh_type     : 0x8 (SHT_NOBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x0
+  sh_offset   : 0x1410 (5136)
+  sh_size     : 0x2dc6c40 (48000064)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x10 (16)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 5 .MIPS.options
+  sh_name     : 0x31 (49)
+  sh_type     : 0x7000000d (SHT_MIPS_OPTIONS)
+  sh_flags    : 0x8000002 (SHF_ALLOC SHF_MIPS_NOSTRIP)
+  sh_addr     : 0x0
+  sh_offset   : 0x1410 (5136)
+  sh_size     : 0x28 (40)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x1 (1)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 6 .pdr
+  sh_name     : 0x44 (68)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x1438 (5176)
+  sh_size     : 0x100 (256)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x4 (4)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 7 .rela.pdr
+  sh_name     : 0x3f (63)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x4df8 (19960)
+  sh_size     : 0xc0 (192)
+  sh_link     : 0x1b
+  sh_info     : 0x6
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 8
+  Group number      : 0
+  Group count       : 0
+Section 8 .mdebug.abi64
+  sh_name     : 0x49 (73)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x1538 (5432)
+  sh_size     : 0x0 (0)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 9 .debug_abbrev
+  sh_name     : 0x57 (87)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x1538 (5432)
+  sh_size     : 0x128 (296)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 10 .debug_info
+  sh_name     : 0x6a (106)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x1660 (5728)
+  sh_size     : 0x617 (1559)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 11 .rela.debug_info
+  sh_name     : 0x65 (101)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x4eb8 (20152)
+  sh_size     : 0x4b0 (1200)
+  sh_link     : 0x1b
+  sh_info     : 0xa
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 50
+  Group number      : 0
+  Group count       : 0
+Section 12 .debug_line
+  sh_name     : 0x7b (123)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x1c77 (7287)
+  sh_size     : 0x204 (516)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 13 .rela.debug_line
+  sh_name     : 0x76 (118)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x5368 (21352)
+  sh_size     : 0x18 (24)
+  sh_link     : 0x1b
+  sh_info     : 0xc
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 1
+  Group number      : 0
+  Group count       : 0
+Section 14 .rodata
+  sh_name     : 0x87 (135)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x0
+  sh_offset   : 0x1e80 (7808)
+  sh_size     : 0x500 (1280)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x10 (16)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 15 .data.rel.local
+  sh_name     : 0x94 (148)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x0
+  sh_offset   : 0x2380 (9088)
+  sh_size     : 0x20 (32)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 16 .rela.data.rel.local
+  sh_name     : 0x8f (143)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x5380 (21376)
+  sh_size     : 0x60 (96)
+  sh_link     : 0x1b
+  sh_info     : 0xf
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 4
+  Group number      : 0
+  Group count       : 0
+Section 17 .debug_frame
+  sh_name     : 0xa9 (169)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x23a0 (9120)
+  sh_size     : 0x158 (344)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 18 .rela.debug_frame
+  sh_name     : 0xa4 (164)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x53e0 (21472)
+  sh_size     : 0x180 (384)
+  sh_link     : 0x1b
+  sh_info     : 0x11
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 16
+  Group number      : 0
+  Group count       : 0
+Section 19 .debug_loc
+  sh_name     : 0xb6 (182)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x24f8 (9464)
+  sh_size     : 0x260 (608)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 20 .debug_pubnames
+  sh_name     : 0xc6 (198)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x2758 (10072)
+  sh_size     : 0xa6 (166)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 21 .rela.debug_pubnames
+  sh_name     : 0xc1 (193)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x5560 (21856)
+  sh_size     : 0x18 (24)
+  sh_link     : 0x1b
+  sh_info     : 0x14
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 1
+  Group number      : 0
+  Group count       : 0
+Section 22 .debug_aranges
+  sh_name     : 0xdb (219)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x27fe (10238)
+  sh_size     : 0x30 (48)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 23 .rela.debug_aranges
+  sh_name     : 0xd6 (214)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x5578 (21880)
+  sh_size     : 0x30 (48)
+  sh_link     : 0x1b
+  sh_info     : 0x16
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 2
+  Group number      : 0
+  Group count       : 0
+Section 24 .debug_str
+  sh_name     : 0xea (234)
+  sh_type     : 0x7000001e (SHT_MIPS_DWARF)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x282e (10286)
+  sh_size     : 0x19 (25)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 25 .comment
+  sh_name     : 0xf5 (245)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x2847 (10311)
+  sh_size     : 0x21 (33)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 26 .shstrtab
+  sh_name     : 0x11 (17)
+  sh_type     : 0x3 (SHT_STRTAB)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x2868 (10344)
+  sh_size     : 0xfe (254)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 27 .symtab
+  sh_name     : 0x1 (1)
+  sh_type     : 0x2 (SHT_SYMTAB)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x30a8 (12456)
+  sh_size     : 0x390 (912)
+  sh_link     : 0x1c
+  sh_info     : 0x1b
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 28 .strtab
+  sh_name     : 0x9 (9)
+  sh_type     : 0x3 (SHT_STRTAB)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x3438 (13368)
+  sh_size     : 0xcc (204)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
 Summary: 3562 bytes for 8 debug sections
 }
 Section Groups: No section groups or .dwo sections present. No .dynamic section exists in yyy/stream.o

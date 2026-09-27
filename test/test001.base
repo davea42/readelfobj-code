@@ -1,5 +1,6 @@
 Usage: readelfobj <options> file ...
 Options:
+ We suggest adding the --v option when printing section details
 --print-dynamic print the .dynamic section (DT_ stuff)
 --print-groups  print the section group of each DWARF section
 --print-relocs  print relocation entries (.rela & .rel)

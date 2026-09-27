@@ -53,116 +53,510 @@ Program header 6  type (PT_GNU_RELRO) 0x6474e552
 String section data at 0x20f041 (2158657) length 0x157 (343)
 
 Section count: 36
- [i] offset      size        name            (flags)(type)(link,info,align)
-{
-[ 0] 0x00000000 0x00000000 ""                (0)(SHT_NULL)
-    Hdroffset: 0x0020f1d8
-    Addr     : 0x00000000
-[ 1] 0x000001c8 0x00000024 ".note.gnu.build-id"  (SHF_ALLOC)(SHT_NOTE)(0,0x0,0x4)
-    Hdroffset: 0x0020f218
-    Addr     : 0x000001c8
-[ 2] 0x000001f0 0x000013c0 ".gnu.hash"       (SHF_ALLOC)(SHT_GNU_HASH)(3,0x0,0x8)
-    Hdroffset: 0x0020f258
-    Addr     : 0x000001f0
-[ 3] 0x000015b0 0x00003e70 ".dynsym"         (SHF_ALLOC)(SHT_DYNSYM)(4,0x1,0x8)
-    Hdroffset: 0x0020f298
-    Addr     : 0x000015b0
-[ 4] 0x00005420 0x00003b9e ".dynstr"         (SHF_ALLOC)(SHT_STRTAB)(0,0x0,0x1)
-    Hdroffset: 0x0020f2d8
-    Addr     : 0x00005420
-[ 5] 0x00008fbe 0x00000534 ".gnu.version"    (SHF_ALLOC)(SHT_GNU_versym SHT_HIOS)(3,0x0,0x2)
-    Hdroffset: 0x0020f318
-    Addr     : 0x00008fbe
-[ 6] 0x000094f8 0x00000070 ".gnu.version_r"  (SHF_ALLOC)(SHT_GNU_verneed)(4,0x2,0x8)
-    Hdroffset: 0x0020f358
-    Addr     : 0x000094f8
-[ 7] 0x00009568 0x00009480 ".rela.dyn"       (SHF_ALLOC)(SHT_RELA)(3,0x0,0x8)
-    Hdroffset: 0x0020f398
-    Addr     : 0x00009568
-[ 8] 0x000129e8 0x000017e8 ".rela.plt"       (SHF_ALLOC SHF_INFO_LINK)(SHT_RELA)(3,0x16,0x8)
-    Hdroffset: 0x0020f3d8
-    Addr     : 0x000129e8
-[ 9] 0x000141d0 0x00000017 ".init"           (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x4)
-    Hdroffset: 0x0020f418
-    Addr     : 0x000141d0
-[10] 0x000141f0 0x00001000 ".plt"            (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x10)
-    Hdroffset: 0x0020f458
-    Addr     : 0x000141f0
-[11] 0x000151f0 0x00000018 ".plt.got"        (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x8)
-    Hdroffset: 0x0020f498
-    Addr     : 0x000151f0
-[12] 0x00015210 0x000397a6 ".text"           (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x10)
-    Hdroffset: 0x0020f4d8
-    Addr     : 0x00015210
-[13] 0x0004e9b8 0x00000009 ".fini"           (SHF_ALLOC SHF_EXECINSTR)(SHT_PROGBITS)(0,0x0,0x4)
-    Hdroffset: 0x0020f518
-    Addr     : 0x0004e9b8
-[14] 0x0004e9e0 0x0000c880 ".rodata"         (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x20)
-    Hdroffset: 0x0020f558
-    Addr     : 0x0004e9e0
-[15] 0x0005b260 0x0000164c ".eh_frame_hdr"   (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x4)
-    Hdroffset: 0x0020f598
-    Addr     : 0x0005b260
-[16] 0x0005c8b0 0x00009298 ".eh_frame"       (SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x8)
-    Hdroffset: 0x0020f5d8
-    Addr     : 0x0005c8b0
-[17] 0x00066570 0x00000008 ".init_array"     (SHF_WRITE SHF_ALLOC)(SHT_INIT_ARRAY)(0,0x0,0x8)
-    Hdroffset: 0x0020f618
-    Addr     : 0x00266570
-[18] 0x00066578 0x00000008 ".fini_array"     (SHF_WRITE SHF_ALLOC)(SHT_FINI_ARRAY)(0,0x0,0x8)
-    Hdroffset: 0x0020f658
-    Addr     : 0x00266578
-[19] 0x00066580 0x000007d8 ".data.rel.ro"    (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x20)
-    Hdroffset: 0x0020f698
-    Addr     : 0x00266580
-[20] 0x00066d58 0x000001f0 ".dynamic"        (SHF_WRITE SHF_ALLOC)(SHT_DYNAMIC)(4,0x0,0x8)
-    Hdroffset: 0x0020f6d8
-    Addr     : 0x00266d58
-[21] 0x00066f48 0x000000b8 ".got"            (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x8)
-    Hdroffset: 0x0020f718
-    Addr     : 0x00266f48
-[22] 0x00067000 0x00000810 ".got.plt"        (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x8)
-    Hdroffset: 0x0020f758
-    Addr     : 0x00267000
-[23] 0x00067820 0x000051a0 ".data"           (SHF_WRITE SHF_ALLOC)(SHT_PROGBITS)(0,0x0,0x20)
-    Hdroffset: 0x0020f798
-    Addr     : 0x00267820
-[24] 0x0006c9c0 0x00000188 ".bss"            (SHF_WRITE SHF_ALLOC)(SHT_NOBITS)(0,0x0,0x20)
-    Hdroffset: 0x0020f7d8
-    Addr     : 0x0026c9c0
-[25] 0x0006c9c0 0x0000002a ".comment"        (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f818
-    Addr     : 0x00000000
-[26] 0x0006c9ea 0x00000c80 ".debug_aranges"  (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f858
-    Addr     : 0x00000000
-[27] 0x0006d66a 0x00096c43 ".debug_info"     (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f898
-    Addr     : 0x00000000
-[28] 0x001042ad 0x0000d480 ".debug_abbrev"   (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f8d8
-    Addr     : 0x00000000
-[29] 0x0011172d 0x00011e73 ".debug_line"     (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f918
-    Addr     : 0x00000000
-[30] 0x001235a0 0x0000ffce ".debug_str"      (SHF_MERGE SHF_STRINGS)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f958
-    Addr     : 0x00000000
-[31] 0x0013356e 0x000c32d5 ".debug_loc"      (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f998
-    Addr     : 0x00000000
-[32] 0x001f6843 0x0000dbd0 ".debug_ranges"   (0)(SHT_PROGBITS)(0,0x0,0x1)
-    Hdroffset: 0x0020f9d8
-    Addr     : 0x00000000
-[33] 0x00204418 0x00005a30 ".symtab"         (0)(SHT_SYMTAB)(34,0x129,0x8)
-    Hdroffset: 0x0020fa18
-    Addr     : 0x00000000
-[34] 0x00209e48 0x000051f9 ".strtab"         (0)(SHT_STRTAB)(0,0x0,0x1)
-    Hdroffset: 0x0020fa58
-    Addr     : 0x00000000
-[35] 0x0020f041 0x00000157 ".shstrtab"       (0)(SHT_STRTAB)(0,0x0,0x1)
-    Hdroffset: 0x0020fa98
-    Addr     : 0x00000000
+Section 0 
+  sh_name     : 0x0 (0)
+  sh_type     : 0x0 (SHT_NULL)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x0 (0)
+  sh_size     : 0x0 (0)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x0 (0)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 1 .note.gnu.build-id
+  sh_name     : 0x1b (27)
+  sh_type     : 0x7 (SHT_NOTE)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x1c8
+  sh_offset   : 0x1c8 (456)
+  sh_size     : 0x24 (36)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x4 (4)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 2 .gnu.hash
+  sh_name     : 0x2e (46)
+  sh_type     : 0x6ffffff6 (SHT_GNU_HASH)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x1f0
+  sh_offset   : 0x1f0 (496)
+  sh_size     : 0x13c0 (5056)
+  sh_link     : 0x3
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 3 .dynsym
+  sh_name     : 0x38 (56)
+  sh_type     : 0xb (SHT_DYNSYM)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x15b0
+  sh_offset   : 0x15b0 (5552)
+  sh_size     : 0x3e70 (15984)
+  sh_link     : 0x4
+  sh_info     : 0x1
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 4 .dynstr
+  sh_name     : 0x40 (64)
+  sh_type     : 0x3 (SHT_STRTAB)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x5420
+  sh_offset   : 0x5420 (21536)
+  sh_size     : 0x3b9e (15262)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 5 .gnu.version
+  sh_name     : 0x48 (72)
+  sh_type     : 0x6fffffff (SHT_GNU_versym SHT_HIOS)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x8fbe
+  sh_offset   : 0x8fbe (36798)
+  sh_size     : 0x534 (1332)
+  sh_link     : 0x3
+  sh_info     : 0x0
+  sh_addralign: 0x2 (2)
+  sh_entsize  : 0x2 (2)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 6 .gnu.version_r
+  sh_name     : 0x55 (85)
+  sh_type     : 0x6ffffffe (SHT_GNU_verneed)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x94f8
+  sh_offset   : 0x94f8 (38136)
+  sh_size     : 0x70 (112)
+  sh_link     : 0x4
+  sh_info     : 0x2
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 7 .rela.dyn
+  sh_name     : 0x64 (100)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x9568
+  sh_offset   : 0x9568 (38248)
+  sh_size     : 0x9480 (38016)
+  sh_link     : 0x3
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 1584
+  Group number      : 0
+  Group count       : 0
+Section 8 .rela.plt
+  sh_name     : 0x6e (110)
+  sh_type     : 0x4 (SHT_RELA)
+  sh_flags    : 0x42 (SHF_ALLOC SHF_INFO_LINK)
+  sh_addr     : 0x129e8
+  sh_offset   : 0x129e8 (76264)
+  sh_size     : 0x17e8 (6120)
+  sh_link     : 0x3
+  sh_info     : 0x16
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 255
+  Group number      : 0
+  Group count       : 0
+Section 9 .init
+  sh_name     : 0x78 (120)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x6 (SHF_ALLOC SHF_EXECINSTR)
+  sh_addr     : 0x141d0
+  sh_offset   : 0x141d0 (82384)
+  sh_size     : 0x17 (23)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x4 (4)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 10 .plt
+  sh_name     : 0x73 (115)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x6 (SHF_ALLOC SHF_EXECINSTR)
+  sh_addr     : 0x141f0
+  sh_offset   : 0x141f0 (82416)
+  sh_size     : 0x1000 (4096)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x10 (16)
+  sh_entsize  : 0x10 (16)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 11 .plt.got
+  sh_name     : 0x7e (126)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x6 (SHF_ALLOC SHF_EXECINSTR)
+  sh_addr     : 0x151f0
+  sh_offset   : 0x151f0 (86512)
+  sh_size     : 0x18 (24)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x8 (8)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 12 .text
+  sh_name     : 0x87 (135)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x6 (SHF_ALLOC SHF_EXECINSTR)
+  sh_addr     : 0x15210
+  sh_offset   : 0x15210 (86544)
+  sh_size     : 0x397a6 (235430)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x10 (16)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 13 .fini
+  sh_name     : 0x8d (141)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x6 (SHF_ALLOC SHF_EXECINSTR)
+  sh_addr     : 0x4e9b8
+  sh_offset   : 0x4e9b8 (321976)
+  sh_size     : 0x9 (9)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x4 (4)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 14 .rodata
+  sh_name     : 0x93 (147)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x4e9e0
+  sh_offset   : 0x4e9e0 (322016)
+  sh_size     : 0xc880 (51328)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x20 (32)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 15 .eh_frame_hdr
+  sh_name     : 0x9b (155)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x5b260
+  sh_offset   : 0x5b260 (373344)
+  sh_size     : 0x164c (5708)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x4 (4)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 16 .eh_frame
+  sh_name     : 0xa9 (169)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x2 (SHF_ALLOC)
+  sh_addr     : 0x5c8b0
+  sh_offset   : 0x5c8b0 (379056)
+  sh_size     : 0x9298 (37528)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 17 .init_array
+  sh_name     : 0xb3 (179)
+  sh_type     : 0xe (SHT_INIT_ARRAY)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x266570
+  sh_offset   : 0x66570 (419184)
+  sh_size     : 0x8 (8)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x8 (8)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 18 .fini_array
+  sh_name     : 0xbf (191)
+  sh_type     : 0xf (SHT_FINI_ARRAY)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x266578
+  sh_offset   : 0x66578 (419192)
+  sh_size     : 0x8 (8)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x8 (8)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 19 .data.rel.ro
+  sh_name     : 0xcb (203)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x266580
+  sh_offset   : 0x66580 (419200)
+  sh_size     : 0x7d8 (2008)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x20 (32)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 20 .dynamic
+  sh_name     : 0xd8 (216)
+  sh_type     : 0x6 (SHT_DYNAMIC)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x266d58
+  sh_offset   : 0x66d58 (421208)
+  sh_size     : 0x1f0 (496)
+  sh_link     : 0x4
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x10 (16)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 21 .got
+  sh_name     : 0x82 (130)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x266f48
+  sh_offset   : 0x66f48 (421704)
+  sh_size     : 0xb8 (184)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x8 (8)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 22 .got.plt
+  sh_name     : 0xe1 (225)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x267000
+  sh_offset   : 0x67000 (421888)
+  sh_size     : 0x810 (2064)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x8 (8)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 23 .data
+  sh_name     : 0xea (234)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x267820
+  sh_offset   : 0x67820 (423968)
+  sh_size     : 0x51a0 (20896)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x20 (32)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 24 .bss
+  sh_name     : 0xf0 (240)
+  sh_type     : 0x8 (SHT_NOBITS)
+  sh_flags    : 0x3 (SHF_WRITE SHF_ALLOC)
+  sh_addr     : 0x26c9c0
+  sh_offset   : 0x6c9c0 (444864)
+  sh_size     : 0x188 (392)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x20 (32)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 25 .comment
+  sh_name     : 0xf5 (245)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x30 (SHF_MERGE SHF_STRINGS)
+  sh_addr     : 0x0
+  sh_offset   : 0x6c9c0 (444864)
+  sh_size     : 0x2a (42)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x1 (1)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 26 .debug_aranges
+  sh_name     : 0xfe (254)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x6c9ea (444906)
+  sh_size     : 0xc80 (3200)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 27 .debug_info
+  sh_name     : 0x10d (269)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x6d66a (448106)
+  sh_size     : 0x96c43 (617539)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 28 .debug_abbrev
+  sh_name     : 0x119 (281)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x1042ad (1065645)
+  sh_size     : 0xd480 (54400)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 29 .debug_line
+  sh_name     : 0x127 (295)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x11172d (1120045)
+  sh_size     : 0x11e73 (73331)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 30 .debug_str
+  sh_name     : 0x133 (307)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x30 (SHF_MERGE SHF_STRINGS)
+  sh_addr     : 0x0
+  sh_offset   : 0x1235a0 (1193376)
+  sh_size     : 0xffce (65486)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x1 (1)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 31 .debug_loc
+  sh_name     : 0x13e (318)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x13356e (1258862)
+  sh_size     : 0xc32d5 (799445)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 32 .debug_ranges
+  sh_name     : 0x149 (329)
+  sh_type     : 0x1 (SHT_PROGBITS)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x1f6843 (2058307)
+  sh_size     : 0xdbd0 (56272)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 1
+  Group count       : 0
+Section 33 .symtab
+  sh_name     : 0x1 (1)
+  sh_type     : 0x2 (SHT_SYMTAB)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x204418 (2114584)
+  sh_size     : 0x5a30 (23088)
+  sh_link     : 0x22
+  sh_info     : 0x129
+  sh_addralign: 0x8 (8)
+  sh_entsize  : 0x18 (24)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 34 .strtab
+  sh_name     : 0x9 (9)
+  sh_type     : 0x3 (SHT_STRTAB)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x209e48 (2137672)
+  sh_size     : 0x51f9 (20985)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
+Section 35 .shstrtab
+  sh_name     : 0x11 (17)
+  sh_type     : 0x3 (SHT_STRTAB)
+  sh_flags    : 0x0
+  sh_addr     : 0x0
+  sh_offset   : 0x20f041 (2158657)
+  sh_size     : 0x157 (343)
+  sh_link     : 0x0
+  sh_info     : 0x0
+  sh_addralign: 0x1 (1)
+  sh_entsize  : 0x0 (0)
+  Relocations count : 0
+  Group number      : 0
+  Group count       : 0
 Summary: 1707201 bytes for 8 debug sections
 }
 GNU .gnu_debuglink and .note.gnu.buildid
